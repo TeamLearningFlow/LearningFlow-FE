@@ -4,6 +4,10 @@ import LeftUI from './components/leftUI';
 import Divider from './components/divider';
 import GoogleAuthButton from './components/googleAuthButton';
 import AuthButton from './components/authButton';
+import InputEmail from './components/inputEmail';
+import InputPw from './components/inputPw';
+import { ValidationCheck } from './components/validation';
+import InputPwCheck from './components/inputPwCheck';
 
 const PageContainer = styled.div`
   display: flex;
@@ -23,7 +27,7 @@ const RightSection = styled.div`
   justify-content: right;
   align-items: center;
   padding-right: 64px;
-  margin-top: 180px;
+  //   margin-top: 180px;
 `;
 
 const FormContainer = styled.div`
@@ -44,6 +48,29 @@ const SignupPage: React.FC = () => {
       <PageContainer>
         <RightSection>
           <FormContainer>
+            <h2 style={{ textAlign: 'center' }}>회원가입</h2>
+            <InputEmail />
+            <InputPw />
+            <ValidationCheck />
+            <InputPwCheck />
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                margin: '32px 0',
+              }}
+            >
+              <input type="checkbox" />
+              <span
+                style={{
+                  fontSize: '12px',
+                  marginLeft: '6px',
+                }}
+              >
+                이벤트, 맞춤 추천, 학습 팁 등을 보내주세요
+              </span>
+            </div>
+
             <FormGroup>
               <AuthButton disabled={true} text="가입하기" />
               <Divider />

@@ -56,7 +56,7 @@ const InputPw: React.FC = () => {
     <div>
       <Label htmlFor="password">비밀번호</Label>
       <InputWrapper>
-        <Input type="password" placeholder="" />
+        <Input type="password" placeholder="영문, 숫자, 특수문자 포함 8~16자" />
         <IconWrapper>
           <Image src={invisibleicon} alt="invisibleicon" />
         </IconWrapper>
