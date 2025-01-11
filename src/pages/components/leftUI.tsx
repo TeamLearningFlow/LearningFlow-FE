@@ -22,7 +22,7 @@ const LoginPageCover = styled.div`
   top: 0;
   left: 0;
   width: 54vw; /* 화면 너비의 54% 사용 */
-  height: 100vh; /* 화면 전체 높이 사용용 */
+  height: 100vh; /* 화면 전체 높이 사용 */
 
   display: flex;
   flex-direction: column;
@@ -41,20 +41,23 @@ const InstructionContainer = styled.div`
 `;
 
 const LogoTypoImg = styled(Image)`
-  width: 35%;
+  // width: 50%;
+  width: 260px;
   height: auto;
-  margin-bottom: 2%;
+  margin-bottom: 4%;
 `;
 
 const Instruction1 = styled.div`
-  font-size: 2.1vw;
+  // font-size: 2.1vw;
+  font-size: 30px;
   font-weight: 500;
   color: #dcd9ff;
   text-align: right;
 `;
 
 const Instruction2 = styled.div`
-  font-size: 2.1vw;
+  // font-size: 2.1vw;
+  font-size: 30px;
   font-weight: 500;
   color: #dcd9ff;
   text-align: right;
