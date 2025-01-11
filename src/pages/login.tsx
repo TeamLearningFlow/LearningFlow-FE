@@ -1,6 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import InputBox from './components/input';
+import InputEmail from './components/inputEmail';
+import InputPw from './components/inputPw';
+import LeftUI from './components/leftUI';
+import Divider from './components/divider';
+import GoogleAuthButton from './components/googleAuthButton';
+import AuthButton from './components/authButton';
 
 const PageContainer = styled.div`
   display: flex;
@@ -19,30 +24,32 @@ const RightSection = styled.div`
   display: flex;
   justify-content: right;
   align-items: center;
-  padding-right: 64px;
-  margin-top: 180px;
+  padding-right: 67px;
+  margin-top: 400px;
 `;
 
 const FormContainer = styled.div`
-  width: 460px;
+  position: absolute;
+  width: 520px;
   padding: 40px;
   border-radius: 8px;
   background-color: #ffffff;
-`;
-
-const FormGroup = styled.div`
-  margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
 `;
 
 const LoginPage: React.FC = () => {
   return (
     <>
+      <LeftUI />
       <PageContainer>
         <RightSection>
           <FormContainer>
-            <FormGroup>
-              <InputBox />
-            </FormGroup>
+            <InputEmail />
+            <InputPw />
+            <AuthButton disabled={true} text="로그인" />
+            <Divider />
+            <GoogleAuthButton text="Google 계정으로 로그인" />
           </FormContainer>
         </RightSection>
       </PageContainer>
