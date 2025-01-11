@@ -8,7 +8,7 @@ const leftUI: React.FC = () => {
     <LoginPageCover>
       <InstructionContainer>
         <LogoTypoImg src={logotypo} alt="Onboarding" />
-        <Instruction1>성장을 원하는 사람들을 위한ss</Instruction1>
+        <Instruction1>성장을 원하는 사람들을 위한</Instruction1>
         <Instruction2>가장 빠른 학습 여정 플랫폼</Instruction2>
       </InstructionContainer>
     </LoginPageCover>

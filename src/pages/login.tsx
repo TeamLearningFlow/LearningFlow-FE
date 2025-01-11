@@ -38,11 +38,11 @@ const FormGroup = styled.div`
 const LoginPage: React.FC = () => {
   return (
     <>
+      <LeftUI />
       <PageContainer>
         <RightSection>
           <FormContainer>
             <FormGroup>
-              <LeftUI />
               <InputBox />
             </FormGroup>
           </FormContainer>
