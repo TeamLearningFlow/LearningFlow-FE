@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import InputBox from './components/input';
+import LeftUI from './components/leftUI';
 
 const PageContainer = styled.div`
   display: flex;
@@ -41,6 +42,7 @@ const LoginPage: React.FC = () => {
         <RightSection>
           <FormContainer>
             <FormGroup>
+              <LeftUI />
               <InputBox />
             </FormGroup>
           </FormContainer>
