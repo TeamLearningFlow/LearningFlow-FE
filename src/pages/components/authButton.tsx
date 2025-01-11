@@ -3,17 +3,17 @@ import styled from 'styled-components';
 
 const Button = styled.button<{ disabled?: boolean }>`
   display: flex;
-  height: 62px;
+  height: 57px;
   padding: 18px 8px;
   justify-content: center;
   align-items: center;
-  width: 380px;
+  width: 440px;
   background-color: ${({ disabled }) =>
     disabled ? 'rgba(100, 105, 110, 1)' : 'rgba(94, 82, 255, 1)'};
   border: none;
   border-radius: 6.962px;
   font-family: Roboto;
-  font-size: 22px;
+  font-size: 20px;
   font-style: normal;
   font-weight: 600;
   color: rgba(255, 255, 255, 1);

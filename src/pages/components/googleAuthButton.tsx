@@ -46,16 +46,16 @@ const GoogleLogo: React.FC = () => {
 
 const Button = styled.button`
   display: flex;
-  height: 66.351px;
+  height: 57px;
   padding: 18px 8px;
   justify-content: center;
   align-items: center;
-  width: 380px;
+  width: 440px;
   background-color: rgba(236, 238, 240, 1);
   border: none;
   border-radius: 6.962px;
   font-family: Roboto;
-  font-size: 22px;
+  font-size: 20px;
   font-style: normal;
   font-weight: 600;
   color: rgba(50, 53, 56, 1);

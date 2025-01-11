@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import InputBox from './components/input';
 import LeftUI from './components/leftUI';
 import Divider from './components/divider';
 import GoogleAuthButton from './components/googleAuthButton';
@@ -46,7 +45,6 @@ const SignupPage: React.FC = () => {
         <RightSection>
           <FormContainer>
             <FormGroup>
-              <InputBox />
               <AuthButton disabled={true} text="가입하기" />
               <Divider />
               <GoogleAuthButton text="Google 계정으로 회원가입" />
