@@ -2,6 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import InputBox from './components/input';
 import LeftUI from './components/leftUI';
+import Divider from './components/divider';
+import GoogleAuthButton from './components/googleAuthButton';
+import AuthButton from './components/authButton';
 
 const PageContainer = styled.div`
   display: flex;
@@ -44,6 +47,9 @@ const LoginPage: React.FC = () => {
           <FormContainer>
             <FormGroup>
               <InputBox />
+              <AuthButton disabled={true} text="로그인" />
+              <Divider />
+              <GoogleAuthButton text="Google 계정으로 로그인" />
             </FormGroup>
           </FormContainer>
         </RightSection>
