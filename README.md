@@ -12,15 +12,15 @@
 - 브랜치 네이밍 규칙: `feat/페이지이름`
   - ex) `feat/login` -> `develop` 브랜치로 merge
 - `initial`: 리액트 초기 설정 클론을 위한 브랜치
-- `feature`: 기능 개발 브랜치
+- `feat`: 기능 개발 브랜치
 - `develop`: 각 기능들의 개발을 완료하고 병합하는 브랜치
 - `main`: default 브랜치, 최종적으로 배포하는 브랜치
 - `hotfix`: 배포 후 오류 발생 시 사용하는 브랜치
-- `feature > develop > main` 순으로 merge
+- `feat > develop > main` 순으로 merge
 ***
 
 **2. Commit 컨벤션**
-- "**태그: 커밋 메시지**" 형식
+- "**태그: 커밋 메시지 #이슈번호**" 형식
 - 태그는 영어 소문자, 커밋 메시지는 한글로 작성
 - ex)
   - **feat**: 새로운 기능 추가
