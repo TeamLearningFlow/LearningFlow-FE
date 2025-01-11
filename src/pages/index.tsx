@@ -5,8 +5,7 @@ const App = () => {
   return (
     <div>
       <p>
-        {/* <Link href="/login"></Link> */}
-        test
+        <Link href="/login"></Link>
       </p>
     </div>
   );
