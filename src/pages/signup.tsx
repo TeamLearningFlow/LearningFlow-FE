@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import LeftUI from './components/leftUI';
 import Divider from './components/divider';
@@ -28,8 +28,7 @@ const RightSection = styled.div`
   justify-content: right;
   align-items: center;
   padding-right: 64px;
-  height: 100%; 
-  //   margin-top: 180px;
+  height: 100%;
 `;
 
 const FormContainer = styled.div`
@@ -45,6 +44,8 @@ const FormGroup = styled.div`
 `;
 
 const SignupPage: React.FC = () => {
+  const [password, setPassword] = useState('');
+  
   return (
     <>
       <TopLogo />
@@ -54,23 +55,13 @@ const SignupPage: React.FC = () => {
           <FormContainer>
             <h2 style={{ textAlign: 'center' }}>회원가입</h2>
             <InputEmail />
-            <InputPw />
+            <InputPw setPassword={setPassword} />
             <ValidationCheck />
-            <InputPwCheck />
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                margin: '22px 0',
-              }}
-            >
+            {/* 비밀번호 확인을 위한 InputPwCheck 컴포넌트 */}
+            <InputPwCheck password={password} />
+            <div style={{ display: 'flex', alignItems: 'center', margin: '22px 0' }}>
               <input type="checkbox" />
-              <span
-                style={{
-                  fontSize: '12px',
-                  marginLeft: '6px',
-                }}
-              >
+              <span style={{ fontSize: '12px', marginLeft: '6px' }}>
                 이벤트, 맞춤 추천, 학습 팁 등을 보내주세요
               </span>
             </div>

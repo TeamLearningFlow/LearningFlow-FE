@@ -61,20 +61,15 @@ const Label = styled.label`
   color: #181818;
 `;
 
-const InputPw: React.FC = () => {
+const InputPw: React.FC<{ setPassword: React.Dispatch<React.SetStateAction<string>> }> = ({ setPassword }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const handleFocus = () => setIsFocused(true);
-  const handleBlur = () => setIsFocused(false);
-  
+
   const PasswordVisibility = () => setIsPasswordVisible(prev => !prev);
 
   const schema = yup.object().shape({
-    email: yup
-      .string()
-      .email('올바른 형식의 이메일을 입력해주세요.')
-      .required('이메일을 반드시 입력해주세요.'),
     password: yup
       .string()
       .min(8, '8자 이상 16자 이하')
@@ -83,10 +78,6 @@ const InputPw: React.FC = () => {
       .matches(/\d/, '숫자 포함')
       .matches(/[!@#$%^&*()_+]/, '특수문자 포함')
       .required('비밀번호를 반드시 입력해주세요.'),
-    passwordCheck: yup
-      .string()
-      .oneOf([yup.ref('password'), undefined], '비밀번호가 일치하지 않습니다.')
-      .required('비밀번호 확인을 반드시 입력해주세요.'),
   });
 
   const { register, formState: { errors, isValid }, handleSubmit } = useForm({
@@ -97,13 +88,13 @@ const InputPw: React.FC = () => {
   return (
     <div>
       <Label htmlFor="password">비밀번호</Label>
-      {/* isFocused를 InputWrapper에 전달 */}
       <InputWrapper isFocused={isFocused}>
         <Input
           type={isPasswordVisible ? 'text' : 'password'}
           placeholder="영문, 숫자, 특수문자 포함 8~16자"
           onFocus={handleFocus}
-          onBlur={handleBlur}
+          {...register('password')}
+          onChange={(e) => setPassword(e.target.value)}
         />
         <IconWrapper onClick={PasswordVisibility}>
           <Image src={invisibleicon} alt="비밀번호 보이기/숨기기 아이콘" />
@@ -114,4 +105,3 @@ const InputPw: React.FC = () => {
 };
 
 export default InputPw;
-

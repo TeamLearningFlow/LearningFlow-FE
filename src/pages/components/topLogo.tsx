@@ -10,7 +10,6 @@ const Container = styled.div`
   height: 674px;
   left: 0px;
   top: 0px;
-  background-color: #323538;
 `;
 
 const Box = styled.div`

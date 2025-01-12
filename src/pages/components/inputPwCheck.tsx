@@ -1,9 +1,9 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import invisibleicon from '../assets/invisibleicon.svg';
 
-const InputWrapper = styled.div<{ isFocused: boolean }>`
+const InputWrapper = styled.div<{ isFocused: boolean, isError: boolean }>`
   display: flex;
   height: 55px;
   position: relative;
@@ -14,13 +14,8 @@ const InputWrapper = styled.div<{ isFocused: boolean }>`
   margin-bottom: 10px;
   transition: box-shadow 0.3s ease;
   box-shadow: ${(props) =>
-    props.isFocused ? '0 0 5px #5E52ff' : 'none'};
-
-  img {
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-  }
+    props.isError ? 'none' : props.isFocused ? '0 0 5px #5E52ff' : 'none'}; /* 비밀번호 불일치 시 shadow 제거 */
+  border-color: ${(props) => (props.isError ? 'red' : '#323538')}; /* 비밀번호 불일치 시 테두리 색상 변경 */
 `;
 
 const Input = styled.input`
@@ -58,28 +53,45 @@ const Label = styled.label`
   color: #181818;
 `;
 
-const InputPwCheck: React.FC = () => {
+const ErrorText = styled.span`
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+`;
+
+const InputPwCheck: React.FC<{ password: string }> = ({ password }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [passwordCheck, setPasswordCheck] = useState('');
+  const [isError, setIsError] = useState(false);
 
   const handleFocus = () => setIsFocused(true);
   const handleBlur = () => setIsFocused(false);
-  
+
+  const handlePasswordCheckChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPasswordCheck(e.target.value);
+    setIsError(e.target.value !== password);
+  };
+
   const PasswordVisibility = () => setIsPasswordVisible(prev => !prev);
 
   return (
     <div>
-      <Label htmlFor="password">비밀번호 확인</Label>
-      <InputWrapper isFocused={isFocused}>
+      <Label htmlFor="passwordCheck">비밀번호 확인</Label>
+      <InputWrapper isFocused={isFocused} isError={isError}>
         <Input
           type={isPasswordVisible ? 'text' : 'password'}
+          value={passwordCheck}
+          onChange={handlePasswordCheckChange}
           onFocus={handleFocus}
           onBlur={handleBlur}
+          placeholder="비밀번호를 다시 입력하세요"
         />
         <IconWrapper onClick={PasswordVisibility}>
           <Image src={invisibleicon} alt="비밀번호 보이기/숨기기 아이콘" />
         </IconWrapper>
       </InputWrapper>
+      {isError && <ErrorText>비밀번호가 틀렸습니다!</ErrorText>}
     </div>
   );
 };
