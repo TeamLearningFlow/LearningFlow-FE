@@ -28,11 +28,13 @@ const RightSection = styled.div`
   justify-content: right;
   align-items: center;
   padding-right: 64px;
+  height: 100%; 
   //   margin-top: 180px;
 `;
 
 const FormContainer = styled.div`
   width: 460px;
+  height: 100vh;
   padding: 40px;
   border-radius: 8px;
   background-color: #ffffff;
@@ -59,7 +61,7 @@ const SignupPage: React.FC = () => {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                margin: '32px 0',
+                margin: '22px 0',
               }}
             >
               <input type="checkbox" />

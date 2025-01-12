@@ -6,10 +6,12 @@ import { HiXMark } from 'react-icons/hi2';
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
+
 `;
 
 const ValidationWrapper = styled(Wrapper)`
   color: rgba(124, 131, 137, 1);
+  margin-bottom: 20px;
 `;
 
 const RedWrapper = styled(Wrapper)`

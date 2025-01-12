@@ -7,13 +7,13 @@ const Button = styled.button<{ disabled?: boolean }>`
   padding: 18px 8px;
   justify-content: center;
   align-items: center;
-  width: 440px;
+  width: 100%;
   background-color: ${({ disabled }) =>
     disabled ? 'rgba(100, 105, 110, 1)' : 'rgba(94, 82, 255, 1)'};
   border: none;
   border-radius: 6.962px;
   font-family: Roboto;
-  font-size: 20px;
+  font-size: 17px;
   font-style: normal;
   font-weight: 600;
   color: rgba(255, 255, 255, 1);

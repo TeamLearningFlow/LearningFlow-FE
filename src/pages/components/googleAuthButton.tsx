@@ -50,12 +50,12 @@ const Button = styled.button`
   padding: 18px 8px;
   justify-content: center;
   align-items: center;
-  width: 440px;
+  width: 100%;
   background-color: rgba(236, 238, 240, 1);
   border: none;
   border-radius: 6.962px;
   font-family: Roboto;
-  font-size: 20px;
+  font-size: 17px;
   font-style: normal;
   font-weight: 600;
   color: rgba(50, 53, 56, 1);
