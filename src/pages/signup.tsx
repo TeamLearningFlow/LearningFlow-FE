@@ -8,6 +8,7 @@ import InputEmail from './components/inputEmail';
 import InputPw from './components/inputPw';
 import { ValidationCheck } from './components/validation';
 import InputPwCheck from './components/inputPwCheck';
+import TopLogo from './components/topLogo';
 
 const PageContainer = styled.div`
   display: flex;
@@ -44,6 +45,7 @@ const FormGroup = styled.div`
 const SignupPage: React.FC = () => {
   return (
     <>
+      <TopLogo />
       <LeftUI />
       <PageContainer>
         <RightSection>
