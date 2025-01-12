@@ -10,7 +10,7 @@ const InputWrapper = styled.div`
   border: 0.696px solid #323538;
   border-radius: 6.962px;
   padding: 12px;
-  margin-bottom: 25px;
+  margin-bottom: 24px;
 `;
 
 const Input = styled.input`
@@ -38,7 +38,7 @@ const InputEmail: React.FC = () => {
     <div>
       <Label htmlFor="email">이메일</Label>
       <InputWrapper>
-        <Input type="email" placeholder="이메일 주소를 적어주세요." />
+        <Input type="email" placeholder="이메일 주소를 적어주세요" />
       </InputWrapper>
     </div>
   );

@@ -12,7 +12,7 @@ const InputWrapper = styled.div`
   border: 0.696px solid #323538;
   border-radius: 6.962px;
   padding: 12px;
-  margin-bottom: 27px;
+  margin-bottom: 24px;
 
   img {
     width: 18px;
@@ -57,7 +57,7 @@ const InputPw: React.FC = () => {
     <div>
       <Label htmlFor="password">비밀번호</Label>
       <InputWrapper>
-        <Input type="password" placeholder="" />
+        <Input type="password" placeholder="비밀번호를 입력해주세요" />
         <IconWrapper>
           <Image src={invisibleicon} alt="invisibleicon" />
         </IconWrapper>
