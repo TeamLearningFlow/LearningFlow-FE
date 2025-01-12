@@ -23,11 +23,20 @@ const Button = styled.button<{ disabled?: boolean }>`
 const AuthButton = ({
   text,
   disabled,
+  onClick,
 }: {
   text: string;
   disabled: boolean;
+  onClick?: () => void;
 }) => {
-  return <Button disabled={disabled}>{text}</Button>;
+  return (
+    <Button
+      disabled={disabled}
+      onClick={!disabled ? onClick : undefined} // disabled 상태가 아닐 때 onClick 동작
+    >
+      {text}
+    </Button>
+  );
 };
 
 export default AuthButton;
