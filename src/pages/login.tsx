@@ -6,6 +6,7 @@ import LeftUI from './components/leftUI';
 import Divider from './components/divider';
 import GoogleAuthButton from './components/googleAuthButton';
 import AuthButton from './components/authButton';
+import TopLogo from './components/topLogo';
 
 const PageContainer = styled.div`
   display: flex;
@@ -24,7 +25,7 @@ const RightSection = styled.div`
   display: flex;
   justify-content: right;
   align-items: center;
-  padding-right: 67px;
+  padding-right: 40px;
   margin-top: 400px;
 `;
 
@@ -41,6 +42,7 @@ const FormContainer = styled.div`
 const LoginPage: React.FC = () => {
   return (
     <>
+      <TopLogo />
       <LeftUI />
       <PageContainer>
         <RightSection>
