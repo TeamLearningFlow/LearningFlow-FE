@@ -16,8 +16,7 @@ const InputWrapper = styled.div<{ isFocused: boolean }>`
   padding: 12px;
   margin-bottom: 10px;
   transition: box-shadow 0.3s ease;
-  box-shadow: ${(props) =>
-    props.isFocused ? '0 0 5px #5E52ff' : 'none'};
+  box-shadow: ${(props) => (props.isFocused ? '0 0 5px #5E52ff' : 'none')};
 
   img {
     width: 18px;
@@ -67,8 +66,8 @@ const InputPw: React.FC = () => {
 
   const handleFocus = () => setIsFocused(true);
   const handleBlur = () => setIsFocused(false);
-  
-  const PasswordVisibility = () => setIsPasswordVisible(prev => !prev);
+
+  const PasswordVisibility = () => setIsPasswordVisible((prev) => !prev);
 
   const schema = yup.object().shape({
     email: yup
@@ -89,7 +88,11 @@ const InputPw: React.FC = () => {
       .required('비밀번호 확인을 반드시 입력해주세요.'),
   });
 
-  const { register, formState: { errors, isValid }, handleSubmit } = useForm({
+  const {
+    register,
+    formState: { errors, isValid },
+    handleSubmit,
+  } = useForm({
     resolver: yupResolver(schema),
     mode: 'onChange',
   });
@@ -114,4 +117,3 @@ const InputPw: React.FC = () => {
 };
 
 export default InputPw;
-
