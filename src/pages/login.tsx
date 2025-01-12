@@ -10,33 +10,29 @@ import TopLogo from './components/topLogo';
 
 const PageContainer = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 100vh;
   max-width: 1440px;
   margin: 0 auto;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background-color: #ffffff;
 `;
 
 const RightSection = styled.div`
-  flex: 1;
+  position: absolute; /* 절대 위치 지정 */
+  top: 0;
+  right: 0;
+  width: 46vw; /* 화면 너비의 46% 사용 */
+  height: 100vh; /* 화면 전체 높이 사용 */
+  padding-top: 100px;
   display: flex;
-  justify-content: right;
-  align-items: center;
-  padding-right: 40px;
-  margin-top: 400px;
+  flex-direction: column;
 `;
 
 const FormContainer = styled.div`
-  position: absolute;
-  width: 520px;
-  padding: 40px;
+  width: 460px;
+  padding: 105px;
   border-radius: 8px;
   background-color: #ffffff;
-  display: flex;
-  flex-direction: column;
 `;
 
 const LoginPage: React.FC = () => {

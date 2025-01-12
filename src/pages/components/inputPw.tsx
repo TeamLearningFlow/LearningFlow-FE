@@ -5,6 +5,7 @@ import invisibleicon from '../assets/invisibleicon.svg';
 
 const InputWrapper = styled.div`
   display: flex;
+  width: 440px;
   height: 55px;
   position: relative;
   align-items: center;

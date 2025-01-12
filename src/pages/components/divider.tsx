@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const DividerWrapper = styled.div`
+  width: 440px;
   display: flex;
   align-items: center;
   margin: 32px 0;

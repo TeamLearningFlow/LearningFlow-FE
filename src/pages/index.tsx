@@ -6,6 +6,8 @@ const App = () => {
     <div>
       <p>
         <Link href="/login"></Link>
+        <Link href="/signup"></Link>
+        <Link href="/search"></Link>
       </p>
     </div>
   );
