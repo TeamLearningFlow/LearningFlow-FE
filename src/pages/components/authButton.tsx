@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
+import { LoginContext } from '../context/LoginContext';
 
 const Button = styled.button<{ disabled?: boolean }>`
   display: flex;
@@ -20,20 +21,75 @@ const Button = styled.button<{ disabled?: boolean }>`
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 `;
 
-const AuthButton = ({
-  text,
-  disabled,
-  onClick,
-}: {
-  text: string;
-  disabled: boolean;
-  onClick?: () => void;
-}) => {
+const AuthButton = ({ text }: { text: string }) => {
+  // const [formErrorMsg, setFormErrorMsg] = useState<string>('');
+  // const [isValid, setIsValid] = useState<boolean>(false);
+  const [isButtonValid, setIsButtonValid] = useState<boolean>(false);
+
+  const context = useContext(LoginContext);
+  if (!context) throw new Error('LoginContext를 찾을 수 없습니다.');
+
+  const {
+    email,
+    password,
+    isValidEmail,
+    isEmailChecked,
+    isPasswordChecked,
+    isFormValid,
+    formErrorMsg,
+  } = context.state;
+  const {
+    setIsEmailChecked,
+    setIsPasswordChecked,
+    setIsFormValid,
+    setFormErrorMsg,
+  } = context.actions;
+
+  // 로그인 버튼 활성화 유무
+  const buttonValid = (
+    isEmailChecked: boolean,
+    isValidEmail: boolean,
+    isPasswordChecked: boolean,
+  ): boolean => {
+    return (
+      isEmailChecked === true &&
+      isValidEmail === true &&
+      isPasswordChecked === true
+    );
+  };
+
+  // 버튼 활성화 상태 업데이트
+  useEffect(() => {
+    setIsButtonValid(
+      buttonValid(isEmailChecked, isValidEmail, isPasswordChecked),
+    );
+  }, [isEmailChecked, isValidEmail, isPasswordChecked]);
+
+  // 테스트용 이메일-비밀번호
+  const validateForm = (password: string): boolean => {
+    if (email === 'a@naver.com' && password === '0000') return true;
+    if (email === 'b@naver.com' && password === '1111') return true;
+    return false;
+  };
+
+  const handleFormLogin = () => {
+    const isValid = validateForm(password);
+    // setIsValid(validateForm(password));
+    if (isButtonValid) {
+      if (isValid) {
+        setFormErrorMsg('');
+        setIsFormValid(true);
+        alert('로그인 성공');
+      } else {
+        setFormErrorMsg('이메일 또는 비밀번호를 확인해주세요.');
+        setIsFormValid(false);
+        alert('로그인 실패');
+      }
+    }
+  };
+
   return (
-    <Button
-      disabled={disabled}
-      onClick={!disabled ? onClick : undefined} // disabled 상태가 아닐 때 onClick 동작
-    >
+    <Button disabled={!isButtonValid} onClick={handleFormLogin}>
       {text}
     </Button>
   );

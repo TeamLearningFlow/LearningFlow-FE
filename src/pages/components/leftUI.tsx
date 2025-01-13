@@ -21,12 +21,13 @@ const LoginPageCover = styled.div`
   position: absolute; /* 절대 위치 지정 */
   top: 0;
   left: 0;
-  width: 54vw; /* 화면 너비의 54% 사용 */
-  height: 100vh; /* 화면 전체 높이 사용 */
+  width: 53vw; /* 화면 너비의 53% 사용 */
+  // height: 100vh; /* 화면 전체 높이 사용 */
+  height: 100%;
 
   display: flex;
   flex-direction: column;
-  border-radius: 0px 23px 23px 0px;
+  border-radius: 0px 32px 32px 0px;
   background-color: #323538;
 `;
 

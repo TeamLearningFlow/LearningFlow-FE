@@ -1,4 +1,4 @@
-import React /**{ useState } **/ from 'react';
+import React /**{ useContext, useState } **/ from 'react';
 import styled from 'styled-components';
 import InputEmail from './components/inputEmail';
 import InputPw from './components/inputPw';
@@ -7,30 +7,70 @@ import Divider from './components/divider';
 import GoogleAuthButton from './components/googleAuthButton';
 import AuthButton from './components/authButton';
 import TopLogo from './components/topLogo';
+import { LoginProvider } from './context/LoginContext';
 
+// test
+// const Test = styled.div`
+//   width: 100%;
+//   height: 100%;
+//   overflow: hidden;
+// `;
+
+// const PageContainer = styled.div`
+//   display: flex;
+//   // max-width: 1440px;
+//   // margin: 0 auto;
+//   // width: 100%;
+//   height: 100vh;
+//   background-color: #ffffff;
+// `;
+
+// const PageContainer = styled.div`
+//   display: flex;
+//   position: absolute;
+//   top: 0;
+//   left: 100vw;
+// `;
 const PageContainer = styled.div`
   display: flex;
-  max-width: 1440px;
-  margin: 0 auto;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   background-color: #ffffff;
+  overflow: hidden; /* 스크롤 방지 */
 `;
+// height: 100vh; /* 화면 전체 높이 */
 
+// const RightSection = styled.div`
+//   position: absolute; /* 절대 위치 지정 */
+//   top: 0;
+//   right: 0;
+//   width: 46vw; /* 화면 너비의 46% 사용 */
+//   height: 100vh; /* 화면 전체 높이 사용 */
+//   // padding-top: 50px;
+
+//   display: flex;
+//   flex-direction: column;
+// `;
+
+const LeftSection = styled.div`
+  width: 60vw;
+`;
 const RightSection = styled.div`
-  position: absolute; /* 절대 위치 지정 */
+  position: absolute;
   top: 0;
   right: 0;
-  width: 46vw; /* 화면 너비의 46% 사용 */
-  height: 100vh; /* 화면 전체 높이 사용 */
-  padding-top: 50px;
-  display: flex;
-  flex-direction: column;
+  width: 43vw;
+  height: 100%;
 `;
+// min-height: 100%;
+// display: flex;
 
 const FormContainer = styled.div`
   width: 460px;
-  padding: 105px;
+  // padding: 105px;
+  padding: 85px;
+  padding-top: 60px;
+  padding-bottom: 0px;
   border-radius: 8px;
   background-color: #ffffff;
 `;
@@ -50,6 +90,7 @@ const CheckboxContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 12px;
   margin-bottom: 32px;
 
   label {
@@ -116,32 +157,38 @@ const LoginPage: React.FC = () => {
 
   return (
     <>
-      <TopLogo />
-      <LeftUI />
-      <PageContainer>
-        <RightSection>
-          <FormContainer>
-            <Title>로그인</Title>
-            <InputEmail />
-            <InputPw />
-            <CheckboxContainer>
-              <label>
-                <input type="checkbox" /> 로그인 유지
-              </label>
-              <div>
-                <a href="/forgot-id">아이디(이메일) 찾기</a> |{' '}
-                <a href="/forgot-password">비밀번호 찾기</a>
-              </div>
-            </CheckboxContainer>
-            <SignupText>
-              온보딩이 처음이신가요? <a href="/signup">회원가입</a>
-            </SignupText>
-            <AuthButton disabled={true} text="로그인" />
-            <Divider />
-            <GoogleAuthButton text="Google 계정으로 로그인" />
-          </FormContainer>
-        </RightSection>
-      </PageContainer>
+      {/* <Test> */}
+      <LoginProvider>
+        <LeftSection>
+          <TopLogo />
+          <LeftUI />
+        </LeftSection>
+        <PageContainer>
+          <RightSection>
+            <FormContainer>
+              <Title>로그인</Title>
+              <InputEmail />
+              <InputPw />
+              <CheckboxContainer>
+                <label>
+                  <input type="checkbox" /> 로그인 유지
+                </label>
+                <div>
+                  <a href="/forgot-id">아이디(이메일) 찾기</a> |{' '}
+                  <a href="/forgot-password">비밀번호 찾기</a>
+                </div>
+              </CheckboxContainer>
+              <SignupText>
+                온보딩이 처음이신가요? <a href="/signup">회원가입</a>
+              </SignupText>
+              <AuthButton disabled={true} text="로그인" />
+              <Divider />
+              <GoogleAuthButton text="Google 계정으로 로그인" />
+            </FormContainer>
+          </RightSection>
+        </PageContainer>
+      </LoginProvider>
+      {/* </Test> */}
     </>
   );
 };
