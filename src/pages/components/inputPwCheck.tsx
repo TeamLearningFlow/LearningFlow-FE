@@ -3,23 +3,33 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import invisibleicon from '../assets/invisibleicon.svg';
 
-const InputWrapper = styled.div<{ isFocused: boolean, isError: boolean, hasBlurred: boolean }>`
+const InputWrapper = styled.div<{
+  isFocused: boolean;
+  isError: boolean;
+  hasBlurred: boolean;
+}>`
   display: flex;
-  height: 55px;
+  height: 50px;
   position: relative;
   align-items: center;
   border: 0.696px solid #323538;
   border-radius: 6.962px;
   padding: 12px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   transition: box-shadow 0.3s ease;
   box-shadow: ${(props) =>
     props.isError ? 'none' : props.isFocused ? '0 0 5px #5E52ff' : 'none'};
   border-color: ${(props) => (props.isError ? 'red' : '#323538')};
-  background-color: ${(props) => 
+  background-color: ${(props) =>
     props.isError ? '#fff' : props.hasBlurred ? '#f5f5ff' : '#fff'};
-`;
+  overflow: hidden;
 
+  img {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+`;
 
 const Input = styled.input`
   flex: 1;
@@ -27,8 +37,10 @@ const Input = styled.input`
   border: none;
   outline: none;
   font-size: 15px;
-  padding-right: 40px;
   margin-left: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   &::placeholder {
     color: #afb8c1;
@@ -52,7 +64,7 @@ const IconWrapper = styled.div`
 
 const Label = styled.label`
   display: block;
-  margin-bottom: 12px;
+  margin-bottom: 9px;
   font-size: 14px;
   color: #181818;
 `;
@@ -83,20 +95,25 @@ const InputPwCheck: React.FC<{ password: string }> = ({ password }) => {
     }
   };
 
-  const handlePasswordCheckChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePasswordCheckChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setPasswordCheck(e.target.value);
     const isPasswordMatch = e.target.value === password;
     setIsError(!isPasswordMatch);
     setHasBlurred(isPasswordMatch);
   };
-  
 
-  const PasswordVisibility = () => setIsPasswordVisible(prev => !prev);
+  const PasswordVisibility = () => setIsPasswordVisible((prev) => !prev);
 
   return (
     <div>
-      <Label htmlFor="passwordCheck">비밀번호 확인</Label>
-      <InputWrapper isFocused={isFocused} isError={isError} hasBlurred={hasBlurred}>
+      <Label htmlFor="passwordCheck=">비밀번호 확인</Label>
+      <InputWrapper
+        isFocused={isFocused}
+        isError={isError}
+        hasBlurred={hasBlurred}
+      >
         <Input
           type={isPasswordVisible ? 'text' : 'password'}
           value={passwordCheck}

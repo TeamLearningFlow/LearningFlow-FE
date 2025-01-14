@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const Button = styled.button<{ disabled?: boolean }>`
   display: flex;
-  height: 57px;
+  height: 50px;
   padding: 18px 8px;
   justify-content: center;
   align-items: center;

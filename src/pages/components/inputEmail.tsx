@@ -3,18 +3,17 @@ import styled from 'styled-components';
 
 const InputWrapper = styled.div<{ isFocused: boolean; hasBlurred: boolean }>`
   display: flex;
-  width: 100%;
-  height: 55px;
+  height: 50px;
   position: relative;
   align-items: center;
-  justify-content: center;
   border: 0.696px solid #323538;
   border-radius: 6.962px;
   padding: 12px;
-  margin-bottom: 25px;
+  margin-bottom: 23px;
   transition: box-shadow 0.3s ease;
   box-shadow: ${(props) => (props.isFocused ? '0 0 5px #5E52ff' : 'none')};
   background-color: ${(props) => (props.hasBlurred ? '#f5f5ff' : '#fff')};
+  overflow: hidden;
 `;
 
 const Input = styled.input`
@@ -25,6 +24,9 @@ const Input = styled.input`
   font-size: 15px;
   padding-right: 40px;
   margin-left: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   &::placeholder {
     color: #afb8c1;
@@ -37,7 +39,8 @@ const Input = styled.input`
 
 const Label = styled.label`
   display: block;
-  margin-bottom: 12px;
+  margin-bottom: 9px;
+  margin-top: 28px;
   font-size: 14px;
   color: #181818;
 `;
@@ -70,7 +73,7 @@ const InputEmail: React.FC = () => {
         <Input
           type="email"
           value={value}
-          placeholder="이메일 주소를 적어주세요."
+          placeholder="이메일 주소를 적어주세요"
           onFocus={handleFocus}
           onBlur={handleBlur}
           onChange={handleChange}

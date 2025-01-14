@@ -7,9 +7,9 @@ const GoogleLogo: React.FC = () => {
       xmlns="http://www.w3.org/2000/svg"
       width="20"
       height="20"
-      viewBox="0 0 25 25"
+      viewBox="0 0 30 30"
       fill="none"
-      style={{ width: '24px', height: '24px', marginRight: '16px' }}
+      style={{ width: '24px', height: '24px', marginRight: '10px' }}
     >
       <mask
         id="mask0_1083_18144"
@@ -46,7 +46,7 @@ const GoogleLogo: React.FC = () => {
 
 const Button = styled.button`
   display: flex;
-  height: 57px;
+  height: 50px;
   padding: 18px 8px;
   justify-content: center;
   align-items: center;

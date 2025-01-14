@@ -15,57 +15,65 @@ const PageContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   height: 100vh;
-  max-width: 1440px;
-  margin: 0 auto;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
   background-color: #ffffff;
+  overflow: hidden;
+`;
+
+const LeftSection = styled.div`
+  width: 54vw;
+  display: flex;
 `;
 
 const RightSection = styled.div`
-  flex: 1;
+  width: 46vw;
   display: flex;
-  justify-content: right;
+  justify-content: center;
   align-items: center;
-  padding-right: 64px;
-  height: 100%;
+  box-sizing: border-box;
 `;
 
 const FormContainer = styled.div`
-  width: 460px;
-  height: 100vh;
-  padding: 40px;
+  position: absolute;
+  width: 30vw;
+  max-width: 420px;
   border-radius: 8px;
   background-color: #ffffff;
+  box-sizing: border-box;
 `;
 
-const FormGroup = styled.div`
-  margin-bottom: 32px;
-`;
+const FormGroup = styled.div``;
 
 const SignupPage: React.FC = () => {
   const [password, setPassword] = useState('');
-  
+
   return (
     <>
-      <TopLogo />
-      <LeftUI />
       <PageContainer>
+        <LeftSection>
+          <TopLogo />
+          <LeftUI />
+        </LeftSection>
         <RightSection>
           <FormContainer>
-            <h2 style={{ textAlign: 'center' }}>회원가입</h2>
+            <h2 style={{ textAlign: 'center', fontSize: '25px' }}>회원가입</h2>
             <InputEmail />
             <InputPw setPassword={setPassword} />
             <ValidationCheck />
             {/* 비밀번호 확인을 위한 InputPwCheck 컴포넌트 */}
             <InputPwCheck password={password} />
-            <div style={{ display: 'flex', alignItems: 'center', margin: '22px 0' }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                margin: '22px 0',
+              }}
+            >
               <input type="checkbox" />
-              <span style={{ fontSize: '12px', marginLeft: '6px' }}>
+              <span style={{ fontSize: '13px', marginLeft: '6px' }}>
                 이벤트, 맞춤 추천, 학습 팁 등을 보내주세요
               </span>
             </div>
-
             <FormGroup>
               <AuthButton disabled={true} text="가입하기" />
               <Divider />

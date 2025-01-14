@@ -8,15 +8,16 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 const InputWrapper = styled.div<{ isFocused: boolean }>`
   display: flex;
-  height: 55px;
+  height: 50px;
   position: relative;
   align-items: center;
   border: 0.696px solid #323538;
   border-radius: 6.962px;
   padding: 12px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   transition: box-shadow 0.3s ease;
   box-shadow: ${(props) => (props.isFocused ? '0 0 5px #5E52ff' : 'none')};
+  overflow: hidden;
 
   img {
     width: 18px;
@@ -32,6 +33,10 @@ const Input = styled.input`
   font-size: 15px;
   padding-right: 40px;
   margin-left: 15px;
+  background-color: transparent;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   &::placeholder {
     color: #afb8c1;
@@ -51,16 +56,19 @@ const IconWrapper = styled.div`
   height: 18px;
   position: absolute;
   right: 20px;
+  z-index: 1;
 `;
 
 const Label = styled.label`
   display: block;
-  margin-bottom: 12px;
+  margin-bottom: 9px;
   font-size: 14px;
   color: #181818;
 `;
 
-const InputPw: React.FC<{ setPassword: React.Dispatch<React.SetStateAction<string>> }> = ({ setPassword }) => {
+const InputPw: React.FC<{
+  setPassword: React.Dispatch<React.SetStateAction<string>>;
+}> = ({ setPassword }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
