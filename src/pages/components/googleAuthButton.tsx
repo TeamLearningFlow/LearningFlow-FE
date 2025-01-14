@@ -50,7 +50,7 @@ const Button = styled.button`
   padding: 18px 8px;
   justify-content: center;
   align-items: center;
-  width: 420px;
+  width: 100%;
   background-color: rgba(236, 238, 240, 1);
   border: none;
   border-radius: 6.962px;

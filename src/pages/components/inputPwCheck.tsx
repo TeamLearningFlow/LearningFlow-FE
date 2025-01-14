@@ -5,7 +5,7 @@ import invisibleicon from '../assets/invisibleicon.svg';
 
 const InputWrapper = styled.div`
   display: flex;
-  width: 440px;
+  width: 100%;
   height: 55px;
   position: relative;
   align-items: center;
@@ -13,6 +13,7 @@ const InputWrapper = styled.div`
   border-radius: 6.962px;
   padding: 12px;
   margin-bottom: 27px;
+  overflow: hidden;
 
   img {
     width: 18px;
@@ -28,6 +29,9 @@ const Input = styled.input`
   font-size: 15px;
   padding-right: 40px;
   margin-left: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background-color: transparent;
 
   &::placeholder {
     color: #afb8c1;

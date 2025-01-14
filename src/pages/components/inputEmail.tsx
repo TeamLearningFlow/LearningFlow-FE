@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { LoginContext } from '../context/LoginContext';
 import Image from 'next/image';
-import X from '../assets/X_red.png';
+import X from '../assets/X_red.svg';
 
 const Label = styled.label`
   display: block;
@@ -18,7 +18,7 @@ const InputWrapper = styled.div<{
   isChecked: boolean;
 }>`
   display: flex;
-  width: 420px;
+  width: 100%;
   height: 50px;
   position: relative;
   align-items: center;
@@ -58,6 +58,7 @@ const InputWrapper = styled.div<{
     return 'none';
   }};
 
+  overflow: hidden;
   padding: 12px;
   margin-bottom: 7px;
 `;
@@ -74,15 +75,17 @@ const Input = styled.input<{
   font-size: 15px;
   padding-right: 40px;
   margin-left: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   color: ${({ isValid }) => (isValid ? '#1f1f1f' : '#ec2d30')};
   background-color: ${(props) => {
     if (props.isChecked) {
       // 유효성 검사가 실행되었을 때
-      return props.isValid ? '#F5F5FF' : '#FFFFFF';
+      return props.isValid ? '#F5F5FF' : 'transparent';
     } else {
       // 유효성 검사가 실행되지 않은 초기 상태
-      return '#FFFFFF';
+      return 'transparent';
     }
   }};
 
@@ -134,7 +137,7 @@ const InputEmail: React.FC = () => {
       const isValid = validateEmail(email);
       setIsValidEmail(isValid);
       setIsEmailChecked(true); // 유효성 검사 실행 여부를 true로 설정
-      setErrorMessage(isValid ? '' : '이메일 형식이 올바르지 않습니다.');
+      setErrorMessage(isValid ? '' : '이메일 형식이 올바르지 않습니다');
     }
   };
 

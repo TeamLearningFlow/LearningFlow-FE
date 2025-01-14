@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const DividerWrapper = styled.div`
-  width: 420px;
+  width: 100%;
   display: flex;
   align-items: center;
   margin: 28px 0;

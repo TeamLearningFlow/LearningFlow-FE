@@ -42,7 +42,7 @@ const FormContainer = styled.div`
 `;
 
 const Title = styled.h1`
-  width: 420px;
+  width: 100%;
   font-size: 29px;
   font-weight: 600;
   letter-spacing: -0.64px;
@@ -52,7 +52,7 @@ const Title = styled.h1`
 `;
 
 const CheckboxContainer = styled.div`
-  width: 420px;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -86,7 +86,7 @@ const CheckboxContainer = styled.div`
 `;
 
 const SignupText = styled.p`
-  width: 420px;
+  width: 100%;
   text-align: center;
   font-size: 15px;
   font-weight: 400;

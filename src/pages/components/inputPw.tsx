@@ -19,7 +19,7 @@ const InputWrapper = styled.div<{
   isError: boolean;
 }>`
   display: flex;
-  width: 420px;
+  width: 100%;
   height: 50px;
   position: relative;
   align-items: center;
@@ -54,6 +54,7 @@ const InputWrapper = styled.div<{
 
   padding: 12px;
   margin-bottom: 6px;
+  overflow: hidden;
 
   img {
     width: 18px;
@@ -69,15 +70,17 @@ const Input = styled.input<{ isValid: boolean; isChecked: boolean }>`
   font-size: 15px;
   padding-right: 40px;
   margin-left: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   color: #1f1f1f;
   background-color: ${(props) => {
     if (props.isChecked) {
       // 유효성 검사가 실행되었을 때
-      return props.isValid ? '#F5F5FF' : '#FFFFFF';
+      return props.isValid ? '#F5F5FF' : 'transparent';
     } else {
       // 유효성 검사가 실행되지 않은 초기 상태
-      return '#FFFFFF';
+      return 'transparent';
     }
   }};
 

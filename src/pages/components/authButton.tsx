@@ -8,7 +8,7 @@ const Button = styled.button<{ disabled?: boolean }>`
   padding: 18px 8px;
   justify-content: center;
   align-items: center;
-  width: 420px;
+  width: 100%;
   background-color: ${({ disabled }) =>
     disabled ? 'rgba(100, 105, 110, 1)' : 'rgba(94, 82, 255, 1)'};
   border: none;
