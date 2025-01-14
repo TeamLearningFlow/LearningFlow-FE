@@ -6,7 +6,7 @@ import X from '../assets/X_red.png';
 
 const Label = styled.label`
   display: block;
-  margin-bottom: 12px;
+  margin-bottom: 9px;
   font-size: 14px;
   color: #181818;
 `;
@@ -18,8 +18,8 @@ const InputWrapper = styled.div<{
   isChecked: boolean;
 }>`
   display: flex;
-  width: 440px;
-  height: 55px;
+  width: 420px;
+  height: 50px;
   position: relative;
   align-items: center;
 
@@ -59,7 +59,7 @@ const InputWrapper = styled.div<{
   }};
 
   padding: 12px;
-  margin-bottom: 4px;
+  margin-bottom: 7px;
 `;
 
 const Input = styled.input<{
@@ -103,7 +103,6 @@ const XImg = styled(Image)`
 
 const EmailErrorMsg = styled.span`
   margin-left: 4px;
-  font-family: Pretendard;
   font-size: 14px;
   color: #ec2d30;
 `;

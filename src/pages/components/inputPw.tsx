@@ -6,8 +6,8 @@ import invisibleicon from '../assets/invisibleicon.svg';
 
 const Label = styled.label`
   display: block;
-  margin-top: 15px;
-  margin-bottom: 12px;
+  margin-top: 22px;
+  margin-bottom: 9px;
   font-size: 14px;
   color: #181818;
 `;
@@ -19,8 +19,8 @@ const InputWrapper = styled.div<{
   isError: boolean;
 }>`
   display: flex;
-  width: 440px;
-  height: 55px;
+  width: 420px;
+  height: 50px;
   position: relative;
   align-items: center;
 
@@ -53,7 +53,7 @@ const InputWrapper = styled.div<{
       : 'none'}; // 포커스 시 그림자
 
   padding: 12px;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 
   img {
     width: 18px;

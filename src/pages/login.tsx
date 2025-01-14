@@ -9,92 +9,58 @@ import AuthButton from './components/authButton';
 import TopLogo from './components/topLogo';
 import { LoginProvider } from './context/LoginContext';
 
-// test
-// const Test = styled.div`
-//   width: 100%;
-//   height: 100%;
-//   overflow: hidden;
-// `;
-
-// const PageContainer = styled.div`
-//   display: flex;
-//   // max-width: 1440px;
-//   // margin: 0 auto;
-//   // width: 100%;
-//   height: 100vh;
-//   background-color: #ffffff;
-// `;
-
-// const PageContainer = styled.div`
-//   display: flex;
-//   position: absolute;
-//   top: 0;
-//   left: 100vw;
-// `;
 const PageContainer = styled.div`
   display: flex;
-  width: 100%;
-  height: 100%;
+  justify-content: space-between;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
   background-color: #ffffff;
-  overflow: hidden; /* 스크롤 방지 */
+  overflow: hidden;
 `;
-// height: 100vh; /* 화면 전체 높이 */
-
-// const RightSection = styled.div`
-//   position: absolute; /* 절대 위치 지정 */
-//   top: 0;
-//   right: 0;
-//   width: 46vw; /* 화면 너비의 46% 사용 */
-//   height: 100vh; /* 화면 전체 높이 사용 */
-//   // padding-top: 50px;
-
-//   display: flex;
-//   flex-direction: column;
-// `;
 
 const LeftSection = styled.div`
-  width: 60vw;
+  width: 54vw;
+  display: flex;
 `;
+
 const RightSection = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 43vw;
-  height: 100%;
+  width: 46vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
 `;
-// min-height: 100%;
-// display: flex;
 
 const FormContainer = styled.div`
-  width: 460px;
-  // padding: 105px;
-  padding: 85px;
-  padding-top: 60px;
-  padding-bottom: 0px;
+  position: absolute;
+  width: 30vw;
+  max-width: 420px;
   border-radius: 8px;
   background-color: #ffffff;
+  box-sizing: border-box;
 `;
 
 const Title = styled.h1`
-  width: 440px;
-  font-size: 32px;
+  width: 420px;
+  font-size: 29px;
   font-weight: 600;
   letter-spacing: -0.64px;
-  margin-bottom: 32px;
+  margin-bottom: 28px;
   text-align: center;
   color: #181818;
 `;
 
 const CheckboxContainer = styled.div`
-  width: 440px;
+  width: 420px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 12px;
+  margin-top: 16px;
   margin-bottom: 32px;
 
   label {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 400;
     letter-spacing: -0.28px;
     color: #181818;
@@ -103,14 +69,13 @@ const CheckboxContainer = styled.div`
     position: relative;
 
     input {
-      transform: scale(1.2); /* 체크박스 크기 1.2배 확대 */
       margin-right: 6px;
       cursor: pointer;
     }
   }
 
   a {
-    font-size: 14px;
+    font-size: 13px;
     color: #7c8389;
     text-decoration: none;
 
@@ -121,9 +86,9 @@ const CheckboxContainer = styled.div`
 `;
 
 const SignupText = styled.p`
-  width: 440px;
+  width: 420px;
   text-align: center;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 400;
   letter-spacing: -0.36px;
   color: #bbc0c5;
@@ -131,7 +96,7 @@ const SignupText = styled.p`
 
   a {
     color: #181818;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
     letter-spacing: -0.36px;
     text-decoration: none;
@@ -159,11 +124,11 @@ const LoginPage: React.FC = () => {
     <>
       {/* <Test> */}
       <LoginProvider>
-        <LeftSection>
-          <TopLogo />
-          <LeftUI />
-        </LeftSection>
         <PageContainer>
+          <LeftSection>
+            <TopLogo />
+            <LeftUI />
+          </LeftSection>
           <RightSection>
             <FormContainer>
               <Title>로그인</Title>

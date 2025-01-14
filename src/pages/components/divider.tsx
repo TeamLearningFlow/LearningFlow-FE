@@ -2,10 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 
 const DividerWrapper = styled.div`
-  width: 440px;
+  width: 420px;
   display: flex;
   align-items: center;
-  margin: 32px 0;
+  margin: 28px 0;
 `;
 
 const Line = styled.div`
@@ -22,7 +22,7 @@ const Text = styled.span`
     'liga' off,
     'clig' off;
   font-family: Pretendard;
-  font-size: 18px;
+  font-size: 16px;
   font-style: normal;
   font-weight: 400;
   line-height: 20px; /* 111.111% */
