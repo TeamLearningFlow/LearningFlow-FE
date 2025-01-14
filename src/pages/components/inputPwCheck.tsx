@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import invisibleicon from '../assets/invisibleicon.svg';
 
-const InputWrapper = styled.div<{ isFocused: boolean, isError: boolean }>`
+const InputWrapper = styled.div<{ isFocused: boolean, isError: boolean, hasBlurred: boolean }>`
   display: flex;
   height: 55px;
   position: relative;
@@ -14,12 +14,16 @@ const InputWrapper = styled.div<{ isFocused: boolean, isError: boolean }>`
   margin-bottom: 10px;
   transition: box-shadow 0.3s ease;
   box-shadow: ${(props) =>
-    props.isError ? 'none' : props.isFocused ? '0 0 5px #5E52ff' : 'none'}; /* 비밀번호 불일치 시 shadow 제거 */
-  border-color: ${(props) => (props.isError ? 'red' : '#323538')}; /* 비밀번호 불일치 시 테두리 색상 변경 */
+    props.isError ? 'none' : props.isFocused ? '0 0 5px #5E52ff' : 'none'};
+  border-color: ${(props) => (props.isError ? 'red' : '#323538')};
+  background-color: ${(props) => 
+    props.isError ? '#fff' : props.hasBlurred ? '#f5f5ff' : '#fff'};
 `;
+
 
 const Input = styled.input`
   flex: 1;
+  background: transparent;
   border: none;
   outline: none;
   font-size: 15px;
@@ -61,24 +65,38 @@ const ErrorText = styled.span`
 
 const InputPwCheck: React.FC<{ password: string }> = ({ password }) => {
   const [isFocused, setIsFocused] = useState(false);
+  const [hasBlurred, setHasBlurred] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [passwordCheck, setPasswordCheck] = useState('');
   const [isError, setIsError] = useState(false);
+  const [value, setValue] = useState('');
 
-  const handleFocus = () => setIsFocused(true);
-  const handleBlur = () => setIsFocused(false);
+  const handleFocus = () => {
+    setIsFocused(true);
+    setHasBlurred(false);
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+    if (value.trim() !== '') {
+      setHasBlurred(true);
+    }
+  };
 
   const handlePasswordCheckChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPasswordCheck(e.target.value);
-    setIsError(e.target.value !== password);
+    const isPasswordMatch = e.target.value === password;
+    setIsError(!isPasswordMatch);
+    setHasBlurred(isPasswordMatch);
   };
+  
 
   const PasswordVisibility = () => setIsPasswordVisible(prev => !prev);
 
   return (
     <div>
       <Label htmlFor="passwordCheck">비밀번호 확인</Label>
-      <InputWrapper isFocused={isFocused} isError={isError}>
+      <InputWrapper isFocused={isFocused} isError={isError} hasBlurred={hasBlurred}>
         <Input
           type={isPasswordVisible ? 'text' : 'password'}
           value={passwordCheck}
