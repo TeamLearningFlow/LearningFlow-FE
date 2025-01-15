@@ -1,23 +1,20 @@
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import invisibleicon from '../assets/invisibleicon.svg';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { ValidationCheck } from './validation';
 
 const InputWrapper = styled.div<{ isFocused: boolean }>`
   display: flex;
-  height: 50px;
+  height: 55px;
   position: relative;
   align-items: center;
   border: 0.696px solid #323538;
   border-radius: 6.962px;
   padding: 12px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   transition: box-shadow 0.3s ease;
   box-shadow: ${(props) => (props.isFocused ? '0 0 5px #5E52ff' : 'none')};
-  overflow: hidden;
 
   img {
     width: 18px;
@@ -33,10 +30,6 @@ const Input = styled.input`
   font-size: 15px;
   padding-right: 40px;
   margin-left: 15px;
-  background-color: transparent;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 
   &::placeholder {
     color: #afb8c1;
@@ -56,45 +49,50 @@ const IconWrapper = styled.div`
   height: 18px;
   position: absolute;
   right: 20px;
-  z-index: 1;
 `;
 
 const Label = styled.label`
   display: block;
-  margin-bottom: 9px;
+  margin-bottom: 12px;
   font-size: 14px;
   color: #181818;
 `;
 
-const InputPw: React.FC<{
+interface SignupInputPwProps {
   setPassword: React.Dispatch<React.SetStateAction<string>>;
-}> = ({ setPassword }) => {
+  setIsPasswordValid: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const SignupInputPw: React.FC<SignupInputPwProps> = ({ setPassword, setIsPasswordValid }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [passwordValidation, setPasswordValidation] = useState({
+    hasUpperCase: false,
+    hasSpecialChar: false,
+    isLengthValid: false,
+  });
 
   const handleFocus = () => setIsFocused(true);
 
+  const handlePasswordChange = (value: string) => {
+    setPassword(value);
+    setPasswordValidation({
+      hasUpperCase: /[A-Z]/.test(value) && /[a-z]/.test(value),
+      hasSpecialChar: /[!@#$%^&*()_+]/.test(value),
+      isLengthValid: value.length >= 8 && value.length <= 16,
+    });
+  };
+
   const PasswordVisibility = () => setIsPasswordVisible((prev) => !prev);
 
-  const schema = yup.object().shape({
-    password: yup
-      .string()
-      .min(8, '8자 이상 16자 이하')
-      .max(16, '8자 이상 16자 이하')
-      .matches(/[a-zA-Z]/, '영문자 포함')
-      .matches(/\d/, '숫자 포함')
-      .matches(/[!@#$%^&*()_+]/, '특수문자 포함')
-      .required('비밀번호를 반드시 입력해주세요.'),
-  });
-
-  const {
-    register,
-    formState: { errors, isValid },
-    handleSubmit,
-  } = useForm({
-    resolver: yupResolver(schema),
-    mode: 'onChange',
-  });
+  // 부모 컴포넌트로 유효성 전달
+  useEffect(() => {
+    const isValid =
+      passwordValidation.hasUpperCase &&
+      passwordValidation.hasSpecialChar &&
+      passwordValidation.isLengthValid;
+    setIsPasswordValid(isValid);
+  }, [passwordValidation, setIsPasswordValid]);
 
   return (
     <div>
@@ -104,15 +102,16 @@ const InputPw: React.FC<{
           type={isPasswordVisible ? 'text' : 'password'}
           placeholder="영문, 숫자, 특수문자 포함 8~16자"
           onFocus={handleFocus}
-          {...register('password')}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => handlePasswordChange(e.target.value)}
         />
         <IconWrapper onClick={PasswordVisibility}>
           <Image src={invisibleicon} alt="비밀번호 보이기/숨기기 아이콘" />
         </IconWrapper>
       </InputWrapper>
+      <ValidationCheck passwordValidation={passwordValidation} />
     </div>
   );
 };
 
-export default InputPw;
+export default SignupInputPw;
+

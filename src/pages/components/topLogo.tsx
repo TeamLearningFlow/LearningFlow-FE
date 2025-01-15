@@ -3,14 +3,15 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import LogoLight from '../assets/logo_light.png';
 
-const Container = styled.div`
-  display: flex;
-  position: absolute;
-  width: 700px;
-  height: 674px;
-  left: 0px;
-  top: 0px;
-`;
+// const Container = styled.div`
+//   display: flex;
+//   position: absolute;
+//   width: 700px;
+//   height: 674px;
+//   left: 0px;
+//   top: 0px;
+//   background-color: #323538;
+// `;
 
 const Box = styled.div`
   height: 100%;
@@ -33,18 +34,13 @@ const LogoContainer = styled.div`
 
 const TopLogo: React.FC = () => {
   return (
-    <Container>
-      <Box>
-        <LogoContainer>
-          <Image
-            src={LogoLight}
-            alt="Light Logo"
-            width={130}
-            height={20}
-          />
-        </LogoContainer>
-      </Box>
-    </Container>
+    // <Container>
+    <Box>
+      <LogoContainer>
+        <Image src={LogoLight} alt="Light Logo" width={130} height={20} />
+      </LogoContainer>
+    </Box>
+    // </Container>
   );
 };
 

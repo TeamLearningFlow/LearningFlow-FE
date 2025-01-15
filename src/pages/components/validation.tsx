@@ -6,16 +6,22 @@ import { HiXMark } from 'react-icons/hi2';
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
-
 `;
 
-const ValidationWrapper = styled(Wrapper)`
-  color: rgba(124, 131, 137, 1);
-  margin-bottom: 20px;
+const ValidationWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
 `;
 
 const RedWrapper = styled(Wrapper)`
   color: rgba(236, 45, 48, 1);
+  margin-bottom: 8px;
+`;
+
+const ValidationBox = styled(Wrapper)<{ isValid: boolean }>`
+  color: ${(props) => (props.isValid ? '#165bfa' : '#ec2d30')};
+  margin-bottom: 8px;
 `;
 
 const ValidationLabel = styled.span`
@@ -24,15 +30,36 @@ const ValidationLabel = styled.span`
   margin-right: 16px;
 `;
 
-const ValidationCheck = () => {
+interface ValidationCheckProps {
+  passwordValidation: {
+    hasUpperCase: boolean;
+    hasSpecialChar: boolean;
+    isLengthValid: boolean;
+  } | undefined;
+}
+
+
+const ValidationCheck: React.FC<ValidationCheckProps> = ({ passwordValidation }) => {
+  const validation = passwordValidation || {
+    hasUpperCase: false,
+    hasSpecialChar: false,
+    isLengthValid: false,
+  };
+
   return (
     <ValidationWrapper>
-      <IoCheckmark />
-      <ValidationLabel>대소문자 포함</ValidationLabel>
-      <IoCheckmark />
-      <ValidationLabel>특수문자 포함</ValidationLabel>
-      <IoCheckmark />
-      <ValidationLabel>8자 이상 16자 이하</ValidationLabel>
+      <ValidationBox isValid={validation.hasUpperCase}>
+        <IoCheckmark />
+        <ValidationLabel>대소문자 포함</ValidationLabel>
+      </ValidationBox>
+      <ValidationBox isValid={validation.hasSpecialChar}>
+        <IoCheckmark />
+        <ValidationLabel>특수문자 포함</ValidationLabel>
+      </ValidationBox>
+      <ValidationBox isValid={validation.isLengthValid}>
+        <IoCheckmark />
+        <ValidationLabel>8자 이상 16자 이하</ValidationLabel>
+      </ValidationBox>
     </ValidationWrapper>
   );
 };

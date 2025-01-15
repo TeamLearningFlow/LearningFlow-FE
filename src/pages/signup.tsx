@@ -5,8 +5,7 @@ import Divider from './components/divider';
 import GoogleAuthButton from './components/googleAuthButton';
 import AuthButton from './components/authButton';
 import InputEmail from './components/inputEmail';
-import InputPw from './components/inputPw';
-import { ValidationCheck } from './components/validation';
+import SignupInputPw from './components/signupInputPw';
 import InputPwCheck from './components/inputPwCheck';
 import TopLogo from './components/topLogo';
 
@@ -18,7 +17,6 @@ const PageContainer = styled.div`
   max-width: 1440px;
   margin: 0 auto;
   width: 100%;
-  height: 100%;
   background-color: #ffffff;
 `;
 
@@ -45,7 +43,12 @@ const FormGroup = styled.div`
 
 const SignupPage: React.FC = () => {
   const [password, setPassword] = useState('');
-  
+  const [isEmailValid, setIsEmailValid] = useState(false);
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
+  const [isPasswordCheckValid, setIsPasswordCheckValid] = useState(false);
+
+  const isFormValid = isEmailValid && isPasswordValid && isPasswordCheckValid;
+
   return (
     <>
       <TopLogo />
@@ -54,11 +57,9 @@ const SignupPage: React.FC = () => {
         <RightSection>
           <FormContainer>
             <h2 style={{ textAlign: 'center' }}>회원가입</h2>
-            <InputEmail />
-            <InputPw setPassword={setPassword} />
-            <ValidationCheck />
-            {/* 비밀번호 확인을 위한 InputPwCheck 컴포넌트 */}
-            <InputPwCheck password={password} />
+            <InputEmail setIsEmailValid={setIsEmailValid} />
+            <SignupInputPw setPassword={setPassword} setIsPasswordValid={setIsPasswordValid} />
+            <InputPwCheck password={password} setIsPasswordCheckValid={setIsPasswordCheckValid} />
             <div style={{ display: 'flex', alignItems: 'center', margin: '22px 0' }}>
               <input type="checkbox" />
               <span style={{ fontSize: '12px', marginLeft: '6px' }}>
@@ -67,7 +68,7 @@ const SignupPage: React.FC = () => {
             </div>
 
             <FormGroup>
-              <AuthButton disabled={true} text="가입하기" />
+              <AuthButton text="가입하기" disabled={!isFormValid} />
               <Divider />
               <GoogleAuthButton text="Google 계정으로 회원가입" />
             </FormGroup>
