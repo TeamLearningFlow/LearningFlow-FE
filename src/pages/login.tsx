@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import InputEmail from './components/inputEmail';
 import InputPw from './components/inputPw';
@@ -109,20 +109,8 @@ const SignupText = styled.p`
 `;
 
 const LoginPage: React.FC = () => {
-  /** const [passwordValid, setPasswordValid] = useState(false); // 비밀번호 유효 상태
-  const [passwordError, setPasswordError] = useState(false); // 비밀번호 오류 상태 
-
-  const handleLogin = () => {};
-
- const handlePasswordEnter = (isValid: boolean) => {
-    if (isValid) {
-      setPasswordError(false); // 조건 충족 시 오류 초기화
-    }
-  }; **/
-
   return (
     <>
-      {/* <Test> */}
       <LoginProvider>
         <PageContainer>
           <LeftSection>
@@ -153,7 +141,6 @@ const LoginPage: React.FC = () => {
           </RightSection>
         </PageContainer>
       </LoginProvider>
-      {/* </Test> */}
     </>
   );
 };

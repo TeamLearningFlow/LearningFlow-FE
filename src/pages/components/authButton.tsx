@@ -29,22 +29,11 @@ const AuthButton = ({ text }: { text: string }) => {
   const context = useContext(LoginContext);
   if (!context) throw new Error('LoginContext를 찾을 수 없습니다.');
 
-  const {
-    email,
-    password,
-    isValidEmail,
-    isEmailChecked,
-    isPasswordChecked,
-    isFormValid,
-    formErrorMsg,
-  } = context.state;
+  const { email, password, isValidEmail, isEmailChecked, isPasswordChecked } =
+    context.state;
 
-  const {
-    setIsEmailChecked,
-    setIsPasswordChecked,
-    setIsFormValid,
-    setFormErrorMsg,
-  } = context.actions;
+  const { setIsPasswordChecked, setIsFormValid, setFormErrorMsg } =
+    context.actions;
 
   // 로그인 버튼 활성화 유무
   const buttonValid = (
@@ -75,14 +64,13 @@ const AuthButton = ({ text }: { text: string }) => {
 
   const handleFormLogin = () => {
     const isValid = validateForm(password);
-    // setIsValid(validateForm(password));
     if (isButtonValid) {
       if (isValid) {
         setFormErrorMsg('');
         setIsFormValid(true);
         alert('로그인 성공');
       } else {
-        setFormErrorMsg('이메일 또는 비밀번호를 확인해주세요.');
+        setFormErrorMsg('이메일 또는 비밀번호를 확인해주세요');
         setIsFormValid(false);
         setIsPasswordChecked(false); // 비밀번호 유효성 검사 실패
         setIsButtonValid(false); // 로그인 버튼 비활성화

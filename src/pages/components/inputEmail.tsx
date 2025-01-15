@@ -12,7 +12,6 @@ const Label = styled.label`
 `;
 
 const InputWrapper = styled.div<{
-  email: string;
   isValid: boolean;
   isFocused: boolean;
   isChecked: boolean;
@@ -59,7 +58,6 @@ const InputWrapper = styled.div<{
 `;
 
 const Input = styled.input<{
-  email: string;
   isValid: boolean;
   isFocused: boolean;
   isChecked: boolean;
@@ -122,8 +120,9 @@ const InputEmail: React.FC = () => {
   };
 
   const validateEmail = (email: string): boolean => {
+    // const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; // 비표준 TLD도 허용
     const emailRegex =
-      /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|org|net|edu|gov|io|ai)$/; // 표준 TLD만 허용
     return emailRegex.test(email);
   };
 

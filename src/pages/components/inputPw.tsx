@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { LoginContext } from '../context/LoginContext';
 import Image from 'next/image';
@@ -26,10 +26,13 @@ const InputWrapper = styled.div<{
 
   border: 0.696px solid
     ${(props) => {
-      if (props.isFocused) {
-        return props.isValid ? '#5e52ff' : '#ec2d30'; // 포커스 시 유효성에 따라 색상
+      if (props.isError) {
+        return '#ec2d30'; // 오류 상태일 때 빨간 테두리
       }
-      return props.isError ? '#ec2d30' : '#181818'; // 에러일 때 빨간색
+      if (props.isFocused) {
+        return props.isValid ? '#5e52ff' : '#ec2d30'; // 포커스 상태
+      }
+      return '#181818'; // 기본 상태
     }};
 
   border-radius: 6.962px;
@@ -38,15 +41,19 @@ const InputWrapper = styled.div<{
     if (props.isChecked) {
       // 유효성 검사가 실행되었을 때
       return props.isValid ? '#F5F5FF' : '#FFFFFF';
-    } else {
-      // 유효성 검사가 실행되지 않은 초기 상태
-      return '#FFFFFF';
     }
+    // 유효성 검사가 실행되지 않은 초기 상태
+    return '#FFFFFF';
   }};
-  box-shadow: ${(props) =>
-    props.isFocused
-      ? '2px 2px 2px 0px rgba(94, 82, 255, 0.30), -2px -2px 2px 0px rgba(94, 82, 255, 0.30)'
-      : 'none'}; // 포커스 시 그림자
+  box-shadow: ${(props) => {
+    if (props.isError) {
+      return 'none'; // 오류 상태일 때 그림자 제거
+    }
+    if (props.isFocused && props.isValid) {
+      return '2px 2px 2px 0px rgba(94, 82, 255, 0.30), -2px -2px 2px 0px rgba(94, 82, 255, 0.30)';
+    }
+    return 'none'; // 기본 상태
+  }};
 
   padding: 12px;
   margin-bottom: 6px;
@@ -59,7 +66,7 @@ const InputWrapper = styled.div<{
   }
 `;
 
-const Input = styled.input<{ isValid: boolean; isChecked: boolean }>`
+const Input = styled.input<{ isValid: boolean; isError: boolean }>`
   flex: 1;
   border: none;
   outline: none;
@@ -70,17 +77,11 @@ const Input = styled.input<{ isValid: boolean; isChecked: boolean }>`
   text-overflow: ellipsis;
 
   color: ${(props) =>
-    props.isChecked && !props.isValid ? '#ec2d30' : '#1f1f1f'};
+    props.isError
+      ? '#ec2d30' // 로그인 실패 시 빨간색
+      : '#1f1f1f'};
 
-  background-color: ${(props) => {
-    if (props.isChecked) {
-      // 유효성 검사가 실행되었을 때
-      return props.isValid ? '#F5F5FF' : 'transparent';
-    } else {
-      // 유효성 검사가 실행되지 않은 초기 상태
-      return 'transparent';
-    }
-  }};
+  background-color: transparent;
 
   &::placeholder {
     color: #afb8c1;
@@ -107,22 +108,18 @@ const LoginErrorMsg = styled.span`
 const InputPw: React.FC = () => {
   const [showPwChecked, setShowPwChecked] = useState<boolean>(false);
   const [isFocused, setIsFocused] = useState<boolean>(false);
-  const [isValidPassword, setIsValidPassword] = useState<boolean>(true);
-  // const [formErrorMsg, setFormErrorMsg] = useState<string>('');
-  // const [isChecked, setIsChecked] = useState<boolean>(false); // 유효성 검사 실행 여부 상태
-  const [isError, setIsError] = useState<boolean>(false);
-  const passwordRef = useRef<HTMLInputElement | null>(null);
 
   const context = useContext(LoginContext);
   if (!context) throw new Error('LoginContext를 찾을 수 없습니다.');
 
-  const { password, isPasswordChecked, isFormValid, formErrorMsg } =
-    context.state;
-  const { setPassword, setIsPasswordChecked } = context.actions;
+  const { password, isPasswordChecked, formErrorMsg } = context.state;
+  const { setPassword, setIsPasswordChecked, setFormErrorMsg } =
+    context.actions;
 
   const handlePwChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
     setIsPasswordChecked(false); // 입력 중에는 유효성 검사 초기화
+    setFormErrorMsg(''); // 입력 중에는 오류 메시지 제거
   };
 
   const handleShowPwChecked = () => {
@@ -130,19 +127,18 @@ const InputPw: React.FC = () => {
   };
 
   const validatePassword = (password: string): boolean => {
-    return password == '' ? false : true;
+    return password !== ''; // 빈 값이 아니면 유효
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key == 'Enter') {
-      const isValid = validatePassword(password);
-      setIsValidPassword(isValid);
-      setIsPasswordChecked(true);
-      setIsError(!isValid);
-
-      if (isValid) {
-        // setFormErrorMsg('이메일 또는 비밀번호를 확인해주세요.');
-        setIsFocused(false); // 에러 상태 설정
+      if (!validatePassword(password)) {
+        setFormErrorMsg('이메일 또는 비밀번호를 확인해주세요');
+        setIsPasswordChecked(false);
+      } else {
+        setFormErrorMsg(''); // 오류 메시지 초기화
+        setIsPasswordChecked(true); // 성공
+        setIsFocused(false); // 포커스 초기회
       }
     }
   };
@@ -151,35 +147,30 @@ const InputPw: React.FC = () => {
     <div>
       <Label htmlFor="password">비밀번호</Label>
       <InputWrapper
-        isFocused={isFocused} /* || password !== ''*/
-        onBlur={() => setIsFocused(false)}
-        isValid={isValidPassword}
+        isFocused={isFocused}
+        isValid={formErrorMsg === ''} // 오류 메시지 없으면 유효
         isChecked={isPasswordChecked}
-        isError={isError}
+        isError={formErrorMsg !== ''} // 오류 메시지 있으면 에러 상태
       >
         <Input
           type={showPwChecked ? 'text' : 'password'}
           placeholder="비밀번호를 입력해주세요"
           value={password}
-          onFocus={() => setIsFocused(true)}
+          onFocus={() => {
+            setIsFocused(true);
+            setFormErrorMsg(''); // 포커스 시 오류 메시지 제거
+          }}
           onChange={handlePwChange}
-          onKeyDown={handleKeyPress}
-          isFocused={isFocused}
-          isValid={isValidPassword}
-          isChecked={isPasswordChecked}
-          isError={isError}
           onBlur={() => setIsFocused(false)}
-          ref={passwordRef}
+          onKeyDown={handleKeyPress}
+          isValid={formErrorMsg === ''} // 오류 메시지 없으면 유효
+          isError={formErrorMsg !== ''} // 오류일 때 글씨 빨간색
         />
         <IconWrapper onClick={handleShowPwChecked}>
           <Image src={invisibleicon} alt="invisibleicon" />
         </IconWrapper>
       </InputWrapper>
-      {!isFormValid && (
-        <>
-          <LoginErrorMsg>{formErrorMsg}</LoginErrorMsg>
-        </>
-      )}
+      {formErrorMsg && <LoginErrorMsg>{formErrorMsg}</LoginErrorMsg>}
     </div>
   );
 };
