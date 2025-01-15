@@ -3,11 +3,12 @@ import styled from 'styled-components';
 import LeftUI from './components/leftUI';
 import Divider from './components/divider';
 import GoogleAuthButton from './components/googleAuthButton';
-import AuthButton from './components/authButton';
+import SignupAuthButton from './components/signupAuthButton';
 import InputEmail from './components/inputEmail';
 import SignupInputPw from './components/signupInputPw';
 import InputPwCheck from './components/inputPwCheck';
-import TopLogo from './components/topLogo';
+import TopLogo from './components/topLogo_light';
+import EmailAuthPage from './emailAuth';
 
 const PageContainer = styled.div`
   display: flex;
@@ -48,36 +49,49 @@ const SignupPage: React.FC = () => {
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [isPasswordCheckValid, setIsPasswordCheckValid] = useState(false);
+  const [showEmailAuth, setShowEmailAuth] = useState(false);
 
   const isFormValid = isEmailValid && isPasswordValid && isPasswordCheckValid;
 
+  const handleShowEmailAuth = () => {
+    setShowEmailAuth(true);
+  };
+
   return (
     <>
-      <PageContainer>
-        <LeftSection>
-          <TopLogo />
-          <LeftUI />
-        </LeftSection>
-        <RightSection>
-          <FormContainer>
-            <h2 style={{ textAlign: 'center' }}>회원가입</h2>
-            <InputEmail setIsEmailValid={setIsEmailValid} />
-            <SignupInputPw setPassword={setPassword} setIsPasswordValid={setIsPasswordValid} />
-            <InputPwCheck password={password} setIsPasswordCheckValid={setIsPasswordCheckValid} />
-            <div style={{ display: 'flex', alignItems: 'center', margin: '22px 0' }}>
-              <input type="checkbox" />
-              <span style={{ fontSize: '13px', marginLeft: '6px' }}>
-                이벤트, 맞춤 추천, 학습 팁 등을 보내주세요
-              </span>
-            </div>
-            <FormGroup>
-              <AuthButton text="가입하기" disabled={!isFormValid} />
-              <Divider />
-              <GoogleAuthButton text="Google 계정으로 회원가입" />
-            </FormGroup>
-          </FormContainer>
-        </RightSection>
-      </PageContainer>
+      {!showEmailAuth ? (
+        <PageContainer>
+          <LeftSection>
+            <TopLogo />
+            <LeftUI />
+          </LeftSection>
+          <RightSection>
+            <FormContainer>
+              <h2 style={{ textAlign: 'center' }}>회원가입</h2>
+              <InputEmail setIsEmailValid={setIsEmailValid} />
+              <SignupInputPw setPassword={setPassword} setIsPasswordValid={setIsPasswordValid} />
+              <InputPwCheck password={password} setIsPasswordCheckValid={setIsPasswordCheckValid} />
+              <div style={{ display: 'flex', alignItems: 'center', margin: '22px 0' }}>
+                <input type="checkbox" />
+                <span style={{ fontSize: '13px', marginLeft: '6px' }}>
+                  이벤트, 맞춤 추천, 학습 팁 등을 보내주세요
+                </span>
+              </div>
+              <FormGroup>
+                <SignupAuthButton
+                  text="가입하기"
+                  disabled={!isFormValid}
+                  onClick={handleShowEmailAuth}
+                />
+                <Divider />
+                <GoogleAuthButton text="Google 계정으로 회원가입" />
+              </FormGroup>
+            </FormContainer>
+          </RightSection>
+        </PageContainer>
+      ) : (
+        <EmailAuthPage />
+      )}
     </>
   );
 };

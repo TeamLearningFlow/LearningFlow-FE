@@ -32,7 +32,7 @@ const LogoContainer = styled.div`
   z-index: 10;
 `;
 
-const TopLogo: React.FC = () => {
+const LightTopLogo: React.FC = () => {
   return (
     // <Container>
     <Box>
@@ -44,4 +44,4 @@ const TopLogo: React.FC = () => {
   );
 };
 
-export default TopLogo;
+export default LightTopLogo;
