@@ -38,6 +38,7 @@ const AuthButton = ({ text }: { text: string }) => {
     isFormValid,
     formErrorMsg,
   } = context.state;
+
   const {
     setIsEmailChecked,
     setIsPasswordChecked,
@@ -83,6 +84,8 @@ const AuthButton = ({ text }: { text: string }) => {
       } else {
         setFormErrorMsg('이메일 또는 비밀번호를 확인해주세요.');
         setIsFormValid(false);
+        setIsPasswordChecked(false); // 비밀번호 유효성 검사 실패
+        setIsButtonValid(false); // 로그인 버튼 비활성화
         alert('로그인 실패');
       }
     }

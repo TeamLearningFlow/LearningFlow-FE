@@ -31,7 +31,7 @@ const InputWrapper = styled.div<{
       }
       if (props.isChecked) {
         // 유효성 검사 후 포커스가 없으면 테두리 색을 #181818로 설정
-        return '#181818';
+        return props.isValid ? '#181818' : '#ec2d30';
       }
       // 포커스도 없고 유효성 검사 전이면 기본 색상
       return '#323538';
@@ -47,13 +47,8 @@ const InputWrapper = styled.div<{
     }
   }};
   box-shadow: ${(props) => {
-    if (props.isFocused) {
-      return props.isValid
-        ? '2px 2px 2px 0px rgba(94, 82, 255, 0.30), -2px -2px 2px 0px rgba(94, 82, 255, 0.30)'
-        : 'none';
-    }
-    if (props.isChecked) {
-      return 'none';
+    if (props.isFocused && props.isValid) {
+      return '2px 2px 2px 0px rgba(94, 82, 255, 0.30), -2px -2px 2px 0px rgba(94, 82, 255, 0.30)';
     }
     return 'none';
   }};
@@ -123,7 +118,7 @@ const InputEmail: React.FC = () => {
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
-    // setIsChecked(false); // 입력 중에는 유효성 검사 결과 초기화
+    setIsEmailChecked(false); // 입력 중에는 유효성 검사 결과 초기화
   };
 
   const validateEmail = (email: string): boolean => {
@@ -138,6 +133,9 @@ const InputEmail: React.FC = () => {
       setIsValidEmail(isValid);
       setIsEmailChecked(true); // 유효성 검사 실행 여부를 true로 설정
       setErrorMessage(isValid ? '' : '이메일 형식이 올바르지 않습니다');
+      if (isValid) {
+        setIsFocused(false); // 유효성 검사 성공 시 포커스 해제
+      }
     }
   };
 

@@ -26,18 +26,14 @@ const InputWrapper = styled.div<{
 
   border: 0.696px solid
     ${(props) => {
-      // if (props.isError) {
-      //   return '#ec2d30'; // 에러일 때 빨간색
-      // }
       if (props.isFocused) {
         return props.isValid ? '#5e52ff' : '#ec2d30'; // 포커스 시 유효성에 따라 색상
       }
-      // if (props.isChecked) {
-      //   return props.isValid ? '#181818' : '#ec2d30'; // 유효성 검사 결과에 따라 색상
-      // }
-      return '#323538'; // 기본 색상
+      return props.isError ? '#ec2d30' : '#181818'; // 에러일 때 빨간색
     }};
+
   border-radius: 6.962px;
+
   background-color: ${(props) => {
     if (props.isChecked) {
       // 유효성 검사가 실행되었을 때
@@ -73,7 +69,9 @@ const Input = styled.input<{ isValid: boolean; isChecked: boolean }>`
   overflow: hidden;
   text-overflow: ellipsis;
 
-  color: #1f1f1f;
+  color: ${(props) =>
+    props.isChecked && !props.isValid ? '#ec2d30' : '#1f1f1f'};
+
   background-color: ${(props) => {
     if (props.isChecked) {
       // 유효성 검사가 실행되었을 때
@@ -124,6 +122,7 @@ const InputPw: React.FC = () => {
 
   const handlePwChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
+    setIsPasswordChecked(false); // 입력 중에는 유효성 검사 초기화
   };
 
   const handleShowPwChecked = () => {
@@ -139,10 +138,11 @@ const InputPw: React.FC = () => {
       const isValid = validatePassword(password);
       setIsValidPassword(isValid);
       setIsPasswordChecked(true);
+      setIsError(!isValid);
 
-      if (!isValid) {
+      if (isValid) {
         // setFormErrorMsg('이메일 또는 비밀번호를 확인해주세요.');
-        setIsError(true); // 에러 상태 설정
+        setIsFocused(false); // 에러 상태 설정
       }
     }
   };
