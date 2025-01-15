@@ -15,7 +15,7 @@ const InputWrapper = styled.div<{
   border: 0.696px solid #323538;
   border-radius: 6.962px;
   padding: 12px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   transition: box-shadow 0.3s ease;
   box-shadow: ${(props) =>
     props.isError ? 'none' : props.isFocused ? '0 0 5px #5E52ff' : 'none'};
@@ -65,6 +65,7 @@ const IconWrapper = styled.div`
 const Label = styled.label`
   display: block;
   margin-bottom: 9px;
+  margin-top: 9px;
   font-size: 14px;
   color: #181818;
 `;
@@ -80,7 +81,10 @@ interface InputPwCheckProps {
   setIsPasswordCheckValid: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const InputPwCheck: React.FC<InputPwCheckProps> = ({ password, setIsPasswordCheckValid }) => {
+const InputPwCheck: React.FC<InputPwCheckProps> = ({
+  password,
+  setIsPasswordCheckValid,
+}) => {
   const [isFocused, setIsFocused] = useState(false);
   const [hasBlurred, setHasBlurred] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -108,7 +112,9 @@ const InputPwCheck: React.FC<InputPwCheckProps> = ({ password, setIsPasswordChec
     }
   };
 
-  const handlePasswordCheckChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePasswordCheckChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setPasswordCheck(e.target.value);
   };
 

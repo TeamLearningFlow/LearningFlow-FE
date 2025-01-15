@@ -22,7 +22,7 @@ const InputWrapper = styled.div<{
   border: 0.696px solid #323538;
   border-radius: 6.962px;
   padding: 12px;
-  margin-bottom: 23px;
+  margin-bottom: 8px;
   transition: box-shadow 0.3s ease;
   box-shadow: ${(props) =>
     props.isError ? 'none' : props.isFocused ? '0 0 5px #5E52ff' : 'none'};
@@ -63,7 +63,6 @@ interface InputEmailProps {
   setIsEmailValid: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-
 const InputEmail: React.FC<InputEmailProps> = ({ setIsEmailValid }) => {
   const [email, setEmail] = useState<string>('');
   const [isValidEmail, setIsValidEmail] = useState<boolean>(false);
@@ -94,7 +93,11 @@ const InputEmail: React.FC<InputEmailProps> = ({ setIsEmailValid }) => {
   return (
     <div>
       <Label htmlFor="email">이메일</Label>
-      <InputWrapper isFocused={isFocused} isError={!isValidEmail && isEmailChecked} hasBlurred={hasBlurred}>
+      <InputWrapper
+        isFocused={isFocused}
+        isError={!isValidEmail && isEmailChecked}
+        hasBlurred={hasBlurred}
+      >
         <Input
           type="email"
           placeholder="이메일 주소를 적어주세요"
