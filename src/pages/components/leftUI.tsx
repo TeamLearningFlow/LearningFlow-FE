@@ -37,20 +37,20 @@ const InstructionContainer = styled.div`
   align-items: end;
 
   position: absolute;
-  right: 9%;
+  right: 8%;
   bottom: 8%;
 `;
 
 const LogoTypoImg = styled(Image)`
   // width: 50%;
-  width: 260px;
+  width: 230px;
   height: auto;
   margin-bottom: 4%;
 `;
 
 const Instruction1 = styled.div`
   // font-size: 2.1vw;
-  font-size: 30px;
+  font-size: 28px;
   font-weight: 500;
   color: #dcd9ff;
   text-align: right;
@@ -58,7 +58,7 @@ const Instruction1 = styled.div`
 
 const Instruction2 = styled.div`
   // font-size: 2.1vw;
-  font-size: 30px;
+  font-size: 28px;
   font-weight: 500;
   color: #dcd9ff;
   text-align: right;

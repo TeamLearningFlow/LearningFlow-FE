@@ -103,7 +103,7 @@ const InputPwCheck: React.FC<InputPwCheckProps> = ({ password, setIsPasswordChec
     if (e.key === 'Enter') {
       const isPasswordMatch = passwordCheck === password;
       setIsError(!isPasswordMatch);
-      setHasBlurred(true); // Blur 상태는 항상 true로 설정
+      setHasBlurred(true);
       setIsPasswordCheckValid(isPasswordMatch); // 비밀번호 일치 여부를 부모에게 전달
     }
   };
@@ -116,8 +116,12 @@ const InputPwCheck: React.FC<InputPwCheckProps> = ({ password, setIsPasswordChec
 
   return (
     <div>
-      <Label htmlFor="passwordCheck">비밀번호 확인</Label>
-      <InputWrapper isFocused={isFocused} isError={isError} hasBlurred={hasBlurred}>
+      <Label htmlFor="passwordCheck=">비밀번호 확인</Label>
+      <InputWrapper
+        isFocused={isFocused}
+        isError={isError}
+        hasBlurred={hasBlurred}
+      >
         <Input
           type={isPasswordVisible ? 'text' : 'password'}
           value={passwordCheck}

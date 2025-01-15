@@ -4,7 +4,8 @@ import { EmailCheckLabel } from './validation';
 
 const Label = styled.label`
   display: block;
-  margin-bottom: 12px;
+  margin-bottom: 9px;
+  margin-top: 28px;
   font-size: 14px;
   color: #181818;
 `;
@@ -15,19 +16,20 @@ const InputWrapper = styled.div<{
   hasBlurred: boolean;
 }>`
   display: flex;
-  height: 55px;
+  height: 50px;
   position: relative;
   align-items: center;
   border: 0.696px solid #323538;
   border-radius: 6.962px;
   padding: 12px;
-  margin-bottom: 10px;
+  margin-bottom: 23px;
   transition: box-shadow 0.3s ease;
   box-shadow: ${(props) =>
     props.isError ? 'none' : props.isFocused ? '0 0 5px #5E52ff' : 'none'};
   border-color: ${(props) => (props.isError ? '#ec2d30' : '#323538')};
   background-color: ${(props) =>
     props.isError ? '#fff' : props.hasBlurred ? '#f5f5ff' : '#fff'};
+  overflow: hidden;
 
   img {
     width: 18px;
@@ -44,6 +46,9 @@ const Input = styled.input`
   font-size: 15px;
   padding-right: 40px;
   margin-left: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   &::placeholder {
     color: #afb8c1;
@@ -57,6 +62,7 @@ const Input = styled.input`
 interface InputEmailProps {
   setIsEmailValid: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
 
 const InputEmail: React.FC<InputEmailProps> = ({ setIsEmailValid }) => {
   const [email, setEmail] = useState<string>('');
