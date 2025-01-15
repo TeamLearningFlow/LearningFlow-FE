@@ -6,13 +6,14 @@ import { ValidationCheck } from './validation';
 
 const InputWrapper = styled.div<{ isFocused: boolean }>`
   display: flex;
-  height: 55px;
+  height: 50px;
   position: relative;
   align-items: center;
   border: 0.696px solid #323538;
   border-radius: 6.962px;
   padding: 12px;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
+  overflow: hidden;
   transition: box-shadow 0.3s ease;
   box-shadow: ${(props) => (props.isFocused ? '0 0 5px #5E52ff' : 'none')};
 
@@ -30,6 +31,10 @@ const Input = styled.input`
   font-size: 15px;
   padding-right: 40px;
   margin-left: 15px;
+  background: transparent;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   &::placeholder {
     color: #afb8c1;
@@ -53,7 +58,8 @@ const IconWrapper = styled.div`
 
 const Label = styled.label`
   display: block;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
+  margin-top: 22px;
   font-size: 14px;
   color: #181818;
 `;
@@ -63,7 +69,10 @@ interface SignupInputPwProps {
   setIsPasswordValid: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const SignupInputPw: React.FC<SignupInputPwProps> = ({ setPassword, setIsPasswordValid }) => {
+const SignupInputPw: React.FC<SignupInputPwProps> = ({
+  setPassword,
+  setIsPasswordValid,
+}) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [passwordValidation, setPasswordValidation] = useState({
@@ -114,4 +123,3 @@ const SignupInputPw: React.FC<SignupInputPwProps> = ({ setPassword, setIsPasswor
 };
 
 export default SignupInputPw;
-
