@@ -27,6 +27,7 @@ const LeftSection = styled.div`
 
 const RightSection = styled.div`
   width: 46vw;
+  height: 80vh;
   display: flex;
   justify-content: center;
   align-items: center;
