@@ -27,7 +27,6 @@ const LeftSection = styled.div`
 
 const RightSection = styled.div`
   width: 46vw;
-  height: 80vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -41,6 +40,10 @@ const FormContainer = styled.div`
   border-radius: 8px;
   background-color: #ffffff;
   box-sizing: border-box;
+`;
+
+const BlankContainer = styled.div`
+
 `;
 
 const FormGroup = styled.div``;
@@ -67,8 +70,9 @@ const SignupPage: React.FC = () => {
             <LeftUI />
           </LeftSection>
           <RightSection>
+            <BlankContainer />
             <FormContainer>
-              <h2 style={{ textAlign: 'center' }}>회원가입</h2>
+              <h2 style={{ textAlign: 'center', marginTop: '30px' }}>회원가입</h2>
               <InputEmail setIsEmailValid={setIsEmailValid} />
               <SignupInputPw setPassword={setPassword} setIsPasswordValid={setIsPasswordValid} />
               <InputPwCheck password={password} setIsPasswordCheckValid={setIsPasswordCheckValid} />
