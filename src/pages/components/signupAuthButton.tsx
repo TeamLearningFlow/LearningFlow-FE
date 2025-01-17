@@ -20,14 +20,18 @@ const Button = styled.button<{ disabled?: boolean }>`
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 `;
 
-const AuthButton = ({
-  text,
-  disabled,
-}: {
+interface SignupAuthButtonProps {
   text: string;
   disabled: boolean;
+  onClick: () => void;
+}
+
+const SignupAuthButton: React.FC<SignupAuthButtonProps> = ({
+  text,
+  disabled,
+  onClick,
 }) => {
-  return <Button disabled={disabled}>{text}</Button>;
+  return <Button disabled={disabled} onClick={onClick}>{text}</Button>;
 };
 
-export default AuthButton;
+export default SignupAuthButton;
