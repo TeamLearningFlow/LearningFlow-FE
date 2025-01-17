@@ -60,6 +60,7 @@ const Button = styled.button`
   font-weight: 600;
   color: rgba(50, 53, 56, 1);
   cursor: pointer;
+  margin-bottom: 30px;
 `;
 
 const GoogleAuthButton = ({ text }: { text: string }) => {

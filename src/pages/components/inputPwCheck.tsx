@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import invisibleicon from '../assets/invisibleicon.svg';
+import { PasswordCheckLabel } from './validation';
 
 const InputWrapper = styled.div<{
   isFocused: boolean;
@@ -17,9 +18,13 @@ const InputWrapper = styled.div<{
   padding: 12px;
   margin-bottom: 6px;
   transition: box-shadow 0.3s ease;
-  box-shadow: ${(props) =>
-    props.isError ? 'none' : props.isFocused ? '0 0 5px #5E52ff' : 'none'};
-  border-color: ${(props) => (props.isError ? 'red' : '#323538')};
+  box-shadow: ${(props) => {
+    if (props.isFocused && !props.hasBlurred && !props.isError) {
+      return '2px 2px 2px 0px rgba(94, 82, 255, 0.30), -2px -2px 2px 0px rgba(94, 82, 255, 0.30)';
+    }
+    return 'none';
+  }};
+  border-color: ${(props) => (props.isError ? 'rgba(236, 45, 48, 1)' : '#323538')};
   background-color: ${(props) =>
     props.isError ? '#fff' : props.hasBlurred ? '#f5f5ff' : '#fff'};
   overflow: hidden;
@@ -31,7 +36,9 @@ const InputWrapper = styled.div<{
   }
 `;
 
-const Input = styled.input`
+const Input = styled.input<{
+  isError: boolean;
+}>`
   flex: 1;
   background: transparent;
   border: none;
@@ -41,6 +48,7 @@ const Input = styled.input`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: ${(props) => (props.isError ? 'rgba(236, 45, 48, 1)' : 'black')};
 
   &::placeholder {
     color: #afb8c1;
@@ -108,7 +116,11 @@ const InputPwCheck: React.FC<InputPwCheckProps> = ({
       const isPasswordMatch = passwordCheck === password;
       setIsError(!isPasswordMatch);
       setHasBlurred(true);
-      setIsPasswordCheckValid(isPasswordMatch); // 비밀번호 일치 여부를 부모에게 전달
+      setIsPasswordCheckValid(isPasswordMatch);
+
+      if (isPasswordMatch) {
+        setIsFocused(false);
+      }
     }
   };
 
@@ -129,6 +141,7 @@ const InputPwCheck: React.FC<InputPwCheckProps> = ({
         hasBlurred={hasBlurred}
       >
         <Input
+          isError={isError}
           type={isPasswordVisible ? 'text' : 'password'}
           value={passwordCheck}
           onChange={handlePasswordCheckChange}
@@ -141,7 +154,7 @@ const InputPwCheck: React.FC<InputPwCheckProps> = ({
           <Image src={invisibleicon} alt="비밀번호 보이기/숨기기 아이콘" />
         </IconWrapper>
       </InputWrapper>
-      {isError && <ErrorText>비밀번호가 틀렸습니다!</ErrorText>}
+      {isError && <PasswordCheckLabel />}
     </div>
   );
 };

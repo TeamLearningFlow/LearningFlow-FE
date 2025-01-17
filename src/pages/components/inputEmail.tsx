@@ -24,8 +24,12 @@ const InputWrapper = styled.div<{
   padding: 12px;
   margin-bottom: 8px;
   transition: box-shadow 0.3s ease;
-  box-shadow: ${(props) =>
-    props.isError ? 'none' : props.isFocused ? '0 0 5px #5E52ff' : 'none'};
+  box-shadow: ${(props) => {
+    if (props.isFocused && !props.hasBlurred && !props.isError) {
+      return '2px 2px 2px 0px rgba(94, 82, 255, 0.30), -2px -2px 2px 0px rgba(94, 82, 255, 0.30)';
+    }
+    return 'none';
+  }};
   border-color: ${(props) => (props.isError ? '#ec2d30' : '#323538')};
   background-color: ${(props) =>
     props.isError ? '#fff' : props.hasBlurred ? '#f5f5ff' : '#fff'};
@@ -38,7 +42,9 @@ const InputWrapper = styled.div<{
   }
 `;
 
-const Input = styled.input`
+const Input = styled.input<{
+  isError: boolean;
+}>`
   flex: 1;
   background: transparent;
   border: none;
@@ -49,6 +55,7 @@ const Input = styled.input`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: ${(props) => (props.isError ? 'rgba(236, 45, 48, 1)' : 'black')};
 
   &::placeholder {
     color: #afb8c1;
@@ -69,6 +76,7 @@ const InputEmail: React.FC<InputEmailProps> = ({ setIsEmailValid }) => {
   const [isEmailChecked, setIsEmailChecked] = useState<boolean>(false);
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [hasBlurred, setHasBlurred] = useState<boolean>(false);
+  const [isError, setIsError] = useState(false);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -83,10 +91,15 @@ const InputEmail: React.FC<InputEmailProps> = ({ setIsEmailValid }) => {
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       const isValid = validateEmail(email);
+      setIsError(!isValid);
       setIsValidEmail(isValid);
       setIsEmailChecked(true);
       setHasBlurred(true);
-      setIsEmailValid(isValid); // 부모 컴포넌트로 유효성 전달
+      setIsEmailValid(isValid);
+
+      if (isValid) {
+        setIsFocused(false);
+      }
     }
   };
 
@@ -106,6 +119,7 @@ const InputEmail: React.FC<InputEmailProps> = ({ setIsEmailValid }) => {
           onBlur={() => setIsFocused(false)}
           onChange={handleEmailChange}
           onKeyDown={handleKeyPress}
+          isError={isError}
         />
       </InputWrapper>
 

@@ -19,8 +19,9 @@ const RedWrapper = styled(Wrapper)`
   margin-bottom: 8px;
 `;
 
-const ValidationBox = styled(Wrapper)<{ isValid: boolean }>`
-  color: ${(props) => (props.isValid ? '#165bfa' : '#ec2d30')};
+const ValidationBox = styled(Wrapper)<{ isValid: boolean | null }>`
+  color: ${(props) =>
+    props.isValid === null ? '#000000' : props.isValid ? '#165bfa' : '#ec2d30'};
   margin-bottom: 8px;
 `;
 
@@ -32,18 +33,17 @@ const ValidationLabel = styled.span`
 
 interface ValidationCheckProps {
   passwordValidation: {
-    hasUpperCase: boolean;
-    hasSpecialChar: boolean;
-    isLengthValid: boolean;
-  } | undefined;
+    hasUpperCase: boolean | null;
+    hasSpecialChar: boolean | null;
+    isLengthValid: boolean | null;
+  };
 }
-
 
 const ValidationCheck: React.FC<ValidationCheckProps> = ({ passwordValidation }) => {
   const validation = passwordValidation || {
-    hasUpperCase: false,
-    hasSpecialChar: false,
-    isLengthValid: false,
+    hasUpperCase: null,
+    hasSpecialChar: null,
+    isLengthValid: null,
   };
 
   return (
