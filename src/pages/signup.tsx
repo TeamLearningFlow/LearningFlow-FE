@@ -42,9 +42,7 @@ const FormContainer = styled.div`
   box-sizing: border-box;
 `;
 
-const BlankContainer = styled.div`
-
-`;
+const BlankContainer = styled.div``;
 
 const FormGroup = styled.div``;
 
@@ -72,7 +70,9 @@ const SignupPage: React.FC = () => {
           <RightSection>
             <BlankContainer />
             <FormContainer>
-              <h2 style={{ textAlign: 'center', marginTop: '30px' }}>회원가입</h2>
+              <h2 style={{ textAlign: 'center', marginTop: '30px' }}>
+                회원가입
+              </h2>
               <InputEmail setIsEmailValid={setIsEmailValid} />
               <SignupInputPw
                 setPassword={setPassword}
