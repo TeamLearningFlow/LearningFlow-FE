@@ -1,6 +1,6 @@
 import React from 'react';
-import type { AppProps } from "next/app";
-import { createGlobalStyle } from "styled-components";
+import type { AppProps } from 'next/app';
+import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
   * {
