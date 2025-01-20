@@ -4,7 +4,7 @@ import LeftUI from './components/leftUI';
 import Divider from './components/divider';
 import GoogleAuthButton from './components/googleAuthButton';
 import SignupAuthButton from './components/signupAuthButton';
-import InputEmail from './components/signupInputEmail';
+import SignupInputEmail from './components/signupInputEmail';
 import SignupInputPw from './components/signupInputPw';
 import InputPwCheck from './components/inputPwCheck';
 import TopLogo from './components/topLogo_light';
@@ -73,7 +73,7 @@ const SignupPage: React.FC = () => {
               <h2 style={{ textAlign: 'center', marginTop: '30px' }}>
                 회원가입
               </h2>
-              <InputEmail setIsEmailValid={setIsEmailValid} />
+              <SignupInputEmail setIsEmailValid={setIsEmailValid} />
               <SignupInputPw
                 setPassword={setPassword}
                 setIsPasswordValid={setIsPasswordValid}

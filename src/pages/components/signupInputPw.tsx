@@ -60,11 +60,11 @@ const InputWrapper = styled.div<{
   }
 `;
 
-
-
-
-
-const Input = styled.input<{ isError: boolean ; isInvalid: boolean ; isEmpty: boolean}>`
+const Input = styled.input<{
+  isError: boolean;
+  isInvalid: boolean;
+  isEmpty: boolean;
+}>`
   flex: 1;
   border: none;
   outline: none;

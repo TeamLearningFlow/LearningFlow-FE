@@ -31,7 +31,11 @@ const SignupAuthButton: React.FC<SignupAuthButtonProps> = ({
   disabled,
   onClick,
 }) => {
-  return <Button disabled={disabled} onClick={onClick}>{text}</Button>;
+  return (
+    <Button disabled={disabled} onClick={onClick}>
+      {text}
+    </Button>
+  );
 };
 
 export default SignupAuthButton;
