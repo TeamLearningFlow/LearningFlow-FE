@@ -30,11 +30,15 @@ const LineIcon = styled.div`
   background-color: white;
 `;
 
-const TitleBar: React.FC = () => {
+interface TitleBarProps {
+  title?: string;
+}
+
+const TitleBar: React.FC<TitleBarProps> = ({ title = '와이어프레임 입문' }) => {
   return (
     <TitleWrapper>
       <LineIcon />
-      <TitleBox>와이어프레임 입문</TitleBox>
+      <TitleBox>{title}</TitleBox>
     </TitleWrapper>
   );
 };
