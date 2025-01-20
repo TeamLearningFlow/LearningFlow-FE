@@ -4,7 +4,7 @@ import LeftUI from './components/leftUI';
 import Divider from './components/divider';
 import GoogleAuthButton from './components/googleAuthButton';
 import SignupAuthButton from './components/signupAuthButton';
-import InputEmail from './components/inputEmail';
+import InputEmail from './components/signupInputEmail';
 import SignupInputPw from './components/signupInputPw';
 import InputPwCheck from './components/inputPwCheck';
 import TopLogo from './components/topLogo_light';
