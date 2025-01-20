@@ -45,7 +45,7 @@ const LogoTypoImg = styled(Image)`
   // width: 50%;
   width: 230px;
   height: auto;
-  margin-bottom: 4%;
+  margin-bottom: 2%;
 `;
 
 const Instruction1 = styled.div`

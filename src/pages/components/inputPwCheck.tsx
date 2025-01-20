@@ -27,6 +27,7 @@ const Input = styled.input`
   border: none;
   outline: none;
   font-size: 15px;
+  font-family: Pretendard;
   padding-right: 40px;
   margin-left: 15px;
   overflow: hidden;
@@ -52,22 +53,40 @@ const IconWrapper = styled.div`
 const Label = styled.label`
   display: block;
   margin-bottom: 12px;
+  font-family: Pretendard;
   font-size: 14px;
   color: #181818;
 `;
 
-const InputPwCheck: React.FC = () => {
+const InputBox: React.FC = () => {
   return (
     <div>
-      <Label htmlFor="password-check">비밀번호 확인</Label>
-      <InputWrapper>
-        <Input type="password" placeholder="" />
-        <IconWrapper>
-          <Image src={invisibleicon} alt="invisibleicon" />
-        </IconWrapper>
-      </InputWrapper>
+      <div>
+        <Label htmlFor="email">이메일</Label>
+        <InputWrapper>
+          <Input type="email" placeholder="이메일 주소를 적어주세요." />
+        </InputWrapper>
+      </div>
+      <div>
+        <Label htmlFor="password">비밀번호</Label>
+        <InputWrapper>
+          <Input type="password" placeholder="" />
+          <IconWrapper>
+            <Image src={invisibleicon} alt="invisibleicon" />
+          </IconWrapper>
+        </InputWrapper>
+      </div>
+      <div>
+        <Label htmlFor="password-check">비밀번호 확인</Label>
+        <InputWrapper>
+          <Input type="password" placeholder="" />
+          <IconWrapper>
+            <Image src={invisibleicon} alt="invisibleicon" />
+          </IconWrapper>
+        </InputWrapper>
+      </div>
     </div>
   );
 };
 
-export default InputPwCheck;
+export default InputBox;
