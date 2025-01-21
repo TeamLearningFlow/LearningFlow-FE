@@ -138,10 +138,12 @@ const SignupInputPw: React.FC<SignupInputPwProps> = ({
   const [passwordValidation, setPasswordValidation] = useState<{
     hasUpperCase: boolean | null;
     hasSpecialChar: boolean | null;
+    hasNumber: boolean | null; // 숫자 유효성 검사 추가
     isLengthValid: boolean | null;
   }>({
     hasUpperCase: null,
     hasSpecialChar: null,
+    hasNumber: null,
     isLengthValid: null,
   });
 
@@ -161,6 +163,7 @@ const SignupInputPw: React.FC<SignupInputPwProps> = ({
     const newValidation = {
       hasUpperCase: value ? /[A-Z]/.test(value) && /[a-z]/.test(value) : null,
       hasSpecialChar: value ? /[!@#$%^&*()_+]/.test(value) : null,
+      hasNumber: value ? /[0-9]/.test(value) : null,
       isLengthValid: value ? value.length >= 8 && value.length <= 16 : null,
     };
     setPasswordValidation(newValidation);
@@ -168,6 +171,7 @@ const SignupInputPw: React.FC<SignupInputPwProps> = ({
     const invalid =
       !newValidation.hasUpperCase ||
       !newValidation.hasSpecialChar ||
+      !newValidation.hasNumber ||
       !newValidation.isLengthValid;
     setIsInvalid(invalid);
     setIsError(invalid);
@@ -179,6 +183,7 @@ const SignupInputPw: React.FC<SignupInputPwProps> = ({
     const isValidPassword =
       passwordValidation.hasUpperCase &&
       passwordValidation.hasSpecialChar &&
+      passwordValidation.hasNumber &&
       passwordValidation.isLengthValid;
 
     setIsPasswordValid(isValidPassword ?? false);

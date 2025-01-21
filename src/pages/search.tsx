@@ -1,12 +1,7 @@
 import React from 'react';
-import Header from './components/header';
 
-const SearchPage: React.FC = () => {
-  return (
-    <>
-      <Header />
-    </>
-  );
+const Search = () => {
+  return null; // 아무것도 렌더링하지 않음
 };
 
-export default SearchPage;
+export default Search;
