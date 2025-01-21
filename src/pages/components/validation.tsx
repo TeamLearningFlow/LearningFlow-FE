@@ -35,14 +35,18 @@ interface ValidationCheckProps {
   passwordValidation: {
     hasUpperCase: boolean | null;
     hasSpecialChar: boolean | null;
+    hasNumber: boolean | null;
     isLengthValid: boolean | null;
   };
 }
 
-const ValidationCheck: React.FC<ValidationCheckProps> = ({ passwordValidation }) => {
+const ValidationCheck: React.FC<ValidationCheckProps> = ({
+  passwordValidation,
+}) => {
   const validation = passwordValidation || {
     hasUpperCase: null,
     hasSpecialChar: null,
+    hasNumber: null,
     isLengthValid: null,
   };
 
@@ -52,9 +56,11 @@ const ValidationCheck: React.FC<ValidationCheckProps> = ({ passwordValidation })
         <IoCheckmark />
         <ValidationLabel>대소문자 포함</ValidationLabel>
       </ValidationBox>
-      <ValidationBox isValid={validation.hasSpecialChar}>
+      <ValidationBox
+        isValid={validation.hasSpecialChar && validation.hasNumber}
+      >
         <IoCheckmark />
-        <ValidationLabel>특수문자 포함</ValidationLabel>
+        <ValidationLabel>특수문자/숫자 포함</ValidationLabel>
       </ValidationBox>
       <ValidationBox isValid={validation.isLengthValid}>
         <IoCheckmark />
