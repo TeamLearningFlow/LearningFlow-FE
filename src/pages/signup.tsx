@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import LeftUI from './components/leftUI';
 import Divider from './components/divider';
@@ -8,7 +9,8 @@ import SignupInputEmail from './components/signupInputEmail';
 import SignupInputPw from './components/signupInputPw';
 import InputPwCheck from './components/inputPwCheck';
 import TopLogo from './components/topLogo_light';
-import EmailAuthPage from './emailAuth';
+import ContractsPage from './contracts';
+
 
 const PageContainer = styled.div`
   display: flex;
@@ -40,13 +42,22 @@ const FormContainer = styled.div`
   border-radius: 8px;
   background-color: #ffffff;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 `;
 
 const BlankContainer = styled.div``;
 
-const FormGroup = styled.div``;
+const FormGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 15px;
+`;
 
 const SignupPage: React.FC = () => {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
@@ -56,8 +67,37 @@ const SignupPage: React.FC = () => {
   const isFormValid = isEmailValid && isPasswordValid && isPasswordCheckValid;
 
   const handleShowEmailAuth = () => {
+    console.log('Email:', email);
+    console.log('Password:', password);
     setShowEmailAuth(true);
+    registeraxios();
   };
+
+
+  const registeraxios = async () => {
+    try {
+      const response = await axios.post('http://localhost:8080/register', {
+        email: email,
+        password: password,
+      });
+  
+      console.log('Response:', response);  
+      alert('회원가입 성공');
+  
+      if (response.status === 200) {
+        // return navigate('/mylogin');
+        console.log('로그인페이지로 이동');
+      }
+    } catch (err: any) {
+      console.log('Error:', err);
+      if (err.response?.data?.message) {
+        console.log('Error Message:', err.response.data.message);
+      } else {
+        console.log('회원가입 중 오류 발생');
+      }
+    }
+  };
+  
 
   return (
     <>
@@ -73,7 +113,10 @@ const SignupPage: React.FC = () => {
               <h2 style={{ textAlign: 'center', marginTop: '30px' }}>
                 회원가입
               </h2>
-              <SignupInputEmail setIsEmailValid={setIsEmailValid} />
+              <SignupInputEmail
+                setEmail={setEmail}
+                setIsEmailValid={setIsEmailValid}
+              />
               <SignupInputPw
                 setPassword={setPassword}
                 setIsPasswordValid={setIsPasswordValid}
@@ -82,24 +125,41 @@ const SignupPage: React.FC = () => {
                 password={password}
                 setIsPasswordCheckValid={setIsPasswordCheckValid}
               />
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  margin: '22px 0',
-                }}
-              >
-                <input type="checkbox" />
-                <span style={{ fontSize: '13px', marginLeft: '6px' }}>
-                  이벤트, 맞춤 추천, 학습 팁 등을 보내주세요
-                </span>
-              </div>
               <FormGroup>
                 <SignupAuthButton
                   text="가입하기"
                   disabled={!isFormValid}
                   onClick={handleShowEmailAuth}
                 />
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <span style={{ fontSize: '10px' }}>
+                    가입하면{' '}
+                    <span
+                      style={{
+                        textDecoration: 'underline',
+                        fontWeight: 'bold',
+                      }}
+                    >
+                      이용약관
+                    </span>{' '}
+                    및{' '}
+                    <span
+                      style={{
+                        textDecoration: 'underline',
+                        fontWeight: 'bold',
+                      }}
+                    >
+                      개인정보 보호 정책
+                    </span>
+                    에 동의하는 것으로 간주합니다.
+                  </span>
+                </div>
                 <Divider />
                 <GoogleAuthButton text="Google 계정으로 회원가입" />
               </FormGroup>
@@ -107,7 +167,7 @@ const SignupPage: React.FC = () => {
           </RightSection>
         </PageContainer>
       ) : (
-        <EmailAuthPage />
+        <ContractsPage />
       )}
     </>
   );

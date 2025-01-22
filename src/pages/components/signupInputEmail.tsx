@@ -22,7 +22,6 @@ const InputWrapper = styled.div<{
   border: 0.696px solid #323538;
   border-radius: 6.962px;
   padding: 12px;
-  margin-bottom: 8px;
   transition: box-shadow 0.3s ease;
   box-shadow: ${(props) => {
     if (props.isFocused && !props.hasBlurred && !props.isError) {
@@ -67,11 +66,12 @@ const Input = styled.input<{
 `;
 
 interface InputEmailProps {
+  setEmail: React.Dispatch<React.SetStateAction<string>>;
   setIsEmailValid: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const InputEmail: React.FC<InputEmailProps> = ({ setIsEmailValid }) => {
-  const [email, setEmail] = useState<string>('');
+const SignupInputEmail: React.FC<InputEmailProps> = ({ setEmail, setIsEmailValid }) => {
+  const [email, setEmailState] = useState<string>('');
   const [isValidEmail, setIsValidEmail] = useState<boolean>(false);
   const [isEmailChecked, setIsEmailChecked] = useState<boolean>(false);
   const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -79,7 +79,9 @@ const InputEmail: React.FC<InputEmailProps> = ({ setIsEmailValid }) => {
   const [isError, setIsError] = useState(false);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
+    const newEmail = e.target.value;
+    setEmailState(newEmail);
+    setEmail(newEmail);
   };
 
   const validateEmail = (email: string): boolean => {
@@ -128,4 +130,4 @@ const InputEmail: React.FC<InputEmailProps> = ({ setIsEmailValid }) => {
   );
 };
 
-export default InputEmail;
+export default SignupInputEmail;

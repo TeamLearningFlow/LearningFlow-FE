@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import invisibleicon from '../assets/invisibleicon.svg';
+import visibleicon from '../assets/visibleicon.svg';
 import { ValidationCheck } from './validation';
 
 const InputWrapper = styled.div<{
@@ -219,7 +220,10 @@ const SignupInputPw: React.FC<SignupInputPwProps> = ({
           onKeyDown={handleKeyPress}
         />
         <IconWrapper onClick={PasswordVisibility}>
-          <Image src={invisibleicon} alt="비밀번호 보이기/숨기기 아이콘" />
+          <Image 
+          src={isPasswordVisible? visibleicon:invisibleicon} 
+          alt="비밀번호 보이기/숨기기 아이콘"
+          />
         </IconWrapper>
       </InputWrapper>
       <ValidationCheck passwordValidation={passwordValidation} />

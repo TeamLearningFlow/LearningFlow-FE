@@ -51,15 +51,20 @@ const Button = styled.button`
   justify-content: center;
   align-items: center;
   width: 100%;
-  background-color: rgba(236, 238, 240, 1);
-  border: none;
+  background-color: rgba(255, 255, 255, 1);
+  border: 1px solid rgba(189, 197, 204, 1);
   border-radius: 6.962px;
   font-family: Roboto;
   font-size: 18px;
   font-style: normal;
   font-weight: 600;
   color: rgba(50, 53, 56, 1);
-  cursor: pointer;
+  cursor: pointer; 
+
+    &:hover {
+    background-color: rgba(245, 245, 245, 1);
+  }
+
 `;
 
 const GoogleAuthButton = ({ text }: { text: string }) => {

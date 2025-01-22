@@ -9,7 +9,7 @@ const Button = styled.button<{ disabled?: boolean }>`
   align-items: center;
   width: 100%;
   background-color: ${({ disabled }) =>
-    disabled ? 'rgba(100, 105, 110, 1)' : 'rgba(94, 82, 255, 1)'};
+    disabled ? ' rgba(118, 118, 128, 0.12)' : 'rgba(94, 82, 255, 1)'};
   border: none;
   border-radius: 6.962px;
   font-family: Roboto;

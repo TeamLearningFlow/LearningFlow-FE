@@ -76,6 +76,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import invisibleicon from '../assets/invisibleicon.svg';
+import visibleicon from '../assets/visibleicon.svg';
 
 const InputWrapper = styled.div<{
   isFocused: boolean;
@@ -211,7 +212,10 @@ const InputPwCheck: React.FC<InputPwCheckProps> = ({
           placeholder="비밀번호를 다시 입력하세요"
         />
         <IconWrapper onClick={PasswordVisibility}>
-          <Image src={invisibleicon} alt="비밀번호 보이기/숨기기 아이콘" />
+          <Image 
+          src={isPasswordVisible? visibleicon : invisibleicon} 
+          alt="비밀번호 보이기/숨기기 아이콘"
+          />
         </IconWrapper>
       </InputWrapper>
       {isError && <ErrorText>비밀번호가 틀렸습니다!</ErrorText>}
