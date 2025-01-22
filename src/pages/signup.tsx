@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import LeftUI from './components/leftUI';
-import Divider from './components/divider';
-import GoogleAuthButton from './components/googleAuthButton';
-import SignupAuthButton from './components/signupAuthButton';
-import SignupInputEmail from './components/signupInputEmail';
-import SignupInputPw from './components/signupInputPw';
-import InputPwCheck from './components/inputPwCheck';
-import TopLogo from './components/topLogo_light';
+import LeftUI from '../components/leftUI';
+import Divider from '../components/divider';
+import GoogleAuthButton from '../components/googleAuthButton';
+import SignupAuthButton from '../components/signupAuthButton';
+import SignupInputEmail from '../components/signupInputEmail';
+import SignupInputPw from '../components/signupInputPw';
+import InputPwCheck from '../components/inputPwCheck';
+import TopLogo from '../components/topLogo_light';
 import EmailAuthPage from './emailAuth';
 
 const PageContainer = styled.div`

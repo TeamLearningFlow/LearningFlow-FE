@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import { LoginContext } from '../context/LoginContext';
+import { LoginContext } from '../pages/context/LoginContext';
 
 const Button = styled.button<{ disabled?: boolean }>`
   display: flex;

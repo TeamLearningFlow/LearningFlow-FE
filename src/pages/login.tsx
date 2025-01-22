@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import InputEmail from './components/inputEmail';
-import InputPw from './components/inputPw';
-import LeftUI from './components/leftUI';
-import Divider from './components/divider';
-import GoogleAuthButton from './components/googleAuthButton';
-import AuthButton from './components/authButton';
-import TopLogo from './components/topLogo';
+import InputEmail from '../components/inputEmail';
+import InputPw from '../components/inputPw';
+import LeftUI from '../components/leftUI';
+import Divider from '../components/divider';
+import GoogleAuthButton from '../components/googleAuthButton';
+import AuthButton from '../components/authButton';
+import TopLogo from '../components/topLogo';
 import { LoginProvider } from './context/LoginContext';
 
 const PageContainer = styled.div`
