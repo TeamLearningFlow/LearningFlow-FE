@@ -63,8 +63,16 @@ const Button = styled.button`
 `;
 
 const GoogleAuthButton = ({ text }: { text: string }) => {
+  const CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+  const REDIRECT_URI = process.env.NEXT_PUBLIC_REDIRECT_URI;
+
+  const handleGoogleLogin = () => {
+    const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=email profile`;
+    window.location.href = googleAuthUrl;
+  };
+
   return (
-    <Button>
+    <Button onClick={handleGoogleLogin}>
       <GoogleLogo />
       {text}
     </Button>
