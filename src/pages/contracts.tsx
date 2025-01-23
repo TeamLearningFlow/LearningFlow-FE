@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import TopLogo from './components/toplogo_dark';
+import TopLogo from '../assets/logo_dark.png';
 import EmailAuthPage from './emailAuth';
 
 const PageWrapper = styled.div`
