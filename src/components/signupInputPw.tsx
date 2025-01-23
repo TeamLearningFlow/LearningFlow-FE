@@ -11,7 +11,7 @@ const InputWrapper = styled.div<{
   isValid: boolean;
   hasBlurred: boolean;
   isSubmitted: boolean;
-  isEmpty: boolean; // 추가된 속성: input이 비어 있는지 여부
+  isEmpty: boolean;
 }>`
   display: flex;
   height: 50px;

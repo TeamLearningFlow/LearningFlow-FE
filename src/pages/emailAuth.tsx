@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import TopLogo from '../components/toplogo_guest';
-import EmailIcon from './assets/mailIcon.png';
+import EmailIcon from '../assets/mailIcon.png';
 import Image from 'next/image';
 import EmailAuthModal from './modal/emailAuthModal';
 
