@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import TopLogo from '../components/toplogo_guest';
-import EmailIcon from '../assets/mailIcon.png';
-import Image from 'next/image';
+// import EmailIcon from './assets/mailIcon.png';
+// import Image from 'next/image';
 import EmailAuthModal from './modal/emailAuthModal';
 
 const EmailAuthPage: React.FC = () => {
@@ -22,7 +22,7 @@ const EmailAuthPage: React.FC = () => {
       <PageContainer>
         <TitleContainer>인증 메일을 보내드렸어요</TitleContainer>
         <IconContainer>
-          <Image src={EmailIcon} alt="Email Icon" width={240} height={240} />
+          {/*<Image src={EmailIcon} alt="Email Icon" width={240} height={240} /> */}
         </IconContainer>
         <Textwrapper>
           {`메일함을 확인해주세요\n가입하신 이메일을 인증해 주시면,\n온보딩의 서비스를 마음껏 이용하실 수 있어요`}
