@@ -68,6 +68,7 @@ const StyledTable = styled.table`
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
+  border-spacing: 0;
 `;
 
 const TableHeader = styled.th<{ headerWidth?: string }>`
@@ -82,12 +83,12 @@ const TableCell = styled.td`
   border: 1px solid rgba(189, 197, 204, 1);
 `;
 
-const TableCellWithFlex = styled.td`
+{/* const TableCellWithFlex = styled.td`
   display: flex;
   align-items: center;
   padding: 16px;
   border: 1px solid rgba(189, 197, 204, 1);
-`;
+`; */}
 
 const IconWrapper = styled.div`
   display: flex;
@@ -197,7 +198,7 @@ const ContractsPage: React.FC = () => {
                         </span>
                         에 동의하십니까?
                       </TableCell>
-                      <TableCellWithFlex>
+                      <TableCell style={{ display: 'flex' }}>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                           동의하지 않음
                           <IconWrapper onClick={handleDisagreeCheck}>
@@ -218,7 +219,7 @@ const ContractsPage: React.FC = () => {
                             />
                           </IconWrapper>
                         </div>
-                      </TableCellWithFlex>
+                      </TableCell>
                     </tr>
                   </tbody>
                 </StyledTable>
