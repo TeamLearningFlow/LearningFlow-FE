@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import BoardingPassContainer from '../assets/boarding-pass-background.svg';
 import BoardingPassImage from '../assets/boarding-pass.svg';
+import Bookmark from '../assets/bookmark.svg';
 import HoverBackground from '../assets/hover-background.svg';
 import Plane from '../assets/plane.svg';
 import Circle from '../assets/circle.svg';
@@ -347,6 +348,16 @@ const BoardingPassNew: React.FC = () => {
         src={BoardingPassImage}
         alt="boardingpass"
         style={{ position: 'absolute', left: '3.9px' }}
+      />
+      <Image
+        src={Bookmark}
+        alt="bookmark"
+        style={{
+          position: 'absolute',
+          top: '20px',
+          right: '20px',
+          cursor: 'pointer',
+        }}
       />
       <Body>
         <KeywordWrapper>
