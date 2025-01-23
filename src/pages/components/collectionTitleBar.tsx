@@ -6,7 +6,7 @@ const TitleWrapper = styled.div`
   align-items: center;
   justify-content: left;
   height: 50px;
-  background: linear-gradient(to right, #5e52ff, #383199);
+  background-color: rgba(31, 31, 31, 1);
   padding-left: 10%;
 `;
 
