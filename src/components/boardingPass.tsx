@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import BoardingPassContainer from '../assets/boarding-pass-background.svg';
-import BoardingPassImage from '../assets/boarding-pass.svg';
-import Bookmark from '../assets/bookmark.svg';
+import BoardingPassContainer from '../assets/S_Background.svg';
+import CollectionImage from '../assets/boarding-pass.svg';
+import BookmarkIcon from '../assets/bookmark.svg';
 import HoverBackground from '../assets/hover-background.svg';
 import Plane from '../assets/plane.svg';
 import Circle from '../assets/circle.svg';
@@ -31,12 +31,26 @@ const Container = styled(ColumnFlexDiv)`
   background: transparent;
 `;
 
+const BoardingPassImage = styled(Image)`
+  position: absolute;
+  top: 1px;
+  left: 1px;
+`;
+
+const Bookmark = styled(Image)`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+`;
+
 const Body = styled.div`
   background: #fff;
   height: 122px;
-  padding: 18px 20px;
+  margin: 18px 20px;
   position: absolute;
   top: 158.303px;
+  left: 2px;
 `;
 
 const KeywordWrapper = styled(RowFlexSpan)`
@@ -78,15 +92,17 @@ const Author = styled.div`
 `;
 
 const Bottom = styled(RowFlexDiv)`
-  justify-content: center;
-  //   border-top: dashed 1px #dde0e4;
-  //   border-radius: 0px 0px 16px 16px;
-  //   background: #f5f5ff;
-  height: 50.804px;
-  padding: 11.781px 20.616px;
+  width: 282px;
+  justify-content: space-between;
+  border-top: dashed 1px #dde0e4;
+  border-radius: 0px 0px 16px 16px;
+  background: #f5f5ff;
+  height: 53px;
+  padding: 10px 20px;
   position: absolute;
-  bottom: 0;
-  background: transparent;
+  top: 281px;
+  left: 1px;
+  gap: 10px;
 `;
 
 const Departure = styled(ColumnFlexDiv)`
@@ -143,8 +159,8 @@ const HoverWrapper = styled.div`
   width: 100%;
   height: 175px;
   position: absolute;
-  top: 158.303px;
-  left: 3.9px;
+  top: 159.2px;
+  left: 1px;
   background: transparent;
   opacity: 0;
   transition: all 0.3s; // 몇 초로 할지 설정
@@ -224,8 +240,8 @@ const CollectionWrapper = styled(ColumnFlexDiv)`
   left: 20px;
   top: 58px;
   width: 242px;
-  height: 104px;
-  gap: 10px;
+  height: 109px;
+  gap: 8px;
 `;
 
 const ContentWrapper = styled(RowFlexDiv)`
@@ -340,25 +356,12 @@ const HoverCollection = () => {
   );
 };
 
-const BoardingPassNew: React.FC = () => {
+const BoardingPass: React.FC = () => {
   return (
     <Container>
       <Image src={BoardingPassContainer} alt="boarding pass" />
-      <Image
-        src={BoardingPassImage}
-        alt="boardingpass"
-        style={{ position: 'absolute', left: '3.9px' }}
-      />
-      <Image
-        src={Bookmark}
-        alt="bookmark"
-        style={{
-          position: 'absolute',
-          top: '20px',
-          right: '20px',
-          cursor: 'pointer',
-        }}
-      />
+      <BoardingPassImage src={CollectionImage} alt="collection image" />
+      <Bookmark src={BookmarkIcon} alt="bookmark" />
       <Body>
         <KeywordWrapper>
           <Keyword>키워드1</Keyword>
@@ -393,4 +396,4 @@ const BoardingPassNew: React.FC = () => {
   );
 };
 
-export default BoardingPassNew;
+export default BoardingPass;
