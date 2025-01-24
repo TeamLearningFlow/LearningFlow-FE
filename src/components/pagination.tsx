@@ -8,7 +8,7 @@ import nextpage from '../assets/nextPage.svg';
 import nextpage_disabled from '../assets/nextPage_disabled.svg';
 
 const PageButtonWrapper = styled.div`
-  // margin: 50px 0;
+  margin-bottom: 32px;
   gap: 12px;
   display: flex;
   justify-content: center;
