@@ -9,10 +9,11 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
 
-  body {
+  body, html {
     font-family: Pretendard;
     background-color: #fff;
     color: #333;
+    overflow-x: hidden;
   }
 `;
 

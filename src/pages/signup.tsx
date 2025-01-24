@@ -20,6 +20,7 @@ const PageContainer = styled.div`
   width: 100vw;
   background-color: #ffffff;
   overflow: hidden;
+  margin-top: -10px;
 `;
 
 const LeftSection = styled.div`
@@ -52,7 +53,7 @@ const BlankContainer = styled.div``;
 const FormGroup = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 20px;
   margin-top: 15px;
 `;
 

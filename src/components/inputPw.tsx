@@ -2,7 +2,8 @@ import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { LoginContext } from '../pages/context/LoginContext';
 import Image from 'next/image';
-import invisibleicon from '../assets/invisibleicon.png'; /*.svg 계속 오류나서 .png로 바꿈*/
+import invisibleicon from '../assets/invisibleicon.svg'; /*.svg 계속 오류나서 .png로 바꿈*/
+import visibleicon from '../assets/visibleicon.svg';
 
 const Label = styled.label`
   display: block;
@@ -167,7 +168,10 @@ const InputPw: React.FC = () => {
           isError={formErrorMsg !== ''} // 오류일 때 글씨 빨간색
         />
         <IconWrapper onClick={handleShowPwChecked}>
-          <Image src={invisibleicon} alt="invisibleicon" />
+          <Image
+            src={showPwChecked ? visibleicon : invisibleicon}
+            alt="비밀번호 보이기/숨기기 아이콘"
+          />
         </IconWrapper>
       </InputWrapper>
       {formErrorMsg && <LoginErrorMsg>{formErrorMsg}</LoginErrorMsg>}

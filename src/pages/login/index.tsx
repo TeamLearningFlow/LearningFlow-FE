@@ -13,7 +13,7 @@ const PageContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   background-color: #ffffff;
   overflow: hidden;
@@ -22,6 +22,7 @@ const PageContainer = styled.div`
 const LeftSection = styled.div`
   width: 54vw;
   display: flex;
+  overflow: hidden;
 `;
 
 const RightSection = styled.div`
@@ -30,6 +31,7 @@ const RightSection = styled.div`
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
+  over-flow: hidden;
 `;
 
 const FormContainer = styled.div`
@@ -71,6 +73,7 @@ const CheckboxContainer = styled.div`
     input {
       margin-right: 6px;
       cursor: pointer;
+      accent-color: #323538;
     }
   }
 
@@ -108,6 +111,13 @@ const SignupText = styled.p`
   }
 `;
 
+const FormGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 15px;
+`;
+
 const LoginPage: React.FC = () => {
   return (
     <>
@@ -131,12 +141,14 @@ const LoginPage: React.FC = () => {
                   <a href="/forgot-password">비밀번호 찾기</a>
                 </div>
               </CheckboxContainer>
-              <SignupText>
-                온보딩이 처음이신가요? <a href="/signup">회원가입</a>
-              </SignupText>
-              <AuthButton disabled={true} text="로그인" />
-              <Divider />
-              <GoogleAuthButton text="Google 계정으로 로그인" />
+              <FormGroup>
+                <AuthButton disabled={true} text="로그인" />
+                <Divider />
+                <GoogleAuthButton text="Google 계정으로 로그인" />
+                <SignupText>
+                  온보딩이 처음이신가요? <a href="/signup">회원가입</a>
+                </SignupText>
+              </FormGroup>
             </FormContainer>
           </RightSection>
         </PageContainer>

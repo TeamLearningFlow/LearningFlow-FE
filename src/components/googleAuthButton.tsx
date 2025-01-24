@@ -14,7 +14,7 @@ const Button = styled.button`
   border: 1px solid rgba(189, 197, 204, 1);
   border-radius: 6.962px;
   font-family: Roboto;
-  font-size: 18px;
+  font-size: 17px;
   font-style: normal;
   font-weight: 600;
   color: rgba(50, 53, 56, 1);
@@ -26,7 +26,9 @@ const Button = styled.button`
 `;
 
 const GoogleLogo = styled(Image)`
-  margin-right: 16px;
+  margin-right: 10px;
+  width: 20px;
+  height: 20px;
 `;
 
 const GoogleAuthButton = ({ text }: { text: string }) => {
