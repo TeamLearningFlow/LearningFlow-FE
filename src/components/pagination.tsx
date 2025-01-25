@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import axios from 'axios';
+// import axios from 'axios';
 import prevpage from '../assets/prevPage.svg';
 import prevpage_disabled from '../assets/prevpage_disabled.svg';
 import nextpage from '../assets/nextPage.svg';
@@ -55,9 +55,9 @@ const Pagination: React.FC = () => {
 
   const fetchTotalPageData = async () => {
     try {
-      const response = await axios.get(`http://localhost:3000/result`);
+      // const response = await axios.get(`http://localhost:3000/result`);
       // console.log('total page:', response.data.totalPages);
-      setTotalPages(response.data.totalPages);
+      // setTotalPages(response.data.totalPages);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
