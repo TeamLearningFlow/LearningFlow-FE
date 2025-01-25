@@ -26,7 +26,6 @@ const RowFlexSpan = styled.span`
 const Container = styled(ColumnFlexDiv)`
   height: 333px;
   width: 282px;
-  margin: 20px; // 임의 지정, 여러 개 grid로 뿌려줄 때 변경 필요
   position: relative;
   background: transparent;
 `;
@@ -356,7 +355,11 @@ const HoverCollection = () => {
   );
 };
 
-const BoardingPass: React.FC = () => {
+const BoardingPass = ({
+  showHoverCollection,
+}: {
+  showHoverCollection?: boolean;
+}) => {
   return (
     <Container>
       <Image src={BoardingPassContainer} alt="boarding pass" />
@@ -391,7 +394,7 @@ const BoardingPass: React.FC = () => {
           <Level>분야 난이도</Level>
         </Arrival>
       </Bottom>
-      <HoverCollection />
+      {showHoverCollection && <HoverCollection />}
     </Container>
   );
 };

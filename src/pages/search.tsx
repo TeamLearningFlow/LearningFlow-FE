@@ -11,7 +11,7 @@ const SearchPage: React.FC = () => {
       <Header />
       <CategoryList />
       <Filters />
-      <BoardingPass />
+      <BoardingPass showHoverCollection={true} />
       <Pagination />
     </>
   );
