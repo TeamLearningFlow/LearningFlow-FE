@@ -19,7 +19,7 @@ const CategoryListWrapper = styled.div`
   justify-content: flex-start;
   padding: 20px 0 0 10%;
   gap: 20px;
-  height: 110px;
+  height: 115px;
   background-color: #ffffff;
   border-bottom: 1px solid #dde0e4;
 `;
@@ -30,8 +30,8 @@ const CategoryItemWrapper = styled.div<{ active?: boolean }>`
   align-items: center;
   justify-content: center;
   padding: 12px;
-  width: 70px;
-  height: 70px;
+  width: 75px;
+  height: 75px;
   background-color: ${({ active }) => (active ? '#5e52ff' : '#fafafc')};
   box-shadow: ${({ active }) =>
     active ? '1.077px 1.077px 2.154px 0px rgba(0, 0, 0, 0.25)' : 'none'};
@@ -60,6 +60,7 @@ const CategoryText = styled.div<{ active?: boolean }>`
   letter-spacing: -0.28px;
   color: ${({ active }) => (active ? '#ffffff' : '#4f5357')};
   text-align: center;
+  white-space: nowrap;
 `;
 
 const CategoryItem = ({
@@ -108,11 +109,19 @@ const CategoryList = () => {
   ];
 
   const handleClick = (id: number) => {
-    setActiveCategories((prev) =>
-      prev.includes(id)
-        ? prev.filter((categoryId) => categoryId !== id)
-        : [...prev, id],
-    ); // 카테고리 클릭 시 활성화 또는 비활성화
+    if (id === 1) {
+      // "전체" 아이콘 클릭 시 활성화/비활성화 상태
+      setActiveCategories(
+        (prev) => (prev.includes(1) ? [] : [1]), // 이미 활성화된 경우 초기화, 아니면 전체만 활성화
+      );
+    } else {
+      setActiveCategories(
+        (prev) =>
+          prev.includes(id)
+            ? prev.filter((categoryId) => categoryId !== id) // 비활성화
+            : [...prev.filter((categoryId) => categoryId !== 1), id], // "전체" 비활성화 후 추가
+      );
+    }
   };
 
   return (

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import ChevronDown from '../assets/chevronDown.svg';
-import CloseIcon from '../assets/close.svg';
 
 // 타입 정의
 type Option = {
@@ -12,13 +11,12 @@ type Option = {
 
 // filters.tsx에 전달
 type DropdownProps = {
-  onTagChange: (hasTags: boolean) => void;
+  onTagChange: (label: string | null) => void;
 };
 
 const DropdownContainer = styled.div<{ hasTags: boolean }>`
   position: relative;
   display: inline-block;
-
 `;
 
 const DropdownButton = styled.button<{ isOpen: boolean; hasTags: boolean }>`
@@ -87,43 +85,9 @@ const Checkbox = styled.input`
   margin-top: -24px;
 `;
 
-const SelectedTag = styled.div`
-  margin-top: 9px;
-  display: flex;
-  gap: 9px;
-  flex-wrap: wrap;
-`;
-
-const Tag = styled.div`
-  background: #f5f5ff;
-  color: #5e52ff;
-  height: 33px;
-  width: 67px;
-  border-radius: 100px;
-  padding: 0px 14px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 21px; /* 150% */
-  letter-spacing: -0.28px;
-  flex-shrink: 0;
-
-  & > button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-    align-items: center;
-    justify-content: center;
-    margin-right: -2px;
-  }
-`;
-
 const LevelButton: React.FC<DropdownProps> = ({ onTagChange }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOptions, setSelectedOptions] = useState<Option | null>(null);
+  const [selectedOption, setSelectedOption] = useState<Option | null>(null);
 
   const options: Option[] = [
     { label: '입문', description: '누구나 들을 수 있는' },
@@ -133,26 +97,22 @@ const LevelButton: React.FC<DropdownProps> = ({ onTagChange }) => {
   ];
 
   const toggleOption = (option: Option) => {
-    if (selectedOptions?.label === option.label) {
-      setSelectedOptions(null); // 같은 옵션 클릭 시 선택 해제
+    if (selectedOption?.label === option.label) {
+      setSelectedOption(null); // 같은 옵션 클릭 시 선택 해제
     } else {
-      setSelectedOptions(option); // 옵션 선택
+      setSelectedOption(option); // 옵션 선택
     }
   };
 
-  const removeTag = () => {
-    setSelectedOptions(null); // 태그 삭제
-  };
-
   useEffect(() => {
-    onTagChange(!!selectedOptions); // 태그 상태 부모로 전달
-  }, [selectedOptions, onTagChange]);
+    onTagChange(selectedOption ? selectedOption.label : null); // 부모로 선택값 전달
+  }, [selectedOption, onTagChange]);
 
   return (
-    <DropdownContainer hasTags={!!selectedOptions}>
+    <DropdownContainer hasTags={!!selectedOption}>
       <DropdownButton
         isOpen={isOpen}
-        hasTags={!!selectedOptions}
+        hasTags={!!selectedOption}
         onClick={() => setIsOpen(!isOpen)}
       >
         난이도
@@ -164,7 +124,7 @@ const LevelButton: React.FC<DropdownProps> = ({ onTagChange }) => {
             <DropdownItem key={index}>
               <Checkbox
                 type="checkbox"
-                checked={selectedOptions?.label === option.label}
+                checked={selectedOption?.label === option.label}
                 onChange={() => toggleOption(option)}
               />
               <div>
@@ -176,16 +136,6 @@ const LevelButton: React.FC<DropdownProps> = ({ onTagChange }) => {
             </DropdownItem>
           ))}
         </DropdownMenu>
-      )}
-      {selectedOptions && (
-        <SelectedTag>
-          <Tag>
-            {selectedOptions.label}
-            <button onClick={removeTag}>
-              <Image src={CloseIcon} alt="close" width={14} height={14} />
-            </button>
-          </Tag>
-        </SelectedTag>
       )}
     </DropdownContainer>
   );

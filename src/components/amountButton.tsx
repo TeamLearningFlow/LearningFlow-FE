@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import ChevronDown from '../assets/chevronDown.svg';
-import CloseIcon from '../assets/close.svg';
 
 // 타입 정의
 type Option = {
@@ -12,7 +11,7 @@ type Option = {
 
 // filters.tsx에 전달
 type DropdownProps = {
-  onTagChange: (hasTags: boolean) => void;
+  onTagChange: (label: string | null) => void;
 };
 
 const DropdownContainer = styled.div<{ hasTags: boolean }>`
@@ -86,39 +85,6 @@ const Checkbox = styled.input`
   margin-top: -24px;
 `;
 
-const SelectedTag = styled.div`
-  margin-top: 9px;
-  display: flex;
-  gap: 9px;
-  flex-wrap: wrap;
-`;
-
-const Tag = styled.div`
-  background: #f5f5ff;
-  color: #5e52ff;
-  height: 33px;
-  width: auto;
-  border-radius: 100px;
-  padding: 0 14px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 21px; /* 150% */
-  letter-spacing: -0.28px;
-  flex-shrink: 0;
-
-  & > button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-    align-items: center;
-    justify-content: center;
-  }
-`;
-
 const AmountButton: React.FC<DropdownProps> = ({ onTagChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState<Option | null>(null);
@@ -137,12 +103,8 @@ const AmountButton: React.FC<DropdownProps> = ({ onTagChange }) => {
     }
   };
 
-  const removeTag = () => {
-    setSelectedOptions(null); // 태그 삭제
-  };
-
   useEffect(() => {
-    onTagChange(!!selectedOptions); // 태그 상태 부모로 전달
+    onTagChange(selectedOptions ? selectedOptions.label : null); // 부모로 선택값 전달
   }, [selectedOptions, onTagChange]);
 
   return (
@@ -173,16 +135,6 @@ const AmountButton: React.FC<DropdownProps> = ({ onTagChange }) => {
             </DropdownItem>
           ))}
         </DropdownMenu>
-      )}
-      {selectedOptions && (
-        <SelectedTag>
-          <Tag>
-            {selectedOptions.label}
-            <button onClick={removeTag}>
-              <Image src={CloseIcon} alt="close" width={14} height={14} />
-            </button>
-          </Tag>
-        </SelectedTag>
       )}
     </DropdownContainer>
   );
