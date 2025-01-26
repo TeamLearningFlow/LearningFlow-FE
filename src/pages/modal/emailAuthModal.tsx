@@ -38,6 +38,7 @@ const emailAuthModal: React.FC<ModalProps> = ({ onClose }) => {
 export default emailAuthModal;
 
 const ModalWrapper = styled.div`
+  white-space: nowrap;
   position: fixed;
   display: flex;
   justify-content: center;
@@ -57,7 +58,8 @@ const ModalBox = styled.div`
   flex-direction: column;
   align-items: flex-end;
 
-  width: 472px;
+  // width: 472px;
+  // width: 31%;
   height: 231px;
 
   border-radius: 16px;
@@ -80,7 +82,7 @@ const Description = styled.div`
 
   font-size: 18.5px;
   font-weight: 500;
-  line-height: 30px; /* 150% */
+  line-height: 30px;
   letter-spacing: -0.4px;
 `;
 const Button = styled.div`
