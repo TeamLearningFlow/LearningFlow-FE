@@ -7,7 +7,7 @@ import ClassIndex from './components/classIndex';
 import NowPlaying from './components/nowPlaying';
 
 const PageWrapper = styled.div`
-  background-color: #f5f5ff;
+  background-color: #fafafc;
   min-height: 100vh;
 `;
 

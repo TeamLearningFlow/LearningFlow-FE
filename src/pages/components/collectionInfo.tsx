@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import tmpIMG from '../assets/tmpIMG.png';
-import boardingCollectionIMG from '../assets/boarding_collection_L.svg';
+import collectionInfoIMG from '../assets/CollectionInfo.png';
 import youtubeIMG from '../assets/Youtube.png';
 import tistoryIMG from '../assets/Tistory.png';
 import blogIMG from '../assets/NaverBlog.png';
@@ -17,7 +17,7 @@ const CollectionInfo: React.FC = () => {
       <CollectionLeftIMG src={tmpIMG} alt="컬렉션 이미지" height={252} />
       <CollectionDescription>
         <CollectionRightIMG
-          src={boardingCollectionIMG}
+          src={collectionInfoIMG}
           alt="컬렉션 이미지"
           height={252}
         />
@@ -31,8 +31,8 @@ const CollectionInfo: React.FC = () => {
           <TypeImg src={tistoryIMG} alt="tistory" index={1} />
           <TypeImg src={blogIMG} alt="blog" index={2} />
           <TypeImg src={velogIMG} alt="velog" index={3} />
-          <TypeImgEtc>+</TypeImgEtc>
-          <TypeImgEtcNum>4</TypeImgEtcNum>
+          {/* <TypeImgEtc>+</TypeImgEtc> */}
+          {/* <TypeImgEtcNum>4</TypeImgEtcNum> */}
           <TypeImgLetterBox>
             <TypeImgToArticleLine src={line} alt="------" />
             <TypeImgToArticleDot src={dot} alt="O" />
@@ -44,7 +44,11 @@ const CollectionInfo: React.FC = () => {
             </ArticleNVideo>
           </TypeImgLetterBox>
         </TypeImgBox>
-        <Title>컬렉션의 제목을 입력해주세요요요우용요요ㅛ</Title>
+        <Title>
+          컬렉션의
+          <br />
+          제목을 입력해주세요
+        </Title>
         <Author>컬렉션의 제작자명</Author>
         {/* <LowerDescription> */}
         <Departure>
@@ -54,12 +58,14 @@ const CollectionInfo: React.FC = () => {
           </DepartureLeft>
           <DepartureCenter>
             <DepartureToArrivalLetter>00시간</DepartureToArrivalLetter>
+            <Hr />
             <PlaneImg src={plane} alt="비행기" />
+            <Hr />
           </DepartureCenter>
-          {/* <Arrival> */}
-          {/* <ArrivalLetter>Arrival</ArrivalLetter> */}
-          {/* <ArrivalLevel>분야 난이도</ArrivalLevel> */}
-          {/* </Arrival> */}
+          <DepartureRight>
+            <ArrivalLetter>Arrival</ArrivalLetter>
+            <ArrivalLevel>분야 난이도</ArrivalLevel>
+          </DepartureRight>
           {/* </LowerDescription> */}
         </Departure>
       </CollectionDescription>
@@ -76,6 +82,8 @@ const CollectionTicket = styled.span`
   width: 80vw;
   height: 254px;
   margin: 2% 9.5% 2.5% 9.5%;
+
+  white-space: nowrap;
 `;
 
 const CollectionLeftIMG = styled(Image)`
@@ -108,22 +116,21 @@ const Keyword = styled.span`
 
   border-radius: 9.786px;
   background-color: #f5f5f5;
-  color: #1f1f1f;
-  font-size: 14.679px;
+  color: #4f5357;
+  font-size: 14px;
   font-weight: 600;
   line-height: 23.996px;
 `;
 
 const Title = styled.div`
   position: absolute;
-  font-family: Pretendard;
   font-size: 24px;
   font-weight: 700;
 
   line-height: 36px;
   letter-spacing: -0.48px;
 
-  margin-top: 70px;
+  margin-top: 65px;
   margin-left: 25px;
   width: 327.273px;
 `;
@@ -134,16 +141,16 @@ const Author = styled.div`
   font-size: 18px;
   font-weight: 600;
 
-  margin-top: 145px;
+  margin-top: 140px;
   margin-left: 25px;
   width: 327.273px;
 `;
 
 const TypeImgBox = styled.div`
   position: absolute;
-  margin-top: 135px;
+  margin-top: 130px;
 
-  margin-left: 390px;
+  margin-left: 425px;
   width: 300px;
   height: 40px;
 `;
@@ -160,29 +167,29 @@ const TypeImg = styled(Image)<{ index: number }>`
   height: 38.185px;
 `;
 
-const TypeImgEtc = styled.span`
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+// const TypeImgEtc = styled.span`
+//   position: absolute;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
 
-  font-size: 10.367px;
-  height: 40px;
-  margin-left: 123px;
-  color: #4f5357;
-`;
+//   font-size: 10.367px;
+//   height: 40px;
+//   margin-left: 123px;
+//   color: #4f5357;
+// `;
 
-const TypeImgEtcNum = styled.span`
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+// const TypeImgEtcNum = styled.span`
+//   position: absolute;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
 
-  font-size: 10.367px;
-  height: 40px;
-  margin-left: 130px;
-  color: #4f5357;
-`;
+//   font-size: 10.367px;
+//   height: 40px;
+//   margin-left: 130px;
+//   color: #4f5357;
+// `;
 
 const TypeImgLetterBox = styled.div`
   display: flex;
@@ -191,7 +198,7 @@ const TypeImgLetterBox = styled.div`
 
   width: 250px;
   height: 40px;
-  margin-left: 150px;
+  margin-left: 140px;
 
   font-size: 10.367px;
   font-style: normal;
@@ -218,77 +225,87 @@ const ArticleNVideo = styled.span`
 `;
 
 const ArticleLetter = styled.span`
-  margin-right: 5px;
+  margin-right: 4px;
+
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: -0.24px;
 `;
 
 const ArticleNumber = styled.span`
   display: flex;
-  width: 13.574px;
-  height: 13.574px;
+  width: 15px;
+  height: 15px;
 
   align-items: center;
   justify-content: center;
   padding: 1.939px;
-  padding-bottom: 2.8px;
-
-  font-size: 10.367px;
-  font-weight: 500;
-  color: #5e52ff;
-  background-color: #f5f5ff;
-  border-radius: 9.509px;
-`;
-
-const VideoLetter = styled.span`
-  margin-left: 7px;
-  margin-right: 5px;
-`;
-
-const VideoNumber = styled.span`
-  display: flex;
-  width: 13.574px;
-  height: 13.574px;
-
-  align-items: center;
-  justify-content: center;
-  padding: 1.939px;
-  padding-bottom: 2.8px;
-
-  font-size: 10.367px;
-  font-weight: 500;
-  color: #5e52ff;
-  background-color: #f5f5ff;
-  border-radius: 9.509px;
-`;
-
-const Departure = styled.span`
-  border: 1px solid red;
-  display: flex;
-  // justify-content: center;
-  align-items: center;
-
-  margin-top: 180px;
-  margin-left: -780px;
-  width: 54vw;
-  height: 50px;
-`;
-
-const DepartureLeft = styled.span`
-  border: 1px solid blue;
-  position: absolute;
-  margin-left: 20px;
-
-  width: 80px;
-  // height: 50px;
-`;
-
-const DepartureLetter = styled.div`
-  color: #9e9e9e;
 
   font-size: 12px;
   font-weight: 500;
   line-height: 18px;
+  letter-spacing: -0.24px;
+  font-weight: 500;
+  color: #5e52ff;
+  background-color: #f5f5ff;
+  border-radius: 50px;
+`;
 
-  margin-bottom: 5px;
+const VideoLetter = styled.span`
+  margin-left: 7px;
+  margin-right: 4px;
+
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: -0.24px;
+`;
+
+const VideoNumber = styled.span`
+  display: flex;
+  width: 15px;
+  height: 15px;
+
+  align-items: center;
+  justify-content: center;
+  padding: 1.939px;
+
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  letter-spacing: -0.24px;
+  font-weight: 500;
+  color: #5e52ff;
+  background-color: #f5f5ff;
+  border-radius: 50px;
+`;
+
+const Departure = styled.span`
+  display: flex;
+  align-items: center;
+
+  margin-top: 184px;
+  margin-left: -54vw;
+  padding: 16px 100px;
+  width: 54vw;
+  height: 69px;
+`;
+
+const DepartureLeft = styled.span`
+  text-align: left;
+  margin-right: 1vw;
+`;
+
+const DepartureLetter = styled.div`
+  color: #64696e;
+
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  letter-spacing: -0.24px;
+
+  margin-bottom: 1px;
 `;
 
 const DepartureLevel = styled.div`
@@ -299,12 +316,19 @@ const DepartureLevel = styled.div`
   line-height: 24px;
 `;
 
-const DepartureCenter = styled.div`
-  border: 1px solid green;
+const DepartureCenter = styled.span`
+  display: flex;
+  width: 54vw;
+  align-items: center;
+  justify-content: center;
+  margin-top: 25px;
 `;
 
 const DepartureToArrivalLetter = styled.div`
   color: #5e52ff;
+
+  position: absolute;
+  top: 202px;
 
   font-size: 12px;
   font-weight: 600;
@@ -314,15 +338,38 @@ const DepartureToArrivalLetter = styled.div`
   margin-bottom: 5px;
 `;
 
-const PlaneImg = styled(Image)`
-  width: 11.366px;
-  height: 18.09px;
+const Hr = styled.hr`
+  height: 0.5px;
+  flex: 1; /* 남은 공간을 채움 */
+  border: none;
+  background-color: #5e52ff;
 `;
 
-// const Arrival = styled.span``;
+const PlaneImg = styled(Image)`
+  margin-left: 10px;
+  margin-right: 10px;
+`;
 
-// const ArrivalLetter = styled.div`
-//   color: #bbb6ff;
-// `;
+const DepartureRight = styled.span`
+  text-align: left;
+  margin-left: 1vw;
+`;
 
-// const ArrivalLevel = styled.div``;
+const ArrivalLetter = styled.div`
+  color: #64696e;
+
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  letter-spacing: -0.24px;
+
+  margin-bottom: 1px;
+`;
+
+const ArrivalLevel = styled.div`
+  color: #4f5357;
+
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+`;
