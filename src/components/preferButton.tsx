@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
+import CloseIcon from '../assets/close.svg';
 import Polygon from '../assets/polygon.svg';
 
 // filters.tsx에 전달
 type DropdownProps = {
-  onTagChange: (selectedLabel: string | null) => void;
+  onTagChange: (hasTags: boolean) => void;
 };
 
 const DropdownContainer = styled.div<{ hasTags: boolean }>`
@@ -137,31 +138,73 @@ const Text = styled.div`
   text-align: left;
 `;
 
+const Tag = styled.div`
+  background: #f5f5ff;
+  color: #5e52ff;
+  height: 33px;
+  width: auto;
+  border-radius: 100px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 21px;
+  letter-spacing: -0.28px;
+  flex-shrink: 0;
+
+  & > button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    align-items: center;
+    justify-content: center;
+  }
+`;
+
+const SelectedTag = styled.div`
+  margin-top: 9px;
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+`;
+
 const PreferenceButton: React.FC<DropdownProps> = ({ onTagChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [sliderValue, setSliderValue] = useState(50);
-  // const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
   const getTooltipText = (value: number) => {
-    if (value === 0) return '텍스트만';
-    if (value === 100) return '영상만';
-    if (value > 0 && value <= 40) return '텍스트가 좋아요';
-    if (value > 40 && value < 60) return '상관 없어요';
-    if (value >= 60 && value < 100) return '영상이 좋아요';
+    if (value < 40) return '아티클이 좋아요';
+    if (value > 60) return '영상이 좋아요';
     return '상관 없어요';
   };
 
   const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(event.target.value, 10);
     setSliderValue(value);
-    onTagChange(getTooltipText(value)); // 부모 컴포넌트에 상태 전달
+
+    if (value < 40) setSelectedTag('아티클이 좋아요');
+    else if (value > 60) setSelectedTag('영상이 좋아요');
+    else setSelectedTag('상관 없어요');
   };
 
+  const removeTag = () => {
+    setSelectedTag(null);
+    setSliderValue(50);
+  };
+
+  useEffect(() => {
+    onTagChange(!!selectedTag);
+  }, [selectedTag, onTagChange]);
+
   return (
-    <DropdownContainer hasTags={sliderValue !== 50}>
+    <DropdownContainer hasTags={!!selectedTag}>
       <DropdownButton
         isOpen={isOpen}
-        hasTags={sliderValue !== 50}
+        hasTags={!!selectedTag}
         onClick={() => setIsOpen((prev) => !prev)}
       >
         매체 선호도
@@ -180,12 +223,11 @@ const PreferenceButton: React.FC<DropdownProps> = ({ onTagChange }) => {
               />
             </TooltipContainer>
             <SliderContainer>
-              <Label>텍스트</Label>
+              <Label>아티클</Label>
               <Slider
                 type="range"
                 min="0"
                 max="100"
-                step="1"
                 value={sliderValue}
                 onChange={handleSliderChange}
               />
@@ -194,6 +236,16 @@ const PreferenceButton: React.FC<DropdownProps> = ({ onTagChange }) => {
           </SliderWrapper>
           <Text>선호하시는 매체 유형에 맞춰 컬렉션을 추천해드릴게요</Text>
         </DropdownMenu>
+      )}
+      {selectedTag && (
+        <SelectedTag>
+          <Tag>
+            {selectedTag}
+            <button onClick={removeTag}>
+              <Image src={CloseIcon} alt="close" width={14} height={14} />
+            </button>
+          </Tag>
+        </SelectedTag>
       )}
     </DropdownContainer>
   );

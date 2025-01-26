@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import ChevronDown from '../assets/chevronDown.svg';
+import CloseIcon from '../assets/close.svg';
 
 // 타입 정의
 type Option = {
@@ -11,7 +12,7 @@ type Option = {
 
 // filters.tsx에 전달
 type DropdownProps = {
-  onTagChange: (label: string | null) => void;
+  onTagChange: (hasTags: boolean) => void;
 };
 
 const DropdownContainer = styled.div<{ hasTags: boolean }>`
@@ -85,9 +86,42 @@ const Checkbox = styled.input`
   margin-top: -24px;
 `;
 
+const SelectedTag = styled.div`
+  margin-top: 9px;
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+`;
+
+const Tag = styled.div`
+  background: #f5f5ff;
+  color: #5e52ff;
+  height: 33px;
+  width: auto;
+  border-radius: 100px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 21px; /* 150% */
+  letter-spacing: -0.28px;
+  flex-shrink: 0;
+
+  & > button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    align-items: center;
+    justify-content: center;
+  }
+`;
+
 const AmountButton: React.FC<DropdownProps> = ({ onTagChange }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOptions, setSelectedOptions] = useState<Option | null>(null);
+  const [selectedOptions, setSelectedOptions] = useState<Option[]>([]);
 
   const options: Option[] = [
     { label: '짧아요', description: '1 - 5 회차' },
@@ -96,22 +130,32 @@ const AmountButton: React.FC<DropdownProps> = ({ onTagChange }) => {
   ];
 
   const toggleOption = (option: Option) => {
-    if (selectedOptions?.label === option.label) {
-      setSelectedOptions(null); // 같은 옵션 클릭 시 선택 해제
+    if (selectedOptions.some((opt) => opt.label === option.label)) {
+      // 이미 선택된 옵션이면 제거
+      setSelectedOptions((prev) =>
+        prev.filter((opt) => opt.label !== option.label),
+      );
     } else {
-      setSelectedOptions(option); // 옵션 선택
+      // 새로운 옵션 추가
+      setSelectedOptions((prev) => [...prev, option]);
     }
   };
 
+  const removeTag = (label: string) => {
+    setSelectedOptions((prev) =>
+      prev.filter((option) => option.label !== label),
+    );
+  };
+
   useEffect(() => {
-    onTagChange(selectedOptions ? selectedOptions.label : null); // 부모로 선택값 전달
+    onTagChange(selectedOptions.length > 0); // 태그 상태 부모로 전달
   }, [selectedOptions, onTagChange]);
 
   return (
-    <DropdownContainer hasTags={!!selectedOptions}>
+    <DropdownContainer hasTags={selectedOptions.length > 0}>
       <DropdownButton
         isOpen={isOpen}
-        hasTags={!!selectedOptions}
+        hasTags={selectedOptions.length > 0}
         onClick={() => setIsOpen(!isOpen)}
       >
         분량
@@ -123,7 +167,9 @@ const AmountButton: React.FC<DropdownProps> = ({ onTagChange }) => {
             <DropdownItem key={index}>
               <Checkbox
                 type="checkbox"
-                checked={selectedOptions?.label === option.label}
+                checked={selectedOptions.some(
+                  (opt) => opt.label === option.label,
+                )}
                 onChange={() => toggleOption(option)}
               />
               <div>
@@ -135,6 +181,18 @@ const AmountButton: React.FC<DropdownProps> = ({ onTagChange }) => {
             </DropdownItem>
           ))}
         </DropdownMenu>
+      )}
+      {selectedOptions.length > 0 && (
+        <SelectedTag>
+          {selectedOptions.map((option) => (
+            <Tag key={option.label}>
+              {option.label}
+              <button onClick={() => removeTag(option.label)}>
+                <Image src={CloseIcon} alt="close" width={14} height={14} />
+              </button>
+            </Tag>
+          ))}
+        </SelectedTag>
       )}
     </DropdownContainer>
   );

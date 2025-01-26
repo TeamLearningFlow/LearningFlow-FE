@@ -35,16 +35,16 @@ const Tag = styled.div`
 
 type TagsProps = {
   tags: { key: string; label: string }[];
-  removeTag: (key: string) => void;
+  onRemove: (type: string, label: string) => void;
 };
 
-const Tags: React.FC<TagsProps> = ({ tags, removeTag }) => {
+const Tags: React.FC<TagsProps> = ({ tags, onRemove }) => {
   return (
     <TagContainer>
-      {tags.map((tag) => (
-        <Tag key={tag.key}>
+      {tags.map((tag, index) => (
+        <Tag key={`${tag.type}-${tag.label}`}>
           {tag.label}
-          <button onClick={() => removeTag(tag.key)}>
+          <button onClick={() => onRemove(tag.type, tag.label)}>
             <Image src={CloseIcon} alt="close" width={14} height={14} />
           </button>
         </Tag>
