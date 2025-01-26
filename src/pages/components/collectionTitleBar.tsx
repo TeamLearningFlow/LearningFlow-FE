@@ -17,7 +17,7 @@ const TitleBox = styled.div`
   color: white;
   font-size: 16px;
   font-weight: 500;
-  margin-left: 12px;
+  margin-left: 15px;
   margin-top: -2px;
 `;
 
@@ -32,13 +32,14 @@ const LineIcon = styled.div`
 
 interface TitleBarProps {
   title?: string;
+  category?: string;
 }
 
-const TitleBar: React.FC<TitleBarProps> = ({ title = '와이어프레임 입문' }) => {
+const TitleBar: React.FC<TitleBarProps> = ({ title = '컬렉션명' , category = '분야' }) => {
   return (
     <TitleWrapper>
       <LineIcon />
-      <TitleBox>{title}</TitleBox>
+      <TitleBox>{title}  ·  {category}</TitleBox>
     </TitleWrapper>
   );
 };

@@ -1,51 +1,83 @@
 import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import PlayIcon from '../assets/playIcon.png';
+import PlayButton from '../assets/playButton.svg';
+import CompletedIndexIcon from '../assets/completedIndexIcon.svg';
+import EndIndexIcon from '../assets/EndIndexIcon.svg';
 
 const ComponentWrapper = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  width: 80vw;
+  gap: 20px;
+`;
+
+const IndexIcon = styled.div`
+  display: flex;
+  align-items: center;
   justify-content: center;
-  flex-direction: column;
-`
+  width: 5%;
+  min-width: 50px; 
+  height: 100px; 
+  border-radius: 5px;
+  position: relative;
+  top: 32px;
+`;
+
+const EndIconContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 5%;
+  min-width: 50px; 
+  height: 100px; 
+  border-radius: 5px;
+`;
 
 const IndexWrapper = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 80vw;
-  background-color: #fafafc;
-  border-radius: 20px;
-  border: 1px solid rgb(194, 194, 194);
-  padding: 0.7% 1%;
+  width: 95%;
+  height: 100px;
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 10px;
+  padding: 0 1.7%;
+  overflow: hidden;
+  margin-bottom: 20px;
+`;
+
+const StartIndexWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  width: 95%;
+  margin-bottom: 20px;
 `;
 
 const PlatformIcon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 55px;
-  height: 55px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   background-color: #dcd9ff;
+  overflow: hidden;
 `;
 
-const PlayButton = styled.button`
+const ButtonWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  width: 110px;
-  height: 38px;
-  border-radius: 60px;
-  background-color: #181818;
   border: none;
   cursor: pointer;
+  position: relative;
+  left: 55px;
+  margin-top: 63px;
+`;
 
-  img{
-    margin-right: 5px;
-  }
+const StartIndexContainer = styled.div`
+
 `;
 
 const IndexContainer = styled.div`
@@ -53,47 +85,71 @@ const IndexContainer = styled.div`
   flex-direction: column;
   flex-grow: 1;
   margin-left: 25px;
-
 `;
 
 const OrderBox = styled.div`
   display: flex;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 15px;
   margin-bottom: 8px;
+  color: rgba(149, 156, 164, 1);
 `;
 
 const TitleBox = styled.div`
   display: flex;
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 600;
-
 `;
 
-const LineIcon = styled.div`
-  width: 2px;
-  height: 20px;
-  background-color: #5e52ff;
-  margin-left: -73.5%;
-`;
-
-const ClassIndex: React.FC<{ orderText: string }> = ({ orderText }) => {
+const StartIndex = () => {
   return (
-      <ComponentWrapper>
-        <IndexWrapper>
-          <PlatformIcon />
-          <IndexContainer>
-            <OrderBox>{orderText}</OrderBox>
-            <TitleBox>브랜치 포스터 "와이어프레임을 활용하는 이유"</TitleBox>
-          </IndexContainer>
-          <PlayButton>
-            <Image src={PlayIcon} alt="PlayIcon" width={15} height={15} />
-            바로 재생
-          </PlayButton>
-        </IndexWrapper>
-        <LineIcon />
-      </ComponentWrapper>
+    <ComponentWrapper>
+      <IndexIcon>
+        <Image src={CompletedIndexIcon} alt="completed-icon" width={85} height={200} />
+      </IndexIcon>
+      <StartIndexWrapper>
+        <StartIndexContainer>
+          <p style={{fontSize: '18px', fontWeight: '600'}}>Welcome Onboard! 컬렉션 여정을 시작해보세요!</p>
+        </StartIndexContainer>
+      </StartIndexWrapper>
+    </ComponentWrapper>
   );
 };
 
-export default ClassIndex;
+const EndIndex = () => {
+  return (
+    <ComponentWrapper>
+      <EndIconContainer>
+        <Image src={EndIndexIcon} alt="End-icon" width={37} height={90} />
+      </EndIconContainer>
+      <StartIndexWrapper>
+        <StartIndexContainer>
+          <p style={{fontSize: '18px', fontWeight: '600', color:'rgba(221, 224, 228, 1)'}}>Congrats! 컬렉션 완주를 축하드려요!</p>
+        </StartIndexContainer>
+      </StartIndexWrapper>
+    </ComponentWrapper>
+  );
+};
+
+const ClassIndex: React.FC<{ orderText: string; src: string }> = ({ orderText, src }) => {
+  return (
+    <ComponentWrapper>
+      <IndexIcon>
+        <Image src={CompletedIndexIcon} alt="completed-icon" width={85} height={200} />
+      </IndexIcon>
+      <IndexWrapper>
+        <PlatformIcon>
+          <Image src={src} alt="platform-icon" width={60} height={60} />
+        </PlatformIcon>
+        <IndexContainer>
+          <OrderBox>{orderText}</OrderBox>
+          <TitleBox>브랜치 포스터 "와이어프레임을 활용하는 이유"</TitleBox>
+        </IndexContainer>
+        <ButtonWrapper>
+          <Image src={PlayButton} alt="Play Button" width={100} height={100} />
+        </ButtonWrapper>
+      </IndexWrapper>
+    </ComponentWrapper>
+  );
+};
+
+export {ClassIndex, StartIndex, EndIndex};

@@ -3,21 +3,30 @@ import styled from 'styled-components';
 import Header from './components/collectionHeader';
 import TitleBar from './components/collectionTitleBar';
 import CollectionInfo from './components/collectionInfo';
-import ClassIndex from './components/classIndex';
+import {ClassIndex, StartIndex, EndIndex} from './components/classIndex';
 import NowPlaying from './components/nowPlaying';
+import NextClassIndex from './components/nextClassIndex';
+import CheckedYoutube from './assets/checkedYoutube.svg';
 
 const PageWrapper = styled.div`
   background-color: #f5f5ff;
   min-height: 100vh;
 `;
 
+const ListWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+`;
+
+const ListContainer = styled.div`
+`;
+
 const CollectionPage: React.FC = () => {
   const stops = [
-    '출발지',
-    '1번째 경유지',
-    '2번째 경유지',
-    '3번째 경유지',
-    '4번째 경유지',
+    '1회차',
+    '2회차',
   ];
 
   return (
@@ -25,10 +34,18 @@ const CollectionPage: React.FC = () => {
       <Header />
       <TitleBar />
       <CollectionInfo />
-      {stops.map((stop, index) => (
-        <ClassIndex key={index} orderText={stop} />
-      ))}
-      <NowPlaying />
+      <ListWrapper>
+        <StartIndex />
+        <ListContainer>
+        {stops.map((stop, index) => (
+          <ClassIndex src={CheckedYoutube} key={index} orderText={stop} />
+        ))}
+        <NowPlaying />
+        <NextClassIndex />
+        <NextClassIndex />
+        </ListContainer>
+        <EndIndex />
+      </ListWrapper>
     </PageWrapper>
   );
 };

@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import CurrentPlayButton from '../assets/currentPlayButton.svg';
-import CurrentIndexIcon from '../assets/currentIndexIcon.svg';
+import PlayButton from '../assets/playButton.svg';
 import Youtube from '../assets/Youtube.png';
+import NextIndexIcon from '../assets/nextIndexIcon.svg';
 
 const ComponentWrapper = styled.div`
   display: flex;
@@ -23,7 +23,7 @@ const IndexIcon = styled.div`
   height: 100px;
   border-radius: 5px;
   position: relative;
-  top: 28px;
+  top: 30px;
 `;
 
 const IndexWrapper = styled.div`
@@ -46,7 +46,6 @@ const PlatformIcon = styled.div`
   height: 50px;
   border-radius: 50%;
   background-color: #dcd9ff;
-  border: 3px solid #5e52ff;
   overflow: hidden;
 `;
 
@@ -81,11 +80,11 @@ const TitleBox = styled.div`
   font-weight: 600;
 `;
 
-const NowPlaying: React.FC = () => {
+const NextClassIndex: React.FC = () => {
   return (
       <ComponentWrapper>
         <IndexIcon>
-          <Image src={CurrentIndexIcon} alt="current-icon" width={85} height={180} />
+          <Image src={NextIndexIcon} alt="Next-icon" width={85} height={200} />
         </IndexIcon>
         <IndexWrapper>
           <PlatformIcon>
@@ -96,11 +95,11 @@ const NowPlaying: React.FC = () => {
             <TitleBox>브랜치 포스터 "와이어프레임을 활용하는 이유"</TitleBox>
           </IndexContainer>
           <ButtonWrapper>
-            <Image src={CurrentPlayButton} alt="Current Play Button" width={100} height={100} />
+            <Image src={PlayButton} alt="Next Play Button" width={100} height={100} />
           </ButtonWrapper>
         </IndexWrapper>
       </ComponentWrapper>
   );
 };
 
-export default NowPlaying;
+export default NextClassIndex;
