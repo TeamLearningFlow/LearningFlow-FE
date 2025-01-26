@@ -91,7 +91,7 @@ const CategoryItem = ({
 };
 
 const CategoryList = () => {
-  const [activeCategories, setActiveCategories] = useState<number[]>([]); // 활성화된 카테고리 ID 추적
+  const [activeCategories, setActiveCategories] = useState<number | null>(1); // 중복 선택 불가능
 
   const categories = [
     { id: 1, image: AllIcon, text: '전체' },
@@ -109,19 +109,7 @@ const CategoryList = () => {
   ];
 
   const handleClick = (id: number) => {
-    if (id === 1) {
-      // "전체" 아이콘 클릭 시 활성화/비활성화 상태
-      setActiveCategories(
-        (prev) => (prev.includes(1) ? [] : [1]), // 이미 활성화된 경우 초기화, 아니면 전체만 활성화
-      );
-    } else {
-      setActiveCategories(
-        (prev) =>
-          prev.includes(id)
-            ? prev.filter((categoryId) => categoryId !== id) // 비활성화
-            : [...prev.filter((categoryId) => categoryId !== 1), id], // "전체" 비활성화 후 추가
-      );
-    }
+    setActiveCategories((prev) => (prev === id ? null : id)); // 중복 선택 방지
   };
 
   return (
@@ -131,7 +119,7 @@ const CategoryList = () => {
           key={category.id}
           image={category.image}
           text={category.text}
-          active={activeCategories.includes(category.id)} // 활성화 상태 확인
+          active={activeCategories === category.id} // 활성화 상태 확인
           onClick={() => handleClick(category.id)} // 클릭 이벤트 설정
         />
       ))}
