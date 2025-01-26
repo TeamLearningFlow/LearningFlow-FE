@@ -50,7 +50,6 @@ const CollectionInfo: React.FC = () => {
           제목을 입력해주세요
         </Title>
         <Author>컬렉션의 제작자명</Author>
-        {/* <LowerDescription> */}
         <Departure>
           <DepartureLeft>
             <DepartureLetter>Departure</DepartureLetter>
@@ -66,7 +65,6 @@ const CollectionInfo: React.FC = () => {
             <ArrivalLetter>Arrival</ArrivalLetter>
             <ArrivalLevel>분야 난이도</ArrivalLevel>
           </DepartureRight>
-          {/* </LowerDescription> */}
         </Departure>
       </CollectionDescription>
     </CollectionTicket>
@@ -80,8 +78,8 @@ const CollectionTicket = styled.span`
   display: flex;
   align-items: center;
   width: 80vw;
-  height: 254px;
-  margin: 2% 9.5% 2.5% 9.5%;
+  height: 280px;
+  margin: 2% 9.5% 1% 9.5%;
 
   white-space: nowrap;
 `;
@@ -321,21 +319,19 @@ const DepartureCenter = styled.span`
   width: 54vw;
   align-items: center;
   justify-content: center;
-  margin-top: 25px;
+  margin-top: 22px;
 `;
 
 const DepartureToArrivalLetter = styled.div`
   color: #5e52ff;
 
   position: absolute;
-  top: 202px;
+  top: 217px;
 
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   line-height: 18px;
   letter-spacing: -0.24px;
-
-  margin-bottom: 5px;
 `;
 
 const Hr = styled.hr`
