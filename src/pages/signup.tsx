@@ -75,17 +75,22 @@ const SignupPage: React.FC = () => {
 
   const registeraxios = async () => {
     try {
-      const response = await axios.post('http://localhost:8080/register', {
+      // const response = await axios.post('http://localhost:8080/register', {
+      //   email: email,
+      //   password: password,
+      // });
+
+      const response = await axios.post('http://54.180.118.227:8080/register', {
         email: email,
         password: password,
       });
 
       console.log('Response:', response);
-      alert('회원가입 성공');
+      // alert('회원가입 성공');
 
       if (response.status === 200) {
         // return navigate('/mylogin');
-        console.log('로그인 페이지로 이동');
+        console.log('이메일 인증 페이지로 이동');
       }
     } catch (err: any) {
       console.log('Error:', err);
