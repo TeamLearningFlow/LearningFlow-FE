@@ -10,6 +10,7 @@ const App = () => {
         <Link href="/search"></Link>
         <Link href="/home"></Link>
         <Link href="/emailAuth"></Link>
+        <Link href="/landing"></Link>
       </p>
     </div>
   );
