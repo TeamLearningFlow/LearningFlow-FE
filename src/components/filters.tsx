@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import LevelButton from './levelButton';
 import AmountButton from './amountButton';
@@ -25,44 +25,21 @@ const ButtonContainer = styled.div`
 `;
 
 const Filters = () => {
-  const [tags, setTags] = useState<{ key: string; label: string }[]>([]);
-
-  const tagOrder = ['level', 'amount', 'preference']; // 태그 순서
-
-  // 태그 추가 또는 업데이트
-  const addTag = useCallback(
-    (key: string, label: string | null) => {
-      setTags((prev) => {
-        if (label) {
-          const updatedTags = prev.filter((tag) => tag.key !== key);
-          updatedTags.push({ key, label });
-          return updatedTags.sort(
-            (a, b) => tagOrder.indexOf(a.key) - tagOrder.indexOf(b.key),
-          );
-        }
-        return prev.filter((tag) => tag.key !== key);
-      });
-    },
-    [tagOrder],
-  );
-
-  // 태그 삭제
-  const removeTag = useCallback((key: string) => {
-    setTags((prev) => prev.filter((tag) => tag.key !== key));
-  }, []);
-
-  const hasTags = tags.length > 0;
-
+  const [levelHasTags, setLevelHasTags] = useState(false);
+  const [amountHasTags, setAmountHasTags] = useState(false);
+  const [preferHasTags, setPreferHasTags] = useState(false);
+  
+  // 세 상태 중 하나라도 true면 hasTags true
+  const hasTags = levelHasTags || amountHasTags || preferHasTags;
   return (
     <FiltersContainer hasTags={hasTags}>
       <ButtonContainer>
-        <LevelButton onTagChange={(label) => addTag('level', label)} />
-        <AmountButton onTagChange={(label) => addTag('amount', label)} />
-        <PreferButton onTagChange={(label) => addTag('preference', label)} />
+        <LevelButton onTagChange={setLevelHasTags} />
+        <AmountButton onTagChange={setAmountHasTags} />
+        <PreferButton onTagChange={setPreferHasTags} />
       </ButtonContainer>
-      {hasTags && <Tags tags={tags} removeTag={removeTag} />}
+      <Tags />
     </FiltersContainer>
   );
 };
-
 export default Filters;

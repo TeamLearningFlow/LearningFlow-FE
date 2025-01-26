@@ -106,7 +106,7 @@ const LevelButton: React.FC<DropdownProps> = ({ onTagChange }) => {
 
   useEffect(() => {
     onTagChange(selectedOption ? selectedOption.label : null); // 부모로 선택값 전달
-  }, [selectedOption, onTagChange]);
+  }, [selectedOption]);
 
   return (
     <DropdownContainer hasTags={!!selectedOption}>
