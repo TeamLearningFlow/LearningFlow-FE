@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import styled from 'styled-components';
-import TopLogo from '../components/toplogo_guest';
-import selectedicon from '../assets/selectedicon.svg';
-import unselectedicon from '../assets/unselectedicon.svg';
+import TopLogo from '../../components/toplogo_guest';
+import selectedicon from '../../assets/selectedicon.svg';
+import unselectedicon from '../../assets/unselectedicon.svg';
 import EmailAuthPage from './emailAuth';
 
 const PageWrapper = styled.div`
@@ -83,12 +83,14 @@ const TableCell = styled.td`
   border: 1px solid rgba(189, 197, 204, 1);
 `;
 
-{/* const TableCellWithFlex = styled.td`
+{
+  /* const TableCellWithFlex = styled.td`
   display: flex;
   align-items: center;
   padding: 16px;
   border: 1px solid rgba(189, 197, 204, 1);
-`; */}
+`; */
+}
 
 const IconWrapper = styled.div`
   display: flex;
@@ -111,12 +113,12 @@ const ContractsPage: React.FC = () => {
 
   const handleDisagreeCheck = () => {
     setDisagreeChecked((prev) => !prev);
-    if (agreeChecked) setAgreeChecked(false); 
+    if (agreeChecked) setAgreeChecked(false);
   };
 
   const handleAgreeCheck = () => {
     setAgreeChecked((prev) => !prev);
-    if (disagreeChecked) setDisagreeChecked(false); 
+    if (disagreeChecked) setDisagreeChecked(false);
   };
 
   return (
@@ -227,10 +229,9 @@ const ContractsPage: React.FC = () => {
             </SecondContractContainer>
           </PageContainer>
           <NextButton onClick={handleShowContracts}>
-        다음 단계로 넘어가기
-      </NextButton>
+            다음 단계로 넘어가기
+          </NextButton>
         </PageWrapper>
-
       ) : (
         <EmailAuthPage />
       )}

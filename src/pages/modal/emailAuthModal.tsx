@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import SignupPage from '../signup';
+import SignupPage from '../register';
 
 interface ModalProps {
   onClose: () => void;

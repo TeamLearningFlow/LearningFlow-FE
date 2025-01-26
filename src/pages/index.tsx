@@ -6,7 +6,7 @@ const App = () => {
     <div>
       <p>
         <Link href="/login"></Link>
-        <Link href="/signup"></Link>
+        <Link href="/register"></Link>
         <Link href="/search"></Link>
         <Link href="/home"></Link>
         <Link href="/emailAuth"></Link>

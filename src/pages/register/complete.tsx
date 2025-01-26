@@ -8,21 +8,23 @@ const RegisterCompletePage: React.FC = () => {
 
   useEffect(() => {
     const validateToken = async () => {
-      if (!token) return; // 토큰이 없는 경우 작업 하지 않음
+      if (!token) return; // 토큰이 없는 경우 작업 중단
 
       try {
-        const response = await axios.post(
+        const response = await axios.get(
           `http://54.180.118.227:8080/register/complete?token=${token}`,
         );
 
-        // 토큰 유효성 검사
+        // 유효성 확인 후 페이지 이동
         if (response.data.isSuccess) {
-          router.push('/landing'); // 토큰 유효할 때 랜딩 페이지로 이동
+          console.log('토큰 유효');
+          router.push('/landing'); // 랜딩 페이지로 이동
         } else {
-          router.push('/signup'); // 유효하지 않으면 회원가입 페이지로 이동
+          console.log('토큰 무효');
+          router.push('/signup'); // 회원가입 페이지로 이동
         }
       } catch (err) {
-        console.error('토큰 오류: ', err);
+        console.error('토큰 검증 오류:', err);
         router.push('/signup'); // 오류 발생 시 회원가입 페이지로 이동
       }
     };
