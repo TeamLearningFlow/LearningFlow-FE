@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import NotCompleted from './notCompleted';
-import Completed from './Completed';
+import Completed from './completed';
 import Bookmarked from './bookmarked';
 
 const Container = styled.div`
@@ -12,8 +12,7 @@ const Container = styled.div`
 const TabMenu = styled.div`
   display: flex;
   position: absolute;
-  //   top: 446px; // 헤더 추가 시 지정될 높이
-  top: 317px;
+  top: 376px;
   left: 120px;
   gap: 24px;
   cursor: pointer;
