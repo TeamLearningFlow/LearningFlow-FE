@@ -11,7 +11,6 @@ import InputPwCheck from '../components/inputPwCheck';
 import TopLogo from '../components/topLogo_light';
 import ContractsPage from '../pages/contracts';
 
-
 const PageContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -20,7 +19,7 @@ const PageContainer = styled.div`
   width: 100vw;
   background-color: #ffffff;
   overflow: hidden;
-  margin-top: -10px;
+  margin-top: -15px;
 `;
 
 const LeftSection = styled.div`
@@ -45,7 +44,7 @@ const FormContainer = styled.div`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 7px;
 `;
 
 const BlankContainer = styled.div``;
@@ -74,20 +73,19 @@ const SignupPage: React.FC = () => {
     registeraxios();
   };
 
-
   const registeraxios = async () => {
     try {
       const response = await axios.post('http://localhost:8080/register', {
         email: email,
         password: password,
       });
-  
-      console.log('Response:', response);  
+
+      console.log('Response:', response);
       alert('회원가입 성공');
-  
+
       if (response.status === 200) {
         // return navigate('/mylogin');
-        console.log('로그인페이지로 이동');
+        console.log('로그인 페이지로 이동');
       }
     } catch (err: any) {
       console.log('Error:', err);
@@ -98,7 +96,6 @@ const SignupPage: React.FC = () => {
       }
     }
   };
-  
 
   return (
     <>

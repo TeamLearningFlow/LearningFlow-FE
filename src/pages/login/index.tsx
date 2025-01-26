@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
+import axios from 'axios';
 import InputEmail from '../../components/inputEmail';
 import InputPw from '../../components/inputPw';
 import LeftUI from '../../components/leftUI';
@@ -7,7 +9,7 @@ import Divider from '../../components/divider';
 import GoogleAuthButton from '../../components/googleAuthButton';
 import AuthButton from '../../components/authButton';
 import TopLogo from '../../components/topLogo';
-import { LoginProvider } from '../context/LoginContext';
+import { LoginContext } from '../context/LoginContext';
 
 const PageContainer = styled.div`
   display: flex;
@@ -119,40 +121,78 @@ const FormGroup = styled.div`
 `;
 
 const LoginPage: React.FC = () => {
+  const context = useContext(LoginContext);
+  const router = useRouter();
+
+  if (!context) {
+    throw new Error('');
+  }
+
+  const { state, actions } = context;
+
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post('http://localhost:8080/login', {
+        email: state.email,
+        password: state.password,
+        remember: true,
+      });
+
+      console.log('Response:', response.data);
+      actions.setFormErrorMsg('');
+      alert('로그인 성공');
+
+      if (response.status === 200) {
+        router.push('/home');
+      }
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err) && err.response?.data?.message) {
+        actions.setFormErrorMsg(err.response.data.message);
+      } else {
+        actions.setFormErrorMsg('로그인 중 오류가 발생했습니다.');
+      }
+    }
+  };
+
   return (
     <>
-      <LoginProvider>
-        <PageContainer>
-          <LeftSection>
-            <TopLogo />
-            <LeftUI />
-          </LeftSection>
-          <RightSection>
-            <FormContainer>
-              <Title>로그인</Title>
-              <InputEmail />
-              <InputPw />
-              <CheckboxContainer>
-                <label>
-                  <input type="checkbox" /> 로그인 유지
-                </label>
-                <div>
-                  <a href="/forgot-id">아이디(이메일) 찾기</a> |{' '}
-                  <a href="/forgot-password">비밀번호 찾기</a>
-                </div>
-              </CheckboxContainer>
-              <FormGroup>
-                <AuthButton disabled={true} text="로그인" />
-                <Divider />
-                <GoogleAuthButton text="Google 계정으로 로그인" />
-                <SignupText>
-                  온보딩이 처음이신가요? <a href="/signup">회원가입</a>
-                </SignupText>
-              </FormGroup>
-            </FormContainer>
-          </RightSection>
-        </PageContainer>
-      </LoginProvider>
+      <PageContainer>
+        <LeftSection>
+          <TopLogo />
+          <LeftUI />
+        </LeftSection>
+        <RightSection>
+          <FormContainer>
+            <Title>로그인</Title>
+            <InputEmail />
+            <InputPw />
+            <CheckboxContainer>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={state.isEmailChecked}
+                  onChange={() =>
+                    actions.setIsEmailChecked(!state.isEmailChecked)
+                  }
+                />
+                로그인 유지
+              </label>
+              <div>
+                <a href="/forgot-id">아이디(이메일) 찾기</a> |{' '}
+                <a href="/forgot-password">비밀번호 찾기</a>
+              </div>
+            </CheckboxContainer>
+            <FormGroup>
+              <AuthButton onClick={handleLogin} text="로그인" />
+              <Divider />
+              <GoogleAuthButton text="Google 계정으로 로그인" />
+              <SignupText>
+                온보딩이 처음이신가요? <a href="/signup">회원가입</a>
+              </SignupText>
+            </FormGroup>
+          </FormContainer>
+        </RightSection>
+      </PageContainer>
     </>
   );
 };
