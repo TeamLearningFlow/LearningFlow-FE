@@ -135,7 +135,7 @@ const LoginPage: React.FC = () => {
       const response = await axios.post('http://localhost:8080/login', {
         email: state.email,
         password: state.password,
-        remember: true,
+        remember: state.isEmailChecked, // 로그인 유지 여부 전달
       });
 
       console.log('Response:', response.data);
@@ -149,8 +149,14 @@ const LoginPage: React.FC = () => {
       if (axios.isAxiosError(err) && err.response?.data?.message) {
         actions.setFormErrorMsg(err.response.data.message);
       } else {
-        actions.setFormErrorMsg('로그인 중 오류가 발생했습니다.');
+        actions.setFormErrorMsg('로그인 오류');
       }
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); // 엔터키 기본 동작 방지
     }
   };
 
@@ -164,32 +170,34 @@ const LoginPage: React.FC = () => {
         <RightSection>
           <FormContainer>
             <Title>로그인</Title>
-            <InputEmail />
-            <InputPw />
-            <CheckboxContainer>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={state.isEmailChecked}
-                  onChange={() =>
-                    actions.setIsEmailChecked(!state.isEmailChecked)
-                  }
-                />
-                로그인 유지
-              </label>
-              <div>
-                <a href="/forgot-id">아이디(이메일) 찾기</a> |{' '}
-                <a href="/forgot-password">비밀번호 찾기</a>
-              </div>
-            </CheckboxContainer>
-            <FormGroup>
-              <AuthButton onClick={handleLogin} text="로그인" />
-              <Divider />
-              <GoogleAuthButton text="Google 계정으로 로그인" />
-              <SignupText>
-                온보딩이 처음이신가요? <a href="/signup">회원가입</a>
-              </SignupText>
-            </FormGroup>
+            <form onKeyDown={handleKeyDown}>
+              <InputEmail />
+              <InputPw />
+              <CheckboxContainer>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={state.isEmailChecked}
+                    onChange={() =>
+                      actions.setIsEmailChecked(!state.isEmailChecked)
+                    }
+                  />
+                  로그인 유지
+                </label>
+                <div>
+                  <a href="/forgot-id">아이디(이메일) 찾기</a> |{' '}
+                  <a href="/forgot-password">비밀번호 찾기</a>
+                </div>
+              </CheckboxContainer>
+              <FormGroup>
+                <AuthButton onClick={handleLogin} text="로그인" />
+                <Divider />
+                <GoogleAuthButton text="Google 계정으로 로그인" />
+                <SignupText>
+                  온보딩이 처음이신가요? <a href="/signup">회원가입</a>
+                </SignupText>
+              </FormGroup>
+            </form>
           </FormContainer>
         </RightSection>
       </PageContainer>
