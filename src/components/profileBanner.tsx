@@ -8,7 +8,7 @@ const Container = styled.div`
   width: 1200px;
   height: 350px;
   position: relative;
-  margin: 0 120px;
+  margin: 48px 120px 0 120px;
 `;
 
 const Banner = styled.div`

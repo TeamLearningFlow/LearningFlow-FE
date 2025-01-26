@@ -12,7 +12,7 @@ const Container = styled.div`
 const TabMenu = styled.div`
   display: flex;
   position: absolute;
-  top: 376px;
+  top: 425px;
   left: 120px;
   gap: 24px;
   cursor: pointer;
