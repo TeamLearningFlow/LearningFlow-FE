@@ -34,9 +34,11 @@ const ValidationLabel = styled.span`
 interface ValidationCheckProps {
   passwordValidation: {
     hasUpperCase: boolean | null;
+    hasLowerCase: boolean | null;
     hasSpecialChar: boolean | null;
     hasNumber: boolean | null;
     isLengthValid: boolean | null;
+    hasNoSpaces: boolean | null;
   };
 }
 
@@ -45,14 +47,18 @@ const ValidationCheck: React.FC<ValidationCheckProps> = ({
 }) => {
   const validation = passwordValidation || {
     hasUpperCase: null,
+    hasLowerCase: null,
     hasSpecialChar: null,
     hasNumber: null,
     isLengthValid: null,
+    hasNoSpaces: null,
   };
 
   return (
     <ValidationWrapper>
-      <ValidationBox isValid={validation.hasUpperCase}>
+      <ValidationBox
+        isValid={validation.hasUpperCase && validation.hasLowerCase}
+      >
         <IoCheckmark />
         <ValidationLabel>대소문자 포함</ValidationLabel>
       </ValidationBox>

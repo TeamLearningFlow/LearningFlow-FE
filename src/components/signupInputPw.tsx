@@ -138,14 +138,18 @@ const SignupInputPw: React.FC<SignupInputPwProps> = ({
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [passwordValidation, setPasswordValidation] = useState<{
     hasUpperCase: boolean | null;
+    hasLowerCase: boolean | null;
     hasSpecialChar: boolean | null;
     hasNumber: boolean | null; // 숫자 유효성 검사 추가
     isLengthValid: boolean | null;
+    hasNoSpaces: boolean | null; // 공백 조건 추가
   }>({
     hasUpperCase: null,
+    hasLowerCase: null,
     hasSpecialChar: null,
     hasNumber: null,
     isLengthValid: null,
+    hasNoSpaces: null, // 공백 조건추가
   });
 
   const [isInvalid, setIsInvalid] = useState(false);
@@ -162,18 +166,23 @@ const SignupInputPw: React.FC<SignupInputPwProps> = ({
     setPassword(value);
 
     const newValidation = {
-      hasUpperCase: value ? /[A-Z]/.test(value) && /[a-z]/.test(value) : null,
+      hasUpperCase: value ? /[A-Z]/.test(value) : null,
+      hasLowerCase: value ? /[a-z]/.test(value) : null,
       hasSpecialChar: value ? /[!@#$%^&*()_+]/.test(value) : null,
       hasNumber: value ? /[0-9]/.test(value) : null,
       isLengthValid: value ? value.length >= 8 && value.length <= 16 : null,
+      hasNoSpaces: value ? !/\s/.test(value) : null,
     };
+
     setPasswordValidation(newValidation);
 
     const invalid =
       !newValidation.hasUpperCase ||
+      !newValidation.hasLowerCase ||
       !newValidation.hasSpecialChar ||
       !newValidation.hasNumber ||
-      !newValidation.isLengthValid;
+      !newValidation.isLengthValid ||
+      !newValidation.hasNoSpaces;
     setIsInvalid(invalid);
     setIsError(invalid);
   };
@@ -183,9 +192,11 @@ const SignupInputPw: React.FC<SignupInputPwProps> = ({
   useEffect(() => {
     const isValidPassword =
       passwordValidation.hasUpperCase &&
+      passwordValidation.hasLowerCase &&
       passwordValidation.hasSpecialChar &&
       passwordValidation.hasNumber &&
-      passwordValidation.isLengthValid;
+      passwordValidation.isLengthValid &&
+      passwordValidation.hasNoSpaces;
 
     setIsPasswordValid(isValidPassword ?? false);
     setIsValid(isValidPassword ?? false);
@@ -220,9 +231,9 @@ const SignupInputPw: React.FC<SignupInputPwProps> = ({
           onKeyDown={handleKeyPress}
         />
         <IconWrapper onClick={PasswordVisibility}>
-          <Image 
-          src={isPasswordVisible? visibleicon:invisibleicon} 
-          alt="비밀번호 보이기/숨기기 아이콘"
+          <Image
+            src={isPasswordVisible ? visibleicon : invisibleicon}
+            alt="비밀번호 보이기/숨기기 아이콘"
           />
         </IconWrapper>
       </InputWrapper>

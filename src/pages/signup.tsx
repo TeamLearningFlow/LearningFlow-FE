@@ -93,7 +93,7 @@ const SignupPage: React.FC = () => {
         console.log('이메일 인증 페이지로 이동');
       }
     } catch (err: any) {
-      console.log('Error:', err);
+      console.log('Error:', err.response?.data || err.message);
       if (err.response?.data?.message) {
         console.log('Error Message:', err.response.data.message);
       } else {

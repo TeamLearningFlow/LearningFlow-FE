@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import HomePage from '../home';
+import SignupPage from '../signup';
 
 interface ModalProps {
   onClose: () => void;
 }
 
 const emailAuthModal: React.FC<ModalProps> = ({ onClose }) => {
-  const [showHomePage, setShowHomePage] = useState<boolean>(false);
+  const [showSignupPage, setShowSignupPage] = useState<boolean>(false);
 
-  const handleHomePage = () => {
-    setShowHomePage(true);
+  const handleSignupPage = () => {
+    setShowSignupPage(true);
   };
 
   return (
     <>
-      {!showHomePage ? (
+      {!showSignupPage ? (
         <ModalWrapper>
           <ModalBox>
             <Title>이전 페이지로 돌아갈까요?</Title>
@@ -23,13 +23,13 @@ const emailAuthModal: React.FC<ModalProps> = ({ onClose }) => {
               지금 돌아가면 입력하신 회원가입 정보는 삭제됩니다.
             </Description>
             <Button>
-              <BackButton onClick={handleHomePage}>돌아갈래요</BackButton>
+              <BackButton onClick={handleSignupPage}>돌아갈래요</BackButton>
               <ForwardButton onClick={onClose}>이어서하기</ForwardButton>
             </Button>
           </ModalBox>
         </ModalWrapper>
       ) : (
-        <HomePage />
+        <SignupPage />
       )}
     </>
   );
