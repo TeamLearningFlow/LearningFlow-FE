@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
 import Image from 'next/image';
 import styled from 'styled-components';
 import LeftIcon from '../../assets/leftIcon.svg';
@@ -134,11 +133,11 @@ const NextButton = styled.button<{ active: boolean }>`
   cursor: ${(props) => (props.active ? 'pointer' : 'not-allowed')};
 `;
 
-const Page3: React.FC<{ onPrev: () => void; onNext: () => void }> = ({
-  onPrev,
-}) => {
+const Page3: React.FC<{
+  onPrev: () => void;
+  onNext: (preferType: string) => void;
+}> = ({ onPrev, onNext }) => {
   const [sliderValue, setSliderValue] = useState(50);
-  const router = useRouter();
 
   const getTooltipText = (value: number) => {
     if (value < 40) return '텍스트가 좋아요';
@@ -146,12 +145,20 @@ const Page3: React.FC<{ onPrev: () => void; onNext: () => void }> = ({
     return '상관 없어요';
   };
 
+  // 부모에게 전달 할 선호도 값
+  const getPreferType = (value: number): string => {
+    if (value < 40) return 'TEXT';
+    if (value > 60) return 'VIDEO';
+    return 'NO_PREFERENCE';
+  };
+
   const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSliderValue(Number(event.target.value));
   };
 
   const handleComplete = () => {
-    router.push('/home'); // '/home' 경로로 이동
+    const preferType = getPreferType(sliderValue);
+    onNext(preferType); // 부모에게 선호도 값 전달
   };
 
   return (

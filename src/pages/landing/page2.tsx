@@ -142,24 +142,34 @@ const CategoryItem = ({
   );
 };
 
-const Page2: React.FC<{ onPrev: () => void; onNext: () => void }> = ({
-  onPrev,
-  onNext,
-}) => {
+const Page2: React.FC<{
+  onPrev: () => void;
+  onNext: (interestFields: string[]) => void;
+}> = ({ onPrev, onNext }) => {
   const [activeCategories, setActiveCategories] = useState<number[]>([]); // 활성화된 카테고리 ID 추적
 
   const categories = [
-    { id: 1, image: AppIcon, text: '앱개발' },
-    { id: 2, image: WebIcon, text: '웹개발' },
-    { id: 3, image: ComputerIcon, text: '컴퓨터언어' },
-    { id: 4, image: DeepLearningIcon, text: '딥러닝' },
-    { id: 5, image: StatisticsIcon, text: '통계' },
-    { id: 6, image: DataIcon, text: '데이터분석' },
-    { id: 7, image: UXUIIcon, text: 'UX/UI' },
-    { id: 8, image: PlanIcon, text: '기획' },
-    { id: 9, image: WorkIcon, text: '업무생산성' },
-    { id: 10, image: LanguageIcon, text: '외국어' },
-    { id: 11, image: JobIcon, text: '취업' },
+    { id: 1, image: AppIcon, text: '앱개발', value: 'APP_DEVELOPMENT' },
+    { id: 2, image: WebIcon, text: '웹개발', value: 'WEB_DEVELOPMENT' },
+    {
+      id: 3,
+      image: ComputerIcon,
+      text: '컴퓨터언어',
+      value: 'PROGRAMMING_LANGUAGE',
+    },
+    { id: 4, image: DeepLearningIcon, text: '딥러닝', value: 'DEEP_LEARNING' },
+    { id: 5, image: StatisticsIcon, text: '통계', value: 'STATISTICS' },
+    { id: 6, image: DataIcon, text: '데이터분석', value: 'DATA_ANALYSIS' },
+    { id: 7, image: UXUIIcon, text: 'UX/UI', value: 'UI_UX' },
+    { id: 8, image: PlanIcon, text: '기획', value: 'PLANNING' },
+    {
+      id: 9,
+      image: WorkIcon,
+      text: '업무생산성',
+      value: 'BUSINESS_PRODUCTIVITY',
+    },
+    { id: 10, image: LanguageIcon, text: '외국어', value: 'FOREIGN_LANGUAGE' },
+    { id: 11, image: JobIcon, text: '취업', value: 'CAREER' },
   ];
 
   const handleCategoryClick = (id: number) => {
@@ -172,6 +182,11 @@ const Page2: React.FC<{ onPrev: () => void; onNext: () => void }> = ({
             : prev, // 3개 초과 시 무시
     );
   };
+
+  // 부모에게 선택된 카테고리 value 값 전달
+  const selectedCategories = activeCategories.map(
+    (id) => categories.find((category) => category.id === id)?.value || '',
+  );
 
   const isNextButtonActive = activeCategories.length > 0; // 다음 버튼 활성화 조건
 
@@ -198,7 +213,7 @@ const Page2: React.FC<{ onPrev: () => void; onNext: () => void }> = ({
           active={isNextButtonActive}
           onClick={() => {
             if (isNextButtonActive) {
-              onNext(); // 다음 페이지로 이동
+              onNext(selectedCategories); // 다음 페이지로 이동
             }
           }}
         >

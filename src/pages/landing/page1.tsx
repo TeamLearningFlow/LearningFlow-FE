@@ -164,7 +164,9 @@ const NextButton = styled.button<{ active: boolean }>`
   cursor: ${(props) => (props.active ? 'pointer' : 'not-allowed')};
 `;
 
-const LandingPage: React.FC<{ onNext: () => void }> = ({ onNext }) => {
+const LandingPage: React.FC<{
+  onNext: (data: { nickname: string; job: string }) => void;
+}> = ({ onNext }) => {
   const [isHovered, setIsHovered] = useState(false); // 편집 아이콘 hover
   const [nickname, setNickname] = useState('');
   const [isNicknameFocused, setIsNicknameFocused] = useState(false);
@@ -172,7 +174,17 @@ const LandingPage: React.FC<{ onNext: () => void }> = ({ onNext }) => {
   const [job, setJob] = useState('');
   const [isJobDropdownOpen, setIsJobDropdownOpen] = useState(false);
 
-  const jobOptions = ['대학생', '직장인', '이직/취업 준비생', '성인', '기타'];
+  // 부모에게 전달 할 string 정의
+  const jobMapping: { [key: string]: string } = {
+    '대학생(휴학생)': 'STUDENT',
+    직장인: 'EMPLOYEE',
+    '이직/취업 준비생': 'JOB_SEEKER',
+    성인: 'ADULT',
+    기타: 'OTHER',
+  };
+
+  const jobOptions = Object.keys(jobMapping);
+
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -215,6 +227,11 @@ const LandingPage: React.FC<{ onNext: () => void }> = ({ onNext }) => {
       setIsNicknameFocused(false); // 활성화 상태 종료
     }
   };
+
+  const handleJobSelect = (option: string) => {
+    setJob(jobMapping[option]);
+  };
+
   const isNextButtonActive = isNicknameValid === true && job !== '';
 
   return (
@@ -259,7 +276,10 @@ const LandingPage: React.FC<{ onNext: () => void }> = ({ onNext }) => {
           onClick={() => setIsJobDropdownOpen(!isJobDropdownOpen)}
           focused={isJobDropdownOpen}
         >
-          <span>{job || '직업을 선택해주세요'}</span>
+          <span>
+            {jobOptions.find((key) => jobMapping[key] === job) ||
+              '직업을 선택해주세요'}
+          </span>
           <Image
             src={isJobDropdownOpen ? UpIcon : DownIcon} // 드롭다운 상태에 따라 아이콘 변경
             alt="Dropdown Icon"
@@ -274,7 +294,7 @@ const LandingPage: React.FC<{ onNext: () => void }> = ({ onNext }) => {
                   selected={job === option}
                   onClick={(e) => {
                     e.stopPropagation(); // 드롭다운이 바로 닫히지 않음
-                    setJob(option); // 옵션 선택
+                    handleJobSelect(option);
                   }}
                 >
                   {option}
@@ -296,7 +316,7 @@ const LandingPage: React.FC<{ onNext: () => void }> = ({ onNext }) => {
             active={isNextButtonActive}
             onClick={() => {
               if (isNextButtonActive) {
-                onNext(); // 부모 컴포넌트로 전달받은 onNext 호출
+                onNext({ nickname, job }); // 부모 컴포넌트로 직업 값 전달
               }
             }}
           >
