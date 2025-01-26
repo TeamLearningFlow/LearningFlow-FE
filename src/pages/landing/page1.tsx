@@ -291,9 +291,9 @@ const LandingPage: React.FC<{
               {jobOptions.map((option) => (
                 <DropdownOption
                   key={option}
-                  selected={job === option}
+                  selected={job === jobMapping[option]}
                   onClick={(e) => {
-                    e.stopPropagation(); // 드롭다운이 바로 닫히지 않음
+                    e.stopPropagation();
                     handleJobSelect(option);
                   }}
                 >

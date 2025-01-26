@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import axios from 'axios';
+import React, { useState } from 'react';
+// import { useRouter } from 'next/router';
+// import axios from 'axios';
 import Page1 from './page1';
 import Page2 from './page2';
 import Page3 from './page3';
@@ -27,36 +27,16 @@ const LandingPage: React.FC = () => {
   const [job, setJob] = useState(''); // 직업 값
   const [interestFields, setInterestFields] = useState<string[]>([]); // 카테고리 값
   const [preferType, setPreferType] = useState(''); // 선호도 값
-  const router = useRouter();
-  const { token } = router.query; // token 추출
-
-  useEffect(() => {
-    if (!token) {
-      console.error('토큰이 없습니다.');
-    }
-  }, [token, router]);
 
   const handleComplete = async () => {
     const requestData = {
       name: nickname,
       job,
       interestFields,
-      // gender: 'MALE',
       preferType,
     };
 
-    try {
-      await axios.post(
-        `http://54.180.118.227:8080/register/complete?token=${token}`,
-        requestData,
-      );
-      console.log('회원가입 성공');
-      router.push('/home');
-    } catch (err) {
-      console.error('회원가입 실패:', err);
-      // alert('회원가입 실패');
-      router.push('/signup');
-    }
+    console.log('requestData:', requestData);
   };
 
   return (
