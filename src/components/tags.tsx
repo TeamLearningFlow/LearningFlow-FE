@@ -33,19 +33,24 @@ const Tag = styled.div`
   }
 `;
 
+type TagData = {
+  type: string; // 버튼 유형
+  label: string; // 태그 이름
+};
+
 type TagsProps = {
-  tags: { key: string; label: string }[];
-  onRemove: (type: string, label: string) => void;
+  tags: TagData[];
+  onRemove: (type: string, label: string) => void; // 태그 삭제
 };
 
 const Tags: React.FC<TagsProps> = ({ tags, onRemove }) => {
   return (
     <TagContainer>
-      {tags.map((tag, index) => (
+      {tags.map((tag) => (
         <Tag key={`${tag.type}-${tag.label}`}>
           {tag.label}
           <button onClick={() => onRemove(tag.type, tag.label)}>
-            <Image src={CloseIcon} alt="close" width={14} height={14} />
+            <Image src={CloseIcon} alt="closeicon" width={14} height={14} />
           </button>
         </Tag>
       ))}
