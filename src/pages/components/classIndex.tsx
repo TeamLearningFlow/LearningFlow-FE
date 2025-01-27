@@ -35,9 +35,21 @@ const EndIconContainer = styled.div`
   border-radius: 5px;
 `;
 
+const ButtonWrapper = styled.div`
+  position: absolute;
+  top: 82px;
+  right: -34px;
+  transform: translateY(-50%);
+  transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 const IndexWrapper = styled.div`
   display: flex;
   align-items: center;
+  position: relative;
   width: 95%;
   height: 100px;
   background-color: rgba(255, 255, 255, 1);
@@ -45,6 +57,16 @@ const IndexWrapper = styled.div`
   padding: 0 1.7%;
   overflow: hidden;
   margin-bottom: 20px;
+  cursor: pointer;
+  transition: background 0.5s;
+
+  &:hover {
+    background: rgba(245, 245, 255, 1);
+
+    & > ${ButtonWrapper} {
+      transform: translate(-10px, -58px);
+    }
+  }
 `;
 
 const StartIndexWrapper = styled.div`
@@ -52,7 +74,7 @@ const StartIndexWrapper = styled.div`
   align-items: center;
   width: 95%;
   margin-bottom: 20px;
-`;
+`; 
 
 const PlatformIcon = styled.div`
   display: flex;
@@ -63,17 +85,6 @@ const PlatformIcon = styled.div`
   border-radius: 50%;
   background-color: #dcd9ff;
   overflow: hidden;
-`;
-
-const ButtonWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  cursor: pointer;
-  position: relative;
-  left: 55px;
-  margin-top: 63px;
 `;
 
 const StartIndexContainer = styled.div`
