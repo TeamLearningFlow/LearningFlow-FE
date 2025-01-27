@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import LogoDark from '../assets/logo_dark.png';
-import Profile from '../assets/profile.svg';
+import Guest from '../assets/Guest.svg';
 
 const HeaderWrapper = styled.header`
   display: flex;
@@ -38,7 +38,7 @@ const Header: React.FC = () => {
         <Image src={LogoDark} alt="header logo" width={130} height={20} />
       </LogoWrapper>
       <ProfileIcon>
-        <Image src={Profile} alt="profile" width={40} height={40} />
+        <Image src={Guest} alt="profile" width={40} height={40} />
       </ProfileIcon>
     </HeaderWrapper>
   );
