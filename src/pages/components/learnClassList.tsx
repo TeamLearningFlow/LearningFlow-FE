@@ -6,8 +6,9 @@ const ComponentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 65%;
-  margin-left: 3%;
+  width: 100%;
+  // width: 65%;
+  // margin-left: 3%;
   max-height: 200px;
   overflow-y: scroll;
 
@@ -28,8 +29,14 @@ const ComponentWrapper = styled.div`
 
 const ClassList: React.FC = () => {
   const completedClasses = [
-    { orderText: '1회차', title: '브랜치 포스터 "와이어프레임을 활용하는 이유"' },
-    { orderText: '2회차', title: '브랜치 포스터 "와이어프레임을 활용하는 이유"' },
+    {
+      orderText: '1회차',
+      title: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
+    },
+    {
+      orderText: '2회차',
+      title: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
+    },
   ];
 
   return (
@@ -48,4 +55,3 @@ const ClassList: React.FC = () => {
 };
 
 export default ClassList;
-

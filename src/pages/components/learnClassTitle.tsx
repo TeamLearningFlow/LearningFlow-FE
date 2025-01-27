@@ -7,10 +7,10 @@ const TitleWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 65%;
-  margin-left: 3%;
+  width: 100%;
+  // width: 65%;
+  // margin-left: 3%;
   padding: 1.5% 0 1.5% 0;
-
 `;
 
 const TitleBox = styled.div`
@@ -27,8 +27,8 @@ const ButtonWrapper = styled.button`
   align-items: center;
   justify-content: center;
   width: 110px;
-  height: 40px; 
-  background-color:rgba(94, 82, 255, 1);
+  height: 40px;
+  background-color: rgba(94, 82, 255, 1);
   border-radius: 24.7px;
   border: none;
   color: white;
@@ -36,25 +36,21 @@ const ButtonWrapper = styled.button`
   cursor: pointer;
 `;
 
-const IconBox = styled.div`
-
-`;
+const IconBox = styled.div``;
 
 interface ClassTitleProps {
   title?: string;
 }
 
 const ClassTitle: React.FC<ClassTitleProps> = ({
-  title = '기획자라면 알고 있어야 할 \'웹사이트 유형\''
+  title = "기획자라면 알고 있어야 할 '웹사이트 유형'",
 }) => {
   return (
     <TitleWrapper>
-      <TitleBox>
-        {title}
-      </TitleBox>
+      <TitleBox>{title}</TitleBox>
       <ButtonWrapper>
         <IconBox>
-            <Image src={CheckIcon} alt='Check Icon' width={18} height={18} />
+          <Image src={CheckIcon} alt="Check Icon" width={18} height={18} />
         </IconBox>
         수강완료
       </ButtonWrapper>
