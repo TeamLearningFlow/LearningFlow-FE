@@ -145,7 +145,7 @@ const LoginPage: React.FC = () => {
                 <Divider />
                 <GoogleAuthButton text="Google 계정으로 로그인" />
                 <SignupText>
-                  온보딩이 처음이신가요? <a href="/signup">회원가입</a>
+                  온보딩이 처음이신가요? <a href="/register">회원가입</a>
                 </SignupText>
               </FormGroup>
             </FormContainer>
