@@ -12,7 +12,7 @@ const RegisterCompletePage: React.FC = () => {
 
       try {
         const response = await axios.get(
-          `http://54.180.118.227:8080/register/complete?token=${token}`,
+          `http://onboarding.p-e.kr:8080/register/complete?token=${token}`,
         );
 
         // 유효성 확인 후 페이지 이동
@@ -21,11 +21,11 @@ const RegisterCompletePage: React.FC = () => {
           router.push('/landing'); // 랜딩 페이지로 이동
         } else {
           console.log('토큰 무효');
-          router.push('/signup'); // 회원가입 페이지로 이동
+          // router.push('/register'); // 회원가입 페이지로 이동
         }
       } catch (err) {
         console.error('토큰 검증 오류:', err);
-        router.push('/signup'); // 오류 발생 시 회원가입 페이지로 이동
+        // router.push('/register'); // 오류 발생 시 회원가입 페이지로 이동
       }
     };
 

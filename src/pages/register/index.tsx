@@ -80,10 +80,13 @@ const RegisterPage: React.FC = () => {
       //   password: password,
       // });
 
-      const response = await axios.post('http://54.180.118.227:8080/register', {
-        email: email,
-        password: password,
-      });
+      const response = await axios.post(
+        'http://onboarding.p-e.kr:8080/register',
+        {
+          email: email,
+          password: password,
+        },
+      );
 
       console.log('Response:', response);
       // alert('회원가입 성공');
