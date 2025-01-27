@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import Header from './components/learnHeader';
-import TitleBar from './components/learnTitleBar';
-import ClassTitle from './components/learnClassTitle';
-import ClassList from './components/learnClassList';
-import Article from './components/article';
-import Note from './components/note';
+import Header from '../components/learnHeader';
+import TitleBar from '../components/learnTitleBar';
+import ClassTitle from '../components/learnClassTitle';
+import ClassList from '../components/learnClassList';
+import Article from '../components/article';
+import Note from '../components/note';
 
 const PageWrapper = styled.div``;
 
