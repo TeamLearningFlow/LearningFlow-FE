@@ -10,6 +10,7 @@ interface ILoginContext {
     isEmailChecked: boolean;
     isPasswordChecked: boolean;
     formErrorMsg: string;
+    remember: boolean;
   };
   actions: {
     setEmail: React.Dispatch<React.SetStateAction<string>>;
@@ -19,6 +20,7 @@ interface ILoginContext {
     setIsEmailChecked: React.Dispatch<React.SetStateAction<boolean>>;
     setIsPasswordChecked: React.Dispatch<React.SetStateAction<boolean>>;
     setFormErrorMsg: React.Dispatch<React.SetStateAction<string>>;
+    setRemember: React.Dispatch<React.SetStateAction<boolean>>;
   };
 }
 
@@ -41,6 +43,8 @@ export const LoginProvider: React.FC<LoginProviderProps> = ({ children }) => {
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const [formErrorMsg, setFormErrorMsg] = useState<string>('');
 
+  const [remember, setRemember] = useState<boolean>(false);
+
   const value: ILoginContext = {
     state: {
       email,
@@ -50,6 +54,7 @@ export const LoginProvider: React.FC<LoginProviderProps> = ({ children }) => {
       isEmailChecked,
       isPasswordChecked,
       formErrorMsg,
+      remember,
     },
     actions: {
       setEmail,
@@ -59,6 +64,7 @@ export const LoginProvider: React.FC<LoginProviderProps> = ({ children }) => {
       setIsEmailChecked,
       setIsPasswordChecked,
       setFormErrorMsg,
+      setRemember,
     },
   };
 

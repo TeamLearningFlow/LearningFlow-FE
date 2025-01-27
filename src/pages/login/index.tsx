@@ -1,7 +1,7 @@
-import React from 'react';
-// import { useRouter } from 'next/router';
+import React, { useContext } from 'react';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
-// import axios from 'axios';
+import axios from 'axios';
 import InputEmail from '../../components/inputEmail';
 import InputPw from '../../components/inputPw';
 import LeftUI from '../../components/leftUI';
@@ -9,7 +9,7 @@ import Divider from '../../components/divider';
 import GoogleAuthButton from '../../components/googleAuthButton';
 import AuthButton from '../../components/authButton';
 import TopLogo from '../../components/topLogo';
-import { LoginProvider } from '../context/LoginContext';
+import { LoginContext } from '../context/LoginContext';
 
 const PageContainer = styled.div`
   display: flex;
@@ -121,37 +121,82 @@ const FormGroup = styled.div`
 `;
 
 const LoginPage: React.FC = () => {
+  const router = useRouter();
+  const context = useContext(LoginContext);
+
+  if (!context) throw new Error('LoginContext를 찾을 수 없습니다.');
+
+  const { email, password, isValidEmail, isEmailChecked, isPasswordChecked } =
+    context.state;
+
+  const { setRemember } = context.actions;
+
+  const isButtonValid =
+    isEmailChecked === true &&
+    isValidEmail === true &&
+    isPasswordChecked === true;
+
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post('http://onboarding.p-e.kr:8080/login', {
+        email,
+        password,
+        remember: false,
+      });
+
+      console.log('Response: ', response.data);
+
+      if (response.status === 200) {
+        localStorage.setItem('token', response.data.token); // 로그인 성공 시 토큰 저장
+        router.push('/home'); // 홈 페이지로 이동
+      }
+    } catch (err: any) {
+      console.log('Error:', err.response?.data || err.message);
+
+      if (err.response?.data?.message) {
+        console.log('Error Message:', err.response.data.message);
+      } else {
+        console.log('로그인 오류');
+      }
+    }
+  };
+
   return (
     <>
-      <LoginProvider>
-        <PageContainer>
-          <LeftSection>
-            <TopLogo />
-            <LeftUI />
-          </LeftSection>
-          <RightSection>
-            <FormContainer>
-              <Title>로그인</Title>
-              <InputEmail />
-              <InputPw />
-              <CheckboxContainer>
-                <label>
-                  <input type="checkbox" />
-                  로그인 유지
-                </label>
-              </CheckboxContainer>
-              <FormGroup>
-                <AuthButton disabled={true} text="로그인" />
-                <Divider />
-                <GoogleAuthButton text="Google 계정으로 로그인" />
-                <SignupText>
-                  온보딩이 처음이신가요? <a href="/register">회원가입</a>
-                </SignupText>
-              </FormGroup>
-            </FormContainer>
-          </RightSection>
-        </PageContainer>
-      </LoginProvider>
+      <PageContainer>
+        <LeftSection>
+          <TopLogo />
+          <LeftUI />
+        </LeftSection>
+        <RightSection>
+          <FormContainer>
+            <Title>로그인</Title>
+            <InputEmail />
+            <InputPw />
+            <CheckboxContainer>
+              <label>
+                <input
+                  type="checkbox"
+                  onChange={(e) => setRemember(e.target.checked)}
+                />
+                로그인 유지
+              </label>
+            </CheckboxContainer>
+            <FormGroup>
+              <AuthButton
+                disabled={!isButtonValid}
+                onClick={handleLogin}
+                text="로그인"
+              />
+              <Divider />
+              <GoogleAuthButton text="Google 계정으로 로그인" />
+              <SignupText>
+                온보딩이 처음이신가요? <a href="/register">회원가입</a>
+              </SignupText>
+            </FormGroup>
+          </FormContainer>
+        </RightSection>
+      </PageContainer>
     </>
   );
 };

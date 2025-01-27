@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { LoginContext } from '../pages/context/LoginContext';
 import Image from 'next/image';
-import invisibleicon from '../assets/invisibleicon.svg'; /*.svg 계속 오류나서 .png로 바꿈*/
+import invisibleicon from '../assets/invisibleicon.svg';
 import visibleicon from '../assets/visibleicon.svg';
 
 const Label = styled.label`
