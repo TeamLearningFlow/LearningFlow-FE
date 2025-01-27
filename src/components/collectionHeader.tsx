@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import LogoDark from '../assets/logo_dark.png';
 import Search from '../assets/searchicon.svg';
-import Profile from '../assets/profile.svg';
+import Guest from '../assets/Guest.svg';
 import Vector from '../assets/Vector.svg';
 
 const HeaderWrapper = styled.header`
@@ -205,7 +205,7 @@ const Header: React.FC = () => {
         </SearchIcon>
       </SearchWrapper>
       <ProfileIcon>
-        <Image src={Profile} alt="profile" width={40} height={40} />
+        <Image src={Guest} alt="profile" width={40} height={40} />
       </ProfileIcon>
     </HeaderWrapper>
   );
