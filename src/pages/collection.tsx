@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import Header from './components/collectionHeader';
-import TitleBar from './components/collectionTitleBar';
-import CollectionInfo from './components/collectionInfo';
-import {ClassIndex, StartIndex, EndIndex} from './components/classIndex';
-import NowPlaying from './components/nowPlaying';
-import NextClassIndex from './components/nextClassIndex';
-import CheckedYoutube from './assets/checkedYoutube.svg';
+import Header from '../components/collectionHeader';
+import TitleBar from '../components/collectionTitleBar';
+import CollectionInfo from '../components/collectionInfo';
+import { ClassIndex, StartIndex, EndIndex } from '../components/classIndex';
+import NowPlaying from '../components/nowPlaying';
+import NextClassIndex from '../components/nextClassIndex';
+import CheckedYoutube from '../assets/checkedYoutube.svg';
 
 const PageWrapper = styled.div`
   background-color: #fafafc;
@@ -20,14 +20,10 @@ const ListWrapper = styled.div`
   flex-direction: column;
 `;
 
-const ListContainer = styled.div`
-`;
+const ListContainer = styled.div``;
 
 const CollectionPage: React.FC = () => {
-  const stops = [
-    '1회차',
-    '2회차',
-  ];
+  const stops = ['1회차', '2회차'];
 
   return (
     <PageWrapper>
@@ -37,12 +33,12 @@ const CollectionPage: React.FC = () => {
       <ListWrapper>
         <StartIndex />
         <ListContainer>
-        {stops.map((stop, index) => (
-          <ClassIndex src={CheckedYoutube} key={index} orderText={stop} />
-        ))}
-        <NowPlaying />
-        <NextClassIndex />
-        <NextClassIndex />
+          {stops.map((stop, index) => (
+            <ClassIndex src={CheckedYoutube} key={index} orderText={stop} />
+          ))}
+          <NowPlaying />
+          <NextClassIndex />
+          <NextClassIndex />
         </ListContainer>
         <EndIndex />
       </ListWrapper>
