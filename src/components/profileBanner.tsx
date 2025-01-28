@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import styled from 'styled-components';
 import Image from 'next/image';
 import EditIcon from '../assets/editIcon.svg';
@@ -120,9 +121,11 @@ const ProfileBanner = () => {
           </PersonalInfo>
           <Email>onboarding@gmail.com</Email>
         </Profile>
-        <EditButton>
-          <Image src={EditIcon} alt="edit button" />
-        </EditButton>
+        <Link href="/mypage/profile" passHref>
+          <EditButton>
+            <Image src={EditIcon} alt="edit button" />
+          </EditButton>
+        </Link>
       </ProfileWrapper>
     </Container>
   );
