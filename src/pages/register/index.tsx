@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Link from 'next/link';
 import axios from 'axios';
 import styled from 'styled-components';
 import LeftUI from '../../components/leftUI';
@@ -9,7 +10,7 @@ import SignupInputEmail from '../../components/signupInputEmail';
 import SignupInputPw from '../../components/signupInputPw';
 import InputPwCheck from '../../components/inputPwCheck';
 import TopLogo from '../../components/topLogo_light';
-import ContractsPage from './contracts';
+import EmailAuthPage from './emailAuth';
 
 const PageContainer = styled.div`
   display: flex;
@@ -143,23 +144,37 @@ const RegisterPage: React.FC = () => {
                 >
                   <span style={{ fontSize: '10px' }}>
                     가입하면{' '}
-                    <span
-                      style={{
-                        textDecoration: 'underline',
-                        fontWeight: 'bold',
-                      }}
+                    <Link
+                      href="/register/contracts"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
-                      이용약관
-                    </span>{' '}
+                      <span
+                        style={{
+                          color: 'rgba(24, 24, 24, 1)',
+                          textDecoration: 'underline',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        이용약관
+                      </span>
+                    </Link>{' '}
                     및{' '}
-                    <span
-                      style={{
-                        textDecoration: 'underline',
-                        fontWeight: 'bold',
-                      }}
+                    <Link
+                      href="/register/privacyContracts"
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
-                      개인정보 보호 정책
-                    </span>
+                      <span
+                        style={{
+                          color: 'rgba(24, 24, 24, 1)',
+                          textDecoration: 'underline',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        개인정보 처리방침                         
+                      </span>
+                    </Link>
                     에 동의하는 것으로 간주합니다.
                   </span>
                 </div>
@@ -170,7 +185,7 @@ const RegisterPage: React.FC = () => {
           </RightSection>
         </PageContainer>
       ) : (
-        <ContractsPage />
+        <EmailAuthPage />
       )}
     </>
   );

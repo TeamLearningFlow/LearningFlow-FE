@@ -12,6 +12,7 @@ const App = () => {
         <Link href="/emailAuth"></Link>
         <Link href="/landing"></Link>
         <Link href="/form"></Link>
+        <Link href="/contracts"></Link>
       </p>
     </div>
   );

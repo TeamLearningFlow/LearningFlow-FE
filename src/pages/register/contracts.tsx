@@ -1,10 +1,6 @@
-import React, { useState } from 'react';
-import Image from 'next/image';
+import React from 'react';
 import styled from 'styled-components';
-import TopLogo from '../../components/toplogo_guest';
-import selectedicon from '../../assets/selectedicon.svg';
-import unselectedicon from '../../assets/unselectedicon.svg';
-import EmailAuthPage from './emailAuth';
+
 
 const PageWrapper = styled.div`
   width: 100vw;
@@ -19,20 +15,24 @@ const PageContainer = styled.div`
   max-width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 50px 100px;
-  gap: 48px;
+  padding: 100px 100px;
+  gap: 35px;
 `;
 
 const TitleContainer = styled.div`
   font-size: 24px;
   font-weight: 600;
+  margin-bottom: 15px; 
 `;
 
 const Textwrapper = styled.div`
-  font-size: 16px;
+  font-size: 14px;
+  color: rgba(100, 105, 110, 1);
+  line-height: 1.7em;
+  white-space: pre-wrap;
 `;
 
-const NextButton = styled.button`
+{/* const BackButton = styled.button`
   display: flex;
   height: 50px;
   padding: 18px 8px;
@@ -47,196 +47,113 @@ const NextButton = styled.button`
   font-style: normal;
   color: rgba(255, 255, 255, 1);
   cursor: pointer;
-  margin: 48px auto; /* 버튼을 가로축에서 중앙 정렬 */
-`;
+  margin: 48px auto;
+`; */}
 
-const FirstContractContainer = styled.div``;
-const SecondContractContainer = styled.div``;
-
-const FirstTableContainer = styled.div`
-  margin-top: 20px;
-  overflow-x: auto;
-`;
-
-const SecondTableContainer = styled.div`
-  margin-top: 20px;
-  overflow-x: auto;
-  width: 70%;
-`;
-
-const StyledTable = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed;
-  border-spacing: 0;
-`;
-
-const TableHeader = styled.th<{ headerWidth?: string }>`
-  width: ${({ headerWidth }) => headerWidth || 'auto'};
-  padding: 16px;
-  border: 1px solid rgba(189, 197, 204, 1);
-  text-align: left;
-`;
-
-const TableCell = styled.td`
-  padding: 16px;
-  border: 1px solid rgba(189, 197, 204, 1);
-`;
-
-{
-  /* const TableCellWithFlex = styled.td`
+const ContractContainer = styled.div`
   display: flex;
-  align-items: center;
-  padding: 16px;
-  border: 1px solid rgba(189, 197, 204, 1);
-`; */
-}
-
-const IconWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  width: 18px;
-  height: 18px;
-  margin: 0 10px;
+  flex-direction: column;
+  gap: 10px;
 `;
 
-const ContractsPage: React.FC = () => {
-  const [disagreeChecked, setDisagreeChecked] = useState(false);
-  const [agreeChecked, setAgreeChecked] = useState(false);
-  const [showContracts, setShowContracts] = useState(false);
+const Contracts: React.FC = () => {
 
-  const handleShowContracts = () => {
-    setShowContracts(true);
-  };
-
-  const handleDisagreeCheck = () => {
-    setDisagreeChecked((prev) => !prev);
-    if (agreeChecked) setAgreeChecked(false);
-  };
-
-  const handleAgreeCheck = () => {
-    setAgreeChecked((prev) => !prev);
-    if (disagreeChecked) setDisagreeChecked(false);
-  };
+  {/* const handleBackToRegister = () => {
+    router.push('/register');
+  }; */}
 
   return (
     <>
-      {!showContracts ? (
-        <PageWrapper>
-          <TopLogo />
-          <PageContainer>
-            <TitleContainer>개인정보 수집 · 이용 동의</TitleContainer>
+      <PageWrapper>
+        <PageContainer>
+        <TitleContainer>이용약관</TitleContainer>
+          <ContractContainer>
+            <p style={{ fontSize: '18px', fontWeight: 'bold' }}>
+              제1조(목적)
+            </p>
             <Textwrapper>
-              온보딩은 「신용정보의 이용 및 보호에 관한 법률」, 「개인정보
-              보호법」 등 관련 법규에 따라 회원님께 아래와 같은 '수집·이용 목적,
-              수집·이용 항목, 보유 및 이용기간, 거부 권리 및 불이익'에 관한
-              사항을 안내 드리고 개인정보 수집·이용 동의를 받고자 합니다.
+              이 약관은 [Onboarding] (이하 "플랫폼")에서 제공하는 모든 서비스의 이용과 관련하여 플랫폼과 사용자 간의 권리, 의무, 책임사항을 규정합니다.
             </Textwrapper>
-            <FirstContractContainer>
-              <p style={{ fontSize: '16px', fontWeight: 'bold' }}>
-                1. 제공에 관한 사항
-              </p>
-              <FirstTableContainer>
-                <StyledTable>
-                  <tbody>
-                    <tr>
-                      <TableHeader headerWidth="30%">
-                        수집·이용 목적
-                      </TableHeader>
-                      <TableCell>
-                        온보딩 로그인 및 서비스 이용을 위한 본인 확인
-                      </TableCell>
-                    </tr>
-                    <tr>
-                      <TableHeader headerWidth="30%">
-                        제공받는 자의 이용 목적
-                      </TableHeader>
-                      <TableCell>
-                        목적 달성 시 까지(단, 관련 법령에 따라 보존할 필요가
-                        있는 경우는 해당 보존기간)
-                      </TableCell>
-                    </tr>
-                    <tr>
-                      <TableHeader headerWidth="30%">
-                        거부 권리 및 불이익
-                      </TableHeader>
-                      <TableCell>
-                        고객님께서는 개인정보 수집·이용 동의를 거부할 권리가
-                        있습니다. 다만, 해당 필수동의 거부 시 수집·이용 목적에
-                        따른 토스인증서 로그인 및 본인확인 서비스 이용이 제한될
-                        수 있습니다.
-                      </TableCell>
-                    </tr>
-                  </tbody>
-                </StyledTable>
-              </FirstTableContainer>
-            </FirstContractContainer>
-            <SecondContractContainer>
-              <p style={{ fontSize: '16px', fontWeight: 'bold' }}>
-                2. 수집 · 이용 및 항목
-              </p>
-              <SecondTableContainer>
-                <StyledTable>
-                  <tbody>
-                    <tr>
-                      <TableHeader colSpan={2}>개인정보</TableHeader>
-                    </tr>
-                    <tr>
-                      <TableHeader headerWidth="50%">일반 개인정보</TableHeader>
-                      <TableCell>성명, 생년월일, 휴대폰번호</TableCell>
-                    </tr>
-                    <tr>
-                      <TableCell>
-                        위{' '}
-                        <span
-                          style={{
-                            fontWeight: 'bold',
-                            textDecoration: 'underline',
-                          }}
-                        >
-                          개인정보 수집·이용
-                        </span>
-                        에 동의하십니까?
-                      </TableCell>
-                      <TableCell style={{ display: 'flex' }}>
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                          동의하지 않음
-                          <IconWrapper onClick={handleDisagreeCheck}>
-                            <Image
-                              src={
-                                disagreeChecked ? selectedicon : unselectedicon
-                              }
-                              alt="동의하지 않음 체크박스"
-                            />
-                          </IconWrapper>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                          동의함
-                          <IconWrapper onClick={handleAgreeCheck}>
-                            <Image
-                              src={agreeChecked ? selectedicon : unselectedicon}
-                              alt="동의함 체크박스"
-                            />
-                          </IconWrapper>
-                        </div>
-                      </TableCell>
-                    </tr>
-                  </tbody>
-                </StyledTable>
-              </SecondTableContainer>
-            </SecondContractContainer>
-          </PageContainer>
-          <NextButton onClick={handleShowContracts}>
-            다음 단계로 넘어가기
-          </NextButton>
-        </PageWrapper>
-      ) : (
-        <EmailAuthPage />
-      )}
+          </ContractContainer>
+
+          <ContractContainer>
+            <p style={{ fontSize: '18px', fontWeight: 'bold' }}>
+              제2조(약관의 효력 및 변경)
+            </p>
+            <Textwrapper>
+              1. 본 약관은 플랫폼에 게시함으로써 효력이 발생합니다.<br />
+              2. 플랫폼은 합리적인 사유가 발생할 경우 관련 법령을 위배하지 않는 범위 내에서 약관을 변경할 수 있습니다. 변경된 약관은 시행 전에 공지되며, 사용자가 동의하지 않을 경우 서비스 이용을 중단할 수 있습니다.
+            </Textwrapper>
+          </ContractContainer>
+
+          <ContractContainer>
+            <p style={{ fontSize: '18px', fontWeight: 'bold' }}>
+              제3조(이용계약의 체결)
+            </p>
+            <Textwrapper>
+              1. 사용자는 플랫폼이 정한 절차에 따라 회원가입을 신청하고, 플랫폼이 이를 승인함으로써 계약이 체결됩니다.<br/>
+              2. 회원가입 시 사용자는 정확하고 사실에 기반한 정보를 제공해야 하며, 허위 정보 제공으로 인해 발생하는 문제는 사용자 책임입니다.
+            </Textwrapper>
+          </ContractContainer>
+
+          <ContractContainer>
+            <p style={{ fontSize: '18px', fontWeight: 'bold' }}>
+              제4조(서비스의 제공 및 변경)
+            </p>
+            <Textwrapper>
+            1. 플랫폼은 아래와 같은 서비스를 제공합니다:<br/>
+            <span style={{ paddingRight: '5px' }}></span>    · 학습 자료 제공<br/>
+            <span style={{ paddingRight: '5px' }}></span>    · 학습 진도 관리 및 이용 분석<br/>
+            2. 플랫폼은 서비스의 내용, 운영 정책 등을 변경할 수 있으며, 이 경우 사용자에게 사전 공지합니다.
+            </Textwrapper>
+          </ContractContainer>
+
+          <ContractContainer>
+            <p style={{ fontSize: '18px', fontWeight: 'bold' }}>
+              제5조(사용자의 의무)
+            </p>
+            <Textwrapper>
+              1. 사용자는 플랫폼 내에서 다음 행위를 하지 않아야 합니다:<br />
+              <span style={{ paddingRight: '5px' }}></span>    · 타인의 계정을 도용하거나 부정 사용<br />
+              <span style={{ paddingRight: '5px' }}></span>    · 불법적이거나 부적절한 콘텐츠 게시<br />
+              2. 사용자는 플랫폼이 제공하는 콘텐츠를 허가 없이 복제, 배포, 변경할 수 없습니다.
+            </Textwrapper>
+          </ContractContainer>
+
+          <ContractContainer>
+            <p style={{ fontSize: '18px', fontWeight: 'bold' }}>
+              제6조(개인정보 보호)
+            </p>
+            <Textwrapper>
+            사용자의 개인정보는 [개인정보처리방침]에 따라 보호됩니다.
+            </Textwrapper>
+          </ContractContainer>
+
+          <ContractContainer>
+            <p style={{ fontSize: '18px', fontWeight: 'bold' }}>
+              제7조(책임 제한)
+            </p>
+            <Textwrapper>
+              플랫폼은 다음에 대해 책임을 지지 않습니다.<br/>
+              1. 사용자가 제공한 정보의 부정확성<br/>
+              2. 플랫폼 외부 링크 및 제3자의 행위<br/>
+              3. 불가항력적 사유로 인한 서비스 중단
+            </Textwrapper>
+          </ContractContainer>
+
+          <ContractContainer>
+            <p style={{ fontSize: '18px', fontWeight: 'bold' }}>
+              제8조(분쟁 해결)
+            </p>
+            <Textwrapper>
+              본 약관과 관련하여 분쟁이 발생할 경우 [소재지]의 관할 법원을 전속 관할로 합니다.
+            </Textwrapper>
+          </ContractContainer>
+        </PageContainer>
+        {/* <BackButton onClick={handleBackToRegister}>뒤로가기</BackButton> */}
+      </PageWrapper>
     </>
   );
 };
 
-export default ContractsPage;
+export default Contracts;
