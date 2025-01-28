@@ -18,14 +18,19 @@ const RegisterCompletePage: React.FC = () => {
         // 유효성 확인 후 페이지 이동
         if (response.data.isSuccess) {
           console.log('토큰 유효');
+
+          // 로컬 스토리지에 토큰 저장
+          localStorage.setItem('token', token as string);
+          console.log('토큰 저장 완료');
+
           router.push('/landing'); // 랜딩 페이지로 이동
         } else {
           console.log('토큰 무효');
-          // router.push('/register'); // 회원가입 페이지로 이동
+          router.push('/register'); // 회원가입 페이지로 이동
         }
       } catch (err) {
         console.error('토큰 검증 오류:', err);
-        // router.push('/register'); // 오류 발생 시 회원가입 페이지로 이동
+        router.push('/register'); // 오류 발생 시 회원가입 페이지로 이동
       }
     };
 
