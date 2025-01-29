@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import TopLogo from '../../components/homeHeader';
+import Banner from '../../components/homeBanner';
+import Footer from '../../components/homeFooter';
 // import HomeModal from '../../pages/modal/homeModal';
 
 const Wrapper = styled.div`
@@ -27,10 +29,12 @@ const Home: React.FC = () => {
   return (
     <>
       <TopLogo />
+      <Banner />
       <Wrapper>
         {/* {isModalOpen && <HomeModal onClose={handleCloseModal} />} */}
         {!isModalOpen && <Main></Main>}
       </Wrapper>
+      <Footer/>
     </>
   );
 };
