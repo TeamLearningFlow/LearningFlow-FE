@@ -7,6 +7,11 @@ import BookmarkIcon from '../assets/bookmark.svg';
 import HoverBackground from '../assets/hover-background.svg';
 import Plane from '../assets/plane.svg';
 import Circle from '../assets/circle.svg';
+import NaverblogIcon from '../assets/platformicon/naverblog_nostroke_ic.svg';
+import TistoryIcon from '../assets/platformicon/tistory_nostroke_ic.svg';
+import VelogIcon from '../assets/platformicon/velog_nostroke_ic.svg';
+import YoutubeIcon from '../assets/platformicon/youtube_nostroke_ic.svg';
+import VelogLine from '../assets/platformicon/velog_ic.svg';
 
 const ColumnFlexDiv = styled.div`
   display: flex;
@@ -38,9 +43,11 @@ const BoardingPassImage = styled(Image)`
 
 const Bookmark = styled(Image)`
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 15px;
+  right: 15px;
   cursor: pointer;
+  width: 35px;
+  height: 35px;
 `;
 
 const Body = styled.div`
@@ -97,7 +104,7 @@ const Bottom = styled(RowFlexDiv)`
   border-radius: 0px 0px 16px 16px;
   background: #f5f5ff;
   height: 53px;
-  padding: 10px 20px;
+  padding: 10px 15px;
   position: absolute;
   top: 281px;
   left: 1px;
@@ -179,11 +186,18 @@ const CollectionHeader = styled(RowFlexDiv)`
 `;
 
 // svg 감싸는 애로 추후 변경 필요
-const Thumbnail = styled.span<{ backgroundColor: string }>`
+const Thumbnail = styled.div<{ left: number; zIndex: number }>`
   width: 26px;
   height: 26px;
-  background-color: ${(props) => props.backgroundColor};
   border-radius: 13px;
+  position: absolute;
+  left: ${(props) => props.left}px;
+  z-index: ${(props) => props.zIndex};
+`;
+
+const ThumbnailWrapper = styled.div`
+  position: relative;
+  height: 26px;
 `;
 
 const Detail = styled.span<{ marginLeft?: string }>`
@@ -285,22 +299,20 @@ const HoverCollection = () => {
     <HoverWrapper>
       <Image src={HoverBackground} alt="hover background" />
       <CollectionHeader>
-        <Thumbnail
-          backgroundColor={'white'}
-          style={{ position: 'absolute', left: '53px' }}
-        />
-        <Thumbnail
-          backgroundColor={'orange'}
-          style={{ position: 'absolute', left: '35px' }}
-        />
-        <Thumbnail
-          backgroundColor={'red'}
-          style={{ position: 'absolute', left: '18px' }}
-        />
-        <Thumbnail
-          backgroundColor={'black'}
-          style={{ position: 'absolute', left: '0' }}
-        />
+        <ThumbnailWrapper>
+          <Thumbnail left={0} zIndex={3}>
+            <Image src={YoutubeIcon} alt="youtube" width={26} height={26} />
+          </Thumbnail>
+          <Thumbnail left={18} zIndex={2}>
+            <Image src={VelogIcon} alt="velog" width={26} height={26} />
+          </Thumbnail>
+          <Thumbnail left={35} zIndex={1}>
+            <Image src={TistoryIcon} alt="tistory" width={26} height={26} />
+          </Thumbnail>
+          <Thumbnail left={53} zIndex={0}>
+            <Image src={NaverblogIcon} alt="naverblog" width={26} height={26} />
+          </Thumbnail>
+        </ThumbnailWrapper>
         <Detail style={{ position: 'absolute', left: '83px' }}>+4</Detail>
         <LineWrapper>
           <svg
@@ -329,21 +341,27 @@ const HoverCollection = () => {
 
       <CollectionWrapper>
         <ContentWrapper>
-          <Thumbnail backgroundColor={'black'} />
+          <ThumbnailWrapper>
+            <Image src={VelogLine} alt="velogline" width={26} height={26} />
+          </ThumbnailWrapper>
           <Content>
             <Label color={'#BBB6FF'}>1회차</Label>
             <Label color={'#fff'}>1회차 콘텐츠의 제목을 입력해주세요.</Label>
           </Content>
         </ContentWrapper>
         <ContentWrapper>
-          <Thumbnail backgroundColor={'black'} />
+          <ThumbnailWrapper>
+            <Image src={VelogLine} alt="velogline" width={26} height={26} />
+          </ThumbnailWrapper>
           <Content>
             <Label color={'#BBB6FF'}>2회차</Label>
             <Label color={'#fff'}>2회차 콘텐츠의 제목을 입력해주세요.</Label>
           </Content>
         </ContentWrapper>
         <ContentWrapper>
-          <Thumbnail backgroundColor={'black'} />
+          <ThumbnailWrapper>
+            <Image src={VelogLine} alt="velogline" width={26} height={26} />
+          </ThumbnailWrapper>
           <Content>
             <Label color={'#BBB6FF'}>3회차</Label>
             <Label color={'#fff'}>3회차 콘텐츠의 제목을 입력해주세요.</Label>
