@@ -139,17 +139,24 @@ const ProfileIcon = styled.div`
   flex-shrink: 0;
 `;
 
-const Header: React.FC = () => {
+// 헤더 상태 전달
+interface HeaderProps {
+  onSearchStateChange: (active: boolean) => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ onSearchStateChange }) => {
   const [searchState, setSearchState] = useState<string>('Inactive'); // 검색 박스 상태
   const [searchValue, setSearchValue] = useState(''); // 입력 값
 
   const handleFocus = () => {
     setSearchState('Active'); // 검색 박스 활성화
+    onSearchStateChange(true); // 검색 페이지 활성화
   };
 
   const handleBlur = () => {
     if (!searchValue.trim()) {
       setSearchState('Inactive'); // 텍스트 없으면 초기화
+      onSearchStateChange(false); // 검색 페이지 비활성화
     } else {
       setSearchState('Completed'); // 텍스트 있으면 비활성화
     }
