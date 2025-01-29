@@ -3,13 +3,13 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import tmpIMG from '../assets/tmpIMG.png';
 import collectionInfoIMG from '../assets/CollectionInfo.png';
-import youtubeIMG from '../assets/Youtube.png';
-import tistoryIMG from '../assets/Tistory.png';
-import blogIMG from '../assets/NaverBlog.png';
-import velogIMG from '../assets/Velog.png';
-import line from '../assets/Line.png';
-import dot from '../assets/dot.png';
-import plane from '../assets/Airplane.png';
+import youtubeIMG from '../assets/Youtube.svg';
+import tistoryIMG from '../assets/Tistory.svg';
+import blogIMG from '../assets/NaverBlog.svg';
+import velogIMG from '../assets/Velog.svg';
+import line from '../assets/Line.svg';
+import dot from '../assets/dot.svg';
+import plane from '../assets/Airplane.svg';
 
 const CollectionInfo: React.FC = () => {
   return (
@@ -82,6 +82,7 @@ const CollectionTicket = styled.span`
   margin: 2% 9.5% 1% 9.5%;
 
   white-space: nowrap;
+  // overflow: hidden;
 `;
 
 const CollectionLeftIMG = styled(Image)`
@@ -148,8 +149,10 @@ const TypeImgBox = styled.div`
   position: absolute;
   margin-top: 130px;
 
-  margin-left: 425px;
-  width: 300px;
+  // margin-left: 425px;
+  margin-left: 35%;
+  // width: 300px;
+  width: 30%;
   height: 40px;
 `;
 
@@ -218,7 +221,8 @@ const ArticleNVideo = styled.span`
   align-items: center;
   margin-left: 100px;
 
-  width: 400px;
+  // width: 400px;
+  width: 130px;
   height: 40px;
 `;
 
