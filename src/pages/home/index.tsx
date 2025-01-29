@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React /*useState*/ from 'react';
+// import styled from 'styled-components';
 import TopLogo from '../../components/homeHeader';
 import Banner from '../../components/homeBanner';
 import Footer from '../../components/homeFooter';
+import HomeCollection from '../../components/homeCollection';
 // import HomeModal from '../../pages/modal/homeModal';
 
-const Wrapper = styled.div`
+/*const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -18,11 +19,11 @@ const Main = styled.div`
   text-align: center;
   padding: 20px;
 `;
+*/
 
 const Home: React.FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState(true);
-
-  /*const handleCloseModal = () => {
+  /*const [isModalOpen, setIsModalOpen] = useState(true);
+  const handleCloseModal = () => {
     setIsModalOpen(false);
   };*/
 
@@ -30,11 +31,13 @@ const Home: React.FC = () => {
     <>
       <TopLogo />
       <Banner />
-      <Wrapper>
-        {/* {isModalOpen && <HomeModal onClose={handleCloseModal} />} */}
+      <HomeCollection />
+      {/*<Wrapper>
+        {isModalOpen && <HomeModal onClose={handleCloseModal} />}
         {!isModalOpen && <Main></Main>}
-      </Wrapper>
-      <Footer/>
+        </Wrapper> 
+        */}
+      <Footer />
     </>
   );
 };
