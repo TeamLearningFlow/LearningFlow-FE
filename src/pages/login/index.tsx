@@ -2,12 +2,12 @@ import React, { useContext } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import axios from 'axios';
-import InputEmail from '../../components/inputEmail';
-import InputPw from '../../components/inputPw';
+import InputEmail from '../../components/login/inputEmail';
+import InputPw from '../../components/login/inputPw';
 import LeftUI from '../../components/leftUI';
 import Divider from '../../components/divider';
 import GoogleAuthButton from '../../components/googleAuthButton';
-import AuthButton from '../../components/authButton';
+import AuthButton from '../../components/login/authButton';
 import TopLogo from '../../components/topLogo';
 import { LoginContext } from '../context/LoginContext';
 

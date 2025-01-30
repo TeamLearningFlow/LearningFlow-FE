@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { EmailCheckLabel } from './validation';
+import { EmailCheckLabel } from '../register/validation';
 
 const Label = styled.label`
   display: block;

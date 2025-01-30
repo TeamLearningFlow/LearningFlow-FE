@@ -1,7 +1,7 @@
 // pages/home.tsx
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import TopLogo from '../components/homeHeader';
+import TopLogo from '../components/home/homeHeader';
 import HomeModal from '../pages/modal/homeModal';
 
 const Wrapper = styled.div`

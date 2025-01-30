@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import invisibleicon from '../assets/invisibleicon.svg';
 import visibleicon from '../assets/visibleicon.svg';
-import { ValidationCheck } from './validation';
+import { ValidationCheck } from '../register/validation';
 
 const InputWrapper = styled.div<{
   isFocused: boolean;

@@ -5,10 +5,10 @@ import styled from 'styled-components';
 import LeftUI from '../../components/leftUI';
 import Divider from '../../components/divider';
 import GoogleAuthButton from '../../components/googleAuthButton';
-import SignupAuthButton from '../../components/signupAuthButton';
-import SignupInputEmail from '../../components/signupInputEmail';
-import SignupInputPw from '../../components/signupInputPw';
-import InputPwCheck from '../../components/inputPwCheck';
+import SignupAuthButton from '../../components/register/signupAuthButton';
+import SignupInputEmail from '../../components/register/signupInputEmail';
+import SignupInputPw from '../../components/register/signupInputPw';
+import InputPwCheck from '../../components/register/inputPwCheck';
 import TopLogo from '../../components/topLogo_light';
 import EmailAuthPage from './emailAuth';
 
@@ -81,10 +81,13 @@ const RegisterPage: React.FC = () => {
       //   password: password,
       // });
 
-      const response = await axios.post('http://onboarding.p-e.kr:8080/register', {
-        email: email,
-        password: password,
-      });
+      const response = await axios.post(
+        'http://onboarding.p-e.kr:8080/register',
+        {
+          email: email,
+          password: password,
+        },
+      );
 
       console.log('Response:', response);
       // alert('회원가입 성공');
@@ -172,7 +175,7 @@ const RegisterPage: React.FC = () => {
                           fontWeight: 'bold',
                         }}
                       >
-                        개인정보 처리방침                         
+                        개인정보 처리방침
                       </span>
                     </Link>
                     에 동의하는 것으로 간주합니다.

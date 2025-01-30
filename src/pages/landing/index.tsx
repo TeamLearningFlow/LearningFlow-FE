@@ -5,7 +5,7 @@ import Page1 from './page1';
 import Page2 from './page2';
 import Page3 from './page3';
 import styled from 'styled-components';
-import TopLogo from '../../components/landingHeader';
+import TopLogo from '../../components/landing/landingHeader';
 
 const PageIndicator = styled.div`
   display: flex;
