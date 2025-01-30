@@ -246,7 +246,11 @@ const userModal: React.FC = () => {
       </InfoTop>
       <Hr />
       <InfoMid>
-        <MidTitle>마이페이지</MidTitle>
+        <MidTitle>
+          {/* <a href="/mypage"> */}
+          마이페이지
+          {/* </a> */}
+        </MidTitle>
         <MidLearning>
           <MidLearningIMG>
             <BookIMG src={bookIMG} alt="학습방" width={20} height={20} />
@@ -257,7 +261,11 @@ const userModal: React.FC = () => {
           <MidLikeIMG>
             <LikeIMG src={likeIMG} alt="좋아요" width={20} height={20} />
           </MidLikeIMG>
-          <MidLikeLetter>좋아요</MidLikeLetter>
+          <MidLikeLetter>
+            {/* <a href="/좋아요"> */}
+            좋아요
+            {/* </a> */}
+          </MidLikeLetter>
         </MidLike>
         <MidSettings>
           <MidSettingsIMG>
@@ -268,7 +276,11 @@ const userModal: React.FC = () => {
               height={20}
             />
           </MidSettingsIMG>
-          <MidSettingsLetter>계정 설정</MidSettingsLetter>
+          <MidSettingsLetter>
+            {/* <a href="/계정설정"> */}
+            계정 설정
+            {/* </a> */}
+          </MidSettingsLetter>
         </MidSettings>
       </InfoMid>
       <Hr />
@@ -277,7 +289,11 @@ const userModal: React.FC = () => {
           <BottomLogoutIMG>
             <LogoutIMG src={logoutIMG} alt="로그아웃" width={20} height={20} />
           </BottomLogoutIMG>
-          <BottomLogoutLetter>로그아웃</BottomLogoutLetter>
+          <BottomLogoutLetter>
+            {/* <a href="/로그아웃"> */}
+            로그아웃
+            {/* </a> */}
+          </BottomLogoutLetter>
         </ButtomLogout>
       </InfoBottom>
     </UserModalWrapper>

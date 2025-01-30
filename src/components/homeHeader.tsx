@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import LogoDark from '../assets/logo_dark.png';
@@ -32,7 +32,7 @@ const HeaderWrapper = styled.header`
 `;
 
 const LogoWrapper = styled.div<{ $state: string }>`
-  display: flex:
+  display: flex;
   align-items: center;
   margin-top: 5px;
   flex-shrink: 0;
@@ -143,18 +143,23 @@ const ProfileIcon = styled.div`
 const ProfileUser = styled.div`
   position: absolute;
   display: flex;
-  width: 100%;
-  padding-right: 10%;
-  justify-content: flex-end;
+  // width: 100%;
+  // width: 30%;
+  // justify-content: flex-end;
+  margin-right: 10%;
+  top: 60px;
+  right: 0px;
   margin-top: 7px;
 
-  z-index: 100;
+  z-index: 1;
 `;
 
 const Header: React.FC = () => {
   const [searchState, setSearchState] = useState<string>('Inactive'); // 검색 박스 상태
   const [searchValue, setSearchValue] = useState(''); // 입력 값
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const profileIconRef = useRef<HTMLDivElement>(null);
 
   const handleFocus = () => {
     setSearchState('Active'); // 검색 박스 활성화
@@ -189,9 +194,34 @@ const Header: React.FC = () => {
     setSearchState('Active'); // 텍스트 삭제 시 초기화
   };
 
-  const handleProfileClick = () => {
-    setIsModalOpen(!isModalOpen);
+  // 사용자 아이콘 클릭 시 모달 토글
+  const toggleModal = () => {
+    setIsModalOpen((prev) => !prev);
   };
+
+  // 모달 외부 클릭 시 닫기
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node) &&
+        profileIconRef.current &&
+        !profileIconRef.current.contains(event.target as Node) // 프로필 아이콘 클릭 여부 체크
+      ) {
+        setIsModalOpen(false);
+      }
+    };
+
+    if (isModalOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isModalOpen]);
 
   return (
     <>
@@ -228,12 +258,13 @@ const Header: React.FC = () => {
             alt="profile"
             width={40}
             height={40}
-            onClick={handleProfileClick}
+            onClick={toggleModal}
+            ref={profileIconRef}
           />
         </ProfileIcon>
       </HeaderWrapper>
       {isModalOpen && (
-        <ProfileUser>
+        <ProfileUser ref={modalRef}>
           <UserModal />
         </ProfileUser>
       )}
