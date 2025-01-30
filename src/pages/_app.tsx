@@ -1,7 +1,6 @@
 import React from 'react';
 import type { AppProps } from 'next/app';
 import { createGlobalStyle } from 'styled-components';
-import { LoginProvider } from '../pages/context/LoginContext';
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -10,21 +9,18 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
 
-  body, html {
+  body {
     font-family: Pretendard;
     background-color: #fff;
     color: #333;
-    overflow-x: hidden;
   }
 `;
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
-      <LoginProvider>
-        <GlobalStyle />
-        <Component {...pageProps} />
-      </LoginProvider>
+      <GlobalStyle />
+      <Component {...pageProps} />
     </>
   );
 }
