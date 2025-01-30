@@ -8,7 +8,7 @@ import LeftUI from '../../components/leftUI';
 import Divider from '../../components/divider';
 import GoogleAuthButton from '../../components/googleAuthButton';
 import AuthButton from '../../components/login/authButton';
-import TopLogo from '../../components/topLogo';
+import TopLogo from '../../components/topLogo_light';
 import { LoginContext } from '../context/LoginContext';
 
 const PageContainer = styled.div`

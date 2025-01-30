@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import TopLogo from '../../components/toplogo_guest';
+import DarkTopLogo from '../../components/topLogo_dark';
 // import EmailIcon from './assets/mailIcon.png';
 // import Image from 'next/image';
 import EmailAuthModal from '../modal/emailAuthModal';
@@ -18,7 +18,7 @@ const EmailAuthPage: React.FC = () => {
 
   return (
     <Container>
-      <TopLogo />
+      <DarkTopLogo />
       <PageContainer>
         <TitleContainer>인증 메일을 보내드렸어요</TitleContainer>
         <IconContainer>

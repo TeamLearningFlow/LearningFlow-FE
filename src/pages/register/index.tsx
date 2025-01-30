@@ -8,7 +8,7 @@ import GoogleAuthButton from '../../components/googleAuthButton';
 import SignupAuthButton from '../../components/register/signupAuthButton';
 import SignupInputEmail from '../../components/register/signupInputEmail';
 import SignupInputPw from '../../components/register/signupInputPw';
-import InputPwCheck from '../../components/register/inputPwCheck';
+import InputPwCheck from '../../components/register/signupinputPwCheck';
 import TopLogo from '../../components/topLogo_light';
 import EmailAuthPage from './emailAuth';
 

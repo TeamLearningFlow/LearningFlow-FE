@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 
-
 const PageWrapper = styled.div`
   width: 100vw;
   height: 100vh;
@@ -30,7 +29,8 @@ const Textwrapper = styled.div`
   line-height: 1.7em;
 `;
 
-{/* const BackButton = styled.button`
+{
+  /* const BackButton = styled.button`
   display: flex;
   height: 50px;
   padding: 18px 8px;
@@ -46,7 +46,8 @@ const Textwrapper = styled.div`
   color: rgba(255, 255, 255, 1);
   cursor: pointer;
   margin: 48px auto;
-`; */}
+`; */
+}
 
 const FirstContractContainer = styled.div`
   display: flex;
@@ -88,10 +89,11 @@ const TableCell = styled.td`
 `;
 
 const PrivacyContracts: React.FC = () => {
-
-  {/* const handleBackToRegister = () => {
+  {
+    /* const handleBackToRegister = () => {
     router.push('/register');
-  }; */}
+  }; */
+  }
 
   return (
     <>
@@ -164,7 +166,7 @@ const PrivacyContracts: React.FC = () => {
                 <colgroup>
                   <col style={{ width: '40%' }} />
                   <col style={{ width: '60%' }} />
-                </colgroup>                
+                </colgroup>
                 <tbody>
                   <tr>
                     <TableHeader colSpan={2}>
@@ -306,7 +308,7 @@ const PrivacyContracts: React.FC = () => {
             </FirstTableContainer>
           </FirstContractContainer>
           <p style={{ fontSize: '18px', fontWeight: 'bold' }}>
-             본 방침은 2024년 2월 20일부터 적용됩니다.
+            본 방침은 2024년 2월 20일부터 적용됩니다.
           </p>
         </PageContainer>
         {/* <BackButton onClick={handleBackToRegister}>뒤로가기</BackButton> */}
