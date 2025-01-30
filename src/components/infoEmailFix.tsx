@@ -3,154 +3,136 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import X from '../assets/X_red.svg';
 
-const InputWrapper = styled.div<{
-  isValid: boolean;
-  isFocused: boolean;
-  isChecked: boolean;
-}>`
-  display: flex;
-  width: 100%;
-  height: 50px;
-  position: relative;
+const GridContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 10px;
   align-items: center;
-  border: 0.696px solid
-    ${(props) => {
-      if (props.isFocused) {
-        // 포커스 시 유효한 이메일이면 보라색, 아니면 빨간색 테두리
-        return props.isValid ? '#5E52FF' : '#ec2d30';
-      }
-      if (props.isChecked) {
-        // 유효성 검사 후 포커스가 없으면 테두리 색을 #181818로 설정
-        return props.isValid ? '#181818' : '#ec2d30';
-      }
-      // 포커스도 없고 유효성 검사 전이면 기본 색상
-      return '#323538';
-    }};
-  border-radius: 6.962px;
-  box-shadow: ${(props) => {
-    if (props.isFocused && props.isValid) {
-      return '2px 2px 2px 0px rgba(94, 82, 255, 0.30), -2px -2px 2px 0px rgba(94, 82, 255, 0.30)';
-    }
-    return 'none';
-  }};
-
-  overflow: hidden;
-  padding: 12px;
-  margin-bottom: 7px;
 `;
 
-const Input = styled.input<{
-  isValid: boolean;
-  isFocused: boolean;
-  isChecked: boolean;
-}>`
-  flex: 1;
-  border: none;
+const Input = styled.input<{ hasError?: boolean; isFocused?: boolean }>`
+  width: 100%;
+  height: 40px;
+  padding: 10px;
+  border: 0.9px solid
+    ${({ hasError, isFocused }) => {
+      if (hasError) return '#ec2d30'; // 에러
+      if (isFocused) return '#5e52ff'; // 입력 중일 때
+      return '#323538'; // 기본 상태
+    }};
+  border-radius: 6px;
   outline: none;
-  font-size: 15px;
-  padding-right: 40px;
-  margin-left: 15px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: ${({ isValid }) => (isValid ? '#1f1f1f' : '#ec2d30')};
-  background-color: transparent;
-
-  &::placeholder {
-    color: #afb8c1;
-  }
+  color: ${({ hasError }) => (hasError ? '#ec2d30' : '#1f1f1f')};
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 150%; /* 24px */
+  letter-spacing: -0.32px;
+  box-shadow: ${({ isFocused }) =>
+    isFocused
+      ? '1px 1px 1px 0px rgba(94, 82, 255, 0.30), -1px -1px 1px 0px rgba(94, 82, 255, 0.30)'
+      : 'none'};
 `;
 
 const ErrorContainer = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 4px;
-`;
-
-const XImg = styled(Image)`
-  margin-top: 1px;
-`;
-
-const EmailErrorMsg = styled.span`
-  margin-left: 4px;
-  font-size: 14px;
+  gap: 8px;
   color: #ec2d30;
+  font-size: 14px;
+  margin-top: 5px;
+`;
+
+const Button = styled.button<{ primary?: boolean }>`
+  padding: 6px 12px;
+  border: 0.5px solid #bdc5cc;
+  border-radius: 6px;
+  background-color: ${({ primary }) => (primary ? '#5e52ff' : '#ffffff')};
+  color: ${({ primary }) => (primary ? '#ffffff' : '#000')};
+  font-size: 14px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${({ primary }) => (primary ? '#3c31c8' : '#f0f0f0')};
+  }
 `;
 
 interface InfoEmailFixProps {
-  email: string;
-  setEmail: (email: string) => void;
-  isValidEmail: boolean;
-  setIsValidEmail: (isValid: boolean) => void;
-  onEnterPress: () => void; // 엔터 눌렀을 때 호출할 함수
+  initialEmail: string;
+  onSave: (newEmail: string) => void;
+  onCancel: () => void;
 }
 
 const InfoEmailFix: React.FC<InfoEmailFixProps> = ({
-  email,
-  setEmail,
-  isValidEmail,
-  setIsValidEmail,
-  onEnterPress,
+  initialEmail,
+  onSave,
+  onCancel,
 }) => {
+  const [email, setEmail] = useState(initialEmail);
+  const [error, setError] = useState('');
   const [isFocused, setIsFocused] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [isChecked, setIsChecked] = useState(false); // 엔터 입력 여부 확인
 
-  const validateEmail = (email: string): boolean => {
-    const emailRegex =
-      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|org|net|edu|gov|io|ai)$/;
-    return emailRegex.test(email);
+  const validateEmail = (value: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(value);
   };
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newEmail = e.target.value;
-    setEmail(newEmail);
-    setIsValidEmail(validateEmail(newEmail));
-    setErrorMessage('');
-    setIsChecked(false);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+    setError(''); // 입력 중일 때는 오류 메시지 제거
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      const isValid = validateEmail(email);
-      setIsValidEmail(isValid);
-      setIsChecked(true);
-      setErrorMessage(isValid ? '' : '올바른 이메일 형식이 아닙니다');
-
-      if (isValid) {
-        setIsFocused(false);
-        onEnterPress(); // 엔터를 눌렀을 때 BasicInfo.tsx로 변경 내용 전달
+      if (validateEmail(email)) {
+        setError('');
+        setIsFocused(false); // 유효하면 기본 테두리로 변경
+      } else {
+        setError('올바른 이메일 형식이 아닙니다');
       }
     }
   };
 
   return (
-    <div>
-      <InputWrapper
-        isValid={isValidEmail}
-        isFocused={isFocused} /*|| email !== ''*/
-        onBlur={() => setIsFocused(false)}
-        isChecked={isChecked}
-      >
+    <>
+      <GridContainer>
         <Input
-          type="email"
-          placeholder="이메일 주소를 적어주세요"
+          type="text"
           value={email}
-          onFocus={() => setIsFocused(true)}
-          onChange={handleEmailChange}
-          onKeyDown={handleKeyPress}
-          isValid={isValidEmail}
-          isFocused={isFocused}
+          onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
+          onFocus={() => {
+            setIsFocused(true);
+            setError('');
+          }}
           onBlur={() => setIsFocused(false)}
-          isChecked={isChecked}
+          hasError={!!error}
+          isFocused={isFocused}
+          placeholder="이메일을 입력하세요"
         />
-      </InputWrapper>
-      {!isValidEmail && isChecked && (
+        <Button onClick={onCancel}>취소</Button>
+        <Button
+          primary
+          onClick={() => {
+            if (validateEmail(email)) {
+              onSave(email);
+            } else {
+              setError('올바른 이메일 형식이 아닙니다');
+            }
+          }}
+        >
+          저장
+        </Button>
+      </GridContainer>
+      {error && (
         <ErrorContainer>
-          <XImg src={X} alt="X" />
-          <EmailErrorMsg>{errorMessage}</EmailErrorMsg>
+          <Image src={X} alt="error icon" width={16} height={16} />
+          <span>{error}</span>
         </ErrorContainer>
       )}
-    </div>
+    </>
   );
 };
 

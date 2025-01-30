@@ -205,7 +205,7 @@ const CheckList = styled.div`
 
 const MyProfile = () => {
   const [isEditing, setIsEditing] = useState(false); // 편집 모드
-  const [profileData, setProfileData] = useState({
+  const [originalProfileData, setOriginalProfileData] = useState({
     nickname: '푸글',
     job: '대학생',
     profileImage: userProfile,
@@ -213,6 +213,7 @@ const MyProfile = () => {
     preferredMedia: 50,
     selectedCategories: [] as string[],
   });
+  const [profileData, setProfileData] = useState(originalProfileData);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -240,19 +241,28 @@ const MyProfile = () => {
     }));
   };
 
-  const handleMediaPreferenceChange = (value) => {
+  const handleMediaPreferenceChange = (value: number) => {
     setProfileData((prev) => ({
       ...prev,
       preferredMedia: value,
     }));
   };
 
-  const handleEdit = () => setIsEditing(true); // 편집 모드 활성화
+  const handleEdit = () => {
+    setOriginalProfileData(profileData); // 초기 데이터 저장
+    setIsEditing(true);
+  };
+
   const handleSave = () => {
     setIsEditing(false); // 편집 모드 비활성화
+    setOriginalProfileData(profileData); // 데이터 업데이트
     console.log(profileData); // 변경 데이터 확인
   };
-  const handleCancel = () => setIsEditing(false); // 편집 취소
+
+  const handleCancel = () => {
+    setProfileData(originalProfileData); // 초기 데이터로 복원
+    setIsEditing(false);
+  };
 
   return (
     <Section>
@@ -321,7 +331,7 @@ const MyProfile = () => {
             type="text"
             name="nickname"
             value={profileData.nickname}
-            placeholder={profileData.nickname}
+            // placeholder={profileData.nickname}
             onChange={handleInputChange}
           />
         ) : (
@@ -334,7 +344,7 @@ const MyProfile = () => {
             type="text"
             name="job"
             value={profileData.job}
-            placeholder={profileData.nickname}
+            // placeholder={profileData.job}
             onChange={handleInputChange}
           />
         ) : (
