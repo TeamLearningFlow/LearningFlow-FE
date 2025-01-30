@@ -147,6 +147,8 @@ const ProfileUser = styled.div`
   padding-right: 10%;
   justify-content: flex-end;
   margin-top: 7px;
+
+  z-index: 100;
 `;
 
 const Header: React.FC = () => {

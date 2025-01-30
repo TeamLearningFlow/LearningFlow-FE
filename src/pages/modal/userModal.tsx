@@ -11,11 +11,12 @@ const UserModalWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 250px;
+  width: 240px;
 
-  border: 1px solid black;
-  border-radius: 15px;
+  border: 1px solid rgba(221, 224, 228, 1);
+  border-radius: 16px;
   background-color: #fff;
+  box-shadow: 1.5px 2px 8px 0px rgba(0, 0, 0, 0.1);
 
   white-space: nowrap;
 `;
@@ -66,7 +67,7 @@ const UserJob = styled.div`
 `;
 
 const UserEmail = styled.div`
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 400;
   line-height: 150%;
   letter-spacing: -0.28px;
@@ -75,8 +76,8 @@ const UserEmail = styled.div`
 `;
 
 const Hr = styled.div`
-  background-color: #959ca4;
-  height: 0.2px;
+  background-color: rgba(221, 224, 228, 1);
+  height: 0.5px;
   width: 100%;
 `;
 
@@ -85,6 +86,7 @@ const InfoMid = styled.div`
   flex-direction: column;
 
   padding: 15px;
+  padding-bottom: 18px;
   margin-left: 5px;
 `;
 
@@ -95,7 +97,11 @@ const MidTitle = styled.div`
   letter-spacing: -0.4px;
   color: #959ca4;
 
+  margin-top: 3px;
   margin-bottom: 15px;
+
+  cursor: pointer;
+  display: inline-block;
 `;
 
 const MidLearning = styled.div`
@@ -116,14 +122,14 @@ const BookIMG = styled(Image)`
 `;
 
 const MidLearningLetter = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   font-size: 16px;
   font-weight: 400;
   line-height: 150%;
   letter-spacing: -0.4px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
 
   cursor: pointer;
 `;
