@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import X from '../assets/X_red.svg';
+import InvisibleIcon from '../assets/invisibleicon.svg';
+import VisibleIcon from '../assets/visibleicon.svg';
 
 const Section = styled.div`
   margin-bottom: 20px;
@@ -124,13 +126,21 @@ const Button = styled.button<{ primary?: boolean }>`
 `;
 
 const BasicInfo = () => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [originalEmail, setOriginalEmail] = useState('onboarding@gmail.com');
+  const [isEditingEmail, setIsEditingEmail] = useState(false);
+  const [isEditingPassword, setIsEditingPassword] = useState(false);
+  const [originalEmail, setOriginalEmail] = useState('onboarding@gmail.com'); // 이메일 예시
+  const [originalPassword, setOriginalPassword] = useState('Abcd1234%&'); // 비밀번호 예시
   const [email, setEmail] = useState(originalEmail);
+  const [password, setPassword] = useState(originalPassword);
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [isValid, setIsValid] = useState(true);
+  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+  const [isPasswordChecked, setIsPasswordChecked] = useState(false);
+  const [isPasswordValid, setIsPasswordValid] = useState(true);
 
   const validateEmail = (value: string) => {
     const emailRegex =
@@ -138,11 +148,30 @@ const BasicInfo = () => {
     return emailRegex.test(value);
   };
 
+  const validatePassword = (value: string) => {
+    const conditions = {
+      hasUpperCase: /[A-Z]/.test(value),
+      hasLowerCase: /[a-z]/.test(value),
+      hasSpecialChar: /[!@#$%^&*()_+]/.test(value),
+      hasNumber: /[0-9]/.test(value),
+      isLengthValid: value.length >= 8 && value.length <= 16,
+      hasNoSpaces: !/\s/.test(value),
+    };
+    return Object.values(conditions).every(Boolean);
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
     setIsChecked(false);
     setError('');
     setIsValid(true);
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+    setIsPasswordChecked(false);
+    setPasswordError('');
+    setIsPasswordValid(true);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -157,17 +186,50 @@ const BasicInfo = () => {
     }
   };
 
-  const handleSave = () => {
+  const handlePasswordKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      const isValidPassword = validatePassword(password);
+      setIsPasswordValid(isValidPassword);
+      setIsPasswordChecked(true);
+      setPasswordError(
+        isValidPassword
+          ? ''
+          : '비밀번호는 8~16자, 대소문자, 특수문자, 숫자가 포함되어야 합니다',
+      );
+      if (isValidPassword) {
+        setIsPasswordFocused(false);
+      }
+    }
+  };
+
+  const handleSaveEmail = () => {
     if (validateEmail(email)) {
-      setIsEditing(false);
+      setOriginalEmail(email); // 변경된 이메일 저장
+      setIsEditingEmail(false);
     } else {
       setError('올바른 이메일 형식이 아닙니다');
     }
   };
 
-  const handleCancel = () => {
+  const handleSavePassword = () => {
+    if (validatePassword(password)) {
+      setOriginalPassword(password); // 변경된 비밀번호 저장
+      setIsEditingPassword(false);
+    } else {
+      setPasswordError(
+        '비밀번호는 8~16자, 대소문자, 특수문자, 숫자가 포함되어야 합니다',
+      );
+    }
+  };
+
+  const handleCancelEmail = () => {
     setEmail(originalEmail);
-    setIsEditing(false);
+    setIsEditingEmail(false);
+  };
+
+  const handleCancelPassword = () => {
+    setPassword(originalPassword);
+    setIsEditingPassword(false);
   };
 
   return (
@@ -176,7 +238,7 @@ const BasicInfo = () => {
 
       <InfoRow>
         <Label>이메일</Label>
-        {isEditing ? (
+        {isEditingEmail ? (
           <InputContainer>
             <InputWrapper
               isFocused={isFocused}
@@ -201,8 +263,8 @@ const BasicInfo = () => {
               </ErrorContainer>
             )}
             <ButtonContainer>
-              <Button onClick={handleCancel}>취소</Button>
-              <Button primary onClick={handleSave}>
+              <Button onClick={handleCancelEmail}>취소</Button>
+              <Button primary onClick={handleSaveEmail}>
                 저장
               </Button>
             </ButtonContainer>
@@ -210,15 +272,66 @@ const BasicInfo = () => {
         ) : (
           <>
             <Value>{email}</Value>
-            <SetButton onClick={() => setIsEditing(true)}>설정</SetButton>
+            {!isEditingPassword && (
+              <SetButton onClick={() => setIsEditingEmail(true)}>
+                설정
+              </SetButton>
+            )}
           </>
         )}
       </InfoRow>
 
       <InfoRow>
         <Label>비밀번호</Label>
-        <Value>**********</Value>
-        {!isEditing && <SetButton>설정</SetButton>}
+        {isEditingPassword ? (
+          <InputContainer>
+            <InputWrapper
+              isFocused={isPasswordFocused}
+              isValid={isPasswordValid}
+              isChecked={isPasswordChecked}
+            >
+              <Input
+                type={showPassword ? 'text' : 'password'}
+                placeholder="비밀번호를 입력하세요"
+                value={password}
+                onChange={handlePasswordChange}
+                onFocus={() => setIsPasswordFocused(true)}
+                onBlur={() => setIsPasswordFocused(false)}
+                onKeyDown={handlePasswordKeyDown}
+                isValid={isPasswordValid}
+              />
+              <Image
+                src={showPassword ? VisibleIcon : InvisibleIcon}
+                alt="toggle visibility"
+                onClick={() => setShowPassword(!showPassword)}
+                width={20}
+                height={20}
+                style={{ cursor: 'pointer', marginLeft: '10px' }}
+              />
+            </InputWrapper>
+            {passwordError && (
+              <ErrorContainer>
+                <Image src={X} alt="Error icon" width={16} height={16} />
+                <span>{passwordError}</span>
+              </ErrorContainer>
+            )}
+            <ButtonContainer>
+              <Button onClick={handleCancelPassword}>취소</Button>
+              <Button primary onClick={handleSavePassword}>
+                저장
+              </Button>
+            </ButtonContainer>
+          </InputContainer>
+        ) : (
+          <>
+            <Value>**********</Value>
+            {!isEditingEmail && (
+              <SetButton onClick={() => setIsEditingPassword(true)}>
+                설정
+              </SetButton>
+            )}
+          </>
+        )}
       </InfoRow>
     </Section>
   );
