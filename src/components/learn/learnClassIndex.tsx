@@ -1,9 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import CheckedYoutube from '../assets/checkedYoutube.svg';
-import Youtube from '../assets/Youtube.svg';
-
+import CheckedYoutube from '../../assets/platformicon/youtube_checked_ic.svg';
+import YoutubeIcon from '../../assets/platformicon/youtube_nostroke_ic.svg';
 
 const IndexWrapper = styled.div`
   display: flex;
@@ -91,7 +90,6 @@ const TitleBox = styled.div`
   font-weight: 600;
 `;
 
-
 interface ClassListProps {
   orderText?: string;
   title?: string;
@@ -102,42 +100,47 @@ export const CompletedClass: React.FC<ClassListProps> = ({
   title = '브랜치 포스터 "와이어프레임을 활용하는 이유"',
 }) => {
   return (
-      <IndexWrapper>
-        <PlatformIcon>
-          <Image src={CheckedYoutube} alt="platform-icon" width={50} height={50} />
-        </PlatformIcon>
-        <IndexContainer>
-          <OrderBox>{orderText}</OrderBox>
-          <TitleBox>{title}</TitleBox>
-        </IndexContainer>
-      </IndexWrapper>
+    <IndexWrapper>
+      <PlatformIcon>
+        <Image
+          src={CheckedYoutube}
+          alt="platform-icon"
+          width={50}
+          height={50}
+        />
+      </PlatformIcon>
+      <IndexContainer>
+        <OrderBox>{orderText}</OrderBox>
+        <TitleBox>{title}</TitleBox>
+      </IndexContainer>
+    </IndexWrapper>
   );
 };
 
 export const CurrentClass: React.FC = () => {
   return (
-      <CurrentIndexWrapper>
-        <CurrentPlatformIcon>
-          <Image src={Youtube} alt="platform-icon" width={45} height={45} />
-        </CurrentPlatformIcon>
-        <IndexContainer>
-          <CurrentOrderBox>3회차</CurrentOrderBox>
-          <TitleBox>브랜치 포스터 "와이어프레임을 활용하는 이유"</TitleBox>
-        </IndexContainer>
-      </CurrentIndexWrapper>
+    <CurrentIndexWrapper>
+      <CurrentPlatformIcon>
+        <Image src={YoutubeIcon} alt="platform-icon" width={45} height={45} />
+      </CurrentPlatformIcon>
+      <IndexContainer>
+        <CurrentOrderBox>3회차</CurrentOrderBox>
+        <TitleBox>브랜치 포스터 "와이어프레임을 활용하는 이유"</TitleBox>
+      </IndexContainer>
+    </CurrentIndexWrapper>
   );
 };
 
 export const NextClass: React.FC = () => {
-    return (
-        <IndexWrapper>
-          <PlatformIcon>
-            <Image src={Youtube} alt="platform-icon" width={45} height={45} />
-          </PlatformIcon>
-          <IndexContainer>
-            <OrderBox>3회차</OrderBox>
-            <TitleBox>브랜치 포스터 "와이어프레임을 활용하는 이유"</TitleBox>
-          </IndexContainer>
-        </IndexWrapper>
-    );
+  return (
+    <IndexWrapper>
+      <PlatformIcon>
+        <Image src={YoutubeIcon} alt="platform-icon" width={45} height={45} />
+      </PlatformIcon>
+      <IndexContainer>
+        <OrderBox>3회차</OrderBox>
+        <TitleBox>브랜치 포스터 "와이어프레임을 활용하는 이유"</TitleBox>
+      </IndexContainer>
+    </IndexWrapper>
+  );
 };

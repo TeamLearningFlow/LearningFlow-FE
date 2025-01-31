@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import CheckIcon from '../assets/checkIcon.svg';
+import CheckIcon from '../../assets/checkIcon.svg';
 
 const TitleWrapper = styled.div`
   display: flex;

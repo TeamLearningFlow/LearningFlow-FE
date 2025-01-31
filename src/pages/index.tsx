@@ -14,6 +14,7 @@ const App = () => {
         <Link href="/form"></Link>
         <Link href="/contracts"></Link>
         <Link href="/colllection"></Link>
+        <Link href="/learn"></Link>
       </p>
     </div>
   );
