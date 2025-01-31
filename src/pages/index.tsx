@@ -6,6 +6,8 @@ const App = () => {
     <div>
       <p>
         <Link href="/login"></Link>
+        <Link href="/mypage"></Link>
+        <Link href="/mypage/profile"></Link>
         <Link href="/register"></Link>
         <Link href="/search"></Link>
         <Link href="/home"></Link>
