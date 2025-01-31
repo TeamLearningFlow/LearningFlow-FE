@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import PlayButton from '../assets/playButton.svg';
-import CompletedIndexIcon from '../assets/completedIndexIcon.svg';
-import EndIndexIcon from '../assets/EndIndexIcon.svg';
+import PlayButton from '../../assets/playButton.svg';
+import CompletedIndexIcon from '../../assets/completedIndexIcon.svg';
+import EndIndexIcon from '../../assets/EndIndexIcon.svg';
 
 const ComponentWrapper = styled.div`
   display: flex;

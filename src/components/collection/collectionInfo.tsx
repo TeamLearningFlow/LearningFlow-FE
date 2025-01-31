@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import tmpIMG from '../assets/tmpIMG.png';
-import collectionInfoIMG from '../assets/CollectionInfo.png';
-import youtubeIMG from '../assets/Youtube.svg';
-import tistoryIMG from '../assets/Tistory.svg';
-import blogIMG from '../assets/NaverBlog.svg';
-import velogIMG from '../assets/Velog.svg';
-import line from '../assets/Line.svg';
-import dot from '../assets/dot.svg';
-import plane from '../assets/Airplane.svg';
+import tmpIMG from '../../assets/tmpIMG.svg';
+import collectionInfoIMG from '../../assets/CollectionInfo.svg';
+import NaverblogIcon from '../../assets/platformicon/naverblog_nostroke_ic.svg';
+import TistoryIcon from '../../assets/platformicon/tistory_nostroke_ic.svg';
+import VelogIcon from '../../assets/platformicon/velog_nostroke_ic.svg';
+import YoutubeIcon from '../../assets/platformicon/youtube_nostroke_ic.svg';
+import line from '../../assets/Line.svg';
+import dot from '../../assets/dot.svg';
+import plane from '../../assets/Airplane.svg';
 
 const CollectionInfo: React.FC = () => {
   return (
@@ -27,10 +27,10 @@ const CollectionInfo: React.FC = () => {
           <Keyword>키워드3</Keyword>
         </KeywordBox>
         <TypeImgBox>
-          <TypeImg src={youtubeIMG} alt="youtube" index={0} />
-          <TypeImg src={tistoryIMG} alt="tistory" index={1} />
-          <TypeImg src={blogIMG} alt="blog" index={2} />
-          <TypeImg src={velogIMG} alt="velog" index={3} />
+          <TypeImg src={YoutubeIcon} alt="youtube" index={0} />
+          <TypeImg src={TistoryIcon} alt="tistory" index={1} />
+          <TypeImg src={NaverblogIcon} alt="blog" index={2} />
+          <TypeImg src={VelogIcon} alt="velog" index={3} />
           {/* <TypeImgEtc>+</TypeImgEtc> */}
           {/* <TypeImgEtcNum>4</TypeImgEtcNum> */}
           <TypeImgLetterBox>

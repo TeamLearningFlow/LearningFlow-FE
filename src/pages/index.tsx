@@ -13,6 +13,7 @@ const App = () => {
         <Link href="/landing"></Link>
         <Link href="/form"></Link>
         <Link href="/contracts"></Link>
+        <Link href="/colllection"></Link>
       </p>
     </div>
   );
