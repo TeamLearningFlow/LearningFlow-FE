@@ -1,36 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import SignupPage from '../register';
-
-// interface ModalProps {
-//   onClose: () => void;
-// }
 
 const emailAuthModal: React.FC = ({ onClose, onContinue }) => {
-  const [showSignupPage, setShowSignupPage] = useState<boolean>(false);
-
-  const handleSignupPage = () => {
-    setShowSignupPage(true);
-  };
-
   return (
     <>
-      {!showSignupPage ? (
-        <ModalWrapper>
-          <ModalBox>
-            <Title>이전 페이지로 돌아갈까요?</Title>
-            <Description>
-              지금 돌아가면 입력하신 회원가입 정보는 삭제됩니다.
-            </Description>
-            <Button>
-              <BackButton onClick={onClose}>돌아갈래요</BackButton>
-              <ForwardButton onClick={onContinue}>이어서하기</ForwardButton>
-            </Button>
-          </ModalBox>
-        </ModalWrapper>
-      ) : (
-        <SignupPage />
-      )}
+      <ModalWrapper>
+        <ModalBox>
+          <Title>이전 페이지로 돌아갈까요?</Title>
+          <Description>
+            지금 돌아가면 입력하신 회원가입 정보는 삭제됩니다.
+          </Description>
+          <Button>
+            <BackButton onClick={onClose}>돌아갈래요</BackButton>
+            <ForwardButton onClick={onContinue}>이어서하기</ForwardButton>
+          </Button>
+        </ModalBox>
+      </ModalWrapper>
     </>
   );
 };

@@ -36,14 +36,33 @@ const EndIconContainer = styled.div`
 `;
 
 const ButtonWrapper = styled.div`
-  position: absolute;
-  top: 82px;
-  right: -34px;
+  position: relative;
+  width: 110px;
+  height: 110px;
+  min-width: 40px;
+  min-height: 40px;
+
+  top: 85px;
+  right: -48px;
   transform: translateY(-50%);
   transition: transform 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media (max-width: 850px) {
+    top: 66px;
+    right: -48px;
+    width: 90px;
+    height: 90px;
+  }
+
+  @media (max-width: 560px) {
+    top: 66px;
+    right: -48px;
+    width: 90px;
+    height: 90px;
+  }
 `;
 
 const IndexWrapper = styled.div`
@@ -60,12 +79,34 @@ const IndexWrapper = styled.div`
   cursor: pointer;
   transition: background 0.5s;
 
+  border: 1px solid black;
+
   &:hover {
     background: rgba(245, 245, 255, 1);
 
     & > ${ButtonWrapper} {
-      transform: translate(-10px, -58px);
+      transform: translate(-10px, -63px);
+
+      @media (max-width: 850px) {
+        transform: translate(-7px, -50px);
+      }
+@media (max-width: 560px) {
+    
+  }
     }
+  }
+
+  @media (max-width: 850px) {
+    height: 80px;
+    padding: 0 3%;
+    margin-bottom: 15px;
+    
+  }
+
+  @media (max-width: 560px) {
+    height: 60px;
+    padding: 0 5%;
+    margin-bottom: 10px;
   }
 `;
 
@@ -77,14 +118,25 @@ const StartIndexWrapper = styled.div`
 `; 
 
 const PlatformIcon = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: relative;
   width: 50px;
   height: 50px;
-  border-radius: 50%;
-  background-color: #dcd9ff;
-  overflow: hidden;
+  min-width: 40px;
+  min-height: 40px;
+
+  @media (max-width: 850px) {
+    width: 45px;
+    height: 45px;
+    min-width: 35px;
+    min-height: 35px;
+  }
+
+  @media (max-width: 560px) {
+    width: 40px;
+    height: 40px;
+    min-width: 30px;
+    min-height: 30px;
+  }
 `;
 
 const StartIndexContainer = styled.div`
@@ -103,12 +155,36 @@ const OrderBox = styled.div`
   font-size: 15px;
   margin-bottom: 8px;
   color: rgba(149, 156, 164, 1);
+
+  @media (max-width: 850px) {
+    font-size: 13px;
+    margin-bottom: 7px;
+  }
+
+  @media (max-width: 560px) {
+    font-size: 10px;
+    margin-bottom: 5px;
+  }
 `;
 
 const TitleBox = styled.div`
-  display: flex;
+  display: inline-block;
   font-size: 18px;
   font-weight: 600;
+
+  @media (max-width: 850px) {
+    font-size: 16px;
+    margin-bottom: 7px;
+  }
+
+  @media (max-width: 560px) {
+    font-size: 12px;
+    margin-bottom: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px; 
+  }
 `;
 
 const StartIndex = () => {
@@ -149,14 +225,14 @@ const ClassIndex: React.FC<{ orderText: string; src: string }> = ({ orderText, s
       </IndexIcon>
       <IndexWrapper>
         <PlatformIcon>
-          <Image src={src} alt="platform-icon" width={60} height={60} />
+          <Image src={src} alt="platform-icon" fill style={{ objectFit: 'contain' }} />
         </PlatformIcon>
         <IndexContainer>
           <OrderBox>{orderText}</OrderBox>
           <TitleBox>브랜치 포스터 "와이어프레임을 활용하는 이유"</TitleBox>
         </IndexContainer>
         <ButtonWrapper>
-          <Image src={PlayButton} alt="Play Button" width={100} height={100} />
+          <Image src={PlayButton} alt="Play Button" fill style={{ objectFit: 'contain' }} />
         </ButtonWrapper>
       </IndexWrapper>
     </ComponentWrapper>

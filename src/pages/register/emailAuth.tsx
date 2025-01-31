@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import DarkTopLogo from '../../components/topLogo_dark';
 // import EmailIcon from './assets/mailIcon.png';
 // import Image from 'next/image';
-import EmailAuthModal from '../modal/emailAuthModal';
+import EmailAuthModal from '../../components/modal/emailAuthModal';
 import RegisterPage from './index';
 
 const EmailAuthPage: React.FC = () => {
