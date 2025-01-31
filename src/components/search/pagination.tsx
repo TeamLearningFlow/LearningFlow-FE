@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 // import axios from 'axios';
-import prevpage from '../assets/prevPage.svg';
-import prevpage_disabled from '../assets/prevpage_disabled.svg';
-import nextpage from '../assets/nextPage.svg';
-import nextpage_disabled from '../assets/nextPage_disabled.svg';
+import prevpage from '../../assets/prevPage.svg';
+import prevpage_disabled from '../../assets/prevpage_disabled.svg';
+import nextpage from '../../assets/nextPage.svg';
+import nextpage_disabled from '../../assets/nextPage_disabled.svg';
 
 const PageButtonWrapper = styled.div`
   margin-bottom: 32px;

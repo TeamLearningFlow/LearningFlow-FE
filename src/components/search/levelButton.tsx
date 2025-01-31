@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import ChevronDown from '../assets/chevronDown.svg';
+import ChevronDown from '../../assets/chevronDown.svg';
 
 // 타입 정의
 type Option = {
@@ -26,7 +26,7 @@ const DropdownButton = styled.button<{ isOpen: boolean; hasTags: boolean }>`
     props.hasTags || props.isOpen ? '1px solid #5E52FF' : '1px solid #dde0e4'};
   border-radius: 6px;
   height: 33px;
-  width: 70px;
+  width: 80px;
   font-size: 13px;
   font-weight: 500;
   line-height: 21px; /* 150% */
@@ -51,7 +51,7 @@ const DropdownMenu = styled.ul`
   border-radius: 8px;
   padding: 12px;
   list-style: none;
-  width: 128px;
+  width: 158px;
   z-index: 100;
   font-size: 14px;
   font-style: normal;
@@ -86,16 +86,17 @@ const Checkbox = styled.input`
   margin-top: -24px;
 `;
 
-const AmountButton: React.FC<DropdownProps & { selectedTags: string[] }> = ({
+const LevelButton: React.FC<DropdownProps & { selectedTags: string[] }> = ({
   onTagChange,
   selectedTags,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const options: Option[] = [
-    { label: '짧아요', description: '1 - 5 회차' },
-    { label: '적당해요', description: '5 - 10 회차' },
-    { label: '많아요', description: '11 회차 이상' },
+    { label: '입문', description: '누구나 들을 수 있는' },
+    { label: '초급', description: '선수 지식이 필요한' },
+    { label: '중급', description: '전문성을 높이는' },
+    { label: '실무', description: '실무에 사용 가능한' },
   ];
 
   const toggleOption = (label: string) => {
@@ -112,7 +113,7 @@ const AmountButton: React.FC<DropdownProps & { selectedTags: string[] }> = ({
         hasTags={selectedTags.length > 0}
         onClick={() => setIsOpen(!isOpen)}
       >
-        분량
+        난이도
         <Image src={ChevronDown} alt="chevrondown" />
       </DropdownButton>
       {isOpen && (
@@ -138,4 +139,4 @@ const AmountButton: React.FC<DropdownProps & { selectedTags: string[] }> = ({
   );
 };
 
-export default AmountButton;
+export default LevelButton;

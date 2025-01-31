@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import LevelButton from './levelButton';
-import AmountButton from './amountButton';
+import AmountButton from '../search/amountButton';
 import PreferenceButton from './preferButton';
 import Tags from './tags';
 

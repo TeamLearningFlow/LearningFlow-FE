@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import Polygon from '../assets/polygon.svg';
+import Polygon from '../../assets/polygon.svg';
 
 // filters.tsx에 전달
 type DropdownProps = {

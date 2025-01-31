@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import Header from '../components/searchHeader';
-import CategoryList from '../components/categoryList';
-import BoardingPass from '../components/boardingPass';
-import Filters from '../components/filters';
-import Pagination from '@/components/pagination';
+import CategoryList from '../components/search/categoryList';
+import BoardingPass from '../components/search/boardingPass';
+import Filters from '../components/search/filters';
+import Pagination from '@/components/search/pagination';
 
 const SearchPage: React.FC = () => {
   const [searchActive, setSearchActive] = useState(false); // 검색창 활성화 상태
