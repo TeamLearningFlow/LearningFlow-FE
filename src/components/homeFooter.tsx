@@ -12,6 +12,18 @@ const FooterWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media (max-width: 1024px) {
+    padding: 0 10%;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0;
+  }
+
+  @media (max-width: 560px) {
+    padding: 0 2%;
+  }
 `;
 
 const TextWrapper = styled.div`
@@ -32,6 +44,23 @@ const MenuWrapper = styled.div`
   gap: 20px;
 `;
 
+const SloganWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 20px;
+  margin-bottom: 8px;
+
+  @media (max-width: 850px) {
+    font-size: 17px;
+  }
+
+  @media (max-width: 560px) {
+    font-size: 14px;
+  }
+`;
+
 const StyledLink = styled(Link)`
   text-decoration: none;
   color: white;
@@ -41,17 +70,32 @@ const StyledLink = styled(Link)`
   &:hover {
     text-decoration: underline; /* hover 시 밑줄 효과 */
   }
+
+  @media (max-width: 560px) {
+    font-size: 10px;
+  }
 `;
 
 const FooterIconWrapper = styled.div`
+  position: relative;
   margin-top: 10px;
+  width: 150px;
+  height: 25px;
+
+  @media (max-width: 850px) {
+    width: 150px;
+  }
+
+  @media (max-width: 560px) {
+    width: 100px;
+  }
 `;
 
 const Footer: React.FC = () => {
   return (
     <FooterWrapper>
       <TextWrapper>
-        당신의 학습 여정을 함께하다
+        <SloganWrapper>당신의 학습 여정을 함께하다</SloganWrapper>
         <MenuWrapper>
           <StyledLink href="/register/contracts" target="_blank" rel="noopener noreferrer">
             개인정보처리방침
@@ -67,7 +111,10 @@ const Footer: React.FC = () => {
           </StyledLink>
         </MenuWrapper>
         <FooterIconWrapper>
-          <Image src={FooterIcon} alt="Footer Icon" width={150} height={25} />
+          <Image 
+          src={FooterIcon} 
+          alt="Footer Icon" 
+          fill style={{ objectFit: 'contain' }} />
         </FooterIconWrapper>
         <StyledLink href="/register/contracts" target="_blank" rel="noopener noreferrer">
           인스타그램
