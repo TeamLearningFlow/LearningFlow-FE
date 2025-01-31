@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import BoardingPass from './homeBoardingPass';
-import AirplaneIcon from '../assets/airplaneIcon.svg';
+import AirplaneIcon from '../../assets/airplaneIcon.svg';
 
 const HomeCollectionWrapper = styled.div`
   display: flex;

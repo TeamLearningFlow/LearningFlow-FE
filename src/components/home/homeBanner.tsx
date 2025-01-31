@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import Slider from 'react-slick';
-import BannerText from '../assets/bannerText.svg';
+import BannerText from '../../assets/bannerText.svg';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 

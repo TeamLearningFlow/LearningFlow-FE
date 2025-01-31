@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import MyProfile from './myprofile';
 import BasicInfo from './basicInfo';
+import Footer from '../../components/homeFooter';
 
 const Container = styled.div`
   width: 100%;
@@ -18,17 +19,9 @@ const ProfileContainer = styled.div`
   max-width: 1200px;
   background: #fff;
   border-radius: 32px;
-  margin: 40px 0;
+  margin: 40px 0 100px 0;
   padding: 24px 32px;
   box-sizing: border-box;
-`;
-
-const Footer = styled.footer`
-  width: 100%;
-  height: 180px;
-  background: #323538;
-  text-align: center;
-  margin-top: 70px;
 `;
 
 const Profile = () => {

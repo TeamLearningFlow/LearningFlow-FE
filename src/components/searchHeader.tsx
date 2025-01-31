@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import LogoDark from '../assets/logo_dark.png';
 import Search from '../assets/searchicon.svg';
 import Guest from '../assets/Guest.svg';
 import Vector from '../assets/Vector.svg';
+import UserModal from '../pages/modal/userModal';
 
 const HeaderWrapper = styled.header`
   display: flex;
@@ -139,6 +140,20 @@ const ProfileIcon = styled.div`
   flex-shrink: 0;
 `;
 
+const ProfileUser = styled.div`
+  position: absolute;
+  display: flex;
+  // width: 100%;
+  // width: 30%;
+  // justify-content: flex-end;
+  margin-right: 10%;
+  top: 60px;
+  right: 0px;
+  margin-top: 7px;
+
+  z-index: 1;
+`;
+
 // 헤더 상태 전달
 interface HeaderProps {
   onSearchStateChange: (active: boolean) => void;
@@ -147,6 +162,10 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ onSearchStateChange }) => {
   const [searchState, setSearchState] = useState<string>('Inactive'); // 검색 박스 상태
   const [searchValue, setSearchValue] = useState(''); // 입력 값
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const profileIconRef = useRef<HTMLDivElement>(null);
 
   const handleFocus = () => {
     setSearchState('Active'); // 검색 박스 활성화
@@ -183,6 +202,35 @@ const Header: React.FC<HeaderProps> = ({ onSearchStateChange }) => {
     setSearchState('Active'); // 텍스트 삭제 시 초기화
   };
 
+  // 사용자 아이콘 클릭 시 모달 토글
+  const toggleModal = () => {
+    setIsModalOpen((prev) => !prev);
+  };
+
+  // 모달 외부 클릭 시 닫기
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node) &&
+        profileIconRef.current &&
+        !profileIconRef.current.contains(event.target as Node) // 프로필 아이콘 클릭 여부 체크
+      ) {
+        setIsModalOpen(false);
+      }
+    };
+
+    if (isModalOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isModalOpen]);
+
   return (
     <HeaderWrapper>
       <LogoWrapper $state={searchState}>
@@ -212,8 +260,20 @@ const Header: React.FC<HeaderProps> = ({ onSearchStateChange }) => {
         </SearchIcon>
       </SearchWrapper>
       <ProfileIcon>
-        <Image src={Guest} alt="profile" width={40} height={40} />
+        <Image
+          src={Guest}
+          alt="profile"
+          width={40}
+          height={40}
+          onClick={toggleModal}
+          ref={profileIconRef}
+        />
       </ProfileIcon>
+      {isModalOpen && (
+        <ProfileUser ref={modalRef}>
+          <UserModal />
+        </ProfileUser>
+      )}
     </HeaderWrapper>
   );
 };
