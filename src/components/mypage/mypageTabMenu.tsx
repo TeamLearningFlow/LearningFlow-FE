@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import NotCompleted from './notCompleted';
 import Completed from '../mypage/completed';
-import Bookmarked from '../mypage/bookmarked';
+import Liked from './liked';
 
 const Container = styled.div`
   display: flex;
@@ -16,6 +16,22 @@ const TabMenu = styled.div`
   left: 120px;
   gap: 24px;
   cursor: pointer;
+
+  /* 반응형 설정 */
+  @media (max-width: 1024px) {
+    top: 397px;
+    left: 110px;
+  }
+
+  @media (max-width: 768px) {
+    left: 80px; /* 모바일 화면 */
+  }
+
+  @media (max-width: 480px) {
+    top: 337px; /* 폰 화면 */
+    left: 45px;
+    gap: 19px;
+  }
 `;
 
 const Menu = styled.span`
@@ -37,6 +53,11 @@ const MenuName = styled.span<{ selected: boolean }>`
   font-weight: 600;
   line-height: 28px; /* 127.273% */
   letter-spacing: -0.44px;
+
+  /* 반응형 설정 */
+  @media (max-width: 480px) {
+    font-size: 18px; /* 폰 화면 */
+  }
 `;
 
 const Line = styled.span<{ width: string; selected: boolean }>`
@@ -50,6 +71,21 @@ const Line = styled.span<{ width: string; selected: boolean }>`
 const TabContents = styled.div`
   width: 1200px;
   margin: 54px 120px 120px 120px;
+
+  /* 반응형 설정 */
+  @media (max-width: 1024px) {
+    width: 1000px;
+    margin: 20px 10px 100px 10px;
+  }
+
+  @media (max-width: 768px) {
+    width: calc(100vw - 20px); /* 모바일 화면 */
+  }
+
+  @media (max-width: 480px) {
+    width: calc(100vw - 10px); /* 폰 화면 */
+    margin: 10px 5px 0 5px;
+  }
 `;
 
 const TabContent = styled.div<{ shown: boolean }>`
@@ -59,6 +95,21 @@ const TabContent = styled.div<{ shown: boolean }>`
   align-items: flex-start;
   display: ${(props) => (props.shown ? 'flex' : 'none')};
   gap: 54px;
+
+  /* 반응형 설정 */
+  @media (max-width: 1024px) {
+    width: 1000px;
+    margin: 20px 10px 0 10px;
+  }
+
+  @media (max-width: 768px) {
+    width: calc(100vw - 20px); /* 모바일 화면 */
+  }
+
+  @media (max-width: 480px) {
+    width: calc(100vw - 10px); /* 폰 화면 */
+    margin: 10px 5px 0 5px;
+  }
 `;
 
 const Tab = () => {
@@ -79,12 +130,11 @@ const Tab = () => {
           <MenuName selected={isSelected} onClick={selectMenuHandler}>
             나의 학습방
           </MenuName>
-          {/* 길이 조정 필요 */}
-          <Line width={'80px'} selected={isSelected} />
+          <Line width={'99px'} selected={isSelected} />
         </Menu>
         <Menu>
           <MenuName selected={!isSelected} onClick={selectMenuHandler}>
-            북마크
+            좋아요
           </MenuName>
           <Line width={'57px'} selected={!isSelected} />
         </Menu>
@@ -95,7 +145,7 @@ const Tab = () => {
           <Completed />
         </TabContent>
         <TabContent shown={!isSelected}>
-          <Bookmarked />
+          <Liked />
         </TabContent>
       </TabContents>
     </Container>

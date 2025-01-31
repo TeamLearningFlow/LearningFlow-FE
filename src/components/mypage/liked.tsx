@@ -2,16 +2,29 @@ import React from 'react';
 import styled from 'styled-components';
 import BoardingPass from './boardingPass';
 
-const BookmarkedWrapper = styled.div`
+const LikedWrapper = styled.div`
   width: 1200px;
   height: 1107px;
+
+  /* 반응형 설정 */
+  @media (max-width: 1024px) {
+    width: 1000px;
+  }
+
+  @media (max-width: 768px) {
+    width: calc(100vw - 20px); /* 모바일 화면 */
+    padding: 0 10px;
+  }
+
+  @media (max-width: 480px) {
+    width: calc(100vw - 10px); /* 폰 화면 */
+  }
 `;
 
 const TitleWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  align-self: stretch;
   margin-bottom: 24px;
 `;
 
@@ -37,12 +50,30 @@ const CollectionList = styled.div`
   grid-template-columns: repeat(4, 1fr); /* 한 줄에 4개 */
   justify-items: center;
   gap: 24px;
+
+  /* 반응형 설정 */
+  @media (max-width: 1024px) {
+    padding: 0 20px;
+    gap: 20px;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 30px; /* 모바일 화면 */
+    gap: 25px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(1, 1fr); /* 폰 화면 */
+    place-items: center;
+  }
 `;
 
-const Bookmarked = () => {
+const Liked = () => {
   return (
     <>
-      <BookmarkedWrapper>
+      <LikedWrapper>
         <TitleWrapper>
           <Title>찜한 학습 컬렉션</Title>
         </TitleWrapper>
@@ -60,9 +91,9 @@ const Bookmarked = () => {
           <BoardingPass showHoverCollection={true} />
           <BoardingPass showHoverCollection={true} />
         </CollectionList>
-      </BookmarkedWrapper>
+      </LikedWrapper>
     </>
   );
 };
 
-export default Bookmarked;
+export default Liked;

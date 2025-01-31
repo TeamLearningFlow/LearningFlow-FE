@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import Prev from '../../assets/Previous.svg';
@@ -134,6 +134,20 @@ const ProgressRate = styled.div`
 const NotCompletedWrapper = styled.div`
   width: 1200px;
   height: 338px;
+
+  /* 반응형 설정 */
+  @media (max-width: 1024px) {
+    width: 1000px;
+  }
+
+  @media (max-width: 768px) {
+    width: calc(100vw - 20px); /* 모바일 화면 */
+    padding: 0 10px;
+  }
+
+  @media (max-width: 480px) {
+    width: calc(100vw - 10px); /* 폰 화면 */
+  }
 `;
 
 const TitleWrapper = styled.div`
@@ -173,11 +187,30 @@ const Button = styled(Image)`
 
 const CollectionList = styled.div`
   height: 278px;
-  display: flex;
+  display: grid;
   gap: 24px;
+  grid-template-columns: repeat(4, 1fr);
+
+  /* 반응형 설정 */
+  @media (max-width: 1024px) {
+    padding: 0 20px;
+    gap: 15px;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 30px; /* 모바일 화면 */
+    gap: 20px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(1, 1fr); /* 폰 화면 */
+    place-items: center;
+  }
 `;
 
-const Collection = () => {
+const CollectionItem = () => {
   return (
     <Container>
       <CollectionImage />
@@ -202,6 +235,26 @@ const Collection = () => {
 };
 
 const NotCompleted = () => {
+  const [itemsShown, setItemsShown] = useState<number>(4);
+
+  useEffect(() => {
+    const updateItemsShown = () => {
+      if (window.innerWidth <= 480) {
+        setItemsShown(1);
+      } else if (window.innerWidth <= 768) {
+        setItemsShown(2);
+      } else if (window.innerWidth <= 1024) {
+        setItemsShown(3);
+      } else {
+        setItemsShown(4);
+      }
+    };
+
+    updateItemsShown(); // 초기 설정
+    window.addEventListener('resize', updateItemsShown);
+    return () => window.removeEventListener('resize', updateItemsShown);
+  }, []);
+
   return (
     <NotCompletedWrapper>
       <TitleWrapper>
@@ -212,10 +265,9 @@ const NotCompleted = () => {
         </PageButton>
       </TitleWrapper>
       <CollectionList>
-        <Collection />
-        <Collection />
-        <Collection />
-        <Collection />
+        {Array.from({ length: itemsShown }).map((_, index) => (
+          <CollectionItem key={index} />
+        ))}
       </CollectionList>
     </NotCompletedWrapper>
   );

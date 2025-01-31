@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import Prev from '../../assets/Previous.svg';
@@ -8,6 +8,20 @@ import BoardingPass from './boardingPass';
 const CompletedWrapper = styled.div`
   width: 1200px;
   height: 393px;
+
+  /* 반응형 설정 */
+  @media (max-width: 1024px) {
+    width: 1000px;
+  }
+
+  @media (max-width: 768px) {
+    width: calc(100vw - 20px); /* 모바일 화면 */
+    padding: 0 10px;
+  }
+
+  @media (max-width: 480px) {
+    width: calc(100vw - 10px); /* 폰 화면 */
+  }
 `;
 
 const TitleWrapper = styled.div`
@@ -47,12 +61,50 @@ const Button = styled(Image)`
 
 const CollectionList = styled.div`
   height: 333px;
-  width: 100%;
-  display: flex;
+  // width: 100%;
+  display: grid;
   gap: 24px;
+  grid-template-columns: repeat(4, 1fr);
+
+  /* 반응형 설정 */
+  @media (max-width: 1024px) {
+    padding: 0 20px;
+    gap: 15px;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 30px; /* 모바일 화면 */
+    gap: 20px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(1, 1fr); /* 폰 화면 */
+    place-items: center;
+  }
 `;
 
 const Completed = () => {
+  const [itemsShown, setItemsShown] = useState<number>(4);
+
+  useEffect(() => {
+    const updateItemsShown = () => {
+      if (window.innerWidth <= 480) {
+        setItemsShown(1);
+      } else if (window.innerWidth <= 768) {
+        setItemsShown(2);
+      } else if (window.innerWidth <= 1024) {
+        setItemsShown(3);
+      } else {
+        setItemsShown(4);
+      }
+    };
+
+    updateItemsShown(); // 초기 설정
+    window.addEventListener('resize', updateItemsShown);
+    return () => window.removeEventListener('resize', updateItemsShown);
+  }, []);
   return (
     <CompletedWrapper>
       <TitleWrapper>
@@ -63,10 +115,9 @@ const Completed = () => {
         </PageButton>
       </TitleWrapper>
       <CollectionList>
-        <BoardingPass showHoverCollection={false} />
-        <BoardingPass showHoverCollection={false} />
-        <BoardingPass showHoverCollection={false} />
-        <BoardingPass showHoverCollection={false} />
+        {Array.from({ length: itemsShown }).map((_, index) => (
+          <BoardingPass showHoverCollection={false} key={index} />
+        ))}
       </CollectionList>
     </CompletedWrapper>
   );
