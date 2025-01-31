@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import NotCompleted from './notCompleted';
-import Completed from './completed';
-import Bookmarked from './bookmarked';
+import Completed from '../mypage/completed';
+import Bookmarked from '../mypage/bookmarked';
 
 const Container = styled.div`
   display: flex;

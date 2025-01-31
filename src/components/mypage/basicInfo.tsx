@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import X from '../assets/X_red.svg';
-import InvisibleIcon from '../assets/invisibleicon.svg';
-import VisibleIcon from '../assets/visibleicon.svg';
+import X from '../../assets/X_red.svg';
+import InvisibleIcon from '../../assets/invisibleicon.svg';
+import VisibleIcon from '../../assets/visibleicon.svg';
 
 const Section = styled.div`
   margin-bottom: 20px;

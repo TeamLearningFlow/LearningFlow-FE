@@ -1,18 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import AllIcon from '../assets/allIcon.svg';
-import AppIcon from '../assets/appIcon.svg';
-import WebIcon from '../assets/webIcon.svg';
-import ComputerIcon from '../assets/computerIcon.svg';
-import DeepLearningIcon from '../assets/deepLearningIcon.svg';
-import StatisticsIcon from '../assets/statisticsIcon.svg';
-import DataIcon from '../assets/dataIcon.svg';
-import UXUIIcon from '../assets/uxuiIcon.svg';
-import PlanIcon from '../assets/planIcon.svg';
-import WorkIcon from '../assets/workIcon.svg';
-import LanguageIcon from '../assets/languageIcon.svg';
-import JobIcon from '../assets/jobIcon.svg';
+// import AllIcon from '../assets/allIcon.svg';
+import AppIcon from '../../assets/appIcon.svg';
+import WebIcon from '../../assets/webIcon.svg';
+import ComputerIcon from '../../assets/computerIcon.svg';
+import DeepLearningIcon from '../../assets/deepLearningIcon.svg';
+import StatisticsIcon from '../../assets/statisticsIcon.svg';
+import DataIcon from '../../assets/dataIcon.svg';
+import UXUIIcon from '../../assets/uxuiIcon.svg';
+import PlanIcon from '../../assets/planIcon.svg';
+import WorkIcon from '../../assets/workIcon.svg';
+import LanguageIcon from '../../assets/languageIcon.svg';
+import JobIcon from '../../assets/jobIcon.svg';
 
 const CategoryListWrapper = styled.div`
   display: flex;

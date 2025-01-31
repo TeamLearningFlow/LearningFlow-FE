@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import Prev from '../assets/Previous.svg';
-import Next from '../assets/Next.svg';
+import Prev from '../../assets/Previous.svg';
+import Next from '../../assets/Next.svg';
 import BoardingPass from './boardingPass';
 
 const CompletedWrapper = styled.div`

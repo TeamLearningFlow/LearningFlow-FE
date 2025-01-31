@@ -2,8 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
 import Image from 'next/image';
-import EditIcon from '../assets/editIcon.svg';
-import user from '../assets/userphoto.svg';
+import ProfileEditIcon from '../../assets/profileEditIcon.svg';
+import user from '../../assets/userphoto.svg';
 
 const Container = styled.div`
   width: 1200px;
@@ -123,7 +123,7 @@ const ProfileBanner = () => {
         </Profile>
         <Link href="/mypage/profile" passHref>
           <EditButton>
-            <Image src={EditIcon} alt="edit button" />
+            <Image src={ProfileEditIcon} alt="edit button" />
           </EditButton>
         </Link>
       </ProfileWrapper>

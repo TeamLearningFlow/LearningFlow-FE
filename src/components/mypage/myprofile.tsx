@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import userProfile from '../assets/userphoto.svg';
-import CheckIcon from '../assets/checkIconGray.svg';
-import ProfileCategoryList from '../components/profileCategoryList';
-import PreferSlider from '../components/preferSlider';
+import userProfile from '../../assets/userphoto.svg';
+import CheckIcon from '../../assets/checkIconGray.svg';
+import ProfileCategoryList from '../../components/mypage/profileCategoryList';
+import PreferSlider from '../../components/mypage/preferSlider';
 
 const Section = styled.div`
   display: flex;

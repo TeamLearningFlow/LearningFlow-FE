@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import styled from 'styled-components';
-import Polygon from '../assets/polygon.svg';
+import Polygon from '../../assets/polygon.svg';
 
 const SliderContainer = styled.div`
   display: flex;
