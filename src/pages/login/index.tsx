@@ -16,7 +16,7 @@ const PageContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   background-color: #ffffff;
   overflow: hidden;
 `;
@@ -33,7 +33,11 @@ const RightSection = styled.div`
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  over-flow: hidden;
+  overflow: hidden;
+
+  @media (max-width: 480px) {
+    margin-top: -50px;
+  }
 `;
 
 const FormContainer = styled.div`

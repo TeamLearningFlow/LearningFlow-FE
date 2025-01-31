@@ -75,6 +75,7 @@ const Input = styled.input<{
   margin-left: 15px;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 
   color: ${({ isValid }) => (isValid ? '#1f1f1f' : '#ec2d30')};
   background-color: ${(props) => {
