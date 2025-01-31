@@ -5,7 +5,7 @@ import LogoDark from '../assets/logo_dark.png';
 import Search from '../assets/searchicon.svg';
 import Guest from '../assets/Guest.svg';
 import Vector from '../assets/Vector.svg';
-import UserModal from '../pages/modal/userModal';
+import UserModal from './modal/userModal';
 
 const HeaderWrapper = styled.header`
   display: flex;
