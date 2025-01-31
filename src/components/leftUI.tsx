@@ -38,7 +38,11 @@ const InstructionContainer = styled.div`
 
   position: absolute;
   right: 8%;
-  bottom: 8%;
+  bottom: 5%;
+
+  @media (max-width: 768px) {
+    right: 7%;
+  }
 `;
 
 const LogoTypoImg = styled(Image)`
@@ -46,6 +50,14 @@ const LogoTypoImg = styled(Image)`
   width: 230px;
   height: auto;
   margin-bottom: 2%;
+
+  @media (max-width: 768px) {
+    width: 190px;
+  }
+
+  @media (max-width: 480px) {
+    width: 150px;
+  }
 `;
 
 const Instruction1 = styled.div`
@@ -54,6 +66,14 @@ const Instruction1 = styled.div`
   font-weight: 500;
   color: #dcd9ff;
   text-align: right;
+
+  @media (max-width: 768px) {
+    font-size: 23px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 17px;
+  }
 `;
 
 const Instruction2 = styled.div`
@@ -62,4 +82,12 @@ const Instruction2 = styled.div`
   font-weight: 500;
   color: #dcd9ff;
   text-align: right;
+
+  @media (max-width: 768px) {
+    font-size: 22px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 17px;
+  }
 `;

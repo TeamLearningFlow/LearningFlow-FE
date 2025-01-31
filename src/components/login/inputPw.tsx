@@ -65,6 +65,11 @@ const InputWrapper = styled.div<{
     height: 18px;
     cursor: pointer;
   }
+
+  @media (max-width: 768px) {
+    padding: 0;
+    font-size: 13px;
+  }
 `;
 
 const Input = styled.input<{ isValid: boolean; isError: boolean }>`
@@ -76,6 +81,7 @@ const Input = styled.input<{ isValid: boolean; isError: boolean }>`
   margin-left: 15px;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 
   color: ${(props) =>
     props.isError
@@ -86,6 +92,10 @@ const Input = styled.input<{ isValid: boolean; isError: boolean }>`
 
   &::placeholder {
     color: #afb8c1;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 13px;
   }
 `;
 

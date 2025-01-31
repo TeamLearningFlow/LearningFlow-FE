@@ -55,6 +55,11 @@ const InputWrapper = styled.div<{
   overflow: hidden;
   padding: 12px;
   margin-bottom: 7px;
+
+  @media (max-width: 768px) {
+    padding: 0;
+    font-size: 13px;
+  }
 `;
 
 const Input = styled.input<{
@@ -84,6 +89,10 @@ const Input = styled.input<{
 
   &::placeholder {
     color: #afb8c1;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 13px;
   }
 `;
 
