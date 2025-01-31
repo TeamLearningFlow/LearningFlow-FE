@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import SignupPage from '../register';
 
-interface ModalProps {
-  onClose: () => void;
-}
+// interface ModalProps {
+//   onClose: () => void;
+// }
 
-const emailAuthModal: React.FC<ModalProps> = ({ onClose }) => {
+const emailAuthModal: React.FC = ({ onClose, onContinue }) => {
   const [showSignupPage, setShowSignupPage] = useState<boolean>(false);
 
   const handleSignupPage = () => {
@@ -23,8 +23,8 @@ const emailAuthModal: React.FC<ModalProps> = ({ onClose }) => {
               지금 돌아가면 입력하신 회원가입 정보는 삭제됩니다.
             </Description>
             <Button>
-              <BackButton onClick={handleSignupPage}>돌아갈래요</BackButton>
-              <ForwardButton onClick={onClose}>이어서하기</ForwardButton>
+              <BackButton onClick={onClose}>돌아갈래요</BackButton>
+              <ForwardButton onClick={onContinue}>이어서하기</ForwardButton>
             </Button>
           </ModalBox>
         </ModalWrapper>

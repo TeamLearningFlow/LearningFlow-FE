@@ -4,9 +4,11 @@ import DarkTopLogo from '../../components/topLogo_dark';
 // import EmailIcon from './assets/mailIcon.png';
 // import Image from 'next/image';
 import EmailAuthModal from '../modal/emailAuthModal';
+import RegisterPage from './index';
 
 const EmailAuthPage: React.FC = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [showAuth, setShowAuth] = useState(true);
 
   const handleModalOpen = () => {
     setShowModal(true);
@@ -16,23 +18,40 @@ const EmailAuthPage: React.FC = () => {
     setShowModal(false);
   };
 
+  const handleAuthClose = () => {
+    setShowAuth(false); // 이메일 인증 페이지 숨김
+  };
+
   return (
-    <Container>
-      <DarkTopLogo />
-      <PageContainer>
-        <TitleContainer>인증 메일을 보내드렸어요</TitleContainer>
-        <IconContainer>
-          {/*<Image src={EmailIcon} alt="Email Icon" width={240} height={240} /> */}
-        </IconContainer>
-        <Textwrapper>
-          {`메일함을 확인해주세요\n가입하신 이메일을 인증해 주시면,\n온보딩의 서비스를 마음껏 이용하실 수 있어요`}
-        </Textwrapper>
-        <GoBackButton onClick={handleModalOpen}>
-          이전 페이지로 돌아가기
-        </GoBackButton>
-        {showModal && <EmailAuthModal onClose={handleModalClose} />}
-      </PageContainer>
-    </Container>
+    <>
+      {showAuth ? (
+        <>
+          <Container>
+            <DarkTopLogo />
+            <PageContainer>
+              <TitleContainer>인증 메일을 보내드렸어요</TitleContainer>
+              <IconContainer>
+                {/*<Image src={EmailIcon} alt="Email Icon" width={240} height={240} /> */}
+              </IconContainer>
+              <Textwrapper>
+                {`메일함을 확인해주세요\n가입하신 이메일을 인증해 주시면,\n온보딩의 서비스를 마음껏 이용하실 수 있어요`}
+              </Textwrapper>
+              <GoBackButton onClick={handleModalOpen}>
+                이전 페이지로 돌아가기
+              </GoBackButton>
+            </PageContainer>
+          </Container>
+          {showModal && (
+            <EmailAuthModal
+              onClose={handleAuthClose}
+              onContinue={handleModalClose}
+            />
+          )}
+        </>
+      ) : (
+        <RegisterPage />
+      )}
+    </>
   );
 };
 

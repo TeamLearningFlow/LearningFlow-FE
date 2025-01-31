@@ -11,6 +11,7 @@ import SignupInputPw from '../../components/register/signupInputPw';
 import InputPwCheck from '../../components/register/signupinputPwCheck';
 import TopLogo from '../../components/topLogo_light';
 import EmailAuthPage from './emailAuth';
+import EmailAuthModal from '../modal/emailAuthModal';
 
 const PageContainer = styled.div`
   display: flex;
