@@ -1,0 +1,130 @@
+import React from 'react';
+import styled from 'styled-components';
+import Image from 'next/image';
+import CurrentPlayButton from '../assets/currentPlayButton.svg';
+import CurrentIndexIcon from '../assets/currentIndexIcon.svg';
+import Youtube from '../assets/Youtube.png';
+
+const ComponentWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  width: 80vw;
+  gap: 20px;
+`;
+
+const IndexIcon = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 5%;
+  min-width: 50px;
+  height: 100px;
+  border-radius: 5px;
+  position: relative;
+  top: 28px;
+`;
+
+const ButtonWrapper = styled.div`
+  position: absolute;
+  top: 82px;
+  right: -34px;
+  transform: translateY(-50%);
+  transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const IndexWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 95%;
+  height: 100px;
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 10px;
+  padding: 0 1.7%;
+  overflow: hidden;
+  margin-bottom: 20px;
+  cursor: pointer;
+  transition: background 0.5s;
+
+  &:hover {
+    background: rgba(245, 245, 255, 1);
+
+    & > ${ButtonWrapper} {
+      transform: translate(-10px, -58px);
+    }
+  }
+`;
+
+
+const PlatformIcon = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #dcd9ff;
+  border: 3px solid #5e52ff;
+  overflow: hidden;
+`;
+
+
+
+const IndexContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin-left: 25px;
+`;
+
+const OrderBox = styled.div`
+  display: flex;
+  font-size: 15px;
+  margin-bottom: 8px;
+  color: rgba(149, 156, 164, 1);
+`;
+
+const TitleBox = styled.div`
+  display: flex;
+  font-size: 18px;
+  font-weight: 600;
+`;
+
+const NowPlaying: React.FC = () => {
+  return (
+    <ComponentWrapper>
+      <IndexIcon>
+        <Image
+          src={CurrentIndexIcon}
+          alt="current-icon"
+          width={85}
+          height={180}
+        />
+      </IndexIcon>
+      <IndexWrapper>
+        <PlatformIcon>
+          <Image src={Youtube} alt="platform-icon" width={60} height={60} />
+        </PlatformIcon>
+        <IndexContainer>
+          <OrderBox>3회차</OrderBox>
+          <TitleBox>브랜치 포스터 "와이어프레임을 활용하는 이유"</TitleBox>
+        </IndexContainer>
+        <ButtonWrapper>
+          <Image
+            src={CurrentPlayButton}
+            alt="Current Play Button"
+            width={100}
+            height={100}
+          />
+        </ButtonWrapper>
+      </IndexWrapper>
+    </ComponentWrapper>
+  );
+};
+
+export default NowPlaying;
