@@ -1,0 +1,100 @@
+import React from 'react';
+import styled from 'styled-components';
+import Image from 'next/image';
+import BoardingPass from './homeBoardingPass';
+import AirplaneIcon from '../assets/airplaneIcon.svg';
+
+const HomeCollectionWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  height: 1050px;
+  padding: 50px 17% 0px 17%;
+  margin: 0 auto;
+  flex-direction: column;
+  align-items: center;
+  gap: 50px;
+  flex-shrink: 0;
+  border-radius: 32px 32px 0px 0px;
+  background: #fafafc;
+`;
+
+const CollectionHeader = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const IconWrapper = styled.div`
+  width: 60px;
+  height: 60px;
+`;
+
+const HeaderText = styled.div`
+  text-align: center;
+  margin-top: 10px;
+
+  h1 {
+    color: #959ca4;
+    text-align: center;
+    font-feature-settings:
+      'liga' off,
+      'clig' off;
+    font-size: 19px;
+    font-weight: 500;
+    line-height: 150%; /* 36px */
+    letter-spacing: -0.48px;
+  }
+
+  p {
+    color: #323538;
+    font-feature-settings:
+      'liga' off,
+      'clig' off;
+    font-size: 25px;
+    font-weight: 600;
+    line-height: 150%; /* 48px */
+    letter-spacing: -0.64px;
+  }
+`;
+
+const CollectionList = styled.div`
+  height: auto;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)); /* 한 줄에 3개 */
+  justify-items: center;
+  gap: 16px;
+`;
+
+const HomeCollection = () => {
+  return (
+    <>
+      <HomeCollectionWrapper>
+        <CollectionHeader>
+          <IconWrapper>
+            <Image
+              src={AirplaneIcon}
+              alt="airplaneicon"
+              width={50}
+              height={50}
+            />
+          </IconWrapper>
+          <HeaderText>
+            <h1>‘서비스 기획’ 분야를 학습하고 계신 푸글 님!</h1>
+            <p>푸글 님 맞춤 컬렉션을 추천해 드릴게요</p>
+          </HeaderText>
+        </CollectionHeader>
+        <CollectionList>
+          <BoardingPass showHoverCollection={true} />
+          <BoardingPass showHoverCollection={true} />
+          <BoardingPass showHoverCollection={true} />
+          <BoardingPass showHoverCollection={true} />
+          <BoardingPass showHoverCollection={true} />
+          <BoardingPass showHoverCollection={true} />
+        </CollectionList>
+      </HomeCollectionWrapper>
+    </>
+  );
+};
+
+export default HomeCollection;
