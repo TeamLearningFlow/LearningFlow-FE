@@ -4,6 +4,7 @@ import CategoryList from '../components/search/categoryList';
 import BoardingPass from '../components/search/boardingPass';
 import Filters from '../components/search/filters';
 import Pagination from '@/components/search/pagination';
+import BoardingPassList from '@/components/search/boardingPassList';
 
 const SearchPage: React.FC = () => {
   const [searchActive, setSearchActive] = useState(false); // 검색창 활성화 상태
@@ -20,7 +21,11 @@ const SearchPage: React.FC = () => {
         <div>
           <CategoryList />
           <Filters />
-          <BoardingPass showHoverCollection={true} />
+          <BoardingPassList>
+            {Array.from({ length: 8 }).map((_, index) => (
+              <BoardingPass key={index} showHoverCollection={true} />
+            ))}
+          </BoardingPassList>
           <Pagination />
         </div>
       )}
