@@ -9,6 +9,7 @@ import Pagination from '@/components/search/pagination';
 import Banner from '../../components/home/homeBanner';
 import Footer from '../../components/homeFooter';
 import HomeCollection from '../../components/home/homeCollection';
+import RecentCollection from '../../components/home/recentCollection';
 // import HomeModal from '../../pages/modal/homeModal';
 
 /*const Wrapper = styled.div`
@@ -52,6 +53,7 @@ const Home: React.FC = () => {
       ) : (
         <>
           <Banner />
+          <RecentCollection />
           <HomeCollection />
           {/*<Wrapper>
         {isModalOpen && <HomeModal onClose={handleCloseModal} />}
