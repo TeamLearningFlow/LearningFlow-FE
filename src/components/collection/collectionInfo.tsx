@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import tmpIMG from '../../assets/tmpIMG.png';
+import tmpIMG from '../../assets/collection-clock.png';
 import collectionInfoIMG from '../../assets/CollectionInfo.png';
 import NaverblogIcon from '../../assets/platformicon/naverblog_nostroke_ic.svg';
 import TistoryIcon from '../../assets/platformicon/tistory_nostroke_ic.svg';

@@ -2,8 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import BoardingPassContainer from '../../assets/S_Background.svg';
-import CollectionImage from '../../assets/boarding-pass.svg';
-import BookmarkIcon from '../../assets/bookmark.svg';
+import CollectionImage from '../../assets/boardingpassS.svg';
+// import BookmarkIcon from '../../assets/bookmark.svg';
 import HoverBackground from '../../assets/hover-background.svg';
 import Plane from '../../assets/plane.svg';
 import Circle from '../../assets/circle.svg';
@@ -41,14 +41,14 @@ const BoardingPassImage = styled(Image)`
   left: 1px;
 `;
 
-const Bookmark = styled(Image)`
+/* const Bookmark = styled(Image)`
   position: absolute;
   top: 15px;
   right: 15px;
   cursor: pointer;
   width: 35px;
   height: 35px;
-`;
+`; */
 
 const Body = styled.div`
   background: #fff;
@@ -382,7 +382,7 @@ const BoardingPass = ({
     <Container>
       <Image src={BoardingPassContainer} alt="boarding pass" />
       <BoardingPassImage src={CollectionImage} alt="collection image" />
-      <Bookmark src={BookmarkIcon} alt="bookmark" />
+      {/* <Bookmark src={BookmarkIcon} alt="bookmark" /> */}
       <Body>
         <KeywordWrapper>
           <Keyword>키워드1</Keyword>
