@@ -17,11 +17,22 @@ import JobIcon from '../../assets/jobIcon.svg';
 const CategoryListWrapper = styled.div`
   display: flex;
   justify-content: flex-start;
-  padding: 20px 0 0 10%;
+  padding: 20px 10% 0 10%;
   gap: 20px;
   height: 115px;
   background-color: #ffffff;
   border-bottom: 1px solid #dde0e4;
+  overflow-x: auto;
+  white-space: nowrap;
+
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #cccccc;
+    border-radius: 4px;
+  }
 `;
 
 const CategoryItemWrapper = styled.div<{ active?: boolean }>`
@@ -31,6 +42,7 @@ const CategoryItemWrapper = styled.div<{ active?: boolean }>`
   justify-content: center;
   padding: 12px;
   width: 75px;
+  min-width: 75px;
   height: 75px;
   background-color: ${({ active }) => (active ? '#5e52ff' : '#fafafc')};
   box-shadow: ${({ active }) =>

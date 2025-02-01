@@ -49,6 +49,16 @@ const DropdownMenu = styled.div`
   width: 350px;
   height: 180px;
   text-align: center;
+
+  @media (max-width: 850px) {
+    left: 0;
+    transform: translateX(-17%);
+  }
+
+  @media (max-width: 480px) {
+    left: 0;
+    transform: translateX(-56%);
+  }
 `;
 
 const SliderContainer = styled.div`
@@ -146,7 +156,7 @@ const PreferButton: React.FC<DropdownProps> = ({
   const [sliderValue, setSliderValue] = React.useState(50);
 
   const getTooltipText = (value: number) => {
-    if (value < 40) return '아티클이 좋아요';
+    if (value < 40) return '텍스트가 좋아요';
     if (value > 60) return '영상이 좋아요';
     return '상관 없어요';
   };
@@ -186,7 +196,7 @@ const PreferButton: React.FC<DropdownProps> = ({
               />
             </TooltipContainer>
             <SliderContainer>
-              <Label>아티클</Label>
+              <Label>텍스트</Label>
               <Slider
                 type="range"
                 min="0"

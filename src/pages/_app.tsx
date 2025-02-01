@@ -11,10 +11,21 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
 
+  html, body {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
   body {
     font-family: Pretendard;
     background-color: #fff;
     color: #333;
+  }
+
+  #__next {
+    width: 100%;
+    max-width: 100vw;
   }
 `;
 
