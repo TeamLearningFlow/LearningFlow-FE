@@ -11,19 +11,24 @@ const ComponentWrapper = styled.div`
   justify-content: space-between;
   flex-direction: row;
   width: 80vw;
-  gap: 20px;
 `;
 
 const IndexIcon = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 5%;
-  min-width: 50px;
-  height: 100px;
-  border-radius: 5px;
+  width: 100px;
+  height: 120px;
+  right: 20px;
   position: relative;
-  top: 30px;
+  top: 32px;
+
+
+  @media (max-width: 850px) {
+
+  }
+
+  @media (max-width: 560px) {
+
+  }
 `;
 
 const ButtonWrapper = styled.div`
@@ -172,7 +177,7 @@ const NextClassIndex: React.FC = () => {
   return (
       <ComponentWrapper>
         <IndexIcon>
-          <Image src={NextIndexIcon} alt="Next-icon" width={85} height={200} />
+          <Image src={NextIndexIcon} alt="Next-icon" fill style={{ objectFit: 'contain' }} />
         </IndexIcon>
         <IndexWrapper>
           <PlatformIcon>

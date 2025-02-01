@@ -11,19 +11,24 @@ const ComponentWrapper = styled.div`
   justify-content: space-between;
   flex-direction: row;
   width: 80vw;
-  gap: 20px;
 `;
 
 const IndexIcon = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 5%;
-  min-width: 50px;
-  height: 100px;
-  border-radius: 5px;
+  width: 100px;
+  height: 120px;
+  right: 20px;
   position: relative;
-  top: 28px;
+  top: 30px;
+
+
+  @media (max-width: 850px) {
+
+  }
+
+  @media (max-width: 560px) {
+
+  }
 `;
 
 const ButtonWrapper = styled.div`
@@ -175,8 +180,7 @@ const NowPlaying: React.FC = () => {
         <Image
           src={CurrentIndexIcon}
           alt="current-icon"
-          width={85}
-          height={180}
+          fill style={{ objectFit: 'contain' }}
         />
       </IndexIcon>
       <IndexWrapper>

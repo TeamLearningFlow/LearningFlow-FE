@@ -21,11 +21,29 @@ const PageContainer = styled.div`
   background-color: #ffffff;
   overflow: hidden;
   margin-top: -15px;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 const LeftSection = styled.div`
   width: 54vw;
   display: flex;
+  align-items: center;
+
+  @media (max-width: 480px) {
+    justify-content: center;
+    width: 100vw;
+  }
+`;
+
+const LeftUIContainer = styled.div`
+  @media (max-width: 480px) {
+    display: none;
+  }
 `;
 
 const RightSection = styled.div`
@@ -34,10 +52,16 @@ const RightSection = styled.div`
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
+
+  @media (max-width: 480px) {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 const FormContainer = styled.div`
-  position: absolute;
   width: 30vw;
   max-width: 420px;
   border-radius: 8px;
@@ -46,7 +70,25 @@ const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 7px;
+
+  @media (max-width: 480px) {
+    width: 80vw;
+  }
+
+  h2 {
+    @media (max-width: 480px) {
+      font-size: 20px;
+    }
+  }
+
+  div {
+    @media (max-width: 480px) {
+      white-space: pre-wrap;
+      word-wrap: break-word; /* 긴 단어가 줄바꿈되도록 설정 */
+    }
+  }
 `;
+
 
 const BlankContainer = styled.div``;
 
@@ -55,6 +97,20 @@ const FormGroup = styled.div`
   flex-direction: column;
   gap: 20px;
   margin-top: 15px;
+`;
+
+const TermsText = styled.div`
+  font-size: 12px;
+  color: #000;
+  text-align: center;
+  line-height: 1.5;
+  word-wrap: break-word;
+
+
+  @media (max-width: 480px) {
+    font-size: 8px;
+    text-align: center;
+  }
 `;
 
 const RegisterPage: React.FC = () => {
@@ -76,11 +132,6 @@ const RegisterPage: React.FC = () => {
 
   const registeraxios = async () => {
     try {
-      // const response = await axios.post('http://localhost:8080/register', {
-      //   email: email,
-      //   password: password,
-      // });
-
       const response = await axios.post(
         'http://onboarding.p-e.kr:8080/register',
         {
@@ -90,10 +141,8 @@ const RegisterPage: React.FC = () => {
       );
 
       console.log('Response:', response);
-      // alert('회원가입 성공');
 
       if (response.status === 200) {
-        // return navigate('/mylogin');
         console.log('이메일 인증 페이지로 이동');
       }
     } catch (err: any) {
@@ -112,7 +161,9 @@ const RegisterPage: React.FC = () => {
         <PageContainer>
           <LeftSection>
             <TopLogo />
-            <LeftUI />
+            <LeftUIContainer>
+              <LeftUI />
+            </LeftUIContainer>
           </LeftSection>
           <RightSection>
             <BlankContainer />
@@ -138,49 +189,41 @@ const RegisterPage: React.FC = () => {
                   disabled={!isFormValid}
                   onClick={handleShowEmailAuth}
                 />
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <span style={{ fontSize: '10px' }}>
-                    가입하면{' '}
-                    <Link
-                      href="/register/contracts"
-                      target="_blank"
-                      rel="noopener noreferrer"
+                <TermsText>
+                  가입하면{' '}
+                  <Link
+                    href="/register/contracts"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span
+                      style={{
+                        color: 'rgba(24, 24, 24, 1)',
+                        textDecoration: 'underline',
+                        fontWeight: 'bold',
+                      }}
                     >
-                      <span
-                        style={{
-                          color: 'rgba(24, 24, 24, 1)',
-                          textDecoration: 'underline',
-                          fontWeight: 'bold',
-                        }}
-                      >
-                        이용약관
-                      </span>
-                    </Link>{' '}
-                    및{' '}
-                    <Link
-                      href="/register/privacyContracts"
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      이용약관
+                    </span>
+                  </Link>{' '}
+                  및{' '}
+                  <Link
+                    href="/register/privacyContracts"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span
+                      style={{
+                        color: 'rgba(24, 24, 24, 1)',
+                        textDecoration: 'underline',
+                        fontWeight: 'bold',
+                      }}
                     >
-                      <span
-                        style={{
-                          color: 'rgba(24, 24, 24, 1)',
-                          textDecoration: 'underline',
-                          fontWeight: 'bold',
-                        }}
-                      >
-                        개인정보 처리방침
-                      </span>
-                    </Link>
-                    에 동의하는 것으로 간주합니다.
-                  </span>
-                </div>
+                      개인정보 처리방침
+                    </span>
+                  </Link>
+                  에 동의하는 것으로 간주합니다.
+                </TermsText>
                 <Divider />
                 <GoogleAuthButton text="Google 계정으로 회원가입" />
               </FormGroup>
@@ -195,3 +238,4 @@ const RegisterPage: React.FC = () => {
 };
 
 export default RegisterPage;
+

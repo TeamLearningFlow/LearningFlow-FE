@@ -11,40 +11,33 @@ const ComponentWrapper = styled.div`
   justify-content: space-between;
   flex-direction: row;
   width: 80vw;
-  gap: 20px;
 `;
 
 const IndexIcon = styled.div`
-  border: 1px solid red;
   display: flex;
   width: 100px;
-  height: 130px; 
+  height: 120px;
+  right: 20px;
   position: relative;
   top: 32px;
 
 
   @media (max-width: 850px) {
-    top: 66px;
-    right: -48px;
-    width: 90px;
-    height: 90px;
+
   }
 
   @media (max-width: 560px) {
-    top: 66px;
-    right: -48px;
-    width: 90px;
-    height: 90px;
+
   }
 `;
 
 const EndIconContainer = styled.div`
   display: flex;
-  justify-content: center;
-  width: 5%;
-  min-width: 50px; 
-  height: 100px; 
-  border-radius: 5px;
+  width: 38px;
+  height: 38px;
+  right: -9px;
+  position: relative;
+  top: 30px;
 `;
 
 const ButtonWrapper = styled.div`
@@ -127,6 +120,7 @@ const StartIndexWrapper = styled.div`
   align-items: center;
   width: 95%;
   margin-bottom: 20px;
+  border: 1px solid blue;
 `; 
 
 const PlatformIcon = styled.div`
@@ -152,7 +146,11 @@ const PlatformIcon = styled.div`
 `;
 
 const StartIndexContainer = styled.div`
+`;
 
+const EndIndexContainer = styled.div`
+  border: 1px solid red;
+  margin-left: 37px;
 `;
 
 const IndexContainer = styled.div`
@@ -218,12 +216,12 @@ const EndIndex = () => {
   return (
     <ComponentWrapper>
       <EndIconContainer>
-        <Image src={EndIndexIcon} alt="End-icon" width={37} height={90} />
+        <Image src={EndIndexIcon} alt="End-icon" fill style={{ objectFit: 'contain' }} />
       </EndIconContainer>
       <StartIndexWrapper>
-        <StartIndexContainer>
+        <EndIndexContainer>
           <p style={{fontSize: '18px', fontWeight: '600', color:'rgba(221, 224, 228, 1)'}}>Congrats! 컬렉션 완주를 축하드려요!</p>
-        </StartIndexContainer>
+        </EndIndexContainer>
       </StartIndexWrapper>
     </ComponentWrapper>
   );
