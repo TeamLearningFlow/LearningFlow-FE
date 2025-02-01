@@ -16,12 +16,25 @@ const PageContainer = styled.div`
   flex-direction: column;
   padding: 100px 100px;
   gap: 35px;
+
+  @media (max-width: 850px) {
+    padding: 100px 100px;
+  } 
+
+  @media (max-width: 560px) {
+    padding: 55px 40px;
+  }
 `;
 
 const TitleContainer = styled.div`
   font-size: 24px;
   font-weight: 600;
   margin-bottom: 15px;
+
+  @media (max-width: 560px) {
+    font-size: 19px;
+    margin-bottom: 0px;
+  }
 `;
 
 const Textwrapper = styled.div`
@@ -29,6 +42,10 @@ const Textwrapper = styled.div`
   color: rgba(100, 105, 110, 1);
   line-height: 1.7em;
   white-space: pre-wrap;
+
+  @media (max-width: 560px) {
+    font-size: 11px;
+  }
 `;
 
 {
@@ -57,6 +74,17 @@ const ContractContainer = styled.div`
   gap: 10px;
 `;
 
+const ContractTitle = styled.div`
+  font-size: 18px;
+  font-weight: bold;
+
+  @media (max-width: 560px) {
+    font-size: 15px;
+  }
+`;
+
+
+
 const Contracts: React.FC = () => {
   {
     /* const handleBackToRegister = () => {
@@ -70,7 +98,7 @@ const Contracts: React.FC = () => {
         <PageContainer>
           <TitleContainer>이용약관</TitleContainer>
           <ContractContainer>
-            <p style={{ fontSize: '18px', fontWeight: 'bold' }}>제1조(목적)</p>
+            <ContractTitle>제1조(목적)</ContractTitle>
             <Textwrapper>
               이 약관은 [Onboarding] (이하 "플랫폼")에서 제공하는 모든 서비스의
               이용과 관련하여 플랫폼과 사용자 간의 권리, 의무, 책임사항을
@@ -79,9 +107,9 @@ const Contracts: React.FC = () => {
           </ContractContainer>
 
           <ContractContainer>
-            <p style={{ fontSize: '18px', fontWeight: 'bold' }}>
+            <ContractTitle>
               제2조(약관의 효력 및 변경)
-            </p>
+            </ContractTitle>
             <Textwrapper>
               1. 본 약관은 플랫폼에 게시함으로써 효력이 발생합니다.
               <br />
@@ -93,9 +121,9 @@ const Contracts: React.FC = () => {
           </ContractContainer>
 
           <ContractContainer>
-            <p style={{ fontSize: '18px', fontWeight: 'bold' }}>
+            <ContractTitle>
               제3조(이용계약의 체결)
-            </p>
+            </ContractTitle>
             <Textwrapper>
               1. 사용자는 플랫폼이 정한 절차에 따라 회원가입을 신청하고,
               플랫폼이 이를 승인함으로써 계약이 체결됩니다.
@@ -106,9 +134,9 @@ const Contracts: React.FC = () => {
           </ContractContainer>
 
           <ContractContainer>
-            <p style={{ fontSize: '18px', fontWeight: 'bold' }}>
+            <ContractTitle>
               제4조(서비스의 제공 및 변경)
-            </p>
+            </ContractTitle>
             <Textwrapper>
               1. 플랫폼은 아래와 같은 서비스를 제공합니다:
               <br />
@@ -123,9 +151,9 @@ const Contracts: React.FC = () => {
           </ContractContainer>
 
           <ContractContainer>
-            <p style={{ fontSize: '18px', fontWeight: 'bold' }}>
+            <ContractTitle>
               제5조(사용자의 의무)
-            </p>
+            </ContractTitle>
             <Textwrapper>
               1. 사용자는 플랫폼 내에서 다음 행위를 하지 않아야 합니다:
               <br />
@@ -141,18 +169,18 @@ const Contracts: React.FC = () => {
           </ContractContainer>
 
           <ContractContainer>
-            <p style={{ fontSize: '18px', fontWeight: 'bold' }}>
+            <ContractTitle>
               제6조(개인정보 보호)
-            </p>
+            </ContractTitle>
             <Textwrapper>
               사용자의 개인정보는 [개인정보처리방침]에 따라 보호됩니다.
             </Textwrapper>
           </ContractContainer>
 
           <ContractContainer>
-            <p style={{ fontSize: '18px', fontWeight: 'bold' }}>
+            <ContractTitle>
               제7조(책임 제한)
-            </p>
+            </ContractTitle>
             <Textwrapper>
               플랫폼은 다음에 대해 책임을 지지 않습니다.
               <br />
@@ -165,9 +193,9 @@ const Contracts: React.FC = () => {
           </ContractContainer>
 
           <ContractContainer>
-            <p style={{ fontSize: '18px', fontWeight: 'bold' }}>
+            <ContractTitle>
               제8조(분쟁 해결)
-            </p>
+            </ContractTitle>
             <Textwrapper>
               본 약관과 관련하여 분쟁이 발생할 경우 [소재지]의 관할 법원을 전속
               관할로 합니다.

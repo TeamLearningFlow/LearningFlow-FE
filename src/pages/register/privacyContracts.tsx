@@ -16,17 +16,39 @@ const PageContainer = styled.div`
   flex-direction: column;
   padding: 100px 100px;
   gap: 48px;
+
+  @media (max-width: 560px) {
+    padding: 55px 40px;
+    gap: 38px;
+  }
 `;
 
 const TitleContainer = styled.div`
   font-size: 24px;
   font-weight: 600;
+
+  @media (max-width: 560px) {
+    font-size: 19px;
+  }
 `;
 
 const Textwrapper = styled.div`
   font-size: 14px;
   color: rgba(100, 105, 110, 1);
   line-height: 1.7em;
+
+  @media (max-width: 560px) {
+    font-size: 11px;
+  }
+`;
+
+const ContractTitle = styled.div`
+  font-size: 18px;
+  font-weight: bold;
+
+  @media (max-width: 560px) {
+    font-size: 15px;
+  }
 `;
 
 {
@@ -67,6 +89,10 @@ const FirstTableContainer = styled.div`
 const SecondTableContainer = styled.div`
   overflow-x: auto;
   width: 70%;
+
+  @media (max-width: 560px) {
+    width: 85%;
+  }
 `;
 
 const StyledTable = styled.table`
@@ -81,11 +107,21 @@ const TableHeader = styled.th<{ headerWidth?: string }>`
   padding: 16px;
   border: 1px solid rgba(189, 197, 204, 1);
   text-align: left;
+
+  @media (max-width: 560px) {
+    padding: 10px;
+    font-size: 11px;
+  }
 `;
 
 const TableCell = styled.td`
   padding: 18px;
   border: 1px solid rgba(189, 197, 204, 1);
+
+  @media (max-width: 560px) {
+    padding: 10px;
+    font-size: 11px;
+  }
 `;
 
 const PrivacyContracts: React.FC = () => {
@@ -101,9 +137,9 @@ const PrivacyContracts: React.FC = () => {
         <PageContainer>
           <TitleContainer>개인정보 처리방침</TitleContainer>
           <FirstContractContainer>
-            <p style={{ fontSize: '18px', fontWeight: 'bold' }}>
+            <ContractTitle>
               1. 개인정보 수집 및 이용 목적
-            </p>
+            </ContractTitle>
             <Textwrapper>
               ‘Onboarding’은 사용자에게 다양한 학습 콘텐츠를 모아 학습률을
               저장하고 필터링 기능을 제공하는 서비스를 제공합니다. <br />
@@ -137,9 +173,9 @@ const PrivacyContracts: React.FC = () => {
             </FirstTableContainer>
           </FirstContractContainer>
           <SecondContractContainer>
-            <p style={{ fontSize: '18px', fontWeight: 'bold' }}>
+            <ContractTitle>
               2. 수집하는 개인정보 항목
-            </p>
+            </ContractTitle>
             <SecondTableContainer>
               <StyledTable>
                 <colgroup>
@@ -189,9 +225,9 @@ const PrivacyContracts: React.FC = () => {
             </SecondTableContainer>
           </SecondContractContainer>
           <FirstContractContainer>
-            <p style={{ fontSize: '18px', fontWeight: 'bold' }}>
+            <ContractTitle>
               3. 개인정보 보유 및 이용기간
-            </p>
+            </ContractTitle>
             <Textwrapper>
               ‘Onboarding’은 서비스 제공을 위해 개인정보를 보유하며, 회원 탈퇴
               요청 시 수집된 정보를 지체 없이 삭제합니다. 단, 관련 법령에 따라
@@ -215,9 +251,9 @@ const PrivacyContracts: React.FC = () => {
             </FirstTableContainer>
           </FirstContractContainer>
           <FirstContractContainer>
-            <p style={{ fontSize: '18px', fontWeight: 'bold' }}>
+            <ContractTitle>
               4. 개인정보 파기 절차 및 방법
-            </p>
+            </ContractTitle>
             <Textwrapper>
               회원은 언제든지 본인의 개인정보를 열람, 수정, 삭제하거나 동의를
               철회할 수 있습니다. 개인정보 관련 요청은 이메일
@@ -240,9 +276,9 @@ const PrivacyContracts: React.FC = () => {
           </FirstContractContainer>
 
           <FirstContractContainer>
-            <p style={{ fontSize: '18px', fontWeight: 'bold' }}>
+            <ContractTitle>
               5. 회원의 관리
-            </p>
+            </ContractTitle>
             <Textwrapper>
               수집한 개인정보는 목적이 달성되거나 보유 기간이 만료되면 즉시
               파기합니다.
@@ -250,9 +286,9 @@ const PrivacyContracts: React.FC = () => {
           </FirstContractContainer>
 
           <FirstContractContainer>
-            <p style={{ fontSize: '18px', fontWeight: 'bold' }}>
+            <ContractTitle>
               6. 개인정보 보호책임자 및 문의
-            </p>
+            </ContractTitle>
             <Textwrapper>
               개인정보 처리와 관련된 문의사항은 아래로 연락주시기 바랍니다.
             </Textwrapper>
@@ -277,9 +313,9 @@ const PrivacyContracts: React.FC = () => {
           </FirstContractContainer>
 
           <FirstContractContainer>
-            <p style={{ fontSize: '18px', fontWeight: 'bold' }}>
+            <ContractTitle>
               7. 권익침해 구제방법
-            </p>
+            </ContractTitle>
             <Textwrapper>
               회원은 개인정보 침해로 인한 분쟁 해결이나 상담이 필요한 경우 다음
               기관에 문의할 수 있습니다.
@@ -307,9 +343,9 @@ const PrivacyContracts: React.FC = () => {
               </StyledTable>
             </FirstTableContainer>
           </FirstContractContainer>
-          <p style={{ fontSize: '18px', fontWeight: 'bold' }}>
+          <ContractTitle>
             본 방침은 2024년 2월 20일부터 적용됩니다.
-          </p>
+          </ContractTitle>
         </PageContainer>
         {/* <BackButton onClick={handleBackToRegister}>뒤로가기</BackButton> */}
       </PageWrapper>

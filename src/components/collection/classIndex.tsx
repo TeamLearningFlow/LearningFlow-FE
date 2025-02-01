@@ -17,17 +17,21 @@ const IndexIcon = styled.div`
   display: flex;
   width: 100px;
   height: 120px;
-  right: 20px;
+  right: 1.5vw;
   position: relative;
-  top: 32px;
+  top: 3.5vh;
 
+  border: 1px solid red;
 
   @media (max-width: 850px) {
-
+    width: 70px;
+    height: 90px;
   }
 
   @media (max-width: 560px) {
-
+    width: 40px;
+    height: 40px;
+    top: 2.5vh;
   }
 `;
 
@@ -107,9 +111,9 @@ const IndexWrapper = styled.div`
   }
 
   @media (max-width: 560px) {
-    height: 60px;
+    height: 50px;
     padding: 0 5%;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
 `;
 
@@ -118,6 +122,14 @@ const StartIndexWrapper = styled.div`
   align-items: center;
   width: 95%;
   margin-bottom: 20px;
+
+  @media (max-width: 850px) {
+
+  }
+
+  @media (max-width: 560px) {
+    margin-bottom: 0px;
+  }
 `; 
 
 const PlatformIcon = styled.div`
@@ -143,6 +155,16 @@ const PlatformIcon = styled.div`
 `;
 
 const StartIndexContainer = styled.div`
+  font-size: 18px;
+  font-weight: 600;
+
+  @media (max-width: 850px) {
+
+  }
+
+  @media (max-width: 560px) {
+    font-size: 8px;
+  }
 `;
 
 const EndIndexContainer = styled.div`
@@ -204,7 +226,7 @@ const StartIndex = () => {
       </IndexIcon>
       <StartIndexWrapper>
         <StartIndexContainer>
-          <p style={{fontSize: '18px', fontWeight: '600'}}>Welcome Onboard! 컬렉션 여정을 시작해보세요!</p>
+          Welcome Onboard! 컬렉션 여정을 시작해보세요!
         </StartIndexContainer>
       </StartIndexWrapper>
     </ComponentWrapper>
