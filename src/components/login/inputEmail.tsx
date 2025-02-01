@@ -57,7 +57,7 @@ const InputWrapper = styled.div<{
   margin-bottom: 7px;
 
   @media (max-width: 768px) {
-    padding: 0;
+    padding: 5px;
     font-size: 13px;
   }
 `;

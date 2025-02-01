@@ -19,12 +19,20 @@ const PageContainer = styled.div`
   min-height: 100vh;
   background-color: #ffffff;
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    justify-content: center;
+  }
 `;
 
 const LeftSection = styled.div`
   width: 54vw;
   display: flex;
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const RightSection = styled.div`
@@ -35,8 +43,12 @@ const RightSection = styled.div`
   box-sizing: border-box;
   overflow: hidden;
 
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+
   @media (max-width: 480px) {
-    margin-top: -50px;
+    margin-top: -70px;
   }
 `;
 
@@ -47,6 +59,10 @@ const FormContainer = styled.div`
   border-radius: 8px;
   background-color: #ffffff;
   box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    width: 80%;
+  }
 `;
 
 const Title = styled.h1`
