@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-// import styled from 'styled-components';
+import styled from 'styled-components';
 import Header from '../../components/searchHeader';
 import CategoryList from '@/components/search/categoryList';
 import BoardingPass from '@/components/search/boardingPass';
@@ -11,9 +11,9 @@ import Banner from '../../components/home/homeBanner';
 import Footer from '../../components/homeFooter';
 import HomeCollection from '../../components/home/homeCollection';
 import RecentCollection from '../../components/home/recentCollection';
-// import HomeModal from '../../pages/modal/homeModal';
+import HomeModal from '../../components/modal/homeModal';
 
-/*const Wrapper = styled.div`
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -26,13 +26,12 @@ const Main = styled.div`
   text-align: center;
   padding: 20px;
 `;
-*/
 
 const Home: React.FC = () => {
-  /*const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(true);
   const handleCloseModal = () => {
     setIsModalOpen(false);
-  };*/
+  };
 
   const [searchActive, setSearchActive] = useState(false); // 검색창 활성화 상태
 
@@ -60,11 +59,10 @@ const Home: React.FC = () => {
           <Banner />
           <RecentCollection />
           <HomeCollection />
-          {/*<Wrapper>
-        {isModalOpen && <HomeModal onClose={handleCloseModal} />}
-        {!isModalOpen && <Main></Main>}
-        </Wrapper> 
-        */}
+          <Wrapper>
+            {isModalOpen && <HomeModal onClose={handleCloseModal} />}
+            {!isModalOpen && <Main></Main>}
+          </Wrapper>
           <Footer />
         </>
       )}

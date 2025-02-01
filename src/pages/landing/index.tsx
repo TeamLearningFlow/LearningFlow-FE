@@ -6,6 +6,7 @@ import Page2 from './page2';
 import Page3 from './page3';
 import styled from 'styled-components';
 import TopLogo from '../../components/landing/landingHeader';
+import Guest from '../../assets/Guest.svg';
 
 const PageIndicator = styled.div`
   display: flex;
@@ -23,6 +24,7 @@ const Indicator = styled.div<{ active: boolean }>`
 
 const LandingPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [imgUrl, setImgUrl] = useState(''); // 프로필 url 값
   const [nickname, setNickname] = useState(''); // 닉네임 값
   const [job, setJob] = useState(''); // 직업 값
   const [interestFields, setInterestFields] = useState<string[]>([]); // 카테고리 값
@@ -41,11 +43,14 @@ const LandingPage: React.FC = () => {
   const router = useRouter();
 
   const handleComplete = async (finalPreferType: string) => {
+    const defaultImgUrl = imgUrl || Guest.src; // 디폴트 이미지
+
     const requestData = {
       name: nickname,
       job,
       interestFields,
       preferType: finalPreferType,
+      imgUrl: defaultImgUrl,
     };
 
     console.log('requestData:', requestData);
@@ -81,9 +86,10 @@ const LandingPage: React.FC = () => {
       <TopLogo />
       {currentPage === 1 && (
         <Page1
-          onNext={({ nickname, job }) => {
+          onNext={({ nickname, job, imgUrl }) => {
             setNickname(nickname);
             setJob(job);
+            setImgUrl(imgUrl);
             setCurrentPage(2);
           }}
         />

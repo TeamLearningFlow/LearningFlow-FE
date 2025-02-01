@@ -23,6 +23,17 @@ const ProfileContainer = styled.div`
   margin-bottom: 50px;
 `;
 
+const UploadedImage = styled.img`
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+`;
+
+const FileInput = styled.input`
+  display: none;
+`;
+
 const PencilButton = styled.div`
   position: absolute;
   right: 18px;
@@ -74,8 +85,8 @@ const InputBox = styled.input<{ valid: boolean | null; focused: boolean }>`
       props.valid === false
         ? '#EC2D30'
         : props.focused
-        ? '#5E52FF'
-        : '#181818'};
+          ? '#5E52FF'
+          : '#181818'};
   box-shadow: ${(props) =>
     props.focused && props.valid !== false
       ? '1.806px 1.806px 1.806px 0px rgba(94, 82, 255, 0.30), -1.806px -1.806px 1.806px 0px rgba(94, 82, 255, 0.30)'
@@ -123,7 +134,8 @@ const DropdownOptions = styled.ul`
   padding: 0;
   margin: 0;
   z-index: 100;
-  box-shadow: 1px 1px 1px 0px rgba(94, 82, 255, 0.3),
+  box-shadow:
+    1px 1px 1px 0px rgba(94, 82, 255, 0.3),
     -1px -1px 1px 0px rgba(94, 82, 255, 0.3);
 `;
 
@@ -164,7 +176,7 @@ const NextButton = styled.button<{ active: boolean }>`
 `;
 
 const LandingPage: React.FC<{
-  onNext: (data: { nickname: string; job: string }) => void;
+  onNext: (data: { nickname: string; job: string; imgUrl: string }) => void;
 }> = ({ onNext }) => {
   const [isHovered, setIsHovered] = useState(false); // 편집 아이콘 hover
   const [nickname, setNickname] = useState('');
@@ -172,6 +184,8 @@ const LandingPage: React.FC<{
   const [isNicknameValid, setIsNicknameValid] = useState<boolean | null>(null);
   const [job, setJob] = useState('');
   const [isJobDropdownOpen, setIsJobDropdownOpen] = useState(false);
+  const [imgUrl, setImgUrl] = useState(''); // 이미지 URL 상태 추가
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // 부모에게 전달 할 string 정의
   const jobMapping: { [key: string]: string } = {
@@ -231,6 +245,14 @@ const LandingPage: React.FC<{
     setJob(jobMapping[option]);
   };
 
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const uploadedFile = event.target.files[0];
+      const objectUrl = URL.createObjectURL(uploadedFile);
+      setImgUrl(objectUrl);
+    }
+  };
+
   const isNextButtonActive = isNicknameValid === true && job !== '';
 
   return (
@@ -238,10 +260,15 @@ const LandingPage: React.FC<{
       <Content>
         <Title>닉네임과 직업을 설정해주세요</Title>
         <ProfileContainer>
-          <Image src={Guest} alt="Profile" width={120} height={120} />
+          {imgUrl ? (
+            <UploadedImage src={imgUrl} alt="Uploaded Profile" />
+          ) : (
+            <Image src={Guest} alt="Profile" width={120} height={120} />
+          )}
           <PencilButton
             onMouseEnter={() => setIsHovered(true)} // 마우스가 올려졌을 때
             onMouseLeave={() => setIsHovered(false)} // 마우스가 떠났을 때
+            onClick={() => fileInputRef.current?.click()} // 이미지 업로드 기능 추가
           >
             <Image
               src={isHovered ? EditIconHover : EditIcon} // 호버 상태에 따라 아이콘 변경
@@ -250,6 +277,12 @@ const LandingPage: React.FC<{
               height={27}
             />
           </PencilButton>
+          <FileInput
+            type="file"
+            accept="image/*"
+            ref={fileInputRef}
+            onChange={handleImageUpload}
+          />
         </ProfileContainer>
         <Label>닉네임</Label>
         <InputBox
@@ -315,7 +348,7 @@ const LandingPage: React.FC<{
             active={isNextButtonActive}
             onClick={() => {
               if (isNextButtonActive) {
-                onNext({ nickname, job }); // 부모 컴포넌트로 직업 값 전달
+                onNext({ nickname, job, imgUrl }); // 부모 컴포넌트로 직업 값 전달
               }
             }}
           >
