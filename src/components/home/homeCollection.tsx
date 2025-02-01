@@ -7,7 +7,6 @@ import AirplaneIcon from '../../assets/airplaneIcon.svg';
 const HomeCollectionWrapper = styled.div`
   display: flex;
   width: 100%;
-  height: 1050px;
   padding: 50px 17% 0px 17%;
   margin: 0 auto;
   flex-direction: column;
@@ -43,6 +42,14 @@ const HeaderText = styled.div`
     font-weight: 500;
     line-height: 150%; /* 36px */
     letter-spacing: -0.48px;
+
+    @media (max-width: 768px) {
+      font-size: 17px;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 15px;
+    }
   }
 
   p {
@@ -54,6 +61,14 @@ const HeaderText = styled.div`
     font-weight: 600;
     line-height: 150%; /* 48px */
     letter-spacing: -0.64px;
+
+    @media (max-width: 768px) {
+      font-size: 23px;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 18px;
+    }
   }
 `;
 
@@ -61,9 +76,10 @@ const CollectionList = styled.div`
   height: auto;
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr)); /* 한 줄에 3개 */
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   justify-items: center;
   gap: 16px;
+  margin-bottom: 70px;
 `;
 
 const HomeCollection = () => {
