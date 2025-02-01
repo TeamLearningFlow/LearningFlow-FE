@@ -15,15 +15,27 @@ const ComponentWrapper = styled.div`
 `;
 
 const IndexIcon = styled.div`
+  border: 1px solid red;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 5%;
-  min-width: 50px; 
-  height: 100px; 
-  border-radius: 5px;
+  width: 100px;
+  height: 130px; 
   position: relative;
   top: 32px;
+
+
+  @media (max-width: 850px) {
+    top: 66px;
+    right: -48px;
+    width: 90px;
+    height: 90px;
+  }
+
+  @media (max-width: 560px) {
+    top: 66px;
+    right: -48px;
+    width: 90px;
+    height: 90px;
+  }
 `;
 
 const EndIconContainer = styled.div`
@@ -191,7 +203,7 @@ const StartIndex = () => {
   return (
     <ComponentWrapper>
       <IndexIcon>
-        <Image src={CompletedIndexIcon} alt="completed-icon" width={85} height={200} />
+        <Image src={CompletedIndexIcon} alt="completed-icon" fill style={{ objectFit: 'contain' }} />
       </IndexIcon>
       <StartIndexWrapper>
         <StartIndexContainer>
@@ -221,7 +233,7 @@ const ClassIndex: React.FC<{ orderText: string; src: string }> = ({ orderText, s
   return (
     <ComponentWrapper>
       <IndexIcon>
-        <Image src={CompletedIndexIcon} alt="completed-icon" width={85} height={200} />
+        <Image src={CompletedIndexIcon} alt="completed-icon" fill style={{ objectFit: 'contain' }} />
       </IndexIcon>
       <IndexWrapper>
         <PlatformIcon>

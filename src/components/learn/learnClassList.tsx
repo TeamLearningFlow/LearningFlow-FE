@@ -7,13 +7,19 @@ const ComponentWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  // width: 65%;
-  // margin-left: 3%;
   max-height: 200px;
   overflow-y: scroll;
 
   &::-webkit-scrollbar {
     width: 8px; /* 스크롤바의 너비 */
+
+    @media (max-width: 850px) {
+      width: 8px;
+    }
+
+    @media (max-width: 560px) {
+      width: 5px;
+    }
   }
 
   &::-webkit-scrollbar-track {
@@ -24,6 +30,14 @@ const ComponentWrapper = styled.div`
   &::-webkit-scrollbar-thumb {
     background: #888; /* 스크롤바 색상 */
     border-radius: 10px; /* 스크롤바 모서리 둥글게 */
+  }
+
+  @media (max-width: 850px) {
+    max-height: 500px;
+  }
+
+  @media (max-width: 560px) {
+    max-height: 350px;
   }
 `;
 
@@ -37,6 +51,18 @@ const ClassList: React.FC = () => {
       orderText: '2회차',
       title: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
     },
+    {
+      orderText: '3회차',
+      title: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
+    },
+    {
+      orderText: '4회차',
+      title: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
+    },
+    {
+      orderText: '5회차',
+      title: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
+    }
   ];
 
   return (
