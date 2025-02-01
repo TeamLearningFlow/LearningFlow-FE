@@ -20,6 +20,16 @@ const NoteTitle = styled.div`
   font-weight: 600;
   line-height: 36px;
   letter-spacing: -0.48px;
+
+  @media (max-width: 850px) {
+    font-size: 20px;
+  }
+
+  @media (max-width: 560px) {
+    font-size: 15px;
+    padding: 15px;
+    padding-left: 19px;
+  }
 `;
 
 const NoteBody = styled.div`
@@ -29,8 +39,12 @@ const NoteBody = styled.div`
   color: #bdc5cc;
   font-size: 18px;
   font-weight: 400;
-  line-height: 27px;
+  // line-height: 27px;
   letter-spacing: -0.36px;
+
+  @media (max-width: 560px) {
+    padding: 15px;
+  }
 `;
 
 const InputWrapper = styled.textarea`
@@ -51,31 +65,64 @@ const InputWrapper = styled.textarea`
 
   &::placeholder {
     color: #bdc5cc;
-    font-family: Pretendard;
     font-size: 18px;
     font-weight: 400;
     line-height: 30px;
     letter-spacing: -0.36px;
   }
+
+  @media (max-width: 850px) {
+    font-size: 15px;
+    line-height: 25px;
+    &::placeholder {
+      color: #bdc5cc;
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 25px;
+      letter-spacing: -0.36px;
+    }
+  }
+
+  @media (max-width: 560px) {
+    font-size: 10px;
+    line-height: 20px;
+    &::placeholder {
+      color: #bdc5cc;
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 20px;
+      letter-spacing: -0.36px;
+    }
+  }
 `;
 
 const SaveButton = styled.div<{ isValid: boolean }>`
   text-align: center;
+  // white-space: nowrap;
 
   border-radius: 6px;
   background-color: ${(props) =>
     props.isValid ? '#5E52FF' : 'rgba(118, 118, 128, 0.12)'};
 
   color: #fff;
-  text-aign: center;
+  text-align: center;
   font-size: 20px;
   font-weight: 600;
   line-height: 30px;
   letter-spacing: -0.4px;
-  padding: 10px 100px;
+  padding: 10px;
   margin-top: 24px;
 
   cursor: ${(props) => (props.isValid ? 'pointer' : 'default')};
+
+  @media (max-width: 850px) {
+    font-size: 17px;
+  }
+
+  @media (max-width: 560px) {
+    font-size: 10px;
+    padding: 0px;
+  }
 `;
 
 const Note: React.FC = () => {
