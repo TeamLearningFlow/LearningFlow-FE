@@ -152,6 +152,10 @@ const ProfileUser = styled.div`
   margin-top: 7px;
 
   z-index: 1;
+
+  @media (max-width: 650px) {
+    margin-right: 1%;
+  }
 `;
 
 // 헤더 상태 전달
