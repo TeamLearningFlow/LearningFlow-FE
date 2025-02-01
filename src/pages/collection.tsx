@@ -5,6 +5,7 @@ import CategoryList from '../components/search/categoryList';
 import BoardingPass from '../components/search/boardingPass';
 import Filters from '../components/search/filters';
 import Pagination from '@/components/search/pagination';
+import BoardingPassList from '@/components/search/boardingPassList';
 
 import TitleBar from '../components/collection/collectionTitleBar';
 import CollectionInfo from '../components/collection/collectionInfo';
@@ -46,11 +47,15 @@ const CollectionPage: React.FC = () => {
       <Header onSearchStateChange={handleSearchStateChange} />
       {searchActive ? (
         <div>
-        <CategoryList />
-        <Filters />
-        <BoardingPass showHoverCollection={true} />
-        <Pagination />
-      </div>
+          <CategoryList />
+          <Filters />
+          <BoardingPassList>
+            {Array.from({ length: 8 }).map((_, index) => (
+              <BoardingPass key={index} showHoverCollection={true} />
+            ))}
+          </BoardingPassList>
+          <Pagination />
+        </div>
       ) : (
         <>
           <TitleBar />
