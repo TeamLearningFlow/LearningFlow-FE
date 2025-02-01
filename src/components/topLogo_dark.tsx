@@ -20,7 +20,7 @@ margin-top: 6px;
 flex-shrink: 0;
 margin-right: auto;
 `;
-
+ 
 const DarkTopLogo: React.FC = () => {
   return (
     <HeaderWrapper>

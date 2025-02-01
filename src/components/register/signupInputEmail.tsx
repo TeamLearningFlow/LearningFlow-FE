@@ -39,6 +39,11 @@ const InputWrapper = styled.div<{
     height: 18px;
     cursor: pointer;
   }
+
+  @media (max-width: 768px) {
+    padding: 0;
+    font-size: 13px;
+  }
 `;
 
 const Input = styled.input<{
@@ -62,6 +67,10 @@ const Input = styled.input<{
 
   &:focus {
     outline: none;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 13px;
   }
 `;
 

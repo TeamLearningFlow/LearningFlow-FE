@@ -23,12 +23,41 @@ const ValidationBox = styled(Wrapper)<{ isValid: boolean | null }>`
   color: ${(props) =>
     props.isValid === null ? '#000000' : props.isValid ? '#165bfa' : '#ec2d30'};
   margin-bottom: 8px;
+
+  svg {
+    font-size: 16px;
+    transition: font-size 0.3s ease;
+  }
+
+  @media (max-width: 768px) {
+    svg {
+      font-size: 14px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    svg {
+      font-size: 12px;
+    }
+  }
 `;
 
 const ValidationLabel = styled.span`
   font-size: 12px;
   margin-left: 6px;
   margin-right: 16px;
+
+  @media (max-width: 768px) {
+    font-size: 10px;
+    margin-left: 2px;
+    margin-right: 6px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 9px;
+    margin-left: 2px;
+    margin-right: 6px;
+  }
 `;
 
 interface ValidationCheckProps {
