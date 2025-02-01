@@ -55,6 +55,11 @@ const InputWrapper = styled.div<{
   overflow: hidden;
   padding: 12px;
   margin-bottom: 7px;
+
+  @media (max-width: 768px) {
+    padding: 0;
+    font-size: 13px;
+  }
 `;
 
 const Input = styled.input<{
@@ -70,6 +75,7 @@ const Input = styled.input<{
   margin-left: 15px;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 
   color: ${({ isValid }) => (isValid ? '#1f1f1f' : '#ec2d30')};
   background-color: ${(props) => {
@@ -84,6 +90,10 @@ const Input = styled.input<{
 
   &::placeholder {
     color: #afb8c1;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 13px;
   }
 `;
 

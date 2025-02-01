@@ -23,12 +23,31 @@ const Button = styled.button`
   &:hover {
     background-color: rgba(245, 245, 245, 1);
   }
+
+  @media (max-width: 768px) {
+    padding: 19px 12px;
+    font-size: 15px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 13px;
+  }
 `;
 
 const GoogleLogo = styled(Image)`
   margin-right: 10px;
   width: 20px;
   height: 20px;
+
+  @media (max-width: 768px) {
+    width: 18px;
+    height: 18px;
+  }
+
+  @media (max-width: 480px) {
+    width: 16px;
+    height: 16px;
+  }
 `;
 
 const GoogleAuthButton = ({ text }: { text: string }) => {

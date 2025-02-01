@@ -16,7 +16,7 @@ const PageContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   background-color: #ffffff;
   overflow: hidden;
 `;
@@ -33,7 +33,11 @@ const RightSection = styled.div`
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  over-flow: hidden;
+  overflow: hidden;
+
+  @media (max-width: 480px) {
+    margin-top: -50px;
+  }
 `;
 
 const FormContainer = styled.div`
@@ -97,7 +101,7 @@ const SignupText = styled.p`
   font-weight: 400;
   letter-spacing: -0.36px;
   color: #bbc0c5;
-  margin-bottom: 32px;
+  margin-bottom: 20px;
 
   a {
     color: #181818;
@@ -105,10 +109,17 @@ const SignupText = styled.p`
     font-weight: 600;
     letter-spacing: -0.36px;
     text-decoration: none;
-    margin-left: 6px;
+    margin-left: 4px;
 
     &:hover {
       text-decoration: underline;
+    }
+  }
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+    a {
+      font-size: 12px;
     }
   }
 `;
