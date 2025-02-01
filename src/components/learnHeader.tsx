@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import Link from 'next/link';
 import styled from 'styled-components';
 import Image from 'next/image';
 import LogoDark from '../assets/logo_dark.png';
@@ -35,7 +36,9 @@ const Header: React.FC = () => {
   return (
     <HeaderWrapper>
       <LogoWrapper>
-        <Image src={LogoDark} alt="header logo" width={130} height={20} />
+        <Link href="/home" passHref>
+          <Image src={LogoDark} alt="header logo" width={130} height={20} />
+        </Link>
       </LogoWrapper>
       <ProfileIcon>
         <Image src={Guest} alt="profile" width={40} height={40} />

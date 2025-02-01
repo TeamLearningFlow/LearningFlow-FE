@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Header from '../../components/searchHeader';
 import CategoryList from '@/components/search/categoryList';
@@ -28,7 +28,17 @@ const Main = styled.div`
 `;
 
 const Home: React.FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    // 로컬 스토리지에서 모달 표시 여부 확인
+    const showModal = localStorage.getItem('showHomeModal');
+    if (showModal === 'true') {
+      setIsModalOpen(true);
+      localStorage.removeItem('showHomeModal');
+    }
+  }, []);
+
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };

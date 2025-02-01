@@ -175,6 +175,7 @@ const LoginPage: React.FC = () => {
 
       if (response.status === 200) {
         localStorage.setItem('token', response.data.token); // 로그인 성공 시 토큰 저장
+        localStorage.setItem('showHomeModal', 'true'); // 로그인 성공 시 모달 표시 여부 결정
         router.push('/home'); // 홈 페이지로 이동
       }
     } catch (err: any) {

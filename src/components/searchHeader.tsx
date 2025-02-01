@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import Link from 'next/link';
 import styled from 'styled-components';
 import Image from 'next/image';
 import LogoDark from '../assets/logo_dark.png';
@@ -32,11 +33,11 @@ const HeaderWrapper = styled.header`
 `;
 
 const LogoWrapper = styled.div<{ $state: string }>`
-  display: flex:
   align-items: center;
   margin-top: 5px;
   flex-shrink: 0;
   margin-right: auto;
+  display: inline-flex;
 `;
 
 const SearchWrapper = styled.div<{ $state: string }>`
@@ -238,8 +239,11 @@ const Header: React.FC<HeaderProps> = ({ onSearchStateChange }) => {
   return (
     <HeaderWrapper>
       <LogoWrapper $state={searchState}>
-        <Image src={LogoDark} alt="header logo" width={130} height={20} />
+        <Link href="/home" passHref>
+          <Image src={LogoDark} alt="header logo" width={130} height={20} />
+        </Link>
       </LogoWrapper>
+
       <SearchWrapper $state={searchState}>
         <Input
           type="text"
