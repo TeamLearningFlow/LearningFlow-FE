@@ -75,8 +75,6 @@ const IndexWrapper = styled.div`
   cursor: pointer;
   transition: background 0.5s;
 
-  border: 1px solid black;
-
   &:hover {
     background: rgba(245, 245, 255, 1);
 

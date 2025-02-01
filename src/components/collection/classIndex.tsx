@@ -84,8 +84,6 @@ const IndexWrapper = styled.div`
   cursor: pointer;
   transition: background 0.5s;
 
-  border: 1px solid black;
-
   &:hover {
     background: rgba(245, 245, 255, 1);
 
@@ -120,7 +118,6 @@ const StartIndexWrapper = styled.div`
   align-items: center;
   width: 95%;
   margin-bottom: 20px;
-  border: 1px solid blue;
 `; 
 
 const PlatformIcon = styled.div`
@@ -149,8 +146,10 @@ const StartIndexContainer = styled.div`
 `;
 
 const EndIndexContainer = styled.div`
-  border: 1px solid red;
-  margin-left: 37px;
+  margin-left: 45px;
+  position: relative;
+  top: 3.5vh;
+
 `;
 
 const IndexContainer = styled.div`

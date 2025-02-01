@@ -84,7 +84,7 @@ const FormContainer = styled.div`
   div {
     @media (max-width: 480px) {
       white-space: pre-wrap;
-      word-wrap: break-word; /* 긴 단어가 줄바꿈되도록 설정 */
+      word-wrap: break-word;
     }
   }
 `;

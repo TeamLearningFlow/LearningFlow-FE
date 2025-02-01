@@ -28,6 +28,7 @@ const ListWrapper = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  margin-bottom: 100px;
 `;
 
 const ListContainer = styled.div``;
