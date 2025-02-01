@@ -22,6 +22,12 @@ const IndexWrapper = styled.div`
   &:hover {
     background: rgba(245, 245, 245, 1);
   }
+
+  @media (max-width: 560px) {
+    margin-bottom: 3px;
+    height: 60px;
+    min-height: 60px;
+  }
 `;
 
 const CurrentIndexWrapper = styled.div`
@@ -38,29 +44,64 @@ const CurrentIndexWrapper = styled.div`
   margin-bottom: 10px;
   cursor: pointer;
   transition: background 0.5s;
+
+  @media (max-width: 560px) {
+    margin-bottom: 3px;
+    height: 60px;
+    min-height: 60px;
+  }
 `;
 
 const PlatformIcon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  background-color: #dcd9ff;
   overflow: hidden;
+  position: relative;
+  width: 50px;
+  height: 50px;
+  min-width: 40px;
+  min-height: 40px;
+
+  @media (max-width: 850px) {
+    width: 45px;
+    height: 45px;
+    min-width: 35px;
+    min-height: 35px;
+  }
+
+  @media (max-width: 560px) {
+    width: 35px;
+    height: 35px;
+    min-width: 30px;
+    min-height: 30px;
+  }
 `;
 
 const CurrentPlatformIcon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background-color: #dcd9ff;
-  border: 3px solid #5e52ff;
   overflow: hidden;
+  position: relative;
+  width: 50px;
+  height: 50px;
+  min-width: 40px;
+  min-height: 40px;
+
+  @media (max-width: 850px) {
+    width: 45px;
+    height: 45px;
+    min-width: 35px;
+    min-height: 35px;
+  }
+
+  @media (max-width: 560px) {
+    width: 35px;
+    height: 35px;
+    min-width: 30px;
+    min-height: 30px;
+  }
 `;
 
 const IndexContainer = styled.div`
@@ -68,6 +109,14 @@ const IndexContainer = styled.div`
   flex-direction: column;
   flex-grow: 1;
   margin-left: 25px;
+
+  @media (max-width: 850px) {
+
+  }
+
+  @media (max-width: 560px) {
+    margin-left: 13px;
+  }
 `;
 
 const OrderBox = styled.div`
@@ -75,6 +124,16 @@ const OrderBox = styled.div`
   font-size: 15px;
   margin-bottom: 8px;
   color: rgba(149, 156, 164, 1);
+
+  @media (max-width: 850px) {
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+
+  @media (max-width: 560px) {
+    font-size: 9px;
+    margin-bottom: 3px;
+  }
 `;
 
 const CurrentOrderBox = styled.div`
@@ -82,12 +141,34 @@ const CurrentOrderBox = styled.div`
   font-size: 15px;
   margin-bottom: 8px;
   color: #5e52ff;
+
+  @media (max-width: 850px) {
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+
+  @media (max-width: 560px) {
+    font-size: 9px;
+    margin-bottom: 3px;
+  }
 `;
 
 const TitleBox = styled.div`
-  display: flex;
+  display: block;
   font-size: 18px;
   font-weight: 600;
+
+  @media (max-width: 850px) {
+    font-size: 15px;
+  }
+
+  @media (max-width: 560px) {
+    font-size: 12px;
+    white-space: wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+  }
 `;
 
 interface ClassListProps {
@@ -105,8 +186,7 @@ export const CompletedClass: React.FC<ClassListProps> = ({
         <Image
           src={CheckedYoutube}
           alt="platform-icon"
-          width={50}
-          height={50}
+          fill style={{ objectFit: 'contain' }}
         />
       </PlatformIcon>
       <IndexContainer>
@@ -121,10 +201,10 @@ export const CurrentClass: React.FC = () => {
   return (
     <CurrentIndexWrapper>
       <CurrentPlatformIcon>
-        <Image src={YoutubeIcon} alt="platform-icon" width={45} height={45} />
+        <Image src={YoutubeIcon} alt="platform-icon" fill style={{ objectFit: 'contain' }} />
       </CurrentPlatformIcon>
       <IndexContainer>
-        <CurrentOrderBox>3회차</CurrentOrderBox>
+        <CurrentOrderBox>6회차</CurrentOrderBox>
         <TitleBox>브랜치 포스터 "와이어프레임을 활용하는 이유"</TitleBox>
       </IndexContainer>
     </CurrentIndexWrapper>
@@ -135,10 +215,10 @@ export const NextClass: React.FC = () => {
   return (
     <IndexWrapper>
       <PlatformIcon>
-        <Image src={YoutubeIcon} alt="platform-icon" width={45} height={45} />
+        <Image src={YoutubeIcon} alt="platform-icon" fill style={{ objectFit: 'contain' }} />
       </PlatformIcon>
       <IndexContainer>
-        <OrderBox>3회차</OrderBox>
+        <OrderBox>7회차</OrderBox>
         <TitleBox>브랜치 포스터 "와이어프레임을 활용하는 이유"</TitleBox>
       </IndexContainer>
     </IndexWrapper>
