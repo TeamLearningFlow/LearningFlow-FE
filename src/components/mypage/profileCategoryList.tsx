@@ -19,6 +19,21 @@ const CategoryListWrapper = styled.div`
   justify-content: flex-start;
   gap: 5px;
   background-color: #ffffff;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding-bottom: 5px; 
+  box-sizing: border-box;
+
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #cccccc;
+    border-radius: 4px;
+  }
+
+  scrollbar-gutter: stable;
 `;
 
 const CategoryItemWrapper = styled.div<{ active?: boolean }>`
@@ -28,6 +43,7 @@ const CategoryItemWrapper = styled.div<{ active?: boolean }>`
   justify-content: center;
   padding: 12px;
   width: 60px;
+  min-width: 60px;
   height: 60px;
   background-color: ${({ active }) => (active ? '#5e52ff' : '#fafafc')};
   box-shadow: ${({ active }) =>

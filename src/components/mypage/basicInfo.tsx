@@ -20,6 +20,14 @@ const InfoRow = styled.div`
   display: flex;
   align-items: start;
   margin-bottom: 20px;
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 13px;
+  }
 `;
 
 const Label = styled.div`
@@ -96,6 +104,7 @@ const SetButton = styled.button`
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
+  color: #1f1f1f;
 
   &:hover {
     background: rgba(118, 118, 128, 0.12);

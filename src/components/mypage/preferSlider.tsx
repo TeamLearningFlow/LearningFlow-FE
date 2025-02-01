@@ -10,6 +10,14 @@ const SliderContainer = styled.div`
   position: relative;
   gap: 10px;
   width: 45%;
+
+  @media (max-width: 1024px) {
+    width: 80%;
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
+  }
 `;
 
 const SliderWrapper = styled.div`
@@ -18,6 +26,10 @@ const SliderWrapper = styled.div`
   align-items: center;
   margin-top: 55px;
   position: relative;
+
+  @media (max-width: 480px) {
+    margin-top: 45px;
+  }
 `;
 
 const TooltipContainer = styled.div<{ position: number }>`
@@ -29,6 +41,17 @@ const TooltipContainer = styled.div<{ position: number }>`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  @media (max-width: 1024px) {
+    left: ${({ position }) => {
+      const basePosition =
+        position <= 40 ? position * 0.85 : position * 0.65 + 10;
+      return `calc(${Math.min(Math.max(basePosition, 6), 92)}%)`;
+    }};
+
+  @media (max-width: 480px) {
+    left: ${(props) => Math.min(Math.max(props.position, 15), 88)}%;
+  }
 `;
 
 const Slider = styled.input<{ value: number }>`

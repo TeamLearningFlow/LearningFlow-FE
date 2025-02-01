@@ -75,6 +75,10 @@ const InfoGrid = styled.div`
   row-gap: 16px;
   column-gap: 20px;
   align-items: start;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const InfoLabel = styled.span`
@@ -83,6 +87,13 @@ const InfoLabel = styled.span`
   line-height: 30px; /* 150% */
   letter-spacing: -0.4px;
   color: #000;
+
+  @media (max-width: 1024px) {
+    margin-bottom: -7px;
+  }
+  @media (max-width: 480px) {
+    font-size: 13px;
+  }
 `;
 
 const InfoValue = styled.span`
@@ -112,12 +123,19 @@ const Input = styled.input`
       -1px -1px 1px 0px rgba(94, 82, 255, 0.3);
     outline: none;
   }
+
+  @media (max-width: 1024px) {
+    width: 90%;
+  }
 `;
 
 const BannerContainer = styled.div`
-  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   gap: 20px;
   width: 100%;
+  position: relative;
 `;
 
 const Banner = styled.div<{ background?: string }>`
@@ -130,6 +148,22 @@ const Banner = styled.div<{ background?: string }>`
       ? `url(${background})`
       : 'linear-gradient(90deg, #5e52ff 0%, #383199 100%)'};
   background-size: cover;
+
+  @media (max-width: 1024px) {
+    width: 570px;
+  }
+
+  @media (max-width: 750px) {
+    width: 400px;
+  }
+
+  @media (max-width: 560px) {
+    width: 330px;
+  }
+
+  @media (max-width: 480px) {
+    width: 180px;
+  }
 `;
 
 const ProfileContainer = styled.div`
@@ -147,13 +181,11 @@ const ProfileImage = styled.div`
 `;
 
 const ChangeContainerBanner = styled.div`
-  position: absolute;
-  top: 50%;
-  right: -30px;
-  transform: translateY(-50%);
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  gap: 2px;
 `;
 
 const ChangeContainerImage = styled.div`
@@ -164,6 +196,10 @@ const ChangeContainerImage = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+
+  @media (max-width: 480px) {
+    margin-left: 95px;
+  }
 `;
 
 const ChangeButton = styled.label`
