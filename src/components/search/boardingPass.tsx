@@ -7,12 +7,17 @@ import CollectionImage from '../../assets/boardingpassS.svg';
 import HoverBackground from '../../assets/hover-background.svg';
 import Plane from '../../assets/plane.svg';
 import Circle from '../../assets/circle.svg';
+import Calendar from '../../assets/calendarIcon.svg';
+
 import NaverblogIcon from '../../assets/platformicon/naverblog_nostroke_ic.svg';
 import TistoryIcon from '../../assets/platformicon/tistory_nostroke_ic.svg';
 import VelogIcon from '../../assets/platformicon/velog_nostroke_ic.svg';
 import YoutubeIcon from '../../assets/platformicon/youtube_nostroke_ic.svg';
 import VelogLine from '../../assets/platformicon/velog_ic.svg';
+import NaverblogLine from '../../assets/platformicon/naverblog_ic.svg';
+import YoutubeLine from '../../assets/platformicon/youtube_ic.svg';
 import OnStudying from '../../assets/onstudying.svg';
+import CompletedStamp from '../../assets/completedStamp.svg';
 
 const ColumnFlexDiv = styled.div`
   display: flex;
@@ -309,11 +314,11 @@ const Detail = styled.span<{ marginLeft?: string }>`
   letter-spacing: -0.16px;
 `;
 
-const LineWrapper = styled.span`
+const LineWrapper = styled.span<{ status?: string }>`
   display: flex;
   align-items: center;
   position: absolute;
-  left: 109.6px;
+  left: ${(props) => (props.status === '학습완료' ? '65px' : '109.6px')};
 `;
 
 const CollectionDetail = styled(RowFlexSpan)`
@@ -322,21 +327,22 @@ const CollectionDetail = styled(RowFlexSpan)`
   right: 0;
 `;
 
-const Number = styled.span`
+const Number = styled.span<{ status?: string }>`
   display: flex;
-  width: 10px;
-  height: 10px;
-  padding: 1.374px;
+
+  width: ${(props) => (props.status === '학습완료' ? '44px' : '10px')};
+  height: ${(props) => (props.status === '학습완료' ? '15px' : '10px')};
+  padding: ${(props) => (props.status === '학습완료' ? '2px 8px' : '1.374px')};
+  border-radius: ${(props) =>
+    props.status === '학습완료' ? '100px' : '4.81px'};
+
   justify-content: center;
   align-items: center;
-  border-radius: 4.81px;
   background: #f5f5ff;
   margin-left: 2px;
   color: #5e52ff;
   text-align: center;
 
-  /* Detail/8_M */
-  font-family: Pretendard;
   font-size: 8px;
   font-style: normal;
   font-weight: 500;
@@ -357,20 +363,39 @@ const ContentWrapper = styled(RowFlexDiv)`
   align-items: center;
 `;
 
-const Content = styled(ColumnFlexDiv)`
-  margin-left: 10px;
+const Content = styled(ColumnFlexDiv)<{ status?: string }>`
+  margin-left: ${(props) => (props.status === '학습완료' ? '0px' : '10px')};
+  margin-top: ${(props) => (props.status === '학습완료' ? '-6px' : '0px')};
 `;
 
-const Label = styled.span`
-  color: ${(props) => props.color};
+const TextWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 1px;
+  gap: 4px;
+`;
 
-  /* Detail/3xs/regular */
-  font-family: Pretendard;
-  font-size: 10px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 15px; /* 150% */
-  letter-spacing: -0.2px;
+const Label = styled.span<{
+  color: string;
+  fontSize?: string;
+  letterSpacing?: string;
+  lineHeight?: string;
+}>`
+  color: ${(props) => props.color};
+  font-size: ${(props) => props.fontSize || '10px'};
+  font-weight: 350;
+  line-height: ${(props) => props.lineHeight || '15px'};
+  letter-spacing: ${(props) => props.letterSpacing || '-0.2px'};
+
+  align-items: center;
+`;
+
+const CompletedStampIcon = styled.div`
+  position: relative;
+  width: 85px;
+  height: 85px;
+  margin-left: 160px;
+  margin-top: -15px;
 `;
 
 const Gradient = styled.div`
@@ -390,81 +415,175 @@ const Gradient = styled.div`
   backdrop-filter: blur(0.9571801424026489px);
 `;
 
-const HoverCollection = () => {
+const HoverCollection = ({ status }: { status: string }) => {
   return (
     <HoverWrapper>
-      <Image src={HoverBackground} alt="hover background" />
-      <CollectionHeader>
-        <ThumbnailWrapper>
-          <Thumbnail left={0} zIndex={3}>
-            <Image src={YoutubeIcon} alt="youtube" width={26} height={26} />
-          </Thumbnail>
-          <Thumbnail left={18} zIndex={2}>
-            <Image src={VelogIcon} alt="velog" width={26} height={26} />
-          </Thumbnail>
-          <Thumbnail left={35} zIndex={1}>
-            <Image src={TistoryIcon} alt="tistory" width={26} height={26} />
-          </Thumbnail>
-          <Thumbnail left={53} zIndex={0}>
-            <Image src={NaverblogIcon} alt="naverblog" width={26} height={26} />
-          </Thumbnail>
-        </ThumbnailWrapper>
-        <Detail style={{ position: 'absolute', left: '83px' }}>+4</Detail>
-        <LineWrapper>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="49"
-            height="2"
-            viewBox="0 0 49 2"
-            fill="none"
-          >
-            <path
-              d="M0.597656 1H48.7016"
-              stroke="#FAFAFC"
-              strokeWidth="0.740061"
-              strokeDasharray="1.61 1.61"
-            />
-          </svg>
-          <Image src={Circle} alt="circle" />
-        </LineWrapper>
-        <CollectionDetail>
-          <Detail>아티클</Detail>
-          <Number>2</Number>
-          <Detail marginLeft={'5px'}>영상</Detail>
-          <Number>6</Number>
-        </CollectionDetail>
-      </CollectionHeader>
+      {status === '학습완료' ? (
+        <>
+          <Image src={HoverBackground} alt="hover background" />
+          <CollectionHeader>
+            <Number status="학습완료">총 8회차</Number>
+            <LineWrapper status="학습완료">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="95"
+                height="2"
+                viewBox="0 0 95 2"
+                fill="none"
+              >
+                <path
+                  d="M0 1H95"
+                  stroke="#FAFAFC"
+                  strokeWidth="0.740061"
+                  strokeDasharray="1.61 1.61"
+                />
+              </svg>
+              <Image src={Circle} alt="circle" />
+            </LineWrapper>
+            <CollectionDetail>
+              <Detail>아티클</Detail>
+              <Number>2</Number>
+              <Detail marginLeft={'5px'}>영상</Detail>
+              <Number>6</Number>
+            </CollectionDetail>
+          </CollectionHeader>
 
-      <CollectionWrapper>
-        <ContentWrapper>
-          <ThumbnailWrapper>
-            <Image src={VelogLine} alt="velogline" width={26} height={26} />
-          </ThumbnailWrapper>
-          <Content>
-            <Label color={'#BBB6FF'}>1회차</Label>
-            <Label color={'#fff'}>1회차 콘텐츠의 제목을 입력해주세요.</Label>
-          </Content>
-        </ContentWrapper>
-        <ContentWrapper>
-          <ThumbnailWrapper>
-            <Image src={VelogLine} alt="velogline" width={26} height={26} />
-          </ThumbnailWrapper>
-          <Content>
-            <Label color={'#BBB6FF'}>2회차</Label>
-            <Label color={'#fff'}>2회차 콘텐츠의 제목을 입력해주세요.</Label>
-          </Content>
-        </ContentWrapper>
-        <ContentWrapper>
-          <ThumbnailWrapper>
-            <Image src={VelogLine} alt="velogline" width={26} height={26} />
-          </ThumbnailWrapper>
-          <Content>
-            <Label color={'#BBB6FF'}>3회차</Label>
-            <Label color={'#fff'}>3회차 콘텐츠의 제목을 입력해주세요.</Label>
-          </Content>
-        </ContentWrapper>
-      </CollectionWrapper>
-      <Gradient />
+          <CollectionWrapper>
+            <ContentWrapper>
+              <Content status="학습완료">
+                <TextWrapper>
+                  <Image
+                    src={Calendar}
+                    alt="calendarIcon"
+                    width={14}
+                    height={14}
+                  />
+                  <Label
+                    color={'#DCD9FF'}
+                    fontSize="12px"
+                    lineHeight="18px"
+                    letterSpacing="-0.24px"
+                  >
+                    학습기간
+                  </Label>
+                </TextWrapper>
+                <Label
+                  color={'#fff'}
+                  fontSize="12px"
+                  lineHeight="18px"
+                  letterSpacing="-0.24px"
+                >
+                  2025.XX.XX ~ 2025.XX.XX
+                </Label>
+              </Content>
+            </ContentWrapper>
+            <CompletedStampIcon>
+              <Image
+                src={CompletedStamp}
+                alt="completedstamp"
+                width={90}
+                height={90}
+              />
+            </CompletedStampIcon>
+          </CollectionWrapper>
+        </>
+      ) : (
+        <>
+          <Image src={HoverBackground} alt="hover background" />
+          <CollectionHeader>
+            <ThumbnailWrapper>
+              <Thumbnail left={0} zIndex={3}>
+                <Image src={YoutubeIcon} alt="youtube" width={26} height={26} />
+              </Thumbnail>
+              <Thumbnail left={18} zIndex={2}>
+                <Image src={VelogIcon} alt="velog" width={26} height={26} />
+              </Thumbnail>
+              <Thumbnail left={35} zIndex={1}>
+                <Image src={TistoryIcon} alt="tistory" width={26} height={26} />
+              </Thumbnail>
+              <Thumbnail left={53} zIndex={0}>
+                <Image
+                  src={NaverblogIcon}
+                  alt="naverblog"
+                  width={26}
+                  height={26}
+                />
+              </Thumbnail>
+            </ThumbnailWrapper>
+            <Detail style={{ position: 'absolute', left: '83px' }}>+4</Detail>
+            <LineWrapper>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="49"
+                height="2"
+                viewBox="0 0 49 2"
+                fill="none"
+              >
+                <path
+                  d="M0.597656 1H48.7016"
+                  stroke="#FAFAFC"
+                  strokeWidth="0.740061"
+                  strokeDasharray="1.61 1.61"
+                />
+              </svg>
+              <Image src={Circle} alt="circle" />
+            </LineWrapper>
+            <CollectionDetail>
+              <Detail>아티클</Detail>
+              <Number>2</Number>
+              <Detail marginLeft={'5px'}>영상</Detail>
+              <Number>6</Number>
+            </CollectionDetail>
+          </CollectionHeader>
+
+          <CollectionWrapper>
+            <ContentWrapper>
+              <ThumbnailWrapper>
+                <Image src={VelogLine} alt="velogline" width={26} height={26} />
+              </ThumbnailWrapper>
+              <Content>
+                <Label color={'#BBB6FF'}>1회차</Label>
+                <Label color={'#fff'}>
+                  1회차 콘텐츠의 제목을 입력해주세요.
+                </Label>
+              </Content>
+            </ContentWrapper>
+            <ContentWrapper>
+              <ThumbnailWrapper>
+                <Image
+                  src={NaverblogLine}
+                  alt="blogline"
+                  width={26}
+                  height={26}
+                />
+              </ThumbnailWrapper>
+              <Content>
+                <Label color={'#BBB6FF'}>2회차</Label>
+                <Label color={'#fff'}>
+                  2회차 콘텐츠의 제목을 입력해주세요.
+                </Label>
+              </Content>
+            </ContentWrapper>
+            <ContentWrapper>
+              <ThumbnailWrapper>
+                <Image
+                  src={YoutubeLine}
+                  alt="youtubeline"
+                  width={26}
+                  height={26}
+                />
+              </ThumbnailWrapper>
+              <Content>
+                <Label color={'#BBB6FF'}>3회차</Label>
+                <Label color={'#fff'}>
+                  3회차 콘텐츠의 제목을 입력해주세요.
+                </Label>
+              </Content>
+            </ContentWrapper>
+          </CollectionWrapper>
+          <Gradient />
+        </>
+      )}
     </HoverWrapper>
   );
 };
@@ -486,7 +605,7 @@ const BoardingPassBottom = ({ status }: { status?: string }) => {
         <>
           <Departure>
             <DepartureArrival>Departure</DepartureArrival>
-            <Level>분야 난이도</Level>
+            <Level>입문자</Level>
           </Departure>
           <ColumnFlexDiv>
             <Step>n 시간</Step>
@@ -498,7 +617,7 @@ const BoardingPassBottom = ({ status }: { status?: string }) => {
           </ColumnFlexDiv>
           <Arrival>
             <DepartureArrival>Arrival</DepartureArrival>
-            <Level>분야 난이도</Level>
+            <Level>초급자</Level>
           </Arrival>
         </>
       )}
@@ -515,7 +634,7 @@ const BoardingPass = ({
     <Container>
       <Image src={BoardingPassContainer} alt="boarding pass" />
       <BoardingPassImage src={CollectionImage} alt="collection image" />
-      <StatusTag status="학습완료">학습완료</StatusTag>
+      <StatusTag status="학습중">학습중</StatusTag>
       {/* <Bookmark src={BookmarkIcon} alt="bookmark" /> */}
       <Body>
         <TagWrapper>
@@ -528,8 +647,8 @@ const BoardingPass = ({
         </Title>
         <Author>컬렉션 제작자명</Author>
       </Body>
-      <BoardingPassBottom status="학습완료" />
-      {showHoverCollection && <HoverCollection />}
+      <BoardingPassBottom status="학습중" />
+      {showHoverCollection && <HoverCollection status="학습중" />}
     </Container>
   );
 };
