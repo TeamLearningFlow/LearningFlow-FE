@@ -77,6 +77,14 @@ const TitleContainer = styled.div`
   text-align: center;
   font-size: 30px;
   font-weight: 600;
+
+  @media (max-width: 850px) {
+    font-size: 25px;
+  }
+
+  @media (max-width: 560px) {
+    font-size: 18px;
+  }
 `;
 
 const IconContainer = styled.div`
@@ -90,6 +98,17 @@ const Textwrapper = styled.div`
   font-size: 20px;
   margin-bottom: 32px;
   line-height: 28px;
+
+  @media (max-width: 850px) {
+    font-size: 15px;
+    line-height: 23px;
+  }
+
+  @media (max-width: 560px) {
+    font-size: 10px;
+    line-height: 15px;
+    margin-bottom: 20px;
+  }
 `;
 
 const GoBackButton = styled.button`
@@ -106,4 +125,17 @@ const GoBackButton = styled.button`
   font-weight: 300;
   color: rgba(255, 255, 255, 1);
   cursor: pointer;
+
+  @media (max-width: 850px) {
+    font-size: 15px;
+    width: 400px;
+    padding: 15px 0px;
+  }
+
+  @media (max-width: 560px) {
+    font-size: 10px;
+    width: 250px;
+    padding: 10px 0px;
+    border-radius: 10px;
+  }
 `;
