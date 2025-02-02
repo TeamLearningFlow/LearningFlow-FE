@@ -12,6 +12,7 @@ import TistoryIcon from '../../assets/platformicon/tistory_nostroke_ic.svg';
 import VelogIcon from '../../assets/platformicon/velog_nostroke_ic.svg';
 import YoutubeIcon from '../../assets/platformicon/youtube_nostroke_ic.svg';
 import VelogLine from '../../assets/platformicon/velog_ic.svg';
+import OnStudying from '../../assets/onstudying.svg';
 
 const ColumnFlexDiv = styled.div`
   display: flex;
@@ -41,6 +42,36 @@ const BoardingPassImage = styled(Image)`
   left: 1px;
 `;
 
+const StatusTag = styled.span<{ status?: string }>`
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  height: 22px;
+  display: ${(props) =>
+    props.status === '학습중' || props.status === '학습완료'
+      ? 'inline-flex'
+      : 'none'};
+  padding: 2px 8px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  background: ${(props) => (props.status === '학습중' ? '#5e52ff' : '#F5F5F5')};
+  color: ${(props) => (props.status === '학습중' ? '#fff' : '#4F5357')};
+
+  /* 100 */
+  box-shadow: 0.74px 0.74px 1.47px 0px rgba(0, 0, 0, 0.25);
+
+  text-align: center;
+
+  /* Detail/2xs/Semibold */
+  font-family: Pretendard;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%; /* 18px */
+  letter-spacing: -0.24px;
+`;
+
 /*const Bookmark = styled(Image)`
   position: absolute;
   top: 15px;
@@ -59,20 +90,28 @@ const Body = styled.div`
   left: 2px;
 `;
 
-const KeywordWrapper = styled(RowFlexSpan)`
+const TagWrapper = styled(RowFlexSpan)`
   gap: 4px;
 `;
 
-const Keyword = styled.span`
+const Tag = styled.span`
   padding: 2px 7px;
   border-radius: 4px;
-  background-color: #f5f5f5;
-  color: #4f5357;
   font-family: Pretendard;
   font-size: 10px;
   font-style: normal;
   font-weight: 600;
   line-height: 15px; /* 150% */
+`;
+
+const Category = styled(Tag)`
+  background-color: #f5f5ff;
+  color: #5e52ff;
+`;
+
+const Keyword = styled(Tag)`
+  background-color: #f5f5f5;
+  color: #4f5357;
 `;
 
 const Title = styled.div`
@@ -159,6 +198,63 @@ const PlaneLine = styled.span`
   width: 45px;
   height: 0.25px;
   background: #5e52ff;
+`;
+
+const ProgressWrapper = styled.div`
+  width: 242px;
+  height: 33px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  flex: 1 0 0;
+  align-self: stretch;
+`;
+
+const ProgressLabel = styled.span`
+  color: #5e52ff;
+  padding-bottom: 2.95px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+
+  /* Detail/3xs/Semibold */
+  font-family: Pretendard;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%; /* 15px */
+`;
+
+const ProgressBarFull = styled.div`
+  height: 4px;
+  width: 100%;
+  background-color: #dde0e4;
+  border-radius: 17.515px;
+`;
+
+const ProgressBar = styled.div`
+  height: 100%;
+  width: 20%;
+  background-color: #5e52ff;
+  border-radius: 17.515px;
+`;
+
+const ProgressRate = styled.span`
+  height: 12px;
+  width: 242px;
+  color: #959ca4;
+  padding-top: 2px;
+
+  /* Detail/8 */
+  font-family: Pretendard;
+  font-size: 8px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%; /* 12px */
+  letter-spacing: -0.16px;
 `;
 
 const HoverWrapper = styled.div`
@@ -373,6 +469,43 @@ const HoverCollection = () => {
   );
 };
 
+const BoardingPassBottom = ({ status }: { status?: string }) => {
+  return (
+    <Bottom>
+      {status == '학습중' ? (
+        <ProgressWrapper>
+          <ProgressLabel>
+            <Image src={OnStudying} alt=""></Image>학습중
+          </ProgressLabel>
+          <ProgressBarFull>
+            <ProgressBar />
+          </ProgressBarFull>
+          <ProgressRate>4 / 20회차 (20%)</ProgressRate>
+        </ProgressWrapper>
+      ) : (
+        <>
+          <Departure>
+            <DepartureArrival>Departure</DepartureArrival>
+            <Level>분야 난이도</Level>
+          </Departure>
+          <ColumnFlexDiv>
+            <Step>n 시간</Step>
+            <PlaneWrapper>
+              <PlaneLine></PlaneLine>
+              <Image src={Plane} alt="plane" style={{ margin: '0 5px' }} />
+              <PlaneLine></PlaneLine>
+            </PlaneWrapper>
+          </ColumnFlexDiv>
+          <Arrival>
+            <DepartureArrival>Arrival</DepartureArrival>
+            <Level>분야 난이도</Level>
+          </Arrival>
+        </>
+      )}
+    </Bottom>
+  );
+};
+
 const BoardingPass = ({
   showHoverCollection,
 }: {
@@ -382,36 +515,20 @@ const BoardingPass = ({
     <Container>
       <Image src={BoardingPassContainer} alt="boarding pass" />
       <BoardingPassImage src={CollectionImage} alt="collection image" />
+      <StatusTag status="학습완료">학습완료</StatusTag>
       {/* <Bookmark src={BookmarkIcon} alt="bookmark" /> */}
       <Body>
-        <KeywordWrapper>
+        <TagWrapper>
+          <Category>관심분야</Category>
           <Keyword>키워드1</Keyword>
           <Keyword>키워드2</Keyword>
-          <Keyword>키워드3</Keyword>
-        </KeywordWrapper>
+        </TagWrapper>
         <Title>
           컬렉션의 <br></br>제목을 입력해주세요
         </Title>
         <Author>컬렉션 제작자명</Author>
       </Body>
-      <Bottom>
-        <Departure>
-          <DepartureArrival>Departure</DepartureArrival>
-          <Level>분야 난이도</Level>
-        </Departure>
-        <ColumnFlexDiv>
-          <Step>n 회차</Step>
-          <PlaneWrapper>
-            <PlaneLine></PlaneLine>
-            <Image src={Plane} alt="plane" style={{ margin: '0 5px' }} />
-            <PlaneLine></PlaneLine>
-          </PlaneWrapper>
-        </ColumnFlexDiv>
-        <Arrival>
-          <DepartureArrival>Arrival</DepartureArrival>
-          <Level>분야 난이도</Level>
-        </Arrival>
-      </Bottom>
+      <BoardingPassBottom status="학습완료" />
       {showHoverCollection && <HoverCollection />}
     </Container>
   );
