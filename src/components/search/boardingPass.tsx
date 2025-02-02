@@ -634,7 +634,7 @@ const BoardingPass = ({
     <Container>
       <Image src={BoardingPassContainer} alt="boarding pass" />
       <BoardingPassImage src={CollectionImage} alt="collection image" />
-      <StatusTag status="학습중">학습중</StatusTag>
+      <StatusTag status="학습완료">학습완료</StatusTag>
       {/* <Bookmark src={BookmarkIcon} alt="bookmark" /> */}
       <Body>
         <TagWrapper>
@@ -647,8 +647,8 @@ const BoardingPass = ({
         </Title>
         <Author>컬렉션 제작자명</Author>
       </Body>
-      <BoardingPassBottom status="학습중" />
-      {showHoverCollection && <HoverCollection status="학습중" />}
+      <BoardingPassBottom status="학습완료" />
+      {showHoverCollection && <HoverCollection status="학습완료" />}
     </Container>
   );
 };
