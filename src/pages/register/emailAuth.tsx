@@ -26,8 +26,8 @@ const EmailAuthPage: React.FC = () => {
     <>
       {showAuth ? (
         <>
+          <DarkTopLogo />
           <Container>
-            <DarkTopLogo />
             <PageContainer>
               <TitleContainer>인증 메일을 보내드렸어요</TitleContainer>
               <IconContainer>
@@ -58,9 +58,14 @@ const EmailAuthPage: React.FC = () => {
 export default EmailAuthPage;
 
 const Container = styled.div`
+  position: fixed;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  top: 0;
+  left: 0;
+  width: 100vw;
   height: 100vh;
 `;
 
@@ -69,8 +74,6 @@ const PageContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  margin-top: 145px;
 `;
 
 const TitleContainer = styled.div`
