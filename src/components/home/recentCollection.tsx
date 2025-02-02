@@ -41,6 +41,14 @@ const GrayLabal = styled(Label)`
   font-size: 24px;
   font-weight: 500;
   letter-spacing: -0.48px;
+
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 15px;
+  }
 `;
 
 const BlackLabal = styled(Label)`
@@ -50,6 +58,14 @@ const BlackLabal = styled(Label)`
   font-size: 32px;
   font-weight: 600;
   letter-spacing: -0.64px;
+
+  @media (max-width: 768px) {
+    font-size: 28px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 21px;
+  }
 `;
 
 const CollectionWrapper = styled.div`
@@ -64,6 +80,10 @@ const CollectionWrapper = styled.div`
   box-shadow:
     0px 4px 4px 0px rgba(0, 0, 0, 0.04),
     0px 4px 13.3px 0px rgba(202, 198, 255, 0.27);
+
+  @media (max-width: 768px) {
+    width: 730px;
+  }
 `;
 
 const BoardingPassWrapper = styled.div`
