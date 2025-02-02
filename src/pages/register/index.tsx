@@ -22,10 +22,12 @@ const PageContainer = styled.div`
   overflow: hidden;
   margin-top: -15px;
 
+  @media (max-width: 768px) {
+    justify-content: center;
+  }
+
   @media (max-width: 480px) {
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
   }
 `;
 
@@ -34,17 +36,12 @@ const LeftSection = styled.div`
   display: flex;
   align-items: center;
 
-  @media (max-width: 480px) {
-    justify-content: center;
-    width: 100vw;
-  }
-`;
-
-const LeftUIContainer = styled.div`
-  @media (max-width: 480px) {
+  @media (max-width: 768px) {
     display: none;
   }
 `;
+
+const LeftUIContainer = styled.div``;
 
 const RightSection = styled.div`
   width: 46vw;
@@ -53,11 +50,8 @@ const RightSection = styled.div`
   align-items: center;
   box-sizing: border-box;
 
-  @media (max-width: 480px) {
-    width: 100vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  @media (max-width: 768px) {
+    width: 100%;
   }
 `;
 
@@ -71,8 +65,12 @@ const FormContainer = styled.div`
   flex-direction: column;
   gap: 7px;
 
-  @media (max-width: 480px) {
-    width: 80vw;
+  @media (max-width: 1024px) {
+    gap: 0px;
+  }
+
+  @media (max-width: 768px) {
+    width: 80%;
   }
 
   h2 {
@@ -89,7 +87,6 @@ const FormContainer = styled.div`
   }
 `;
 
-
 const BlankContainer = styled.div``;
 
 const FormGroup = styled.div`
@@ -97,6 +94,11 @@ const FormGroup = styled.div`
   flex-direction: column;
   gap: 20px;
   margin-top: 15px;
+
+  @media (max-width: 1024px) {
+    gap: 16px;
+    margin-top: 7px;
+  }
 `;
 
 const TermsText = styled.div`
@@ -105,7 +107,6 @@ const TermsText = styled.div`
   text-align: center;
   line-height: 1.5;
   word-wrap: break-word;
-
 
   @media (max-width: 480px) {
     font-size: 8px;
@@ -238,4 +239,3 @@ const RegisterPage: React.FC = () => {
 };
 
 export default RegisterPage;
-

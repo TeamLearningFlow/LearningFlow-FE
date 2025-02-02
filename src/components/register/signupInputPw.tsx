@@ -60,7 +60,7 @@ const InputWrapper = styled.div<{
     cursor: pointer;
   }
 
-   @media (max-width: 768px) {
+  @media (max-width: 768px) {
     padding: 0;
     font-size: 13px;
   }
@@ -118,6 +118,10 @@ const Label = styled.label`
   margin-top: 22px;
   font-size: 14px;
   color: #181818;
+
+  @media (max-width: 1024px) {
+    margin-top: 16px;
+  }
 `;
 
 const Button = styled.button`

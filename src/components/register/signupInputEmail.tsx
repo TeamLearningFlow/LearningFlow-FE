@@ -8,6 +8,10 @@ const Label = styled.label`
   margin-top: 28px;
   font-size: 14px;
   color: #181818;
+
+  @media (max-width: 1024px) {
+    margin-top: 13px;
+  }
 `;
 
 const InputWrapper = styled.div<{
@@ -79,7 +83,10 @@ interface InputEmailProps {
   setIsEmailValid: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const SignupInputEmail: React.FC<InputEmailProps> = ({ setEmail, setIsEmailValid }) => {
+const SignupInputEmail: React.FC<InputEmailProps> = ({
+  setEmail,
+  setIsEmailValid,
+}) => {
   const [email, setEmailState] = useState<string>('');
   const [isValidEmail, setIsValidEmail] = useState<boolean>(false);
   const [isEmailChecked, setIsEmailChecked] = useState<boolean>(false);
