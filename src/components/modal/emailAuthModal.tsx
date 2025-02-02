@@ -41,7 +41,7 @@ const ModalBox = styled.div`
   box-sizing: border-box;
   padding: 34px 55px 30px 55px;
   flex-direction: column;
-  align-items: flex-end;
+  // align-items: flex-end;
 
   height: 250px;
 
@@ -49,13 +49,13 @@ const ModalBox = styled.div`
   background-color: #fff;
 
   @media (max-width: 850px) {
-    padding: 30px;
+    padding: 25px 40px 15px 40px;
     height: 200px;
   }
 
   @media (max-width: 560px) {
-    padding: 25px;
-    height: 155px;
+    padding: 20px 30px 20px 30px;
+    height: 145px;
   }
 `;
 
@@ -65,7 +65,7 @@ const Title = styled.div`
 
   font-size: 30px;
   font-weight: 600;
-  letter-spacing: -0.64px;
+  letter-spacing: -0.02em;
   margin-bottom: 10px;
 
   @media (max-width: 850px) {
@@ -74,7 +74,7 @@ const Title = styled.div`
 
   @media (max-width: 560px) {
     font-size: 18px;
-    margin-bottom: 2px;
+    margin-bottom: 7px;
   }
 `;
 
@@ -86,15 +86,17 @@ const Description = styled.div`
   font-size: 18.5px;
   font-weight: 500;
   line-height: 25px;
-  letter-spacing: -0.4px;
+  letter-spacing: -0.02em;
   margin-bottom: 15px;
 
   @media (max-width: 850px) {
     font-size: 15px;
+    line-height: 22px;
   }
 
   @media (max-width: 560px) {
     font-size: 10px;
+    line-height: 15px;
   }
 `;
 const Button = styled.div`
@@ -111,12 +113,12 @@ const Button = styled.div`
   align-items: center;
 
   @media (max-width: 850px) {
-    margin: 40px -12px 35px 20px;
+    margin: 40px -20px 28px 20px;
   }
 
   @media (max-width: 560px) {
-    margin-right: -50px;
-    margin-bottom: 27px;
+    margin-right: -70px;
+    margin-bottom: 25px;
   }
 `;
 
@@ -139,13 +141,13 @@ const BackButton = styled.span`
 
   @media (max-width: 850px) {
     font-size: 12px;
-    width: 90px;
+    width: 80px;
     height: 30px;
   }
 
   @media (max-width: 560px) {
     font-size: 9px;
-    width: 70px;
+    width: 60px;
     height: 20px;
   }
 `;
@@ -168,13 +170,13 @@ const ForwardButton = styled.span`
 
   @media (max-width: 850px) {
     font-size: 12px;
-    width: 90px;
+    width: 80px;
     height: 30px;
   }
 
   @media (max-width: 560px) {
     font-size: 9px;
-    width: 70px;
+    width: 60px;
     height: 20px;
   }
 `;
