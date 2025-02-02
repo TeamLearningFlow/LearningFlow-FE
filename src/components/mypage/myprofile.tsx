@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import userProfile from '../../assets/userphoto.svg';
+import Guest from '../../assets/Guest.svg';
 import CheckIcon from '../../assets/checkIconGray.svg';
 import ProfileCategoryList from '../../components/mypage/profileCategoryList';
 import PreferSlider from '../../components/mypage/preferSlider';
@@ -244,7 +245,7 @@ const MyProfile = () => {
   const [originalProfileData, setOriginalProfileData] = useState({
     nickname: '푸글',
     job: '대학생',
-    profileImage: userProfile,
+    profileImage: Guest,
     bannerImage: '',
     preferredMedia: 50,
     selectedCategories: [] as string[],
@@ -341,7 +342,7 @@ const MyProfile = () => {
           <ProfileImage>
             <Image
               src={profileData.profileImage}
-              alt="user profile"
+              alt="guest profile"
               width={80}
               height={80}
             />

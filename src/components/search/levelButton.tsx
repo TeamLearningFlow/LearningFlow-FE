@@ -26,7 +26,7 @@ const DropdownButton = styled.button<{ isOpen: boolean; hasTags: boolean }>`
     props.hasTags || props.isOpen ? '1px solid #5E52FF' : '1px solid #dde0e4'};
   border-radius: 6px;
   height: 33px;
-  width: 80px;
+  width: 90px;
   font-size: 13px;
   font-weight: 500;
   line-height: 21px; /* 150% */
@@ -96,7 +96,7 @@ const LevelButton: React.FC<DropdownProps & { selectedTags: string[] }> = ({
     { label: '입문', description: '누구나 들을 수 있는' },
     { label: '초급', description: '선수 지식이 필요한' },
     { label: '중급', description: '전문성을 높이는' },
-    { label: '실무', description: '실무에 사용 가능한' },
+    // { label: '실무', description: '실무에 사용 가능한' },
   ];
 
   const toggleOption = (label: string) => {
@@ -113,7 +113,7 @@ const LevelButton: React.FC<DropdownProps & { selectedTags: string[] }> = ({
         hasTags={selectedTags.length > 0}
         onClick={() => setIsOpen(!isOpen)}
       >
-        난이도
+        학습 수준
         <Image src={ChevronDown} alt="chevrondown" />
       </DropdownButton>
       {isOpen && (

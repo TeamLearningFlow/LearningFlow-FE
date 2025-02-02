@@ -75,7 +75,7 @@ const Liked = () => {
     <>
       <LikedWrapper>
         <TitleWrapper>
-          <Title>찜한 학습 컬렉션</Title>
+          <Title>좋아요 학습 컬렉션</Title>
         </TitleWrapper>
         <CollectionList>
           <BoardingPass showHoverCollection={true} />
