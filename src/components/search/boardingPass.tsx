@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import BoardingPassContainer from '../../assets/S_Background.svg';
 import CollectionImage from '../../assets/boardingpassS.svg';
-// import BookmarkIcon from '../../assets/bookmark.svg';
+import BookmarkIcon from '../../assets/bookmark.svg';
+import HoverBackgroundTop from '../../assets/hover-backgroundTopS.svg';
 import HoverBackground from '../../assets/hover-background.svg';
 import Plane from '../../assets/plane.svg';
 import Circle from '../../assets/circle.svg';
@@ -75,16 +76,20 @@ const StatusTag = styled.span<{ status?: string }>`
   font-weight: 600;
   line-height: 150%; /* 18px */
   letter-spacing: -0.24px;
+
+  ${Container}:hover & {
+    display: none;
+  }
 `;
 
-/*const Bookmark = styled(Image)`
+const Bookmark = styled.div`
   position: absolute;
   top: 15px;
   right: 15px;
   cursor: pointer;
   width: 35px;
   height: 35px;
-`;*/
+`;
 
 const Body = styled.div`
   background: #fff;
@@ -264,7 +269,7 @@ const ProgressRate = styled.span`
 
 const HoverWrapper = styled.div`
   width: 100%;
-  height: 175px;
+  height: 333px;
   position: absolute;
   top: 159.2px;
   left: 1px;
@@ -275,6 +280,13 @@ const HoverWrapper = styled.div`
   &:hover {
     opacity: 1;
   }
+`;
+
+const HoverBackgroundTopWrapper = styled.div`
+  position: absolute;
+  top: -158px;
+  width: 100%;
+  height: 158px;
 `;
 
 const CollectionHeader = styled(RowFlexDiv)`
@@ -400,7 +412,7 @@ const CompletedStampIcon = styled.div`
 
 const Gradient = styled.div`
   width: 100%;
-  height: 46px;
+  height: 40px;
   border-radius: 0px 0px 16px 16px;
   position: absolute;
   bottom: 0px;
@@ -418,6 +430,12 @@ const Gradient = styled.div`
 const HoverCollection = ({ status }: { status: string }) => {
   return (
     <HoverWrapper>
+      <HoverBackgroundTopWrapper>
+        <Image src={HoverBackgroundTop} alt="hoverbackgroundtop" />
+        <Bookmark>
+          <Image src={BookmarkIcon} alt="bookmark" width={36} height={36} />
+        </Bookmark>
+      </HoverBackgroundTopWrapper>
       {status === '학습완료' ? (
         <>
           <Image src={HoverBackground} alt="hover background" />
@@ -580,8 +598,9 @@ const HoverCollection = ({ status }: { status: string }) => {
                 </Label>
               </Content>
             </ContentWrapper>
+            <Gradient />
           </CollectionWrapper>
-          <Gradient />
+
         </>
       )}
     </HoverWrapper>
@@ -634,8 +653,7 @@ const BoardingPass = ({
     <Container>
       <Image src={BoardingPassContainer} alt="boarding pass" />
       <BoardingPassImage src={CollectionImage} alt="collection image" />
-      <StatusTag status="학습완료">학습완료</StatusTag>
-      {/* <Bookmark src={BookmarkIcon} alt="bookmark" /> */}
+      <StatusTag status=""></StatusTag>
       <Body>
         <TagWrapper>
           <Category>관심분야</Category>
@@ -647,8 +665,8 @@ const BoardingPass = ({
         </Title>
         <Author>컬렉션 제작자명</Author>
       </Body>
-      <BoardingPassBottom status="학습완료" />
-      {showHoverCollection && <HoverCollection status="학습완료" />}
+      <BoardingPassBottom status="" />
+      {showHoverCollection && <HoverCollection status="" />}
     </Container>
   );
 };
