@@ -2,32 +2,60 @@ import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import PlayButton from '../../assets/playButton.svg';
-import YoutubeIcon from '../../assets/platformicon/youtube_nostroke_ic.svg';
-import NextIndexIcon from '../../assets/nextIndexIcon.svg';
+import YoutubeIcon from '../../assets/platformicon/youtube_ic.svg';
+import DefaultRadio from '../../assets/defaultRadio.svg';
 
 const ComponentWrapper = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   flex-direction: row;
   width: 80vw;
+  gap: 30px;
+  margin-bottom: 20px;
+
+  @media (max-width: 850px) {
+    margin-bottom: 15px;
+    gap: 20px;
+  }
+
+  @media (max-width: 560px) {
+    margin-bottom: 10px;
+    gap: 8px;
+  }
+`;
+
+const RadioWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  min-height: 100px;
+
+  @media (max-width: 850px) {
+    min-height: 70px;
+  }
+
+  @media (max-width: 560px) {
+    min-height: 40px;
+    width: 20px;
+  }
 `;
 
 const IndexIcon = styled.div`
   display: flex;
-  width: 100px;
-  height: 120px;
-  right: 20px;
+  width: 33px;
+  height: 33px;
   position: relative;
-  top: 32px;
-
 
   @media (max-width: 850px) {
-
+    width: 25px;
+    height: 25px;
   }
 
   @media (max-width: 560px) {
-
+    width: 13px;
+    height: 13px;
   }
 `;
 
@@ -47,17 +75,19 @@ const ButtonWrapper = styled.div`
   justify-content: center;
 
   @media (max-width: 850px) {
-    top: 66px;
-    right: -48px;
     width: 90px;
     height: 90px;
+    top: 75px;
+    right: -40px;
   }
 
   @media (max-width: 560px) {
-    top: 66px;
-    right: -48px;
-    width: 90px;
-    height: 90px;
+    width: 50px;
+    height: 50px;
+    min-width: 40px;
+    min-height: 40px;
+    top: 37px;
+    right: -17px;
   }
 `;
 
@@ -69,9 +99,8 @@ const IndexWrapper = styled.div`
   height: 100px;
   background-color: rgba(255, 255, 255, 1);
   border-radius: 10px;
-  padding: 0 1.7%;
+  padding: 0 2.5%;
   overflow: hidden;
-  margin-bottom: 20px;
   cursor: pointer;
   transition: background 0.5s;
 
@@ -84,30 +113,26 @@ const IndexWrapper = styled.div`
       @media (max-width: 850px) {
         transform: translate(-7px, -50px);
       }
-@media (max-width: 560px) {
-    
-  }
+      
+      @media (max-width: 560px) {
+        transform: translate(-4px, -30px);
+      }
     }
   }
 
   @media (max-width: 850px) {
-    height: 80px;
-    padding: 0 3%;
-    margin-bottom: 15px;
-    
+    height: 90px;
   }
 
   @media (max-width: 560px) {
-    height: 60px;
-    padding: 0 5%;
-    margin-bottom: 10px;
+    height: 50px;
   }
 `;
 
 const PlatformIcon = styled.div`
-  position: relative;
-  width: 50px;
-  height: 50px;
+ position: relative;
+  width: 60px;
+  height: 60px;
   min-width: 40px;
   min-height: 40px;
 
@@ -119,10 +144,10 @@ const PlatformIcon = styled.div`
   }
 
   @media (max-width: 560px) {
-    width: 40px;
-    height: 40px;
-    min-width: 30px;
-    min-height: 30px;
+    width: 30px;
+    height: 30px;
+    min-width: 25px;
+    min-height: 25px;
   }
 `;
 
@@ -131,7 +156,11 @@ const IndexContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  margin-left: 18px;
+  margin-left: 35px;
+
+  @media (max-width: 560px) {
+    margin-left: 12px;
+  }
 `;
 
 const OrderBox = styled.div`
@@ -146,7 +175,7 @@ const OrderBox = styled.div`
   }
 
   @media (max-width: 560px) {
-    font-size: 10px;
+    font-size: 8px;
     margin-bottom: 5px;
   }
 `;
@@ -155,28 +184,43 @@ const TitleBox = styled.div`
   display: inline-block;
   font-size: 18px;
   font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 650px;
 
   @media (max-width: 850px) {
     font-size: 16px;
     margin-bottom: 7px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 400px;
   }
 
   @media (max-width: 560px) {
-    font-size: 12px;
+    font-size: 10px;
     margin-bottom: 5px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 150px; 
+    max-width: 180px;
   }
 `;
 
 const NextClassIndex: React.FC = () => {
   return (
       <ComponentWrapper>
+      <RadioWrapper>
         <IndexIcon>
-          <Image src={NextIndexIcon} alt="Next-icon" fill style={{ objectFit: 'contain' }} />
+          <Image
+            src={DefaultRadio}
+            alt="completed-icon"
+            fill
+            style={{ objectFit: 'contain' }}
+          />
         </IndexIcon>
+      </RadioWrapper>
         <IndexWrapper>
           <PlatformIcon>
             <Image src={YoutubeIcon} alt="platform-icon" fill style={{ objectFit: 'contain' }} />
