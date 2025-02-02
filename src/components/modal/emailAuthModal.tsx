@@ -8,7 +8,7 @@ const emailAuthModal: React.FC = ({ onClose, onContinue }) => {
         <ModalBox>
           <Title>이전 페이지로 돌아갈까요?</Title>
           <Description>
-            지금 돌아가면 입력하신 회원가입 정보는 삭제됩니다.
+            {`이전 페이지로 돌아가면\n입력하신 회원가입 정보가 삭제됩니다.`}
           </Description>
           <Button>
             <BackButton onClick={onClose}>돌아갈래요</BackButton>
@@ -39,11 +39,11 @@ const ModalWrapper = styled.div`
 const ModalBox = styled.div`
   position: relative;
   box-sizing: border-box;
-  padding: 36px;
+  padding: 34px 55px 30px 55px;
   flex-direction: column;
   align-items: flex-end;
 
-  height: 231px;
+  height: 250px;
 
   border-radius: 16px;
   background-color: #fff;
@@ -79,13 +79,15 @@ const Title = styled.div`
 `;
 
 const Description = styled.div`
+  white-space: pre-line;
   color: #64696e;
   text-align: center;
 
   font-size: 18.5px;
   font-weight: 500;
-  line-height: 30px;
+  line-height: 25px;
   letter-spacing: -0.4px;
+  margin-bottom: 15px;
 
   @media (max-width: 850px) {
     font-size: 15px;
@@ -103,7 +105,7 @@ const Button = styled.div`
   position: absolute;
   right: 0;
   bottom: 0;
-  margin: 36px;
+  margin-right: 36px;
   margin-bottom: 40px;
 
   align-items: center;
@@ -122,7 +124,7 @@ const BackButton = styled.span`
   display: flex;
   padding: 6px 16px;
   width: 109px;
-  height: 33px;
+  height: 39px;
   justify-content: center;
   align-items: center;
   margin-right: 10px;
@@ -152,7 +154,7 @@ const ForwardButton = styled.span`
   display: flex;
   padding: 6px 16px;
   width: 109px;
-  height: 33px;
+  height: 39px;
   justify-content: center;
   align-items: center;
 
