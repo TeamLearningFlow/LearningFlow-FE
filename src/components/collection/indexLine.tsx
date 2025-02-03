@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 
@@ -11,12 +11,13 @@ const ContentWrapper = styled.div`
   align-items: center;
 
   @media (max-width: 850px) {
+    width: 56px;
     min-height: 70px;
   }
 
   @media (max-width: 560px) {
     min-height: 40px;
-    width: 20px;
+    width: 28px;
   }
 `;
 
@@ -26,6 +27,14 @@ const LineWrapper = styled.div`
   background-color: rgba(221, 224, 228, 1);
   width: 2px;
   height: 100%;
+
+  @media (max-width: 850px) {
+    width: 1.4x;
+  }
+
+  @media (max-width: 560px) {
+    width: 1px;
+  }
 `;
 
 const ActiveWrapper = styled.div<{ height: number }>`
@@ -34,16 +43,44 @@ const ActiveWrapper = styled.div<{ height: number }>`
   background-color: rgba(94, 82, 255, 1);
   width: 2px;
   height: ${(props) => props.height}px;
+
+  @media (max-width: 850px) {
+    width: 1.4px;
+  }
+
+  @media (max-width: 560px) {
+    width: 1px;
+  }
 `;
 
 
 
 const IndexLine: React.FC = () => {
-  const lessonRound = 4; // 현재 강의 회차
+  const classRound = 3; // 현재 강의 회차
+  const [activeHeight, setActiveHeight] = useState(120 * classRound);
+
+
+  useEffect(() => {
+    const updateHeight = () => {
+      let baseHeight = 120; // 기본 높이
+      if (window.innerWidth <= 560) {
+        baseHeight = 60; // 작은 화면에서는 높이를 줄이기
+      } else if (window.innerWidth <= 850) {
+        baseHeight = 100; // 중간 크기 화면
+      }
+      setActiveHeight(baseHeight * classRound);
+    };
+
+    updateHeight(); // 초기 설정
+    window.addEventListener('resize', updateHeight); // 화면 크기 변경 감지
+
+    return () => window.removeEventListener('resize', updateHeight); // 클린업
+  }, [classRound]);
+
   return (
     <ContentWrapper>
       <LineWrapper>
-        <ActiveWrapper height={120 * lessonRound}>
+        <ActiveWrapper height={activeHeight}>
         </ActiveWrapper>
       </LineWrapper>
     </ContentWrapper>

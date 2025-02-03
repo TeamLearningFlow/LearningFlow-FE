@@ -76,7 +76,7 @@ const RadioWrapper = styled.div`
 
   @media (max-width: 560px) {
     min-height: 40px;
-    width: 20px;
+    width: 30px;
   }
 `;
 
@@ -87,13 +87,13 @@ const IndexIcon = styled.div`
   position: relative;
 
   @media (max-width: 850px) {
-    width: 25px;
-    height: 25px;
+    width: 32px;
+    height: 32px;
   }
 
   @media (max-width: 560px) {
-    width: 13px;
-    height: 13px;
+    width: 22px;
+    height: 22px;
   }
 `;
 
@@ -127,6 +127,15 @@ const ButtonWrapper = styled.div`
     top: 37px;
     right: -17px;
   }
+
+  @media (max-width: 370px) {
+    width: 50px;
+    height: 50px;
+    min-width: 40px;
+    min-height: 40px;
+    top: 38px;
+    right: -12px;
+  }
 `;
 
 const IndexWrapper = styled.div`
@@ -154,6 +163,9 @@ const IndexWrapper = styled.div`
       @media (max-width: 560px) {
         transform: translate(-4px, -30px);
       }
+      @media (max-width: 370px) {
+        transform: translate(-6px, -30px);
+      }
     }
   }
 
@@ -163,6 +175,11 @@ const IndexWrapper = styled.div`
 
   @media (max-width: 560px) {
     height: 50px;
+    border-radius: 5px;
+  }
+
+  @media (max-width: 370px) {
+    height: 45px;
   }
 `;
 
@@ -240,6 +257,10 @@ const IndexContainer = styled.div`
   @media (max-width: 560px) {
     margin-left: 12px;
   }
+
+  @media (max-width: 370px) {
+    margin-left: 9px;
+  }
 `;
 
 const OrderBox = styled.div`
@@ -256,6 +277,11 @@ const OrderBox = styled.div`
   @media (max-width: 560px) {
     font-size: 8px;
     margin-bottom: 5px;
+  }
+
+  @media (max-width: 370px) {
+    font-size: 7px;
+    margin-bottom: 4px;
   }
 `;
 
@@ -284,6 +310,15 @@ const TitleBox = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 180px;
+  }
+
+  @media (max-width: 370px) {
+    font-size: 9px;
+    margin-bottom: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 170px;
   }
 `;
 

@@ -25,6 +25,15 @@ const LineWrapper = styled.div`
   top: 50px;
   height: calc(100% - 220px);
 
+  @media (max-width: 850px) {
+    top: 45px;
+    height: calc(100% - 210px);
+  }
+
+  @media (max-width: 560px) {
+    top: 30px;
+    height: calc(100% - 180px);
+  }
 `;
 
 const ListWrapper = styled.div`
@@ -44,7 +53,7 @@ const CollectionList: React.FC = () => {
   return (
     <CollectionListWrapper>
       <LineWrapper>
-        <IndexLine />
+      <IndexLine />
       </LineWrapper>
       <ListWrapper>
         <StartIndex />
@@ -53,6 +62,8 @@ const CollectionList: React.FC = () => {
             <ClassIndex src={CheckedYoutube} key={index} orderText={stop} />
           ))}
           <NowPlaying />
+          <NextClassIndex />
+          <NextClassIndex />
           <NextClassIndex />
           <NextClassIndex />
         </ListContainer>
