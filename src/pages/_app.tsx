@@ -3,6 +3,9 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head'; // 뷰포트 설정
 import { createGlobalStyle } from 'styled-components';
 import { LoginProvider } from '../pages/context/LoginContext';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -38,10 +41,12 @@ function MyApp({ Component, pageProps }: AppProps) {
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
         />
       </Head>
-      <LoginProvider>
-        <GlobalStyle />
-        <Component {...pageProps} />
-      </LoginProvider>
+      <QueryClientProvider client={queryClient}>
+        <LoginProvider>
+          <GlobalStyle />
+          <Component {...pageProps} />
+        </LoginProvider>
+      </QueryClientProvider>
     </>
   );
 }
