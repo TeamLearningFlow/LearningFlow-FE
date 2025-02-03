@@ -33,7 +33,6 @@ const StartComponentWrapper = styled.div`
   width: 80vw;
   gap: 30px;
   margin-bottom: 20px;
-  margin-top: 20px;
 
   @media (max-width: 850px) {
     margin-bottom: 15px;
@@ -83,8 +82,8 @@ const RadioWrapper = styled.div`
 
 const IndexIcon = styled.div`
   display: flex;
-  width: 33px;
-  height: 33px;
+  width: 45px;
+  height: 45px;
   position: relative;
 
   @media (max-width: 850px) {

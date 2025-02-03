@@ -6,32 +6,22 @@ import BoardingPass from '../components/search/boardingPass';
 import Filters from '../components/search/filters';
 import Pagination from '@/components/search/pagination';
 import BoardingPassList from '@/components/search/boardingPassList';
-
 import TitleBar from '../components/collection/collectionTitleBar';
 import CollectionInfo from '../components/collection/collectionInfo';
-import {
-  ClassIndex,
-  StartIndex,
-  EndIndex,
-} from '../components/collection/classIndex';
-import NowPlaying from '../components/collection/nowPlaying';
-import NextClassIndex from '../components/collection/nextClassIndex';
-import CheckedYoutube from '../assets/platformicon/youtube_checked_ic.svg';
+import CollectionList from '../components/collection/collectionList';
+
 
 const PageWrapper = styled.div`
   background-color: #fafafc;
   min-height: 100vh;
+  position: relative;
 `;
 
-const ListWrapper = styled.div`
+const ContentWrapper = styled.div`
   display: flex;
-  align-items: center;
   justify-content: center;
-  flex-direction: column;
-  margin-bottom: 100px;
 `;
 
-const ListContainer = styled.div``;
 
 const CollectionPage: React.FC = () => {
   const [searchActive, setSearchActive] = useState(false); // 검색창 활성화 상태
@@ -40,8 +30,6 @@ const CollectionPage: React.FC = () => {
   const handleSearchStateChange = (active: boolean) => {
     setSearchActive(active);
   };
-
-  const stops = ['1회차', '2회차'];
 
   return (
     <PageWrapper>
@@ -61,18 +49,9 @@ const CollectionPage: React.FC = () => {
         <>
           <TitleBar />
           <CollectionInfo />
-          <ListWrapper>
-            <StartIndex />
-            <ListContainer>
-              {stops.map((stop, index) => (
-                <ClassIndex src={CheckedYoutube} key={index} orderText={stop} />
-              ))}
-              <NowPlaying />
-              <NextClassIndex />
-              <NextClassIndex />
-            </ListContainer>
-            <EndIndex />
-          </ListWrapper>
+          <ContentWrapper>
+            <CollectionList />
+          </ContentWrapper>
         </>
       )}
     </PageWrapper>

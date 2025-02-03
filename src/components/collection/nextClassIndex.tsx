@@ -44,8 +44,8 @@ const RadioWrapper = styled.div`
 
 const IndexIcon = styled.div`
   display: flex;
-  width: 33px;
-  height: 33px;
+  width: 45px;
+  height: 45px;
   position: relative;
 
   @media (max-width: 850px) {
