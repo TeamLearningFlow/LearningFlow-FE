@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import Prev from '../../assets/Previous.svg';
 import Next from '../../assets/Next.svg';
-import BoardingPass from './boardingPass';
+import CompletedBoardingPass from './completedCollection';
 
 const CompletedWrapper = styled.div`
   width: 1200px;
@@ -87,6 +87,7 @@ const CollectionList = styled.div`
 
 const Completed = () => {
   const [itemsShown, setItemsShown] = useState<number>(4);
+  const [hoverStates, setHoverStates] = useState<boolean[]>(Array(4).fill(false));
 
   useEffect(() => {
     const updateItemsShown = () => {
@@ -99,12 +100,26 @@ const Completed = () => {
       } else {
         setItemsShown(4);
       }
+      setHoverStates(Array(itemsShown).fill(false)); // 아이템 개수에 맞게 초기화
     };
 
-    updateItemsShown(); // 초기 설정
+    updateItemsShown();
     window.addEventListener('resize', updateItemsShown);
     return () => window.removeEventListener('resize', updateItemsShown);
-  }, []);
+  }, [itemsShown]);
+
+  const handleMouseEnter = (index: number) => {
+    const newHoverStates = [...hoverStates];
+    newHoverStates[index] = true;
+    setHoverStates(newHoverStates);
+  };
+
+  const handleMouseLeave = (index: number) => {
+    const newHoverStates = [...hoverStates];
+    newHoverStates[index] = false;
+    setHoverStates(newHoverStates);
+  };
+
   return (
     <CompletedWrapper>
       <TitleWrapper>
@@ -116,7 +131,13 @@ const Completed = () => {
       </TitleWrapper>
       <CollectionList>
         {Array.from({ length: itemsShown }).map((_, index) => (
-          <BoardingPass showHoverCollection={false} key={index} />
+          <div
+            key={index}
+            onMouseEnter={() => handleMouseEnter(index)}
+            onMouseLeave={() => handleMouseLeave(index)}
+          >
+            <CompletedBoardingPass showHoverCollection={hoverStates[index]} />
+          </div>
         ))}
       </CollectionList>
     </CompletedWrapper>
