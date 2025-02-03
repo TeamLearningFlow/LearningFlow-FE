@@ -34,7 +34,7 @@ const Label = styled.div`
   letter-spacing: -0.48px;
 `;
 
-const GrayLabal = styled(Label)`
+const GrayLabel = styled(Label)`
   color: #959ca4;
 
   /* Body/xl/Medium */
@@ -51,7 +51,7 @@ const GrayLabal = styled(Label)`
   }
 `;
 
-const BlackLabal = styled(Label)`
+const BlackLabel = styled(Label)`
   color: #1f1f1f;
 
   /* Headings/2xl */
@@ -69,12 +69,13 @@ const BlackLabal = styled(Label)`
 `;
 
 const CollectionWrapper = styled.div`
-  width: 786px;
+  width: 736px;
   height: 395px;
-  margin-bottom: 32px;
+  margin-bottom: 35px;
+  padding: 30px 40px;
   display: flex;
   flex-direction: row;
-  flex-shrink: 0;
+  gap: 36px;
   border-radius: 8.757px;
   background: #fff;
   box-shadow:
@@ -86,22 +87,22 @@ const CollectionWrapper = styled.div`
   }
 `;
 
-const BoardingPassWrapper = styled.div`
-  padding: 31px 43px 31px 44px;
+const ContentDescription = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 `;
-const ContentDescription = styled.div``;
 
 const LearningRate = styled.div`
   display: flex;
-  width: 372px;
-  height: 92px;
-  justify-content: center;
-  align-items: baseline;
+  width: 338px;
+  height: 52px;
   flex-direction: column;
 `;
 
 const TitleLabel = styled.div`
   color: #64696e;
+  padding-bottom: 4px;
 
   /* Body/xs/Medium */
   font-family: Pretendard;
@@ -112,25 +113,76 @@ const TitleLabel = styled.div`
   letter-spacing: -0.28px;
 `;
 
+const ProgressWrapper = styled.div`
+  width: 338px;
+  position: relative;
+`;
+
+const ProgressBarFull = styled.div`
+  height: 8px;
+  width: 100%;
+  background-color: #dde0e4;
+  border-radius: 17.515px;
+`;
+
+const ProgressBar = styled.div`
+  height: 100%;
+  width: 20%;
+  background-color: #5e52ff;
+  border-radius: 17.515px;
+`;
+
+const ProgressRate = styled.span`
+  height: 15px;
+  width: 242px;
+  color: #959ca4;
+  padding-top: 3.5px;
+
+  /* Detail/3xs/regular */
+  font-family: Pretendard;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%; /* 15px */
+  letter-spacing: -0.2px;
+`;
+
+const ProgressLabel = styled.span`
+  height: 18px;
+  color: #959ca4;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  white-space: nowrap;
+
+  /* Detail/2xs/Medium */
+  font-family: Pretendard;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%; /* 18px */
+  letter-spacing: -0.24px;
+`;
+
 const ContentList = styled.div`
   display: flex;
   width: 338px;
   flex-direction: column;
-  align-items: flex-start;
   gap: 5px;
 `;
 
 const Content = styled.div`
   display: flex;
   width: 338px;
+  height: 64px;
   align-items: center;
-  padding: 7px 19px 7px 8px;
+  padding: 8px;
+  gap: 12px;
 `;
 
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  margin-left: 13px;
 `;
 
 const ContentNumber = styled.div`
@@ -147,7 +199,7 @@ const ContentNumber = styled.div`
 
 const ContentTitle = styled.div`
   color: #000;
-  width: 250px;
+  width: 262px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -167,8 +219,6 @@ const TodayContentWrapper = styled.div`
   border: 1px solid #5e52ff;
   background: #fff;
   box-shadow: 0px 4px 4px 0px #f3f2ff;
-  height: 62px;
-  align-items: center;
   position: relative;
 `;
 
@@ -182,8 +232,8 @@ const TodayContentMark = styled.div`
   align-items: center;
   justify-content: center;
   position: absolute;
-  top: -13px;
-  right: -3px;
+  top: -10px;
+  right: -10px;
 
   /* Detail/3xs/Semibold */
   font-family: Pretendard;
@@ -198,8 +248,8 @@ const TodayContentLabel = styled.div`
   display: flex;
   gap: 4px;
   position: absolute;
-  top: 7px;
-  right: 61px;
+  top: 4px;
+  right: 38px;
 
   /* Detail/8_M */
   font-family: Pretendard;
@@ -217,9 +267,8 @@ const Button = styled.button`
   padding: 17px 126px;
   justify-content: center;
   align-items: center;
-  gap: 10px;
   border: none;
-  border-radius: 13.136px;
+  border-radius: 12px;
   background: #5e52ff;
   box-shadow: 3.503px 3.503px 3.941px -0.876px rgba(113, 104, 104, 0.26);
 
@@ -235,57 +284,6 @@ const Button = styled.button`
   font-weight: 600;
   line-height: 150%; /* 33px */
   letter-spacing: -0.44px;
-`;
-
-const ProgressWrapper = styled.div`
-  width: 328px;
-  position: relative;
-`;
-
-const ProgressBarFull = styled.div`
-  height: 8px;
-  width: 100%;
-  background-color: #dde0e4;
-  border-radius: 17.515px;
-`;
-
-const ProgressBar = styled.div`
-  height: 100%;
-  width: 20%;
-  background-color: #5e52ff;
-  border-radius: 17.515px;
-`;
-
-const ProgressRate = styled.span`
-  height: 12px;
-  width: 242px;
-  color: #959ca4;
-  padding-top: 2px;
-
-  /* Detail/3xs/regular */
-  font-family: Pretendard;
-  font-size: 10px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 150%; /* 15px */
-  letter-spacing: -0.2px;
-`;
-
-const ProgressLabel = styled.span`
-  height: 18.251px;
-  color: #959ca4;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  white-space: nowrap;
-
-  /* Detail/2xs/Medium */
-  font-family: Pretendard;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 150%; /* 18px */
-  letter-spacing: -0.24px;
 `;
 
 const TodayContent = ({ children }: { children: ReactNode }) => {
@@ -307,15 +305,13 @@ const RecentCollection: React.FC = () => {
     <>
       <Container>
         <LabelWrapper>
-          <GrayLabal>
+          <GrayLabel>
             어제 여기서 학습을 중지하셨어요 오늘도 힘내볼까요?
-          </GrayLabal>
-          <BlackLabal>컬렉션 여정 마무리까지 얼마 남지 않았어요</BlackLabal>
+          </GrayLabel>
+          <BlackLabel>컬렉션 여정 마무리까지 얼마 남지 않았어요</BlackLabel>
         </LabelWrapper>
         <CollectionWrapper>
-          <BoardingPassWrapper>
-            <BoardingPass />
-          </BoardingPassWrapper>
+          <BoardingPass />
           <ContentDescription>
             <LearningRate>
               <TitleLabel>&lt;와이어 프레임 입문&gt; 컬렉션 학습률</TitleLabel>
