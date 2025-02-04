@@ -4,6 +4,7 @@ import CategoryList from '@/components/search/categoryList';
 import BoardingPass from '@/components/search/boardingPass';
 import Filters from '@/components/search/filters';
 import Pagination from '@/components/search/pagination';
+import BoardingPassList from '@/components/search/boardingPassList';
 
 import Profile from '@/components/mypage/profile';
 
@@ -22,7 +23,11 @@ const MyPageProfile = () => {
         <div>
           <CategoryList />
           <Filters />
-          <BoardingPass showHoverCollection={true} />
+          <BoardingPassList>
+            {Array.from({ length: 8 }).map((_, index) => (
+              <BoardingPass key={index} showHoverCollection={true} />
+            ))}
+          </BoardingPassList>
           <Pagination />
         </div>
       ) : (

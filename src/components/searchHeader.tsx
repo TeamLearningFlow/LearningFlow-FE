@@ -152,7 +152,7 @@ const ProfileUser = styled.div`
   right: 0px;
   margin-top: 7px;
 
-  z-index: 1;
+  z-index: 200;
 
   @media (max-width: 650px) {
     margin-right: 1%;
