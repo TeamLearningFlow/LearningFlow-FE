@@ -9,7 +9,8 @@ import BoardingPassList from '@/components/search/boardingPassList';
 import TitleBar from '../components/collection/collectionTitleBar';
 import CollectionInfo from '../components/collection/collectionInfo';
 import CollectionList from '../components/collection/collectionList';
-
+import { SkeletonIndexLine, SkeletonClassIndex } from '../components/skeleton/skeleton_classIndex_M';
+import SkeletonCollectionList from '@/components/skeleton/skeleton_classList_M';
 
 const PageWrapper = styled.div`
   background-color: #fafafc;
@@ -22,9 +23,9 @@ const ContentWrapper = styled.div`
   justify-content: center;
 `;
 
-
 const CollectionPage: React.FC = () => {
   const [searchActive, setSearchActive] = useState(false); // 검색창 활성화 상태
+  const loading = false; // Skeleton UI 확인용
 
   // 헤더 상태 업데이트 전달
   const handleSearchStateChange = (active: boolean) => {
@@ -34,7 +35,14 @@ const CollectionPage: React.FC = () => {
   return (
     <PageWrapper>
       <Header onSearchStateChange={handleSearchStateChange} />
-      {searchActive ? (
+      {loading ? (
+        <>
+          <TitleBar />
+          <ContentWrapper>
+            <SkeletonCollectionList />
+          </ContentWrapper>
+        </>
+      ) : searchActive ? (
         <div>
           <CategoryList />
           <Filters />
