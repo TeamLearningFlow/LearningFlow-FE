@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import BoardingPassContainer from '../../assets/S_Background.svg';
-import CollectionImage from '../../assets/boardingpassS.svg';
+import BoardingPassContainer from '../../assets/M_Background.svg';
+import CollectionImage from '../../assets/boardingpassM.svg';
 import BookmarkIcon from '../../assets/bookmark.svg';
-import HoverBackgroundTop from '../../assets/hover-backgroundTopS.svg';
+import HoverBackgroundTop from '../../assets/hover-backgroundTopM.svg';
 import HoverBackground from '../../assets/hover-background.svg';
 import Plane from '../../assets/plane.svg';
 import Circle from '../../assets/circle.svg';
@@ -85,7 +85,7 @@ const StatusTag = styled.span<{ status?: string }>`
 const Bookmark = styled.div`
   position: absolute;
   top: 15px;
-  right: 15px;
+  right: -80px;
   cursor: pointer;
   width: 35px;
   height: 35px;
@@ -96,7 +96,7 @@ const Body = styled.div`
   height: 122px;
   margin: 18px 20px;
   position: absolute;
-  top: 158.303px;
+  top: 225px;
   left: 2px;
 `;
 
@@ -105,10 +105,10 @@ const TagWrapper = styled(RowFlexSpan)`
 `;
 
 const Tag = styled.span`
-  padding: 2px 7px;
+  padding: 4px 8px;
   border-radius: 4px;
   font-family: Pretendard;
-  font-size: 10px;
+  font-size: 12px;
   font-style: normal;
   font-weight: 600;
   line-height: 15px; /* 150% */
@@ -126,36 +126,33 @@ const Keyword = styled(Tag)`
 
 const Title = styled.div`
   color: #181818;
-  font-family: Pretendard;
-  font-size: 16px;
-  font-style: normal;
+  align-self: stretch;
+  font-size: 20px;
   font-weight: 600;
-  line-height: 20px; /* 125% */
+  line-height: 30px; /* 125% */
   letter-spacing: -0.32px;
-  margin-top: 6px;
-  margin-bottom: 3px;
+  margin-top: 10px;
+  margin-bottom: 8px;
 `;
 
 const Author = styled.div`
   color: #7c8389;
-  font-family: Pretendard;
-  font-size: 12px;
-  font-style: normal;
+  font-size: 16px;
   font-weight: 500;
   line-height: 18px; /* 150% */
-  letter-spacing: -0.24px;
+  letter-spacing: -0.32px;
 `;
 
 const Bottom = styled(RowFlexDiv)`
-  width: 282px;
+  width: 384px;
   justify-content: space-between;
-  border-top: dashed 1px #dde0e4;
+  // border-top: dashed 1px #dde0e4;
   border-radius: 0px 0px 16px 16px;
-  background: #f5f5ff;
+  background: transparent;
   height: 53px;
-  padding: 10px 15px;
+  padding: 10px 20px;
   position: absolute;
-  top: 281px;
+  top: 391px;
   left: 1px;
   gap: 10px;
 `;
@@ -170,18 +167,16 @@ const Arrival = styled(ColumnFlexDiv)`
 
 const DepartureArrival = styled.span`
   color: #7c8389;
-  font-family: Pretendard;
-  font-size: 10px;
+  font-size: 12px;
   font-style: normal;
   font-weight: 500;
-  line-height: 15px; /* 150% */
+  line-height: 17px; /* 150% */
   letter-spacing: -0.2px;
 `;
 
 const Level = styled.span`
   color: #323538;
-  font-family: Pretendard;
-  font-size: 12px;
+  font-size: 14px;
   font-style: normal;
   font-weight: 700;
   line-height: 18px; /* 150% */
@@ -205,7 +200,7 @@ const PlaneWrapper = styled(RowFlexSpan)`
 `;
 
 const PlaneLine = styled.span`
-  width: 45px;
+  width: 100px;
   height: 0.25px;
   background: #5e52ff;
 `;
@@ -650,7 +645,7 @@ const BoardingPass = ({
 }) => {
   return (
     <Container>
-      <Image src={BoardingPassContainer} alt="boarding pass" />
+      <Image src={BoardingPassContainer} alt="boardingpass" />
       <BoardingPassImage src={CollectionImage} alt="collection image" />
       <StatusTag status=""></StatusTag>
       <Body>

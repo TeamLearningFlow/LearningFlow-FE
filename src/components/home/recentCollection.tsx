@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import BoardingPass from './homeBoardingPass';
+import BoardingPass from '../mypage/boardingPass';
 import { useRouter } from 'next/router';
 import plane from '../../assets/plane_today.svg';
 import naverblogChecked from '../../assets/platformicon/naver blog_checked_ic.svg';
