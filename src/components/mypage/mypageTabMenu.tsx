@@ -134,9 +134,9 @@ const Tab = () => {
         </Menu>
         <Menu>
           <MenuName selected={!isSelected} onClick={selectMenuHandler}>
-            좋아요
+            관심 컬렉션
           </MenuName>
-          <Line width={'57px'} selected={!isSelected} />
+          <Line width={'99px'} selected={!isSelected} />
         </Menu>
       </TabMenu>
       <TabContents>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import BoardingPass from './boardingPass';
 
@@ -43,6 +43,20 @@ const Title = styled.div`
   letter-spacing: -0.48px;
 `;
 
+const OptionWrapper = styled.div`
+  display: flex;
+  gap: 8px;
+`;
+
+const Option = styled.div<{ active: boolean }>`
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 150%; /* 27px */
+  letter-spacing: -0.36px;
+  color: ${(props) => (props.active ? '#000' : '#DDE0E4')};
+  cursor: pointer;
+`;
+
 const CollectionList = styled.div`
   height: 1047px;
   width: 100%;
@@ -71,11 +85,27 @@ const CollectionList = styled.div`
 `;
 
 const Liked = () => {
+  const [activeSort, setActiveSort] = useState('최신순');
+
   return (
     <>
       <LikedWrapper>
         <TitleWrapper>
-          <Title>좋아요 학습 컬렉션</Title>
+          <Title>관심 컬렉션</Title>
+          <OptionWrapper>
+            <Option
+              active={activeSort === '최신순'}
+              onClick={() => setActiveSort('최신순')}
+            >
+              최신순
+            </Option>
+            <Option
+              active={activeSort === '인기순'}
+              onClick={() => setActiveSort('인기순')}
+            >
+              인기순
+            </Option>
+          </OptionWrapper>
         </TitleWrapper>
         <CollectionList>
           <BoardingPass showHoverCollection={true} />
