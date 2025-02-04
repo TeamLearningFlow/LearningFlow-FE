@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import guestIMG from '../../assets/Guest.svg';
 import bookIMG from '../../assets/Book.svg';
 import likeIMG from '../../assets/Like.svg';
@@ -258,7 +259,7 @@ const MidLikeIMG = styled.div`
 const LikeIMG = styled(Image)`
   display: flex;
   margin-right: 10px;
-  margin-top: 2px;
+  // margin-top: 2px;
 
   @media (max-width: 850px) {
     margin-bottom: 12px;
@@ -312,7 +313,7 @@ const MidSettingsIMG = styled.div`
 const SettingsIMG = styled(Image)`
   display: flex;
   margin-right: 10px;
-  margin-top: 2px;
+  // margin-top: 2px;
 
   @media (max-width: 850px) {
     margin-bottom: 12px;
@@ -414,6 +415,8 @@ const BottomLogoutLetter = styled.div`
 `;
 
 const userModal: React.FC = () => {
+  const router = useRouter();
+
   return (
     <UserModalWrapper>
       <InfoTop>
@@ -430,25 +433,21 @@ const userModal: React.FC = () => {
       </InfoTop>
       <Hr />
       <InfoMid>
-        <MidTitle>
-          {/* <a href="/mypage"> */}
-          마이페이지
-          {/* </a> */}
-        </MidTitle>
+        <MidTitle onClick={() => router.push('/mypage')}>마이페이지</MidTitle>
         <MidLearning>
           <MidLearningIMG>
             <BookIMG src={bookIMG} alt="학습방" width={20} height={20} />
           </MidLearningIMG>
-          <MidLearningLetter>나의 학습방</MidLearningLetter>
+          <MidLearningLetter onClick={() => router.push('/mypage')}>
+            나의 학습방
+          </MidLearningLetter>
         </MidLearning>
         <MidLike>
           <MidLikeIMG>
             <LikeIMG src={likeIMG} alt="좋아요" width={20} height={20} />
           </MidLikeIMG>
-          <MidLikeLetter>
-            {/* <a href="/좋아요"> */}
+          <MidLikeLetter onClick={() => router.push('/mypage')}>
             좋아요
-            {/* </a> */}
           </MidLikeLetter>
         </MidLike>
         <MidSettings>
@@ -460,10 +459,8 @@ const userModal: React.FC = () => {
               height={20}
             />
           </MidSettingsIMG>
-          <MidSettingsLetter>
-            {/* <a href="/계정설정"> */}
+          <MidSettingsLetter onClick={() => router.push('/mypage/profile')}>
             계정 설정
-            {/* </a> */}
           </MidSettingsLetter>
         </MidSettings>
       </InfoMid>
