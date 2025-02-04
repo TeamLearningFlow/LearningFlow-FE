@@ -27,9 +27,9 @@ const CollectionInfo: React.FC = () => {
         </CollectionRightIMGBox>
         <CollectionUpperDescription>
           <KeywordBox>
+            <Interest>관심분야</Interest>
             <Keyword>키워드1</Keyword>
             <Keyword>키워드2</Keyword>
-            <Keyword>키워드3</Keyword>
           </KeywordBox>
           <TypeImgBox>
             <TypeImgList>
@@ -65,7 +65,7 @@ const CollectionInfo: React.FC = () => {
         <Departure>
           <DepartureLeft>
             <DepartureLetter>Departure</DepartureLetter>
-            <DepartureLevel>분야 난이도</DepartureLevel>
+            <DepartureLevel>입문자</DepartureLevel>
           </DepartureLeft>
           <DepartureCenter>
             <DepartureToArrivalLetter>00시간</DepartureToArrivalLetter>
@@ -75,7 +75,7 @@ const CollectionInfo: React.FC = () => {
           </DepartureCenter>
           <DepartureRight>
             <ArrivalLetter>Arrival</ArrivalLetter>
-            <ArrivalLevel>분야 난이도</ArrivalLevel>
+            <ArrivalLevel>중급자</ArrivalLevel>
           </DepartureRight>
         </Departure>
       </CollectionTicket>
@@ -187,6 +187,34 @@ const KeywordBox = styled.div`
 
   @media (max-width: 560px) {
     margin-left: 7px;
+  }
+`;
+
+const Interest = styled.span`
+  width: 150px;
+  display: inline;
+  padding: 7.339px 18.349px;
+  margin-right: 10px;
+
+  border-radius: 6px;
+  background-color: rgba(245, 245, 255, 1);
+  color: rgba(94, 82, 255, 1);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 23.996px;
+
+  @media (max-width: 850px) {
+    width: 120px;
+    font-size: 8px;
+    padding: 3px 8px;
+    margin-right: 5px;
+  }
+
+  @media (max-width: 560px) {
+    width: 80px;
+    font-size: 5px;
+    padding: 2px 5px;
+    margin-right: 3px;
   }
 `;
 
