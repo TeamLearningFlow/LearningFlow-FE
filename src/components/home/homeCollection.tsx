@@ -7,8 +7,7 @@ import AirplaneIcon from '../../assets/airplaneIcon.svg';
 const HomeCollectionWrapper = styled.div`
   display: flex;
   width: 100%;
-  padding: 50px 5% 0px 5%;
-  margin: 0 auto;
+  padding: 50px 0px;
   flex-direction: column;
   align-items: center;
   gap: 50px;
@@ -76,13 +75,26 @@ const CollectionList = styled.div`
   height: auto;
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(3, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   justify-items: center;
   align-items: center;
-  column-gap: 30px;
-  row-gap: 140px; 
-  padding-right: 7%;
+  row-gap: 140px;
   margin-bottom: 250px;
+  padding: 0px 160px 0px 60px;
+
+  @media (max-width: 768px) {
+    padding: 0px 160px 0px 60px;
+  }
+
+  @media (max-width: 700px) {
+    padding: 0px 160px 0px 8%;
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    padding: 0px 105px 0px 0px;
+    place-items: center;
+  }
 `;
 
 const HomeCollection = () => {
