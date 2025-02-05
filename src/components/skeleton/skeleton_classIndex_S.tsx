@@ -75,6 +75,7 @@ const OrderBox = styled.div`
   margin-bottom: 8px;
   height: 20px;
   width: 180px;
+  border-radius: 4px;
   background-color: rgba(0, 0, 0, 0.08);
 
   @media (max-width: 850px) {
@@ -85,6 +86,7 @@ const OrderBox = styled.div`
     margin-bottom: 3px;
     height: 12px;
     width: 70px;
+    border-radius: 1px;
   }
 `;
 
@@ -93,6 +95,8 @@ const TitleBox = styled.div`
   background-color: rgba(0, 0, 0, 0.08);
   height: 20px;
   width: 380px;
+  border-radius: 4px;
+
   @media (max-width: 850px) {
   }
 
@@ -100,6 +104,7 @@ const TitleBox = styled.div`
     max-width: 180px;
     height: 12px;
     width: 140px;
+    border-radius: 1px;
   }
 `;
 

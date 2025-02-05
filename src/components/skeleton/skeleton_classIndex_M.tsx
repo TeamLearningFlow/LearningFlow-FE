@@ -61,12 +61,14 @@ const TextWrapper = styled.div`
   background-color: rgba(0, 0, 0, 0.08);
 
   @media (max-width: 850px) {
-    height: 90px;
+    height: 25px;
   }
 
   @media (max-width: 560px) {
     margin-bottom: 0px;
-    height: 60px;
+    height: 15px;
+    width: 150px;
+    border-radius: 1px;
   }
 `;
 
@@ -121,9 +123,7 @@ const IndexWrapper = styled.div`
   border-radius: 10px;
   padding: 0 2.5%;
   overflow: hidden;
-
-  }
-
+  
   @media (max-width: 850px) {
     height: 90px;
   }
@@ -186,28 +186,19 @@ const ButtonWrapper = styled.div`
   justify-content: center;
 
   @media (max-width: 850px) {
-    width: 90px;
-    height: 90px;
-    top: 75px;
-    right: -40px;
+    width: 80px;
+    height: 80px;
+    top: 30px;
+    right: -38px;
   }
 
-  @media (max-width: 560px) {
-    width: 50px;
-    height: 50px;
+  @media (max-width: 480px) {
+    width: 45px;
+    height: 45px;
     min-width: 40px;
     min-height: 40px;
-    top: 37px;
-    right: -17px;
-  }
-
-  @media (max-width: 370px) {
-    width: 50px;
-    height: 50px;
-    min-width: 40px;
-    min-height: 40px;
-    top: 38px;
-    right: -12px;
+    top: 15px;
+    right: -20px;
   }
 `;
 
@@ -215,23 +206,18 @@ const PlatformIcon = styled.div`
  position: relative;
   width: 60px;
   height: 60px;
-  min-width: 40px;
-  min-height: 40px;
   border-radius: 50%;
   background-color: rgba(0, 0, 0, 0.08);
+  aspect-ratio: 1 / 1;
 
   @media (max-width: 850px) {
     width: 45px;
     height: 45px;
-    min-width: 35px;
-    min-height: 35px;
   }
 
   @media (max-width: 560px) {
     width: 30px;
     height: 30px;
-    min-width: 25px;
-    min-height: 25px;
   }
 `;
 
@@ -244,10 +230,12 @@ const IndexContainer = styled.div`
 
   @media (max-width: 560px) {
     margin-left: 12px;
+    margin-top: 5px;
   }
 
   @media (max-width: 370px) {
     margin-left: 9px;
+    margin-top: 5px;
   }
 `;
 
@@ -262,16 +250,21 @@ const OrderBox = styled.div`
   @media (max-width: 850px) {
     margin-bottom: 7px;
     height: 18px;
+    width: 150px;
   }
 
   @media (max-width: 560px) {
     margin-bottom: 5px;
-    height: 15px;
+    height: 11px;
+    width: 75px;
+    border-radius: 1px;
   }
 
   @media (max-width: 370px) {
     margin-bottom: 4px;
-    height: 12px;
+    height: 11px;
+    width: 75px;
+    border-radius: 1px;
   }
 `;
 
@@ -284,20 +277,20 @@ const TitleBox = styled.div`
 
   @media (max-width: 850px) {
     margin-bottom: 7px;
-    max-width: 400px;
+    width: 300px;
     height: 20px;
   }
 
   @media (max-width: 560px) {
-    margin-bottom: 5px;
-    max-width: 180px;
-    height: 16px;
+    width: 140px;
+    height: 11px;
+    border-radius: 1px;
   }
 
   @media (max-width: 370px) {
-    margin-bottom: 5px;
-    max-width: 170px;
-    height: 14px;
+    width: 140px;
+    height: 11px;
+    border-radius: 1px;
   }
 `;
 

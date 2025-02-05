@@ -11,6 +11,10 @@ const MenuWrapper = styled.div`
   justify-content: center;
   color: white;
   gap: 20px;
+
+  @media (max-width: 560px) {
+    gap: 10px;
+  }
 `;
 
 const SloganWrapper = styled.div`
@@ -26,7 +30,8 @@ const SloganWrapper = styled.div`
   }
 
   @media (max-width: 560px) {
-    font-size: 14px;
+    font-size: 12px;
+    margin-top: 10px;
   }
 `;
 
@@ -40,11 +45,11 @@ const CaptionWrapper = styled.div`
   text-align: right;
 
   @media (max-width: 850px) {
-    font-size: 17px;
+    font-size: 14px;
   }
 
   @media (max-width: 560px) {
-    font-size: 14px;
+    font-size: 8px;
   }
 `;
 
@@ -59,8 +64,12 @@ const StyledLink = styled(Link)`
     text-decoration: underline;
   }
 
+  @media (max-width: 850px) {
+    font-size: 11px;
+  }
+
   @media (max-width: 560px) {
-    font-size: 10px;
+    font-size: 6px;
   }
 `;
 
@@ -77,12 +86,12 @@ const FooterWrapper = styled.div`
     padding: 0 10%;
   }
 
-  @media (max-width: 768px) {
-    padding: 0;
+  @media (max-width: 850px) {
+    padding: 6% 10%;
   }
 
   @media (max-width: 560px) {
-    padding: 0 2%;
+    padding: 8% 10%;
   }
 `;
 
@@ -132,7 +141,7 @@ const Footer: React.FC = () => {
           코멘트에 대한 설명을 추가 설명을 적어주세요.
         </CaptionWrapper>
         <MenuWrapper>
-          <StyledLink href="/register/contracts" target="_blank" rel="noopener noreferrer">
+          <StyledLink href="/register/privacyContracts" target="_blank" rel="noopener noreferrer">
             개인정보처리방침
           </StyledLink>
           <StyledLink href="/register/contracts" target="_blank" rel="noopener noreferrer">

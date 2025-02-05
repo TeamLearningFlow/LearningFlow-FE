@@ -25,7 +25,8 @@ const TitleBox = styled.div`
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.08);
   width: 380px;
-  height: 28px; 
+  height: 28px;
+  border-radius: 4px;
 
   @media (max-width: 560px) {
     width: 160px;
