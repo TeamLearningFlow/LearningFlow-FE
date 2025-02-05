@@ -9,7 +9,6 @@ import BoardingPassList from '@/components/search/boardingPassList';
 import TitleBar from '../components/collection/collectionTitleBar';
 import CollectionInfo from '../components/collection/collectionInfo';
 import CollectionList from '../components/collection/collectionList';
-import { SkeletonIndexLine, SkeletonClassIndex } from '../components/skeleton/skeleton_classIndex_M';
 import SkeletonCollectionList from '@/components/skeleton/skeleton_classList_M';
 
 const PageWrapper = styled.div`

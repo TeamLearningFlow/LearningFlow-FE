@@ -6,15 +6,14 @@ import ClassTitle from '../components/learn/learnClassTitle';
 import ClassList from '../components/learn/learnClassList';
 import Article from '../components/learn/article';
 import Note from '../components/learn/note';
+import { SkeletonClassList_S, SkeletonClassTitle } from '@/components/skeleton/skeleton_learnComponents';
 
 const PageWrapper = styled.div``;
 
 const BodyWrapper = styled.div`
   padding: 0 2.5%;
   margin-top: 2%;
-
   display: flex;
-  align-items: space-between;
   justify-content: space-between;
 `;
 
@@ -32,22 +31,32 @@ const RightWrapper = styled.div`
 `;
 
 const LearnPage: React.FC = () => {
+  const loading = false; // Skeleton UI 확인용
   return (
     <PageWrapper>
       <Header />
       <TitleBar />
-      <BodyWrapper>
-        <LeftWrapper>
-          <Article />
-          <ClassWrapper>
-            <ClassTitle />
-            <ClassList />
-          </ClassWrapper>
+      {loading ? (
+        <BodyWrapper>
+          <LeftWrapper>
+          <SkeletonClassTitle />
+          <SkeletonClassList_S/>
         </LeftWrapper>
-        <RightWrapper>
-          <Note />
-        </RightWrapper>
-      </BodyWrapper>
+        </BodyWrapper>
+      ) : (
+        <BodyWrapper>
+          <LeftWrapper>
+            <Article />
+            <ClassWrapper>
+              <ClassTitle />
+              <ClassList />
+            </ClassWrapper>
+          </LeftWrapper>
+          <RightWrapper>
+            <Note />
+          </RightWrapper>
+        </BodyWrapper>
+      )}
     </PageWrapper>
   );
 };

@@ -19,6 +19,7 @@ const TitleBox = styled.div`
   font-weight: 500;
   margin-left: 15px;
   margin-top: -2px;
+  
 `;
 
 const LineIcon = styled.div`
