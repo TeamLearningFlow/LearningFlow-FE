@@ -8,6 +8,11 @@ const TitleWrapper = styled.div`
   height: 50px;
   background-color: rgba(31, 31, 31, 1);
   padding-left: 3%;
+
+  @media (max-width: 560px) {
+    padding-left: 5%;
+    height: 40px;
+  }
 `;
 
 const TitleBox = styled.div`
@@ -19,7 +24,10 @@ const TitleBox = styled.div`
   font-weight: 500;
   margin-left: 15px;
   margin-top: -2px;
-  
+
+  @media (max-width: 560px) {
+    font-size: 13px; 
+  }
 `;
 
 const LineIcon = styled.div`
@@ -29,10 +37,18 @@ const LineIcon = styled.div`
   width: 0.9px;
   height: 32px;
   background-color: white;
+
+  @media (max-width: 560px) {
+    height: 22px;
+  }
 `;
 
 const TitleDot = styled.span`
   margin: 0 20px;
+
+  @media (max-width: 560px) {
+    margin: 0 15px;
+  }
 `;
 
 interface TitleBarProps {

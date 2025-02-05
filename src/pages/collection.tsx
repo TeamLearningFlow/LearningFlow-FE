@@ -6,7 +6,7 @@ import BoardingPass from '../components/search/boardingPass';
 import Filters from '../components/search/filters';
 import Pagination from '@/components/search/pagination';
 import BoardingPassList from '@/components/search/boardingPassList';
-import TitleBar from '../components/collection/collectionTitleBar';
+import TitleBar from '../components/learn/learnTitleBar';
 import CollectionInfo from '../components/collection/collectionInfo';
 import CollectionList from '../components/collection/collectionList';
 import SkeletonCollectionList from '@/components/skeleton/skeleton_classList_M';
