@@ -73,7 +73,7 @@ const CategoryItemWrapper = styled.div<{ active?: boolean }>`
   background-color: ${({ active }) => (active ? '#5e52ff' : '#fafafc')};
   box-shadow: ${({ active }) =>
     active ? '1.077px 1.077px 2.154px 0px rgba(0, 0, 0, 0.25)' : 'none'};
-  border: none;
+  border: ${({ active }) => (active ? 'none' : '1px solid #f5f5ff')};
   border-radius: 12px;
   cursor: pointer;
 
@@ -82,16 +82,16 @@ const CategoryItemWrapper = styled.div<{ active?: boolean }>`
   }
 `;
 
-const IconWrapper = styled.div<{ isHovered: boolean }>`
+const IconWrapper = styled.div<{ isHovered: boolean; active?: boolean }>`
   align-items: center;
-  width: ${({ isHovered }) => (isHovered ? '32px' : '30px')};
-  height: ${({ isHovered }) => (isHovered ? '32px' : '30px')};
+  width: ${({ isHovered, active }) => (isHovered || active ? '34px' : '30px')};
+  height: ${({ isHovered, active }) => (isHovered || active ? '34px' : '30px')};
   margin-top: 6px;
   position: relative;
 `;
 
 // 아이콘 크기 변경
-const StyledImage = styled(Image)<{ isHovered: boolean }>`
+const StyledImage = styled(Image)<{ isHovered: boolean; active?: boolean }>`
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -103,7 +103,7 @@ const CategoryText = styled.div<{ active?: boolean }>`
   font-weight: 500;
   line-height: 21px; /* 150% */
   letter-spacing: -0.28px;
-  color: ${({ active }) => (active ? '#ffffff' : '#4f5357')};
+  color: ${({ active }) => (active ? '#ffffff' : '#64696E')};
   text-align: center;
   white-space: nowrap;
 `;
@@ -157,12 +157,12 @@ const CategoryItem = ({
       onMouseLeave={() => setIsHovered(false)}
       onClick={onClick}
     >
-      <IconWrapper isHovered={isHovered}>
+      <IconWrapper isHovered={isHovered} active={active}>
         <StyledImage
           src={active ? imageW : image}
           alt={`${text} 아이콘`}
           isHovered={isHovered}
-          // style={{ objectFit: 'contain' }}
+          active={active}
         />
       </IconWrapper>
       <CategoryText active={active}>{text}</CategoryText>

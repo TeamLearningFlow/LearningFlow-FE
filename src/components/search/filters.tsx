@@ -11,10 +11,10 @@ const FiltersContainer = styled.div<{ hasTags: boolean }>`
   align-items: flex-start;
   justify-content: flex-start;
   padding: ${(props) =>
-    props.hasTags ? '16px 10%' : '16px 10%'};
+    props.hasTags ? '18px 10%' : '18px 10%'};
   gap: 8px;
   height: ${(props) =>
-    props.hasTags ? '105px' : '70px'}; /* 태그 생성 시 버튼 위치 조정 */
+    props.hasTags ? '109px' : '70px'}; /* 태그 생성 시 버튼 위치 조정 */
   background-color: #ffffff;
   border-bottom: 1px solid #dde0e4;
 `;

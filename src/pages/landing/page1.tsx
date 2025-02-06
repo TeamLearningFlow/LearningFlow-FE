@@ -243,6 +243,7 @@ const LandingPage: React.FC<{
 
   const handleJobSelect = (option: string) => {
     setJob(jobMapping[option]);
+    setIsJobDropdownOpen(false);
   };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
