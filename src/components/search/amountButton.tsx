@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import ChevronDown from '../../assets/chevronDown.svg';
+import ChevronDownG from '../../assets/chevronDown_G.svg';
 
 // 타입 정의
 type Option = {
@@ -36,7 +37,7 @@ const DropdownButton = styled.button<{ isOpen: boolean; hasTags: boolean }>`
   align-items: center;
   justify-content: center;
   gap: 8px;
-  color: #1f1f1f;
+  color: ${(props) => (props.hasTags || props.isOpen ? '#1f1f1f' : '#64696e')};
 
   &:focus {
     outline: none;
@@ -91,6 +92,7 @@ const AmountButton: React.FC<DropdownProps & { selectedTags: string[] }> = ({
   selectedTags,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const options: Option[] = [
     { label: '짧아요', description: '1 - 5 회차' },
@@ -105,15 +107,32 @@ const AmountButton: React.FC<DropdownProps & { selectedTags: string[] }> = ({
     onTagChange(updatedOptions); // 부모 상태 업데이트
   };
 
+  // 외부 클릭 시 드롭다운 클로즈
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
-    <DropdownContainer hasTags={selectedTags.length > 0}>
+    <DropdownContainer hasTags={selectedTags.length > 0} ref={dropdownRef}>
       <DropdownButton
         isOpen={isOpen}
         hasTags={selectedTags.length > 0}
         onClick={() => setIsOpen(!isOpen)}
       >
         분량
-        <Image src={ChevronDown} alt="chevrondown" />
+        <Image src={isOpen ? ChevronDown : ChevronDownG} alt="chevrondown" />
       </DropdownButton>
       {isOpen && (
         <DropdownMenu>

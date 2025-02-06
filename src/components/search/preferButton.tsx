@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import Polygon from '../../assets/polygon.svg';
@@ -32,7 +32,7 @@ const DropdownButton = styled.button<{ isOpen: boolean; hasTags: boolean }>`
   align-items: center;
   justify-content: center;
   gap: 8px;
-  color: #1f1f1f;
+  color: ${(props) => (props.hasTags || props.isOpen ? '#1f1f1f' : '#64696e')};
 
   &:focus {
     outline: none;
@@ -119,7 +119,12 @@ const Tooltip = styled.div`
 const TooltipContainer = styled.div<{ position: number }>`
   position: absolute;
   top: -35px;
-  left: ${(props) => Math.min(Math.max(props.position, 15), 88)}%;
+  left: ${(props) => {
+    const minPosition = 15; // 왼쪽 끝 보정값
+    const maxPosition = 95; // 오른쪽 끝 보정값
+    const adjustedPosition = props.position * 0.8 + 9; // 보정 로직 추가
+    return Math.min(Math.max(adjustedPosition, minPosition), maxPosition);
+  }}%;
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
@@ -154,11 +159,14 @@ const PreferButton: React.FC<DropdownProps> = ({
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [sliderValue, setSliderValue] = React.useState(50);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const getTooltipText = (value: number) => {
-    if (value < 40) return '텍스트가 좋아요';
-    if (value > 60) return '영상이 좋아요';
-    return '상관 없어요';
+    if (value <= 20) return '텍스트만';
+    if (value <= 40) return '텍스트가 좋아요';
+    if (value <= 60) return '상관 없어요';
+    if (value <= 80) return '영상이 좋아요';
+    return '영상만';
   };
 
   const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -166,15 +174,34 @@ const PreferButton: React.FC<DropdownProps> = ({
     setSliderValue(value);
 
     let selectedTag = null;
-    if (value < 40) selectedTag = '텍스트가 좋아요';
-    else if (value > 60) selectedTag = '영상이 좋아요';
-    else selectedTag = '상관 없어요';
+    if (value <= 20) selectedTag = '텍스트만';
+    else if (value <= 40) selectedTag = '텍스트가 좋아요';
+    else if (value <= 60) selectedTag = '상관 없어요';
+    else if (value <= 80) selectedTag = '영상이 좋아요';
+    else selectedTag = '영상만';
 
     onTagChange(selectedTag ? [selectedTag] : []); // 부모 상태 업데이트
   };
 
+  // 외부 클릭 시 드롭다운 클로즈
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
-    <DropdownContainer hasTags={selectedTags.length > 0}>
+    <DropdownContainer hasTags={selectedTags.length > 0} ref={dropdownRef}>
       <DropdownButton
         isOpen={isOpen}
         hasTags={selectedTags.length > 0}

@@ -36,11 +36,11 @@ const RowFlexSpan = styled.span`
 `;
 
 const Container = styled(ColumnFlexDiv)`
-  height: 333px;
-  width: 282px;
+  height: 335px;
+  width: 284px;
   position: relative;
   background: transparent;
-  // overflow: hidden;
+  overflow: hidden;
 `;
 
 const BoardingPassImage = styled(Image)`
@@ -602,7 +602,6 @@ const HoverCollection = ({ status }: { status: string }) => {
             </ContentWrapper>
             <Gradient />
           </CollectionWrapper>
-
         </>
       )}
     </HoverWrapper>
