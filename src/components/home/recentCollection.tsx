@@ -11,16 +11,26 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 46px 0 64px 0;
+  padding: 48px 0 63px 0;
+
+  @media (max-width: 480px) {
+    padding: 50px 0 58px 0;
+  }
 `;
 
 const LabelWrapper = styled.div`
   height: 84px;
   display: flex;
-  flex-shrink: 0;
   flex-direction: column;
   text-align: center;
   margin-bottom: 27px;
+
+  @media (max-width: 480px) {
+    width: 309px;
+    height: 181px;
+    gap: 13px;
+    margin-bottom: 6px;
+  }
 `;
 
 const Label = styled.div`
@@ -45,10 +55,6 @@ const GrayLabel = styled(Label)`
   @media (max-width: 768px) {
     font-size: 20px;
   }
-
-  @media (max-width: 480px) {
-    font-size: 15px;
-  }
 `;
 
 const BlackLabel = styled(Label)`
@@ -62,21 +68,25 @@ const BlackLabel = styled(Label)`
   @media (max-width: 768px) {
     font-size: 28px;
   }
+`;
+
+const MobileBreak = styled.br`
+  display: none;
 
   @media (max-width: 480px) {
-    font-size: 21px;
+    display: inline;
   }
 `;
 
 const CollectionWrapper = styled.div`
-  width: 736px;
+  width: 716px;
   height: 395px;
-  margin-bottom: 35px;
-  padding: 30px 40px;
+  margin-bottom: 36px;
+  padding: 30px;
   display: flex;
   flex-direction: row;
   gap: 36px;
-  border-radius: 8.757px;
+  border-radius: 16px;
   background: #fff;
   box-shadow:
     0px 4px 4px 0px rgba(0, 0, 0, 0.04),
@@ -84,6 +94,18 @@ const CollectionWrapper = styled.div`
 
   @media (max-width: 768px) {
     width: 730px;
+  }
+
+  @media (max-width: 480px) {
+    width: 390px;
+    height: 760px;
+    padding: 31px 26px;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    box-shadow:
+      0px 4px 4px 0px rgba(0, 0, 0, 0.04),
+      0px 4px 4px 0px rgba(0, 0, 0, 0.04);
   }
 `;
 
@@ -264,7 +286,7 @@ const Button = styled.button`
   display: flex;
   width: 390px;
   height: 58px;
-  padding: 17px 126px;
+  padding: 18px 126px;
   justify-content: center;
   align-items: center;
   border: none;
@@ -306,9 +328,13 @@ const RecentCollection: React.FC = () => {
       <Container>
         <LabelWrapper>
           <GrayLabel>
-            어제 여기서 학습을 중지하셨어요 오늘도 힘내볼까요?
+            어제 여기서 학습을 중지하셨어요 <MobileBreak />
+            오늘도 힘내볼까요?
           </GrayLabel>
-          <BlackLabel>컬렉션 여정 마무리까지 얼마 남지 않았어요</BlackLabel>
+          <BlackLabel>
+            컬렉션 여정 마무리까지 <MobileBreak />
+            얼마 남지 않았어요
+          </BlackLabel>
         </LabelWrapper>
         <CollectionWrapper>
           <BoardingPass />
