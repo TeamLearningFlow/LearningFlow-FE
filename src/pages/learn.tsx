@@ -10,6 +10,7 @@ import Note from '../components/learn/note';
 import {
   SkeletonClassList_S,
   SkeletonClassTitle,
+  SkeletonArticle,
 } from '@/components/skeleton/skeleton_learnComponents';
 
 const PageWrapper = styled.div``;
@@ -94,7 +95,7 @@ const RightWrapper = styled.div`
 
 const LearnPage: React.FC = () => {
   const { episodeId } = useParams(); // episodeId 파라미터 가져오기
-  const loading = false; // Skeleton UI 확인용
+  const loading = true; // Skeleton UI 확인용
 
   return (
     <PageWrapper>
@@ -103,9 +104,13 @@ const LearnPage: React.FC = () => {
       {loading ? (
         <BodyWrapper>
           <LeftWrapper>
+            <SkeletonArticle />
             <SkeletonClassTitle />
             <SkeletonClassList_S />
           </LeftWrapper>
+          <RightWrapper>
+            <Note />
+          </RightWrapper>
         </BodyWrapper>
       ) : (
         <BodyWrapper>

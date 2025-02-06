@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import SkeletonClassIndex_S from './skeleton_classIndex_S';
 
-
 const TitleWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -15,7 +14,6 @@ const TitleWrapper = styled.div`
   }
 
   @media (max-width: 560px) {
-
   }
 `;
 
@@ -30,7 +28,7 @@ const TitleBox = styled.div`
 
   @media (max-width: 560px) {
     width: 160px;
-    height: 15px; 
+    height: 15px;
   }
 `;
 
@@ -58,7 +56,6 @@ const SkeletonClassTitle: React.FC = () => {
     </TitleWrapper>
   );
 };
-
 
 const ComponentWrapper = styled.div`
   display: flex;
@@ -110,4 +107,20 @@ const SkeletonClassList_S: React.FC = () => {
   );
 };
 
-export { SkeletonClassTitle, SkeletonClassList_S};
+const SkeletonArticleWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 552px;
+  border-radius: 11.483px;
+  background: rgba(0, 0, 0, 0.08);
+  box-shadow: 1.077px 1.435px 6.459px 0px rgba(0, 0, 0, 0.1);
+`;
+
+const SkeletonArticle: React.FC = () => {
+  return <SkeletonArticleWrapper></SkeletonArticleWrapper>;
+};
+
+export { SkeletonClassTitle, SkeletonClassList_S, SkeletonArticle };
