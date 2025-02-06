@@ -67,7 +67,7 @@ const CustomSlider = styled(Slider)`
     top: 50%;
     margin: 0 2%;
     transform: translateY(-50%);
-    z-index: 10;
+    // z-index: 10;
   }
 
   .slick-prev:before,

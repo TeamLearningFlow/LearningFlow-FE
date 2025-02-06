@@ -87,7 +87,7 @@ const CollectionList = styled.div`
   }
 
   @media (max-width: 700px) {
-    padding: 0px 160px 0px 8%;
+    padding: 0px 160px 0px 5%;
   }
 
   @media (max-width: 480px) {

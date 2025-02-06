@@ -40,6 +40,7 @@ const Container = styled(ColumnFlexDiv)`
   width: 282px;
   position: relative;
   background: transparent;
+  // overflow: hidden;
 `;
 
 const BoardingPassImage = styled(Image)`
@@ -269,7 +270,8 @@ const ProgressRate = styled.span`
 
 const HoverWrapper = styled.div`
   width: 100%;
-  height: 333px;
+  height: 100%;
+  // flex-shrink: 0;
   position: absolute;
   top: 159.2px;
   left: 1px;
