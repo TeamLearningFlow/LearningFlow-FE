@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Header from '../components/searchHeader';
 import CategoryList from '../components/search/categoryList';
 import BoardingPass from '../components/search/boardingPass';
@@ -7,17 +7,16 @@ import Pagination from '@/components/search/pagination';
 import BoardingPassList from '@/components/search/boardingPassList';
 
 const SearchPage: React.FC = () => {
-  const [searchActive, setSearchActive] = useState(false); // 검색창 활성화 상태
+  /* const [searchActive, setSearchActive] = useState(false); // 검색창 활성화 상태
 
   // 헤더 상태 업데이트 전달
   const handleSearchStateChange = (active: boolean) => {
     setSearchActive(active);
-  };
+  }; */
 
   return (
     <>
-      <Header onSearchStateChange={handleSearchStateChange} />
-      {searchActive && (
+      <Header />
         <div>
           <CategoryList />
           <Filters />
@@ -28,7 +27,6 @@ const SearchPage: React.FC = () => {
           </BoardingPassList>
           <Pagination />
         </div>
-      )}
     </>
   );
 };

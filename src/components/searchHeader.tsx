@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import Image from 'next/image';
+
 import LogoDark from '../assets/logo_dark.png';
 import Search from '../assets/searchicon.svg';
 import Guest from '../assets/Guest.svg';
@@ -159,12 +161,7 @@ const ProfileUser = styled.div`
   }
 `;
 
-// 헤더 상태 전달
-interface HeaderProps {
-  onSearchStateChange: (active: boolean) => void;
-}
-
-const Header: React.FC<HeaderProps> = ({ onSearchStateChange }) => {
+const Header: React.FC = () => {
   const [searchState, setSearchState] = useState<string>('Inactive'); // 검색 박스 상태
   const [searchValue, setSearchValue] = useState(''); // 입력 값
 
@@ -172,15 +169,18 @@ const Header: React.FC<HeaderProps> = ({ onSearchStateChange }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const profileIconRef = useRef<HTMLDivElement>(null);
 
+  const router = useRouter();
+
   const handleFocus = () => {
     setSearchState('Active'); // 검색 박스 활성화
-    onSearchStateChange(true); // 검색 페이지 활성화
+    // onSearchStateChange(true); 검색 페이지 활성화
+    router.push('/search'); // 검색 페이지 활성화 시 /search로 이동
   };
 
   const handleBlur = () => {
     if (!searchValue.trim()) {
       setSearchState('Inactive'); // 텍스트 없으면 초기화
-      onSearchStateChange(false); // 검색 페이지 비활성화
+      // onSearchStateChange(false); 검색 페이지 비활성화
     } else {
       setSearchState('Completed'); // 텍스트 있으면 비활성화
     }
@@ -204,7 +204,7 @@ const Header: React.FC<HeaderProps> = ({ onSearchStateChange }) => {
 
   const handleClear = () => {
     setSearchValue(''); // 텍스트 삭제
-    setSearchState('Active'); // 텍스트 삭제 시 초기화
+    setSearchState('Active'); // 아이콘 상태 초기화
   };
 
   // 사용자 아이콘 클릭 시 모달 토글
@@ -254,7 +254,15 @@ const Header: React.FC<HeaderProps> = ({ onSearchStateChange }) => {
           onChange={handleChange}
           onKeyDown={handleKeyDown}
         />
-        <SearchIcon onClick={handleClear}>
+        <SearchIcon
+          onMouseDown={(event) => {
+            if (searchState === 'Active-입력') {
+              event.preventDefault(); // 기본 동작 방지
+              event.stopPropagation(); // 이벤트 버블링 방지
+              handleClear(); // 텍스트 클리어
+            }
+          }}
+        >
           <Image
             src={
               searchState === 'Active-입력'
