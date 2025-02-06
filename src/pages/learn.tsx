@@ -52,7 +52,7 @@ const LearnPage: React.FC = () => {
       ) : (
         <BodyWrapper>
           <LeftWrapper>
-            <Article />
+            <Article episodeId={episodeId} />
             <ClassWrapper>
               <ClassTitle />
               <ClassList />
