@@ -43,21 +43,22 @@ const LeftWrapper = styled.div`
   width: 63vw;
 
   @media (max-width: 850px) {
-    display: flex;
+    // display: flex;
     width: 100vw;
-    flex-direction: column; // 이거 설정해서 아래쪽 width 바뀌었을 거에요!! 참고해주세융
-    justify-content: center;
-    align-items: center;
+    // flex-direction: column; // 이거 설정해서 아래쪽 width 바뀌었을 거에요!! 참고해주세융
+    // justify-content: center;
+    // align-items: center;
 
     // border: 10px solid blue;
     padding: 5px 35px;
   }
 
   @media (max-width: 560px) {
-    display: flex;
+    // display: flex;
     width: 100vw;
-    flex-direction: column; // 이거 설정해서 아래쪽 width 바뀌었을 거에요!! 참고해주세융
-    justify-content: center;
+    // flex-direction: column; // 이거 설정해서 아래쪽 width 바뀌었을 거에요!! 참고해주세융
+    // justify-content: center;
+    // align-items: center;
 
     // border: 10px solid blue;
     padding: 5px 30px;

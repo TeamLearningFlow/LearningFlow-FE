@@ -83,13 +83,10 @@ const InputWrapper = styled.textarea`
     font-size: 15px;
     line-height: 25px;
     &::placeholder {
-      color: #bdc5cc;
       font-size: 18px;
       font-weight: 400;
       line-height: 25px;
-      letter-spacing: -0.36px;
     }
-
     height: 102px;
   }
 
@@ -97,11 +94,9 @@ const InputWrapper = styled.textarea`
     font-size: 10px;
     line-height: 20px;
     &::placeholder {
-      color: #bdc5cc;
       font-size: 10px;
       font-weight: 400;
       line-height: 20px;
-      letter-spacing: -0.36px;
     }
 
     height: 102px;

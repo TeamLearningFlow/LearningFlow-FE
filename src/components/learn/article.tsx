@@ -3,6 +3,10 @@ import axios from 'axios';
 import styled from 'styled-components';
 
 const ArticleWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   width: 100%;
   height: 552px;
   border-radius: 11.483px;
@@ -11,13 +15,6 @@ const ArticleWrapper = styled.div`
   // margin-bottom: 20px;
 
   // border: 10px solid pink;
-
-  @media (max-width: 850px) {
-    display: flex;
-    // width: 90%;
-    align-items: center;
-    justify-content: center;
-  }
 `;
 
 const Iframe = styled.iframe`
@@ -27,6 +24,9 @@ const Iframe = styled.iframe`
 `;
 
 const Article: React.FC<{ episodeId?: string }> = ({ episodeId }) => {
+  // const [contentUrl, setContentUrl] = useState<string>(
+  //   'https://www.youtube.com/watch?v=r_cfD_17SJU',
+  // );
   const [contentUrl, setContentUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
