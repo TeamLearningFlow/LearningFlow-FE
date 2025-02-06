@@ -75,7 +75,7 @@ const CollectionList = styled.div`
   height: auto;
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
   justify-items: center;
   align-items: center;
   gap: 24px;
