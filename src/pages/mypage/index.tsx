@@ -8,6 +8,7 @@ import BoardingPassList from '@/components/search/boardingPassList';
 
 import ProfileBanner from '@/components/mypage/profileBanner';
 import Tab from '@/components/mypage/mypageTabMenu';
+import Footer from '@/components/homeFooter';
 
 const MyPage = () => {
   const [searchActive, setSearchActive] = useState(false); // 검색창 활성화 상태
@@ -35,6 +36,7 @@ const MyPage = () => {
         <>
           <ProfileBanner />
           <Tab />
+          <Footer />
         </>
       )}
     </>

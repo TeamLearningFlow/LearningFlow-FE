@@ -12,6 +12,7 @@ import TitleBar from "../../components/learn/learnTitleBar";
 import CollectionInfo from "../../components/collection/collectionInfo";
 import CollectionList from "../../components/collection/collectionList";
 import SkeletonCollectionList from "@/components/skeleton/skeleton_classList_M";
+import Footer from "@/components/homeFooter";
 
 const PageWrapper = styled.div`
   background-color: #fafafc;
@@ -101,9 +102,11 @@ export default function CollectionPage() {
     }
   
     const fetchCollection = async () => {
+      setLoading(true); // 🔥 API 요청 전에 로딩 상태 설정
+  
       try {
         const response = await axios.get(`/collections/${collectionId}`);
-      
+  
         if (response.data.isSuccess) {
           setCollection(response.data.result);
           console.log("데이터 로드 성공:", response.data.result);
@@ -113,22 +116,22 @@ export default function CollectionPage() {
         }
       } catch (err: any) {
         console.log("Error fetching collection:", err);
-      
+  
         if (err.response && err.response.status === 404) {
           console.log("404 에러: 해당 컬렉션을 찾을 수 없습니다.");
-          setCollection(dummyData); // 404일 경우 더미 데이터 사용 가능
+          setCollection(dummyData);
         } else {
           console.log("서버 오류로 데이터를 불러올 수 없습니다.");
-          setCollection(null); // 다른 오류일 경우 데이터 초기화
+          setCollection(null);
         }
       } finally {
         setLoading(false);
       }
-      
     };
   
     fetchCollection();
   }, [collectionId]);
+  
 
 
   return (
@@ -140,6 +143,7 @@ export default function CollectionPage() {
           <ContentWrapper>
             <SkeletonCollectionList />
           </ContentWrapper>
+          <Footer />
         </>
       ) : searchActive ? (
         <div>
@@ -161,6 +165,7 @@ export default function CollectionPage() {
           </ContentWrapper>
         </>
       )}
+      <Footer />
     </PageWrapper>
   );
 }

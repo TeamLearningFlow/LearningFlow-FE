@@ -5,18 +5,6 @@ import Link from 'next/link';
 import Logo from '../assets/logo_light.png';
 
 
-const MenuWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  gap: 20px;
-
-  @media (max-width: 560px) {
-    gap: 10px;
-  }
-`;
-
 const SloganWrapper = styled.div`
   display: flex;
   color: white;
@@ -30,7 +18,7 @@ const SloganWrapper = styled.div`
   }
 
   @media (max-width: 560px) {
-    font-size: 12px;
+    font-size: 0px;
     margin-top: 10px;
   }
 `;
@@ -49,7 +37,7 @@ const CaptionWrapper = styled.div`
   }
 
   @media (max-width: 560px) {
-    font-size: 8px;
+    font-size: 0px;
   }
 `;
 
@@ -69,7 +57,7 @@ const StyledLink = styled(Link)`
   }
 
   @media (max-width: 560px) {
-    font-size: 6px;
+    font-size: 11px;
   }
 `;
 
@@ -81,6 +69,8 @@ const FooterWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+  overflow: hidden;
 
   @media (max-width: 1024px) {
     padding: 0 10%;
@@ -91,7 +81,7 @@ const FooterWrapper = styled.div`
   }
 
   @media (max-width: 560px) {
-    padding: 8% 10%;
+    padding: 12% 10%;
   }
 `;
 
@@ -100,7 +90,25 @@ const FooterLeft = styled.div`
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
+  width: 170px;
 `;
+
+const MenuWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  gap: 20px;
+  flex-shrink: 0;
+  min-width: 200px; 
+  
+  @media (max-width: 560px) {
+    width: 300px;
+    margin-left: -150px;
+  }
+`;
+
+
 
 const TextWrapper = styled.div`
   display: flex;
@@ -120,9 +128,18 @@ const FooterIconWrapper = styled.div`
   }
 
   @media (max-width: 560px) {
-    width: 100px;
+    width: 150px;
   }
 `;
+
+const CopyWrapper = styled.div`
+  font-size: 10px;
+  color:rgba(149, 156, 164, 1);
+
+  @media (max-width: 560px) {
+    font-size: 0px;
+  }
+`
 
 const Footer: React.FC = () => {
   return (
@@ -131,7 +148,9 @@ const Footer: React.FC = () => {
       <FooterIconWrapper>
         <Image src={Logo} alt="Footer Logo" fill style={{ objectFit: 'contain' }} />
       </FooterIconWrapper>
-      <p style={{fontSize: '10px', color:'rgba(149, 156, 164, 1)'}}>© 2025 All Rights Reserved</p>
+      <CopyWrapper>
+        @ 2025 All Rights Reserved
+      </CopyWrapper>
       </FooterLeft>
 
       <TextWrapper>
