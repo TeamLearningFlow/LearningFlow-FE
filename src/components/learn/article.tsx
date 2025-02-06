@@ -3,19 +3,20 @@ import axios from 'axios';
 import styled from 'styled-components';
 
 const ArticleWrapper = styled.div`
-  width: 63vw;
+  width: 100%;
   height: 552px;
   border-radius: 11.483px;
   background: #b5b5b5;
   box-shadow: 1.077px 1.435px 6.459px 0px rgba(0, 0, 0, 0.1);
   // margin-bottom: 20px;
 
-  @media (max-width: 850px) {
-    height: 450px;
-  }
+  // border: 10px solid pink;
 
-  @media (max-width: 560px) {
-    height: 300px;
+  @media (max-width: 850px) {
+    display: flex;
+    // width: 90%;
+    align-items: center;
+    justify-content: center;
   }
 `;
 

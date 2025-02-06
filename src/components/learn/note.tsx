@@ -7,7 +7,13 @@ const NoteWrapper = styled.div`
   width: 30vw;
 
   border-radius: 16px;
-  box-shadow: 1.5px 2px 9px 0px rgba(0, 0, 0, 0.1);
+  box-shadow: 1.5px 2px 8px 0px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 850px) {
+    width: 100%;
+    margin-bottom: 20px;
+    margin-top: 10px;
+  }
 `;
 
 const NoteTitle = styled.div`
@@ -83,6 +89,8 @@ const InputWrapper = styled.textarea`
       line-height: 25px;
       letter-spacing: -0.36px;
     }
+
+    height: 102px;
   }
 
   @media (max-width: 560px) {
@@ -95,6 +103,8 @@ const InputWrapper = styled.textarea`
       line-height: 20px;
       letter-spacing: -0.36px;
     }
+
+    height: 102px;
   }
 `;
 
