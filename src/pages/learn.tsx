@@ -1,4 +1,5 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from '../components/learnHeader';
 import TitleBar from '../components/learn/learnTitleBar';
@@ -32,6 +33,8 @@ const RightWrapper = styled.div`
 `;
 
 const LearnPage: React.FC = () => {
+  const { episodeId } = useParams(); // episodeId 파라미터 가져오기
+
   return (
     <PageWrapper>
       <Header />
@@ -45,7 +48,8 @@ const LearnPage: React.FC = () => {
           </ClassWrapper>
         </LeftWrapper>
         <RightWrapper>
-          <Note />
+          <Note episodeId={episodeId} />
+          {/* <Note /> */}
         </RightWrapper>
       </BodyWrapper>
     </PageWrapper>

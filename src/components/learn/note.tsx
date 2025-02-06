@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 import styled from 'styled-components';
 
 const NoteWrapper = styled.div`
@@ -125,18 +127,22 @@ const SaveButton = styled.div<{ isValid: boolean }>`
   }
 `;
 
-const Note: React.FC = () => {
+const Note: React.FC<{ episodeId?: string }> = ({ episodeId }) => {
   const [noteContent, setNoteContent] = useState<string>('');
   const [isNoteEmpty, setIsNoteEmpty] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);
+  // const { episodeId } = useParams(); // episodeId 파라미터 가져오기
 
   // 로컬 스토리지에서 저장된 노트를 불러오는 함수
   useEffect(() => {
-    const savedNote = localStorage.getItem('noteContent');
-    if (savedNote) {
-      setNoteContent(savedNote);
-      setIsNoteEmpty(savedNote === '');
+    if (episodeId) {
+      const savedNote = localStorage.getItem(`noteContent_${episodeId}`);
+      if (savedNote) {
+        setNoteContent(savedNote);
+        setIsNoteEmpty(savedNote === '');
+      }
     }
-  }, []);
+  }, [episodeId]);
 
   // 노트 내용 변경 핸들러
   const handleNoteContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -153,10 +159,41 @@ const Note: React.FC = () => {
   };
 
   // 저장 버튼 클릭 핸들러
-  const handleSaveNote = () => {
+  const handleSaveNote = async () => {
+    if (!episodeId) {
+      console.log('에피소드 ID가 존재하지 않습니다.');
+      return;
+    }
+
     if (!isNoteEmpty) {
       localStorage.setItem('noteContent', noteContent);
       alert('노트가 저장되었습니다!');
+      try {
+        const response = await axios.post(
+          `http://onboarding.p-e.kr:8080/resources/{episodeId}/memo`,
+          {
+            memoContents: noteContent,
+          },
+          // { headers: { "Content-Type": "application/json" } } // JSON 데이터 전송
+        );
+
+        // 로컬 스토리지에도 저장
+        localStorage.setItem(`noteContent_${episodeId}`, noteContent);
+        console.log('메모 저장 완료');
+        console.log('episodeId: ', episodeId);
+        console.log('Response:', response);
+
+        if (response.status === 200) {
+          console.log(noteContent);
+        }
+      } catch (err: any) {
+        console.log('Error:', err.response?.data || err.message);
+        if (err.response?.data?.message) {
+          console.log('Error Message:', err.response.data.message);
+        } else {
+          console.log('메모 작성 중 오류 발생');
+        }
+      }
     }
   };
 
