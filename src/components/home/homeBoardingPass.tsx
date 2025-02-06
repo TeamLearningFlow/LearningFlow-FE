@@ -36,10 +36,11 @@ const RowFlexSpan = styled.span`
 `;
 
 const Container = styled(ColumnFlexDiv)`
-  height: 333px;
-  width: 282px;
+  height: 452px;
+  width: 386px;
   position: relative;
   background: transparent;
+  overflow: hidden;
 `;
 
 const BoardingPassImage = styled(Image)`

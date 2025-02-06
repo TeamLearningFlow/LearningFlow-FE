@@ -78,22 +78,12 @@ const CollectionList = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   justify-items: center;
   align-items: center;
-  row-gap: 140px;
-  margin-bottom: 250px;
-  padding: 0px 160px 0px 60px;
-
-  @media (max-width: 768px) {
-    padding: 0px 160px 0px 60px;
-  }
-
-  @media (max-width: 700px) {
-    padding: 0px 160px 0px 5%;
-  }
+  gap: 24px;
+  margin-bottom: 120px;
+  padding: 0px 8%;
 
   @media (max-width: 480px) {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    padding: 0px 105px 0px 0px;
-    place-items: center;
+    padding: 0;
   }
 `;
 
