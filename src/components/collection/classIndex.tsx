@@ -4,6 +4,7 @@ import Image from 'next/image';
 import PlayButton from '../../assets/playButton.svg';
 import CompletedIndexIcon from '../../assets/completedRadio.svg';
 import EndIndexIcon from '../../assets/defaultRadio.svg';
+import CheckedYoutube from '../../assets/platformicon/youtube_checked_ic.svg';
 
 const ComponentWrapper = styled.div`
   display: flex;
@@ -322,6 +323,15 @@ const TitleBox = styled.div`
   }
 `;
 
+interface ClassIndexProps {
+  classData: {
+    episodeName: string;
+    url: string;
+    resourceSource: string;
+    episodeNumber: number;
+  };
+}
+
 const StartIndex = () => {
   return (
     <StartComponentWrapper>
@@ -367,10 +377,7 @@ const EndIndex = () => {
   );
 };
 
-const ClassIndex: React.FC<{ orderText: string; src: string }> = ({
-  orderText,
-  src,
-}) => {
+const ClassIndex: React.FC<ClassIndexProps> = ({ classData }) => {
   return (
     <ComponentWrapper>
       <RadioWrapper>
@@ -379,34 +386,35 @@ const ClassIndex: React.FC<{ orderText: string; src: string }> = ({
             src={CompletedIndexIcon}
             alt="completed-icon"
             fill
-            style={{ objectFit: 'contain' }}
+            style={{ objectFit: "contain" }}
           />
         </IndexIcon>
       </RadioWrapper>
       <IndexWrapper>
         <PlatformIcon>
           <Image
-            src={src}
+            src={CheckedYoutube}
             alt="platform-icon"
             fill
-            style={{ objectFit: 'contain' }}
+            style={{ objectFit: "contain" }}
           />
         </PlatformIcon>
         <IndexContainer>
-          <OrderBox>{orderText}</OrderBox>
-          <TitleBox>브랜치 포스터 "와이어프레임을 활용하는 이유"</TitleBox>
+          <OrderBox>{classData.episodeNumber}회차</OrderBox>
+          <TitleBox>{classData.episodeName}</TitleBox>
         </IndexContainer>
         <ButtonWrapper>
           <Image
             src={PlayButton}
             alt="Play Button"
             fill
-            style={{ objectFit: 'contain' }}
+            style={{ objectFit: "contain" }}
           />
         </ButtonWrapper>
       </IndexWrapper>
     </ComponentWrapper>
   );
 };
+
 
 export { ClassIndex, StartIndex, EndIndex };

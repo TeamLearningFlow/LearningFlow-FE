@@ -11,7 +11,40 @@ import line from '../../assets/Line.svg';
 import dot from '../../assets/dot.svg';
 import plane from '../../assets/Airplane.svg';
 
-const CollectionInfo: React.FC = () => {
+interface CollectionData {
+  id: number;
+  interestField: string;
+  title: string;
+  creator: string;
+  keywords: string[];
+  difficulties: number[];
+  amount: number;
+  runtime: number;
+  textCount: number;
+  videoCount: number;
+  resource: {
+    episodeName: string;
+    url: string;
+    resourceSource: string;
+    episodeNumber: number;
+  }[];
+  bookmarkCount: number;
+  bookmarked: boolean;
+}
+
+const difficultyMap: { [key: number]: string } = {
+  1: "입문",
+  2: "초급",
+  3: "중급",
+  4: "실무",
+};
+
+
+interface CollectionInfoProps {
+  data: CollectionData;
+}
+
+const CollectionInfo: React.FC<CollectionInfoProps> = ({ data }) => {
   return (
     <CollectionInfoWrapper>
       <CollectionTicket>
@@ -27,9 +60,9 @@ const CollectionInfo: React.FC = () => {
         </CollectionRightIMGBox>
         <CollectionUpperDescription>
           <KeywordBox>
-            <Interest>관심분야</Interest>
-            <Keyword>키워드1</Keyword>
-            <Keyword>키워드2</Keyword>
+            <Interest>{data.interestField}</Interest>
+            <Keyword>{data.keywords[0]}</Keyword>
+            <Keyword>{data.keywords[1]}</Keyword>
           </KeywordBox>
           <TypeImgBox>
             <TypeImgList>
@@ -48,34 +81,32 @@ const CollectionInfo: React.FC = () => {
             </LineNDot>
             <ArticleNVideo>
               <ArticleLetter>아티클</ArticleLetter>
-              <ArticleNumber>2</ArticleNumber>
+              <ArticleNumber>{data.textCount}</ArticleNumber>
               <VideoLetter>영상</VideoLetter>
-              <VideoNumber>6</VideoNumber>
+              <VideoNumber>{data.videoCount}</VideoNumber>
             </ArticleNVideo>
             {/* </TypeImgLetterBox> */}
             {/* </TypeImgLetterBoxWrapper> */}
           </TypeImgBox>
           <Title>
-            컬렉션의
-            <br />
-            제목을 입력해주세요
+            {data.title}
           </Title>
-          <Author>컬렉션의 제작자명</Author>
+          <Author>{data.creator}</Author>
         </CollectionUpperDescription>
         <Departure>
           <DepartureLeft>
             <DepartureLetter>Departure</DepartureLetter>
-            <DepartureLevel>입문자</DepartureLevel>
+            <DepartureLevel>{difficultyMap[data.difficulties?.[0]] || "알 수 없음"}</DepartureLevel>
           </DepartureLeft>
           <DepartureCenter>
-            <DepartureToArrivalLetter>00시간</DepartureToArrivalLetter>
+            <DepartureToArrivalLetter>{data.runtime}시간</DepartureToArrivalLetter>
             <Hr />
             <PlaneImg src={plane} alt="비행기" />
             <Hr />
           </DepartureCenter>
           <DepartureRight>
             <ArrivalLetter>Arrival</ArrivalLetter>
-            <ArrivalLevel>중급자</ArrivalLevel>
+            <ArrivalLevel>{difficultyMap[data.difficulties?.[1]] || "알 수 없음"}</ArrivalLevel>
           </DepartureRight>
         </Departure>
       </CollectionTicket>

@@ -7,8 +7,7 @@ import {
   } from './classIndex';
 import NowPlaying from './nowPlaying';
 import NextClassIndex from './nextClassIndex';
-import CheckedYoutube from '../../assets/platformicon/youtube_checked_ic.svg';
-import IndexLine from './IndexLine';
+import IndexLine from './indexLine';
 
 
 const CollectionListWrapper = styled.div`
@@ -47,25 +46,22 @@ const ListWrapper = styled.div`
 
 const ListContainer = styled.div``;
 
+interface CollectionListProps {
+  classes: { episodeName: string; url: string; resourceSource: string; episodeNumber: number }[];
+}
 
-const CollectionList: React.FC = () => {
-  const stops = ['1회차', '2회차'];
+const CollectionList: React.FC<CollectionListProps> = ({ classes }) => {
   return (
     <CollectionListWrapper>
       <LineWrapper>
-      <IndexLine />
+        <IndexLine />
       </LineWrapper>
       <ListWrapper>
         <StartIndex />
         <ListContainer>
-          {stops.map((stop, index) => (
-            <ClassIndex src={CheckedYoutube} key={index} orderText={stop} />
+          {classes.map((classData) => (
+            <ClassIndex key={classData.episodeNumber} classData={classData} />
           ))}
-          <NowPlaying />
-          <NextClassIndex />
-          <NextClassIndex />
-          <NextClassIndex />
-          <NextClassIndex />
         </ListContainer>
         <EndIndex />
       </ListWrapper>
