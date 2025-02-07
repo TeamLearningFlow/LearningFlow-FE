@@ -139,7 +139,7 @@ export default function CollectionPage() {
       <Header onSearchStateChange={handleSearchStateChange} />
       {loading ? (
         <>
-          <TitleBar />
+          {collection && <TitleBar data={collection} />}
           <ContentWrapper>
             <SkeletonCollectionList />
           </ContentWrapper>
@@ -158,7 +158,7 @@ export default function CollectionPage() {
         </div>
       ) : (
         <>
-          <TitleBar />
+          {collection && <TitleBar data={collection} />}
           {collection && <CollectionInfo data={collection} />}
           <ContentWrapper>
           {collection && <CollectionList classes={collection.resource} />}

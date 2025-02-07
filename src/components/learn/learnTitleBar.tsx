@@ -7,7 +7,7 @@ const TitleWrapper = styled.div`
   justify-content: left;
   height: 50px;
   background-color: rgba(31, 31, 31, 1);
-  padding-left: 3%;
+  padding: 0 10%;
 
   @media (max-width: 560px) {
     padding-left: 5%;
@@ -52,19 +52,19 @@ const TitleDot = styled.span`
 `;
 
 interface TitleBarProps {
-  title?: string;
-  category?: string;
+  data: {
+    title: string;
+    interestField: string;
+  };
 }
 
-const TitleBar: React.FC<TitleBarProps> = ({
-  title = '컬렉션명',
-  category = '분야',
-}) => {
+
+const TitleBar: React.FC<TitleBarProps> = ({ data }) => {
   return (
     <TitleWrapper>
       <LineIcon />
       <TitleBox>
-        {title} <TitleDot>·</TitleDot> {category}
+        {data.title} <TitleDot>·</TitleDot> {data.interestField}
       </TitleBox>
     </TitleWrapper>
   );
