@@ -3,6 +3,9 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import Slider from 'react-slick';
 import BannerText from '../../assets/bannerText.svg';
+import PrevArrowImage from '../../assets//left_arrow_ic.svg';
+import NextArrowImage from '../../assets/right_arrow_ic.svg';
+import LogoMark from '../../assets/logoMark.svg';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
@@ -10,26 +13,40 @@ const BannerWrapper = styled.div`
   width: 100vw;
   height: 250px;
   padding: 0 10%;
-  background: linear-gradient(to right, #5e52ff, #383199);
+  background: rgba(250, 250, 252, 1);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-
-    /* 반응형 설정 */
-  @media (max-width: 1024px) {
-    width: 100vw;
-  }
-
-  @media (max-width: 768px) {
-    width: 100vw;
-  }
+  position: relative;
 
   @media (max-width: 480px) {
-    width: 100vw;
     height: 22vh;
   }
 `;
+
+const LogoWrapper = styled.div`
+  position: absolute;
+  top: 14%;
+  right: 16%;
+  transform: translateY(-50%);
+  width: 120px;
+  height: 120px;
+  pointer-events: none;
+
+  @media (max-width: 850px) {
+    top: 4%;
+    right: 28%;
+    width: 60px;
+    height: 60px;
+  }
+
+  @media (max-width: 560px) {
+    width: 60px;
+    height: 60px;
+  }
+`;
+
 
 const Slide = styled.div`
   display: flex;
@@ -39,97 +56,107 @@ const Slide = styled.div`
   height: 100%;
   margin-left: 10%;
 
-  
-  /* 반응형 설정 */
-  @media (max-width: 1024px) {
-    margin-left: 10%;
-
-  }
-
-  @media (max-width: 768px) {
-    margin-left: 10%;
-  }
-
   @media (max-width: 480px) {
     margin-left: 0;
     padding: 0 5%;
-
   }
 `;
 
 const CustomSlider = styled(Slider)`
   width: 100%;
-  position: relative; /* 버튼을 부모 기준으로 배치 */
-
-  .slick-prev,
-  .slick-next {
-    position: absolute;
-    top: 50%;
-    margin: 0 2%;
-    transform: translateY(-50%);
-    // z-index: 10;
-  }
-
-  .slick-prev:before,
-  .slick-next:before {
-    font-size: 35px;
-    color: white;
-
-    /* 반응형 설정 */
-    @media (max-width: 1024px) {
-      margin: 0 2%;
-    }
-
-    @media (max-width: 768px) {
-      margin: 0 2%;
-      font-size: 25px;
-    }
-
-    @media (max-width: 480px) {
-      margin: 0 2%;
-      font-size: 18px;
-    }
-  }
+  position: relative;
 `;
 
-
 const TextWrapper = styled.div`
-  color: rgba(255, 255, 255, 1);
+  color: rgba(31, 31, 31, 1);
   font-size: 30px;
   font-weight: 600;
   line-height: 1.5em;
   justify-content: center;
 
-  /* 반응형 설정 */
-  @media (max-width: 1024px) {
-    font-size: 30px;
-  }
-
-  @media (max-width: 768px) {
+  @media (max-width: 850px) {
     font-size: 23px;
   }
 
   @media (max-width: 560px) {
-    margin: 0 2%;
     font-size: 4vw;
   }
 `;
 
 const ImageWrapper = styled.div`
   position: relative;
-  width: 22vw;
+  width: 200px;
   height: 40px;
   margin-bottom: 0.4vh;
 
-  @media (max-width: 768px) {
+  @media (max-width: 850px) {
+    width: 180px;
     height: 30px;
+    margin-bottom: 0.2vh;
   }
 
   @media (max-width: 560px) {
-    margin: 0 2%;
+    width: 130px;
     height: 25px;
   }
 `;
+
+const ArrowButton = styled.div`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+
+  &.prev {
+    left: -5%;
+  }
+
+  &.next {
+    right: -5%;
+  }
+
+  @media (max-width: 850px) {
+    width: 30px;
+    height: 30px;
+
+    &.prev {
+      left: -6%;
+    }
+
+    &.next {
+      right: -6%;
+    }
+  }
+
+  @media (max-width: 560px) {
+    width: 25px;
+    height: 25px;
+
+    &.prev {
+      left: -8%;
+    }
+
+    &.next {
+      right: -8%;
+    }
+  }
+`;
+
+const CustomPrevArrow: React.FC<{ onClick?: () => void }> = ({ onClick }) => (
+  <ArrowButton className="prev" onClick={onClick}>
+    <Image src={PrevArrowImage} alt="Previous" fill style={{ objectFit: 'contain' }} />
+  </ArrowButton>
+);
+
+const CustomNextArrow: React.FC<{ onClick?: () => void }> = ({ onClick }) => (
+  <ArrowButton className="next" onClick={onClick}>
+    <Image src={NextArrowImage} alt="Next" fill style={{ objectFit: 'contain' }} />
+  </ArrowButton>
+);
+
 
 const Banner: React.FC = () => {
   const slides = [
@@ -143,23 +170,20 @@ const Banner: React.FC = () => {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    //dots: true,
-    //autoplay: true,
-    //autoplaySpeed: 3000,
+    prevArrow: <CustomPrevArrow />,
+    nextArrow: <CustomNextArrow />,
   };
 
   return (
     <BannerWrapper>
+      <LogoWrapper>
+        <Image src={LogoMark} alt="Logo Mark" width={310} height={310} />
+      </LogoWrapper>
       <CustomSlider {...settings}>
         {slides.map((text, index) => (
           <Slide key={index}>
             <ImageWrapper>
-              <Image
-                src={BannerText}
-                alt="Banner Text"
-                fill
-                style={{ objectFit: 'contain' }}
-              />
+              <Image src={BannerText} alt="Banner Text" fill style={{ objectFit: 'contain' }} />
             </ImageWrapper>
             <TextWrapper dangerouslySetInnerHTML={{ __html: text }} />
           </Slide>
