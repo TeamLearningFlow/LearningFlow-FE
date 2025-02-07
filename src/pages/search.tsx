@@ -1,5 +1,6 @@
 import React from 'react';
 import Header from '../components/searchHeader';
+import Banner from '../components/search/searchBanner';
 import CategoryList from '../components/search/categoryList';
 import BoardingPass from '../components/search/boardingPass';
 import Filters from '../components/search/filters';
@@ -18,6 +19,7 @@ const SearchPage: React.FC = () => {
   return (
     <>
       <Header />
+      <Banner />
         <div>
           <CategoryList />
           <Filters />
