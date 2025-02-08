@@ -444,7 +444,7 @@ const userModal: React.FC = () => {
       );
 
       if (response.status === 200) {
-        console.log('로그아웃 성공:', response.data);
+        console.log('Response:', response.data);
         localStorage.removeItem('token'); // 로컬 스토리지 토큰 초기화
         context.actions.setIsLoggedIn(false);
         router.push('/home'); // 홈 페이지로 이동

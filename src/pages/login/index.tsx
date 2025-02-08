@@ -156,7 +156,7 @@ const LoginPage: React.FC = () => {
   const { email, password, isValidEmail, isEmailChecked, isPasswordChecked } =
     context.state;
 
-  const { setRemember } = context.actions;
+  // const { setRemember } = context.actions;
 
   const isButtonValid =
     isEmailChecked === true &&
@@ -165,13 +165,16 @@ const LoginPage: React.FC = () => {
 
   const handleLogin = async () => {
     try {
+      const rememberValue = context.state.remember;
+
       const response = await axios.post('http://onboarding.p-e.kr:8080/login', {
         email,
         password,
-        remember: context.state.remember,
+        remember: rememberValue,
       });
 
       console.log('Response: ', response.data);
+      console.log('RememberValue: ', rememberValue);
 
       // Authorization 헤더에서 토큰 추출
       const token = response.headers['authorization']?.split(' ')[1];
@@ -185,7 +188,6 @@ const LoginPage: React.FC = () => {
         console.error('로그인 응답에 Authorization 헤더가 없습니다.');
         alert('로그인 실패');
       }
-
     } catch (err: any) {
       console.log('Error:', err.response?.data || err.message);
 
@@ -194,7 +196,9 @@ const LoginPage: React.FC = () => {
           '로그인에 실패하였습니다. 이메일 또는 비밀번호를 다시 확인해주세요.',
         );
       } else {
-        alert('로그인에 실패하였습니다. 이메일 또는 비밀번호를 다시 확인해주세요.');
+        alert(
+          '로그인에 실패하였습니다. 이메일 또는 비밀번호를 다시 확인해주세요.',
+        );
       }
     }
   };
@@ -215,7 +219,10 @@ const LoginPage: React.FC = () => {
               <label>
                 <input
                   type="checkbox"
-                  onChange={(e) => setRemember(e.target.checked)}
+                  checked={context.state.remember}
+                  onChange={(e) =>
+                    context.actions.setRemember(e.target.checked)
+                  }
                 />
                 로그인 유지
               </label>
