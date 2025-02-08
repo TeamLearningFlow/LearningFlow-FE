@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
+import Icon from '../../assets/oversea.svg';
 
 import { motion } from 'framer-motion';
 import Confetti1 from '../../assets/confetti/confetti1.svg';
@@ -52,7 +53,7 @@ const Title = styled.h1`
   font-weight: 600;
   line-height: 30px; /* 150% */
   letter-spacing: -0.64px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 `;
 
 const Subtitle = styled.p`
@@ -71,7 +72,7 @@ const Button = styled.button`
   color: #ffffff;
   width: 100%;
   border: none;
-  border-radius: 100px;
+  border-radius: 8px;
   padding: 12px 16px;
   font-size: 14px;
   cursor: pointer;
@@ -150,16 +151,12 @@ const HomeModal: React.FC<ModalProps> = ({ onClose }) => {
           <br />
           온보딩에 오신 것을 환영해요!
         </Title>
-        <div
-          style={{
-            width: '100%',
-            height: '170px',
-            background: '#d9d9d9',
-            marginBottom: '15px',
-          }}
-        >
-          {/* 이미지 */}
-        </div>
+        <Image
+            src={Icon}
+            alt="Icon"
+            width={210}
+            height={210}
+          />
         <Subtitle>
           필터링을 통해 꼭 맞는 컬렉션으로 <br />
           학습여정을 시작해요!

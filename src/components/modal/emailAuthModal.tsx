@@ -66,6 +66,7 @@ const Title = styled.div`
   font-size: 30px;
   font-weight: 600;
   letter-spacing: -0.02em;
+  margin-top: 2px;
   margin-bottom: 10px;
 
   @media (max-width: 850px) {
@@ -85,8 +86,8 @@ const Description = styled.div`
 
   font-size: 18.5px;
   font-weight: 500;
-  line-height: 25px;
-  letter-spacing: -0.02em;
+  line-height: 30px;
+  letter-spacing: -0.4px;
   margin-bottom: 15px;
 
   @media (max-width: 850px) {
@@ -108,7 +109,7 @@ const Button = styled.div`
   right: 0;
   bottom: 0;
   margin-right: 36px;
-  margin-bottom: 40px;
+  margin-bottom: 36px;
 
   align-items: center;
 
