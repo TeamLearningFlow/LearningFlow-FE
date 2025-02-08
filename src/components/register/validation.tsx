@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { IoCheckmark } from 'react-icons/io5';
-import { HiXMark } from 'react-icons/hi2';
 
 const Wrapper = styled.div`
   display: flex;
@@ -105,7 +104,7 @@ const ValidationCheck: React.FC<ValidationCheckProps> = ({
   );
 };
 
-const PasswordCheckLabel = () => {
+/* const PasswordCheckLabel = () => {
   return (
     <RedWrapper>
       <HiXMark />
@@ -121,7 +120,7 @@ const EmailCheckLabel = () => {
       <ValidationLabel>이메일 형식이 올바르지 않습니다</ValidationLabel>
     </RedWrapper>
   );
-};
+}; */
 
 const WrongAccountLabel = () => {
   return (
@@ -135,7 +134,7 @@ const WrongAccountLabel = () => {
 
 export {
   ValidationCheck,
-  PasswordCheckLabel,
-  EmailCheckLabel,
+  // PasswordCheckLabel,
+  // EmailCheckLabel,
   WrongAccountLabel,
 };

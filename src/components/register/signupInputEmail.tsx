@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { EmailCheckLabel } from '../register/validation';
+import Image from 'next/image';
+import X from '../../assets/X_red.svg';
+// import { EmailCheckLabel } from '../register/validation';
 
 const Label = styled.label`
   display: block;
@@ -17,7 +19,9 @@ const Label = styled.label`
 const InputWrapper = styled.div<{
   isFocused: boolean;
   isError: boolean;
-  hasBlurred: boolean;
+  // hasBlurred: boolean;
+  isValid: boolean;
+  isEmpty: boolean;
 }>`
   display: flex;
   height: 50px;
@@ -25,17 +29,28 @@ const InputWrapper = styled.div<{
   align-items: center;
   border: 0.696px solid #323538;
   border-radius: 6.962px;
+  margin-bottom: 8px;
   padding: 12px;
   transition: box-shadow 0.3s ease;
-  box-shadow: ${(props) => {
-    if (props.isFocused && !props.hasBlurred && !props.isError) {
-      return '2px 2px 2px 0px rgba(94, 82, 255, 0.30), -2px -2px 2px 0px rgba(94, 82, 255, 0.30)';
-    }
-    return 'none';
-  }};
-  border-color: ${(props) => (props.isError ? '#ec2d30' : '#323538')};
+
+  box-shadow: ${(props) =>
+    props.isValid || props.isError
+      ? 'none' // 유효하거나 오류 상태일 때는 그림자 제거
+      : props.isFocused
+        ? '2px 2px 2px 0px rgba(94, 82, 255, 0.30), -2px -2px 2px 0px rgba(94, 82, 255, 0.30)'
+        : 'none'};
+
+  border-color: ${(props) =>
+    props.isError
+      ? '#ec2d30' // 오류 시 빨간 테두리
+      : props.isValid
+        ? '#323538' // 유효할 때 기본 테두리
+        : props.isFocused
+          ? '#5e52ff' // 포커스 시 보라색 테두리
+          : '#323538'}; // 기본 테두리
+
   background-color: ${(props) =>
-    props.isError ? '#fff' : props.hasBlurred ? '#f5f5ff' : '#fff'};
+    props.isValid && !props.isEmpty ? '#f5f5ff' : '#fff'};
   overflow: hidden;
 
   img {
@@ -63,7 +78,7 @@ const Input = styled.input<{
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: ${(props) => (props.isError ? 'rgba(236, 45, 48, 1)' : 'black')};
+  color: ${(props) => (props.isError ? '#ec2d30' : '#1f1f1f')};
 
   &::placeholder {
     color: #afb8c1;
@@ -78,6 +93,22 @@ const Input = styled.input<{
   }
 `;
 
+const ErrorContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 4px;
+`;
+
+const XImg = styled(Image)`
+  margin-top: -2px;
+`;
+
+const ErrorText = styled.span`
+  color: #ec2d30;
+  font-size: 14px;
+  margin-left: 4px;
+`;
+
 interface InputEmailProps {
   setEmail: React.Dispatch<React.SetStateAction<string>>;
   setIsEmailValid: React.Dispatch<React.SetStateAction<boolean>>;
@@ -89,15 +120,20 @@ const SignupInputEmail: React.FC<InputEmailProps> = ({
 }) => {
   const [email, setEmailState] = useState<string>('');
   const [isValidEmail, setIsValidEmail] = useState<boolean>(false);
-  const [isEmailChecked, setIsEmailChecked] = useState<boolean>(false);
+  // const [isEmailChecked, setIsEmailChecked] = useState<boolean>(false);
   const [isFocused, setIsFocused] = useState<boolean>(false);
-  const [hasBlurred, setHasBlurred] = useState<boolean>(false);
+  // const [hasBlurred, setHasBlurred] = useState<boolean>(false);
   const [isError, setIsError] = useState(false);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newEmail = e.target.value;
     setEmailState(newEmail);
     setEmail(newEmail);
+
+    const isValid = validateEmail(newEmail);
+    setIsValidEmail(isValid);
+    setIsEmailValid(isValid);
+    setIsError(!isValid && newEmail !== ''); // 입력 값이 있고 유효하지 않을 때만 오류 표시
   };
 
   const validateEmail = (email: string): boolean => {
@@ -106,7 +142,7 @@ const SignupInputEmail: React.FC<InputEmailProps> = ({
     return emailRegex.test(email);
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  /* const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       const isValid = validateEmail(email);
       setIsError(!isValid);
@@ -119,15 +155,16 @@ const SignupInputEmail: React.FC<InputEmailProps> = ({
         setIsFocused(false);
       }
     }
-  };
+  }; */
 
   return (
     <div>
       <Label htmlFor="email">이메일</Label>
       <InputWrapper
         isFocused={isFocused}
-        isError={!isValidEmail && isEmailChecked}
-        hasBlurred={hasBlurred}
+        isError={isError}
+        isValid={isValidEmail}
+        isEmpty={email === ''}
       >
         <Input
           type="email"
@@ -136,12 +173,15 @@ const SignupInputEmail: React.FC<InputEmailProps> = ({
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           onChange={handleEmailChange}
-          onKeyDown={handleKeyPress}
           isError={isError}
         />
       </InputWrapper>
-
-      {isEmailChecked && !isValidEmail && <EmailCheckLabel />}
+      {isError && (
+        <ErrorContainer>
+          <XImg src={X} alt="X" />
+          <ErrorText>이메일 형식이 올바르지 않습니다</ErrorText>
+        </ErrorContainer>
+      )}
     </div>
   );
 };

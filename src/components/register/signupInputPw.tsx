@@ -10,7 +10,7 @@ const InputWrapper = styled.div<{
   isInvalid: boolean;
   isValid: boolean;
   hasBlurred: boolean;
-  isSubmitted: boolean;
+  // isSubmitted: boolean;
   isEmpty: boolean;
 }>`
   display: flex;
@@ -19,13 +19,17 @@ const InputWrapper = styled.div<{
   align-items: center;
   border: 0.696px solid
     ${(props) =>
-      props.isInvalid && props.isEmpty
-        ? '#323538' // 비어있고 유효하지 않으면 기본 색상
-        : props.isInvalid
-          ? 'rgba(236, 45, 48, 1)' // 유효하지 않으면 빨간색
-          : props.isEmpty
-            ? '#323538' // 비어 있을 때 기본 색상
-            : '#323538'}; // 기본 색상
+      props.isValid
+        ? '#323538' // 유효하면 기본 색상
+        : props.isFocused && props.isEmpty
+          ? ' #5e52ff'
+          : props.isInvalid && props.isEmpty
+            ? '#323538' // 비어있고 유효하지 않으면 기본 색상
+            : props.isInvalid
+              ? 'rgba(236, 45, 48, 1)' // 유효하지 않으면 빨간색
+              : props.isEmpty
+                ? '#323538' // 비어 있을 때 기본 색상
+                : '#323538'}; // 기본 색상
 
   border-radius: 6.962px;
   padding: 12px;
@@ -36,6 +40,9 @@ const InputWrapper = styled.div<{
     background-color 0.3s ease;
 
   box-shadow: ${(props) => {
+    if (props.isValid) {
+      return 'none'; // 유효하면 그림자 제거
+    }
     // 1. 처음 input 클릭했을 때, 아무 텍스트 입력 안 해도 그림자 효과가 생김
     if (props.isFocused && props.isEmpty) {
       return '2px 2px 2px 0px rgba(94, 82, 255, 0.30), -2px -2px 2px 0px rgba(94, 82, 255, 0.30)';
@@ -45,14 +52,14 @@ const InputWrapper = styled.div<{
       return 'none';
     }
     // 3. 텍스트가 유효하면 다시 그림자
-    if (props.isFocused && props.isValid && !props.isSubmitted) {
+    if (props.isFocused && props.isValid) {
       return '2px 2px 2px 0px rgba(94, 82, 255, 0.30), -2px -2px 2px 0px rgba(94, 82, 255, 0.30)';
     }
     // 4. 유효한 상태로 엔터키를 눌렀을 때 그림자 없어짐
     return 'none';
   }};
-  background-color: ${(props) =>
-    props.isSubmitted && props.isValid ? '#f5f5ff' : 'transparent'};
+
+  background-color: ${(props) => (props.isValid ? '#f5f5ff' : 'transparent')};
 
   img {
     width: 18px;
@@ -115,7 +122,7 @@ const IconWrapper = styled.div`
 const Label = styled.label`
   display: block;
   margin-bottom: 8px;
-  margin-top: 22px;
+  margin-top: 15px;
   font-size: 14px;
   color: #181818;
 
@@ -124,7 +131,7 @@ const Label = styled.label`
   }
 `;
 
-const Button = styled.button`
+/* const Button = styled.button`
   padding: 10px 20px;
   background-color: #5e52ff;
   color: white;
@@ -136,16 +143,18 @@ const Button = styled.button`
   &:hover {
     background-color: #4a46e3;
   }
-`;
+`; */
 
 interface SignupInputPwProps {
   setPassword: React.Dispatch<React.SetStateAction<string>>;
   setIsPasswordValid: React.Dispatch<React.SetStateAction<boolean>>;
+  onPasswordChange: (password: string) => void;
 }
 
 const SignupInputPw: React.FC<SignupInputPwProps> = ({
   setPassword,
   setIsPasswordValid,
+  onPasswordChange,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -168,7 +177,7 @@ const SignupInputPw: React.FC<SignupInputPwProps> = ({
   const [isInvalid, setIsInvalid] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  // const [isSubmitted, setIsSubmitted] = useState(false);
   const [password, setPasswordState] = useState('');
 
   const handleFocus = () => setIsFocused(true);
@@ -177,6 +186,7 @@ const SignupInputPw: React.FC<SignupInputPwProps> = ({
   const handlePasswordChange = (value: string) => {
     setPasswordState(value);
     setPassword(value);
+    onPasswordChange(value);
 
     const newValidation = {
       hasUpperCase: value ? /[A-Z]/.test(value) : null,
@@ -215,11 +225,11 @@ const SignupInputPw: React.FC<SignupInputPwProps> = ({
     setIsValid(isValidPassword ?? false);
   }, [passwordValidation, setIsPasswordValid]);
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  /* const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && isValid) {
       setIsSubmitted(true);
     }
-  };
+  }; */
 
   return (
     <div>
@@ -229,7 +239,7 @@ const SignupInputPw: React.FC<SignupInputPwProps> = ({
         isInvalid={isInvalid}
         isValid={isValid}
         hasBlurred={!isFocused}
-        isSubmitted={isSubmitted}
+        // isSubmitted={isSubmitted}
         isEmpty={password === ''}
       >
         <Input
@@ -241,7 +251,7 @@ const SignupInputPw: React.FC<SignupInputPwProps> = ({
           onFocus={handleFocus}
           onBlur={handleBlur}
           onChange={(e) => handlePasswordChange(e.target.value)}
-          onKeyDown={handleKeyPress}
+          // onKeyDown={handleKeyPress}
         />
         <IconWrapper onClick={PasswordVisibility}>
           <Image

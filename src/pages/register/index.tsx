@@ -117,12 +117,23 @@ const TermsText = styled.div`
 const RegisterPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordCheck, setPasswordCheck] = useState('');
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [isPasswordCheckValid, setIsPasswordCheckValid] = useState(false);
   const [showEmailAuth, setShowEmailAuth] = useState(false);
 
   const isFormValid = isEmailValid && isPasswordValid && isPasswordCheckValid;
+
+  const handlePasswordChange = (newPassword: string) => {
+    setPassword(newPassword);
+    setIsPasswordCheckValid(newPassword === passwordCheck); // 비밀번호 확인 재검증
+  };
+
+  const handlePasswordCheckChange = (newPasswordCheck: string) => {
+    setPasswordCheck(newPasswordCheck);
+    setIsPasswordCheckValid(password === newPasswordCheck); // 비밀번호와 비교
+  };
 
   const handleShowEmailAuth = () => {
     console.log('Email:', email);
@@ -161,7 +172,7 @@ const RegisterPage: React.FC = () => {
       {!showEmailAuth ? (
         <PageContainer>
           <LeftSection>
-          <TopLogo />
+            <TopLogo />
             <LeftUIContainer>
               <LeftUI />
             </LeftUIContainer>
@@ -179,10 +190,12 @@ const RegisterPage: React.FC = () => {
               <SignupInputPw
                 setPassword={setPassword}
                 setIsPasswordValid={setIsPasswordValid}
+                onPasswordChange={handlePasswordChange}
               />
               <InputPwCheck
                 password={password}
                 setIsPasswordCheckValid={setIsPasswordCheckValid}
+                onPasswordCheckChange={handlePasswordCheckChange}
               />
               <FormGroup>
                 <SignupAuthButton

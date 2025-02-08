@@ -104,7 +104,7 @@ const ErrorContainer = styled.div`
 `;
 
 const XImg = styled(Image)`
-  margin-top: 1px;
+  margin-top: -2px;
 `;
 
 const EmailErrorMsg = styled.span`
