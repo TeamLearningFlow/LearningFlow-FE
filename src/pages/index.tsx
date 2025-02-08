@@ -14,6 +14,7 @@ const App = () => {
         <Link href="/learn"></Link>
         <Link href="/mypage"></Link>
         <Link href="/home"></Link>
+        <Link href="/homeNotLogin"></Link>
         <Link href="/form"></Link>
       </p>
     </div>

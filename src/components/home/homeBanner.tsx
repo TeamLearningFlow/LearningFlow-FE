@@ -106,7 +106,7 @@ const ArrowButton = styled.div`
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-  z-index: 10;
+  // z-index: 10;
   width: 40px;
   height: 40px;
 
