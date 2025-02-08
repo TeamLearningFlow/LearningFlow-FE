@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import DarkTopLogo from '../../components/topLogo_dark';
-// import EmailIcon from './assets/mailIcon.png';
-// import Image from 'next/image';
+import Image from 'next/image';
+import PlaneIcon from '../../assets/paperplane.svg';
 import EmailAuthModal from '../../components/modal/emailAuthModal';
 import RegisterPage from './index';
 
@@ -31,10 +31,15 @@ const EmailAuthPage: React.FC = () => {
             <PageContainer>
               <TitleContainer>인증 메일을 보내드렸어요</TitleContainer>
               <IconContainer>
-                {/*<Image src={EmailIcon} alt="Email Icon" width={240} height={240} /> */}
+                <Image
+                  src={PlaneIcon}
+                  alt="Email Icon"
+                  width={220}
+                  height={220}
+                />
               </IconContainer>
               <Textwrapper>
-                {`메일함을 확인해주세요\n가입하신 이메일을 인증해 주시면,\n온보딩의 서비스를 마음껏 이용하실 수 있어요`}
+                {`수신 메일함을 확인해주세요\n인증 시, 온보딩을 마음껏 이용하실 수 있어요`}
               </Textwrapper>
               <GoBackButton onClick={handleModalOpen}>
                 이전 페이지로 돌아가기
@@ -116,16 +121,18 @@ const Textwrapper = styled.div`
 
 const GoBackButton = styled.button`
   display: flex;
-  width: 532px;
-  padding: 18px 0px;
+  width: 500px;
+  padding: 16px 0px;
 
   justify-content: center;
   align-items: center;
   background-color: rgba(94, 82, 255, 1);
   border: none;
-  border-radius: 16px;
+  border-radius: 8px;
   font-size: 20px;
-  font-weight: 300;
+  font-weight: 600;
+  line-height: 140%; /* 30.8px */
+  letter-spacing: -0.44px;
   color: rgba(255, 255, 255, 1);
   cursor: pointer;
 
@@ -139,6 +146,6 @@ const GoBackButton = styled.button`
     font-size: 10px;
     width: 250px;
     padding: 10px 0px;
-    border-radius: 10px;
+    border-radius: 8px;
   }
 `;
