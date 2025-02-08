@@ -9,7 +9,7 @@ import SignupAuthButton from '../../components/register/signupAuthButton';
 import SignupInputEmail from '../../components/register/signupInputEmail';
 import SignupInputPw from '../../components/register/signupInputPw';
 import InputPwCheck from '../../components/register/signupinputPwCheck';
-import TopLogo from '../../components/topLogo_light';
+import TopLogo from '../../components/topLogo_header';
 import EmailAuthPage from './emailAuth';
 
 const PageContainer = styled.div`
@@ -161,7 +161,7 @@ const RegisterPage: React.FC = () => {
       {!showEmailAuth ? (
         <PageContainer>
           <LeftSection>
-            <TopLogo />
+          <TopLogo />
             <LeftUIContainer>
               <LeftUI />
             </LeftUIContainer>

@@ -1,10 +1,129 @@
 import React from 'react';
+import { useRouter } from "next/router";
+import axios from "axios";
 import styled from 'styled-components';
 import Image from 'next/image';
 import PlayButton from '../../assets/playButton.svg';
 import CompletedIndexIcon from '../../assets/completedRadio.svg';
 import EndIndexIcon from '../../assets/defaultRadio.svg';
 import CheckedYoutube from '../../assets/platformicon/youtube_checked_ic.svg';
+
+interface ClassIndexProps {
+  classData: {
+    episodeName: string;
+    url: string; // "/resources/{episodeId}/youtube" 형식
+    resourceSource: string;
+    episodeNumber: number;
+  };
+}
+
+
+const ClassIndex: React.FC<ClassIndexProps> = ({ classData }) => {
+  const router = useRouter();
+
+  const handleClick = async () => {
+    const episodeId = classData.url.split("/")[2]; // URL에서 episodeId 추출
+
+    try {
+      const response = await axios.get(`/resources/${episodeId}/youtube`);
+      if (response.status === 200) {
+        const data = response.data;
+        router.push({
+          pathname: `/learn/${episodeId}`, // LearnPage로 이동
+          query: { data: JSON.stringify(data) }, // 응답 데이터를 쿼리로 전달
+        });
+      }
+    } catch (error) {
+      console.error("Failed to fetch episode data:", error);
+    }
+  };
+
+  return (
+    <ComponentWrapper>
+      <RadioWrapper>
+        <IndexIcon>
+          <Image
+            src={CompletedIndexIcon}
+            alt="completed-icon"
+            fill
+            style={{ objectFit: "contain" }}
+          />
+        </IndexIcon>
+      </RadioWrapper>
+      <IndexWrapper>
+        <PlatformIcon>
+          <Image
+            src={CheckedYoutube}
+            alt="platform-icon"
+            fill
+            style={{ objectFit: "contain" }}
+          />
+        </PlatformIcon>
+        <IndexContainer>
+          <OrderBox>{classData.episodeNumber}회차</OrderBox>
+          <TitleBox>{classData.episodeName}</TitleBox>
+        </IndexContainer>
+        <ButtonWrapper onClick={handleClick}>
+          <Image
+            src={PlayButton}
+            alt="Play Button"
+            fill
+            style={{ objectFit: "contain" }}
+          />
+        </ButtonWrapper>
+      </IndexWrapper>
+    </ComponentWrapper>
+  );
+};
+
+
+const StartIndex = () => {
+  return (
+    <StartComponentWrapper>
+      <RadioWrapper>
+        <IndexIcon>
+          <Image
+            src={CompletedIndexIcon}
+            alt="completed-icon"
+            fill
+            style={{ objectFit: 'contain' }}
+          />
+        </IndexIcon>
+      </RadioWrapper>
+
+      <StartIndexWrapper>
+        <StartIndexContainer>
+          Welcome Onboard! 컬렉션 여정을 시작해보세요!
+        </StartIndexContainer>
+      </StartIndexWrapper>
+    </StartComponentWrapper>
+  );
+};
+
+const EndIndex = () => {
+  return (
+    <EndComponentWrapper>
+      <RadioWrapper>
+        <IndexIcon>
+          <Image
+            src={EndIndexIcon}
+            alt="End-icon"
+            fill
+            style={{ objectFit: 'contain' }}
+          />
+        </IndexIcon>
+      </RadioWrapper>
+      <StartIndexWrapper>
+        <EndIndexContainer>
+            Congrats! 컬렉션 완주를 축하드려요!
+        </EndIndexContainer>
+      </StartIndexWrapper>
+    </EndComponentWrapper>
+  );
+};
+
+export { ClassIndex, StartIndex, EndIndex };
+
 
 const ComponentWrapper = styled.div`
   display: flex;
@@ -323,98 +442,3 @@ const TitleBox = styled.div`
   }
 `;
 
-interface ClassIndexProps {
-  classData: {
-    episodeName: string;
-    url: string;
-    resourceSource: string;
-    episodeNumber: number;
-  };
-}
-
-const StartIndex = () => {
-  return (
-    <StartComponentWrapper>
-      <RadioWrapper>
-        <IndexIcon>
-          <Image
-            src={CompletedIndexIcon}
-            alt="completed-icon"
-            fill
-            style={{ objectFit: 'contain' }}
-          />
-        </IndexIcon>
-      </RadioWrapper>
-
-      <StartIndexWrapper>
-        <StartIndexContainer>
-          Welcome Onboard! 컬렉션 여정을 시작해보세요!
-        </StartIndexContainer>
-      </StartIndexWrapper>
-    </StartComponentWrapper>
-  );
-};
-
-const EndIndex = () => {
-  return (
-    <EndComponentWrapper>
-      <RadioWrapper>
-        <IndexIcon>
-          <Image
-            src={EndIndexIcon}
-            alt="End-icon"
-            fill
-            style={{ objectFit: 'contain' }}
-          />
-        </IndexIcon>
-      </RadioWrapper>
-      <StartIndexWrapper>
-        <EndIndexContainer>
-            Congrats! 컬렉션 완주를 축하드려요!
-        </EndIndexContainer>
-      </StartIndexWrapper>
-    </EndComponentWrapper>
-  );
-};
-
-const ClassIndex: React.FC<ClassIndexProps> = ({ classData }) => {
-  return (
-    <ComponentWrapper>
-      <RadioWrapper>
-        <IndexIcon>
-          <Image
-            src={CompletedIndexIcon}
-            alt="completed-icon"
-            fill
-            style={{ objectFit: "contain" }}
-          />
-        </IndexIcon>
-      </RadioWrapper>
-      <IndexWrapper>
-        <PlatformIcon>
-          <Image
-            src={CheckedYoutube}
-            alt="platform-icon"
-            fill
-            style={{ objectFit: "contain" }}
-          />
-        </PlatformIcon>
-        <IndexContainer>
-          <OrderBox>{classData.episodeNumber}회차</OrderBox>
-          <TitleBox>{classData.episodeName}</TitleBox>
-        </IndexContainer>
-        <ButtonWrapper>
-          <Image
-            src={PlayButton}
-            alt="Play Button"
-            fill
-            style={{ objectFit: "contain" }}
-          />
-        </ButtonWrapper>
-      </IndexWrapper>
-    </ComponentWrapper>
-  );
-};
-
-
-export { ClassIndex, StartIndex, EndIndex };

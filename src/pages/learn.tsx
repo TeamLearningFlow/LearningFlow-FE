@@ -100,7 +100,7 @@ const LearnPage: React.FC = () => {
   return (
     <PageWrapper>
       <Header />
-      <TitleBar />
+      {collection && <TitleBar data={collection} />}
       {loading ? (
         <BodyWrapper>
           <LeftWrapper>

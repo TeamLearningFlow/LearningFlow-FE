@@ -8,8 +8,8 @@ display: flex;
 align-items: center;
 justify-content: flex-start;
 width: 100%;
-height: 60px;
-padding: 0 1.5%;
+height: 70px;
+padding: 0 2%;
 background-color: #ffffff;
 `;
 
@@ -25,7 +25,7 @@ const DarkTopLogo: React.FC = () => {
   return (
     <HeaderWrapper>
       <LogoWrapper>
-        <Image src={LogoDark} alt="header logo" width={130} height={20} />
+        <Image src={LogoDark} alt="header logo" width={160} height={25} />
       </LogoWrapper>
     </HeaderWrapper>
   );
