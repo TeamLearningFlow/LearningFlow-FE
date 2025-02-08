@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { LoginContext } from '../../pages/context/LoginContext';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import axios from 'axios';
+
 import guestIMG from '../../assets/Guest.svg';
 import bookIMG from '../../assets/Book.svg';
 import likeIMG from '../../assets/Like.svg';
@@ -416,6 +419,40 @@ const BottomLogoutLetter = styled.div`
 
 const userModal: React.FC = () => {
   const router = useRouter();
+  const context = useContext(LoginContext);
+
+  if (!context) throw new Error('LoginContext를 찾을 수 없습니다.');
+
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem('token'); // 로컬 스토리지에서 토큰 가져오기
+
+      if (!token) {
+        alert('로그인 정보가 없습니다.');
+        router.push('/login');
+        return;
+      }
+
+      const response = await axios.post(
+        'http://onboarding.p-e.kr:8080/logout', // 로그아웃 api
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // 로컬 스토리지에서 가져온 토큰 사용
+          },
+        },
+      );
+
+      if (response.status === 200) {
+        console.log('로그아웃 성공:', response.data);
+        localStorage.removeItem('token'); // 로컬 스토리지 토큰 초기화
+        context.actions.setIsLoggedIn(false);
+        router.push('/home'); // 홈 페이지로 이동
+      }
+    } catch (error) {
+      console.error('로그아웃 실패:', error);
+    }
+  };
 
   return (
     <UserModalWrapper>
@@ -466,7 +503,7 @@ const userModal: React.FC = () => {
       </InfoMid>
       <Hr />
       <InfoBottom>
-        <ButtomLogout>
+        <ButtomLogout onClick={handleLogout}>
           <BottomLogoutIMG>
             <LogoutIMG src={logoutIMG} alt="로그아웃" width={20} height={20} />
           </BottomLogoutIMG>

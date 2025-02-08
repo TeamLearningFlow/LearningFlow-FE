@@ -168,23 +168,33 @@ const LoginPage: React.FC = () => {
       const response = await axios.post('http://onboarding.p-e.kr:8080/login', {
         email,
         password,
-        remember: false,
+        remember: context.state.remember,
       });
 
       console.log('Response: ', response.data);
 
-      if (response.status === 200) {
-        localStorage.setItem('token', response.data.token); // 로그인 성공 시 토큰 저장
-        localStorage.setItem('showHomeModal', 'true'); // 로그인 성공 시 모달 표시 여부 결정
+      // Authorization 헤더에서 토큰 추출
+      const token = response.headers['authorization']?.split(' ')[1];
+
+      if (response.status === 200 && token) {
+        localStorage.setItem('token', token); // 토큰을 로컬 스토리지에 저장
+
+        context.actions.setIsLoggedIn(true); // 로그인 시
         router.push('/home'); // 홈 페이지로 이동
+      } else {
+        console.error('로그인 응답에 Authorization 헤더가 없습니다.');
+        alert('로그인 실패');
       }
+
     } catch (err: any) {
       console.log('Error:', err.response?.data || err.message);
 
       if (err.response?.data?.message) {
-        console.log('Error Message:', err.response.data.message);
+        alert(
+          '로그인에 실패하였습니다. 이메일 또는 비밀번호를 다시 확인해주세요.',
+        );
       } else {
-        console.log('로그인 오류');
+        alert('로그인에 실패하였습니다. 이메일 또는 비밀번호를 다시 확인해주세요.');
       }
     }
   };

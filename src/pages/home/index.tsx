@@ -1,56 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import Header from '../../components/searchHeader';
-import Banner from '../../components/home/homeBanner';
-import Footer from '../../components/homeFooter';
-import HomeCollection from '../../components/home/homeCollection';
-import RecentCollection from '../../components/home/recentCollection';
-import HomeModal from '../../components/modal/homeModal';
+import React, { useEffect, useContext } from 'react';
+import { LoginContext } from '../context/LoginContext';
+import { useRouter } from 'next/router';
 
-const Wrapper = styled.div`
-  display: flex;
-  position: fixed;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background-color: #ffffff;
-`;
+const HomePage: React.FC = () => {
+  const context = useContext(LoginContext);
+  const router = useRouter();
 
-const Main = styled.div`
-  text-align: center;
-  padding: 20px;
-`;
+  if (!context) {
+    throw new Error('LoginContext를 찾을 수 없습니다.');
+  }
 
-const Home: React.FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { isLoggedIn } = context.state; // 로그인 상태
 
   useEffect(() => {
-    // 로컬 스토리지에서 모달 표시 여부 확인
-    const showModal = localStorage.getItem('showHomeModal');
-    if (showModal === 'true') {
-      setIsModalOpen(true);
-      localStorage.removeItem('showHomeModal');
+    if (isLoggedIn) {
+      router.push('/homeLogin'); // 로그인 상태일 때
+    } else {
+      router.push('/homeNotLogin'); // 비로그인 상태일 때
     }
-  }, []);
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
-  return (
-    <>
-      <Header />
-      <Banner />
-      <RecentCollection />
-      <HomeCollection />
-      <Wrapper>
-        {isModalOpen && <HomeModal onClose={handleCloseModal} />}
-        {!isModalOpen && <Main></Main>}
-      </Wrapper>
-      <Footer />
-    </>
-  );
+  }, [isLoggedIn, router]);
+  return <></>;
 };
 
-export default Home;
+export default HomePage;
