@@ -12,7 +12,10 @@ const NoteWrapper = styled.div`
   @media (max-width: 850px) {
     width: 100%;
     margin-bottom: 20px;
-    margin-top: 10px;
+    margin-top: 15px;
+  }
+  @media (max-width: 560px) {
+    margin-top: -5px;
   }
 `;
 
@@ -24,19 +27,20 @@ const NoteTitle = styled.div`
 
   background-color: #fff;
   color: #64696e;
-  font-size: 24px;
+  font-size: 23px;
   font-weight: 600;
   line-height: 36px;
   letter-spacing: -0.48px;
 
   @media (max-width: 850px) {
     font-size: 20px;
+    padding-left: 20px;
+    padding: 18px;
   }
 
   @media (max-width: 560px) {
-    font-size: 15px;
-    padding: 15px;
-    padding-left: 19px;
+    font-size: 13px;
+    padding: 5px 5px 5px 16px;
   }
 `;
 
@@ -57,7 +61,7 @@ const NoteBody = styled.div`
 
 const InputWrapper = styled.textarea`
   width: 100%;
-  height: 61vh;
+  height: 62vh;
   border: none;
   background-color: #fafafc;
 
@@ -81,25 +85,24 @@ const InputWrapper = styled.textarea`
 
   @media (max-width: 850px) {
     font-size: 15px;
-    line-height: 25px;
+    line-height: 22px;
     &::placeholder {
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 400;
-      line-height: 25px;
+      line-height: 23px;
     }
-    height: 102px;
+    height: 49px;
   }
 
   @media (max-width: 560px) {
     font-size: 10px;
-    line-height: 20px;
+    line-height: 18px;
     &::placeholder {
       font-size: 10px;
       font-weight: 400;
-      line-height: 20px;
+      line-height: 18px;
     }
-
-    height: 102px;
+    height: 40px;
   }
 `;
 
@@ -128,6 +131,7 @@ const SaveButton = styled.div<{ isValid: boolean }>`
 
   @media (max-width: 560px) {
     font-size: 10px;
+    margin-top: 10px;
     padding: 0px;
   }
 `;
