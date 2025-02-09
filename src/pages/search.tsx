@@ -17,22 +17,25 @@ const SearchPage: React.FC = () => {
   }; */
 
   const router = useRouter();
-  const { keyword } = router.query;
+  const { query } = router;
   const [searchResult, setSearchResult] = useState<[]>([]);
 
   useEffect(() => {
-    if (keyword) {
-      fetchSearchResults(keyword as string);
-    } else {
+    if (!query?.keyword && !query?.interestFields) {
       fetchAllResults();
+      return;
     }
-  }, [keyword]);
+    fetchSearchResults();
+  }, [query?.keyword, query?.interestFields]);
 
-  const fetchSearchResults = async (searchValue: string) => {
+  const fetchSearchResults = async () => {
     try {
-      const response = await axios.get(
-        `http://onboarding.p-e.kr:8080/search?keyword=${encodeURIComponent(searchValue)}`,
-      );
+      const response = await axios.get(`http://onboarding.p-e.kr:8080/search`, {
+        params: {
+          keyword: query?.keyword || '',
+          interestFields: query?.interestFields || '',
+        },
+      });
       const data = await response.data.result;
       setSearchResult(data.searchResults);
     } catch (error) {

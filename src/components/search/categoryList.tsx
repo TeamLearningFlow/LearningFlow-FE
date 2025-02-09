@@ -27,6 +27,7 @@ import PlanIconW from '../../assets/categoryIcon/planIcon_w.svg';
 import WorkIconW from '../../assets/categoryIcon/workIcon_w.svg';
 import LanguageIconW from '../../assets/categoryIcon/languageIcon_w.svg';
 import JobIconW from '../../assets/categoryIcon/jobIcon_w.svg';
+import { useRouter } from 'next/router';
 
 const CategoryListWrapper = styled.div`
   display: flex;
@@ -141,30 +142,103 @@ const CategoryItem = ({
 };
 
 const CategoryList = () => {
+  const router = useRouter();
+  const { query } = router;
   const [activeCategories, setActiveCategories] = useState<number | null>(1); // 중복 선택 불가능
 
   const categories = [
-    { id: 1, image: AllIcon, imageW: AllIconW, text: '전체' },
-    { id: 2, image: WebIcon, imageW: WebIconW, text: '웹개발' },
-    { id: 3, image: AppIcon, imageW: AppIconW, text: '앱개발' },
-    { id: 4, image: ComputerIcon, imageW: ComputerIconW, text: '컴퓨터언어' },
+    { id: 1, image: AllIcon, imageW: AllIconW, text: '전체', queryString: '' },
+    {
+      id: 2,
+      image: WebIcon,
+      imageW: WebIconW,
+      text: '웹개발',
+      queryString: 'WEB_DEVELOPMENT',
+    },
+    {
+      id: 3,
+      image: AppIcon,
+      imageW: AppIconW,
+      text: '앱개발',
+      queryString: 'APP_DEVELOPMENT',
+    },
+    {
+      id: 4,
+      image: ComputerIcon,
+      imageW: ComputerIconW,
+      text: '컴퓨터언어',
+      queryString: 'PROGRAMMING_LANGUAGE',
+    },
     {
       id: 5,
       image: DeepLearningIcon,
       imageW: DeepLearningIconW,
       text: '딥러닝',
+      queryString: 'DEEP_LEARNING',
     },
-    { id: 6, image: DataIcon, imageW: DataIconW, text: '데이터분석' },
-    { id: 7, image: StatisticsIcon, imageW: StatisticsIconW, text: '통계' },
-    { id: 8, image: UXUIIcon, imageW: UXUIIconW, text: 'UX/UI' },
-    { id: 9, image: PlanIcon, imageW: PlanIconW, text: '기획' },
-    { id: 10, image: LanguageIcon, imageW: LanguageIconW, text: '외국어' },
-    { id: 11, image: JobIcon, imageW: JobIconW, text: '취업' },
-    { id: 12, image: WorkIcon, imageW: WorkIconW, text: '업무생산성' },
+    {
+      id: 6,
+      image: DataIcon,
+      imageW: DataIconW,
+      text: '데이터분석',
+      queryString: 'DATA_ANALYSIS',
+    },
+    {
+      id: 7,
+      image: StatisticsIcon,
+      imageW: StatisticsIconW,
+      text: '통계',
+      queryString: 'STATISTICS',
+    },
+    {
+      id: 8,
+      image: UXUIIcon,
+      imageW: UXUIIconW,
+      text: 'UX/UI',
+      queryString: 'UI_UX',
+    },
+    {
+      id: 9,
+      image: PlanIcon,
+      imageW: PlanIconW,
+      text: '기획',
+      queryString: 'PLANNING',
+    },
+    {
+      id: 10,
+      image: LanguageIcon,
+      imageW: LanguageIconW,
+      text: '외국어',
+      queryString: 'FOREIGN_LANGUAGE',
+    },
+    {
+      id: 11,
+      image: JobIcon,
+      imageW: JobIconW,
+      text: '취업',
+      queryString: 'CAREER',
+    },
+    {
+      id: 12,
+      image: WorkIcon,
+      imageW: WorkIconW,
+      text: '업무생산성',
+      queryString: 'BUSINESS_PRODUCTIVITY',
+    },
   ];
 
   const handleClick = (id: number) => {
-    setActiveCategories((prev) => (prev === id ? null : id)); // 중복 선택 방지
+    const selectedCategory = categories.find((category) => category.id === id);
+    const category = activeCategories === id ? null : id; // 중복 선택 방지
+    setActiveCategories(category);
+
+    router.push({
+      pathname: '/search',
+      query: {
+        ...query,
+        interestFields: category ? selectedCategory?.queryString : undefined,
+      },
+    });
   };
 
   return (
