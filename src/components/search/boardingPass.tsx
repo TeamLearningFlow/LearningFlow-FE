@@ -116,9 +116,64 @@ const Tag = styled.span`
   line-height: 15px; /* 150% */
 `;
 
-const Category = styled(Tag)`
-  background-color: #f5f5ff;
-  color: #5e52ff;
+const Category = styled(Tag)<{ interestField: string }>`
+  background-color: ${({ interestField }) => {
+    switch (interestField) {
+      case 'APP_DEVELOPMENT':
+        return '#E5F6FE';
+      case 'WEB_DEVELOPMENT':
+        return '#EAF2FE';
+      case 'PROGRAMMING_LANGUAGE':
+        return '#DEFAFF';
+      case 'DEEP_LEARNING':
+        return '#FEECEC';
+      case 'STATISTICS':
+        return '#FDE8F0';
+      case 'DATA_ANALYSIS':
+        return '#FEEEE5';
+      case 'UI_UX':
+        return '#F5F5FF';
+      case 'PLANNING':
+        return '#FFF5D6';
+      case 'BUSINESS_PRODUCTIVITY':
+        return '#E3FFF7';
+      case 'FOREIGN_LANGUAGE':
+        return '#F9EDFF';
+      case 'CAREER':
+        return '#F2FFF6';
+      default:
+        return 'gray';
+    }
+  }};
+
+  color: ${({ interestField }) => {
+    switch (interestField) {
+      case 'APP_DEVELOPMENT':
+        return '#00AEFF';
+      case 'WEB_DEVELOPMENT':
+        return '#0066FF';
+      case 'PROGRAMMING_LANGUAGE':
+        return '#00BDDE';
+      case 'DEEP_LEARNING':
+        return '#FF4242';
+      case 'STATISTICS':
+        return '#F04588';
+      case 'DATA_ANALYSIS':
+        return '#FF5E00';
+      case 'UI_UX':
+        return '#5E52FF';
+      case 'PLANNING':
+        return '#FFAA00';
+      case 'BUSINESS_PRODUCTIVITY':
+        return '#12C79A';
+      case 'FOREIGN_LANGUAGE':
+        return '#CB59FF';
+      case 'CAREER':
+        return '#00BF40';
+      default:
+        return 'gray';
+    }
+  }};
 `;
 
 const Keyword = styled(Tag)`
@@ -692,7 +747,9 @@ const BoardingPass = ({
       <StatusTag status=""></StatusTag>
       <Body>
         <TagWrapper>
-          <Category>{interestFieldMap[data.interestField]}</Category>
+          <Category interestField={data.interestField}>
+            {interestFieldMap[data.interestField]}
+          </Category>
           <Keyword>{data.keywords[0]}</Keyword>
           <Keyword>{data.keywords[1]}</Keyword>
         </TagWrapper>
