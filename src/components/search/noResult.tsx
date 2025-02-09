@@ -5,7 +5,7 @@ import noResult from '../../assets/noResult.svg';
 
 const Container = styled.div`
   width: 100%;
-  padding: 156px 606px;
+  padding: 156px 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -16,6 +16,7 @@ const Label1 = styled.div`
   color: #323538;
   text-align: center;
   padding: 4px 0 2px 0;
+  white-space: nowrap;
 
   /* Body/m/Semibold */
   font-family: Pretendard;
@@ -32,6 +33,7 @@ const Label2 = styled.div`
   font-feature-settings:
     'liga' off,
     'clig' off;
+  white-space: nowrap;
 
   /* Body/s/Regular */
   font-family: Pretendard;
