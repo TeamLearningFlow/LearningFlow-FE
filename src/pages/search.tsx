@@ -3,7 +3,6 @@ import Header from '../components/searchHeader';
 import Banner from '../components/search/searchBanner';
 import CategoryList from '../components/search/categoryList';
 import Filters from '../components/search/filters';
-import Pagination from '@/components/search/pagination';
 import Footer from '@/components/homeFooter';
 import { useRouter } from 'next/router';
 import axios from 'axios';
@@ -47,7 +46,6 @@ const SearchPage: React.FC = () => {
         <CategoryList />
         <Filters />
         <SearchResult result={searchResult} />
-        <Pagination />
         <Footer />
       </div>
     </>

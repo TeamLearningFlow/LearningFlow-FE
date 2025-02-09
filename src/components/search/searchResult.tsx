@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import React from 'react';
 import BoardingPassList from './boardingPassList';
 import BoardingPass from './boardingPass';
+import Pagination from './pagination';
+import NoResult from './noResult';
 
 export type SearchResult = {
   interestField: string;
@@ -23,7 +24,7 @@ export type SearchResult = {
 
 const SearchResult = ({ result }: { result: SearchResult[] }) => {
   if (result.length === 0) {
-    return <p>검색 결과가 없습니다.</p>;
+    return <NoResult />;
   }
 
   return (
@@ -33,6 +34,7 @@ const SearchResult = ({ result }: { result: SearchResult[] }) => {
           <BoardingPass key={index} data={item} showHoverCollection={true} />
         ))}
       </BoardingPassList>
+      <Pagination />
     </>
   );
 };
