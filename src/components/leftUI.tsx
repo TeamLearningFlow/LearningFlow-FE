@@ -1,10 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image'; /* 이미지를 가져올 때 StaticImageData 타입을 자동으로 처리 */
-import logotypo from '../assets/logoTypo_purple.svg';
 import LogoGraphic from '../assets/logoMark.svg';
-import TicketGraphic from '../assets/ticket.svg';
-
+import PlaneGraphic from '../assets/PlaneGraphic.svg';
+import NoteBookGraphic from '../assets/noteBook.svg';
 
 const leftUI: React.FC = () => {
   return (
@@ -13,12 +12,17 @@ const leftUI: React.FC = () => {
         <LogoGraphicImg src={LogoGraphic} alt="Logo Graphic" />
       </LogoWrapper>
       <IconWrapper>
-        <TicketGraphicImg src={TicketGraphic} alt="Ticket Graphic" />
+        <PlaneGraphicImg src={PlaneGraphic} alt="Plane Graphic" />
       </IconWrapper>
+      <NoteBookWrapper>
+        <NoteBookGraphicImg src={NoteBookGraphic} alt="NoteBook Graphic" />
+      </NoteBookWrapper>
+      <ShadowWrapper />
       <InstructionContainer>
-        <LogoTypoImg src={logotypo} alt="Onboarding" />
-        <Instruction1>성장을 원하는 사람들을 위한</Instruction1>
-        <Instruction2>가장 빠른 학습 여정 플랫폼</Instruction2>
+        <Instruction1>성장을 원한다면,</Instruction1>
+        <Instruction2>
+          지금 바로 <span>탑승하세요.</span>
+        </Instruction2>
       </InstructionContainer>
     </LoginPageCover>
   );
@@ -33,6 +37,7 @@ const LoginPageCover = styled.div`
   width: 54vw; /* 화면 너비의 54% 사용 */
   // height: 100vh; /* 화면 전체 높이 사용 */
   height: 100%;
+  overflow: hidden;
 
   display: flex;
   flex-direction: column;
@@ -43,8 +48,10 @@ const LoginPageCover = styled.div`
 const LogoWrapper = styled.div`
   display: flex;
   position: absolute;
-  top: 1%;
-  right: 0;
+  bottom: 13%;
+  right: -2%;
+  // transform: rotate(15deg);
+
   
   @media (max-width: 768px) {
 
@@ -52,9 +59,9 @@ const LogoWrapper = styled.div`
 `;
 
 const LogoGraphicImg = styled(Image)`
-  width: 32vw;
+  width: 35vw;
   height: auto;
-
+  animation: floatUpDown 1.5s ease-in-out infinite alternate;
 
   @media (max-width: 768px) {
     width: 190px;
@@ -62,24 +69,33 @@ const LogoGraphicImg = styled(Image)`
 
   @media (max-width: 480px) {
     width: 150px;
+  }
+
+  @keyframes floatUpDown {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(-25px);
+    }
   }
 `;
 
 const IconWrapper = styled.div`
   display: flex;
   position: absolute;
-  bottom: -13%;
-  left: -19%;
+  bottom: 26.5%;
+  left: 16%;
   
   @media (max-width: 768px) {
 
   }
 `;
 
-const TicketGraphicImg = styled(Image)`
-  width: 42vw;
+const PlaneGraphicImg = styled(Image)`
+  width: 36vw;
   height: auto;
-
+  transform: rotate(5deg);
 
   @media (max-width: 768px) {
     width: 190px;
@@ -90,41 +106,79 @@ const TicketGraphicImg = styled(Image)`
   }
 `;
 
+const NoteBookWrapper = styled.div`
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+
+  
+  @media (max-width: 768px) {
+
+  }
+`;
+
+const NoteBookGraphicImg = styled(Image)`
+  width: 55vw;
+  height: auto;
+
+  @media (max-width: 768px) {
+    width: 190px;
+  }
+
+  @media (max-width: 480px) {
+    width: 150px;
+  }
+`;
+
+const ShadowWrapper = styled.div`
+  display: flex;
+  position: absolute;
+  bottom: 9%;
+  right: 11%;
+  width: 5vw;
+  height: 0.5vh;
+  background-color: transparent;
+  border-radius: 60%;
+  animation: shadowChange 1.5s ease-in-out infinite alternate;
+
+  box-shadow: 0px 10px 20px rgba(172, 172, 172, 0.55);
+
+  @keyframes shadowChange {
+    0% {
+      box-shadow: 0px 10px 100px rgba(172, 172, 172, 0.55);
+    }
+    100% {
+      box-shadow: 0px 0px 100px rgb(255, 0, 0);
+    }
+  }
+
+  @media (max-width: 768px) {
+    /* 반응형 스타일 추가 */
+  }
+`;
+
+
 const InstructionContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: end;
+  align-items: left;
 
   position: absolute;
-  right: 8%;
-  bottom: 5%;
+  left: 8%;
+  top: 16%;
 
   @media (max-width: 768px) {
     right: 7%;
   }
 `;
 
-const LogoTypoImg = styled(Image)`
-  // width: 50%;
-  width: 230px;
-  height: auto;
-  margin-bottom: 2%;
-
-  @media (max-width: 768px) {
-    width: 190px;
-  }
-
-  @media (max-width: 480px) {
-    width: 150px;
-  }
-`;
-
 const Instruction1 = styled.div`
-  // font-size: 2.1vw;
-  font-size: 28px;
+  font-size: 50px;
   font-weight: 600;
-  color: rgba(79, 83, 87, 1);
-  text-align: right;
+  color: #181818;
+  text-align: left;
+  letter-spacing: -1.5px;
 
   @media (max-width: 768px) {
     font-size: 23px;
@@ -136,11 +190,10 @@ const Instruction1 = styled.div`
 `;
 
 const Instruction2 = styled.div`
-  // font-size: 2.1vw;
-  font-size: 28px;
+  font-size: 50px;
   font-weight: 600;
-  color: rgba(79, 83, 87, 1);
-  text-align: right;
+  text-align: left;
+  letter-spacing: -1.5px;
 
   @media (max-width: 768px) {
     font-size: 22px;
@@ -148,5 +201,9 @@ const Instruction2 = styled.div`
 
   @media (max-width: 480px) {
     font-size: 17px;
+  }
+
+  span {
+    color: #7a71f5;
   }
 `;
