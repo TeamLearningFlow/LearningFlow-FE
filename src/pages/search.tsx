@@ -23,6 +23,8 @@ const SearchPage: React.FC = () => {
   useEffect(() => {
     if (keyword) {
       fetchSearchResults(keyword as string);
+    } else {
+      fetchAllResults();
     }
   }, [keyword]);
 
@@ -35,6 +37,16 @@ const SearchPage: React.FC = () => {
       setSearchResult(data.searchResults);
     } catch (error) {
       console.error('검색 오류:', error);
+    }
+  };
+
+  const fetchAllResults = async () => {
+    try {
+      const response = await axios.get(`http://onboarding.p-e.kr:8080/search`);
+      const data = await response.data.result;
+      setSearchResult(data.searchResults);
+    } catch (error) {
+      console.error('전체 데이터 로드 오류:', error);
     }
   };
 
