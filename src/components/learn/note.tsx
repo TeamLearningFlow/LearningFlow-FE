@@ -12,7 +12,7 @@ const NoteWrapper = styled.div`
   @media (max-width: 850px) {
     width: 100%;
     margin-bottom: 20px;
-    margin-top: 10px;
+    // margin-top: 10px;
   }
 `;
 
@@ -24,7 +24,7 @@ const NoteTitle = styled.div`
 
   background-color: #fff;
   color: #64696e;
-  font-size: 24px;
+  font-size: 23px;
   font-weight: 600;
   line-height: 36px;
   letter-spacing: -0.48px;
@@ -57,7 +57,7 @@ const NoteBody = styled.div`
 
 const InputWrapper = styled.textarea`
   width: 100%;
-  height: 61vh;
+  height: 62vh;
   border: none;
   background-color: #fafafc;
 

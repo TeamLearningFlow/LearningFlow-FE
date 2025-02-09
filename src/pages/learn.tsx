@@ -17,85 +17,50 @@ const PageWrapper = styled.div``;
 
 const BodyWrapper = styled.div`
   padding: 0 2.5%;
-  margin-top: 2%;
+  margin-top: 30px;
   display: flex;
-  justify-content: space-between;
+
+  display: grid;
+  grid-template-columns: 62vw 30vw;
+  grid-template-rows: 60vh 20vh;
+  gap: 2.5%;
 
   @media (max-width: 850px) {
     display: flex;
-    flex-direction: column;
+    // flex-direction: column;
     align-items: center;
     justify-content: center;
 
     padding: 0 20px;
+    margin-top: 2%;
   }
 
   @media (max-width: 560px) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    // display: flex;
+    // flex-direction: column;
+    // align-items: center;
+    // justify-content: center;
 
     padding: 0 5%;
   }
 `;
 
-const LeftWrapper = styled.div`
-  width: 63vw;
+const TopWrapper = styled.div``;
 
-  @media (max-width: 850px) {
-    // display: flex;
-    width: 100vw;
-    // flex-direction: column; // 이거 설정해서 아래쪽 width 바뀌었을 거에요!! 참고해주세융
-    // justify-content: center;
-    // align-items: center;
-
-    // border: 10px solid blue;
-    padding: 5px 35px;
-  }
-
-  @media (max-width: 560px) {
-    // display: flex;
-    width: 100vw;
-    // flex-direction: column; // 이거 설정해서 아래쪽 width 바뀌었을 거에요!! 참고해주세융
-    // justify-content: center;
-    // align-items: center;
-
-    // border: 10px solid blue;
-    padding: 5px 30px;
-  }
+const MidWrapper = styled.div`
+  grid-column: 2/4;
 `;
 
-const ClassWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const RightWrapper = styled.div`
-  width: 30vw;
-
-  @media (max-width: 850px) {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-
-    // border: 10px solid red;
-  }
-
-  @media (max-width: 560px) {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-
-    // border: 10px solid red;
-  }
-`;
+const BottomWrapper = styled.div``;
 
 const LearnPage: React.FC = () => {
   const { episodeId } = useParams(); // episodeId 파라미터 가져오기
-  const loading = true; // Skeleton UI 확인용
+  const loading = false; // Skeleton UI 확인용
+
+  const collection = {
+    title: '제목',
+    interestField: '필드',
+  };
 
   return (
     <PageWrapper>
@@ -103,28 +68,42 @@ const LearnPage: React.FC = () => {
       {collection && <TitleBar data={collection} />}
       {loading ? (
         <BodyWrapper>
-          <LeftWrapper>
+          <TopWrapper>
             <SkeletonArticle />
             <SkeletonClassTitle />
-            <SkeletonClassList_S />
-          </LeftWrapper>
-          <RightWrapper>
+          </TopWrapper>
+          <MidWrapper>
             <Note />
-          </RightWrapper>
+          </MidWrapper>
+          <BottomWrapper>
+            <SkeletonClassList_S />
+          </BottomWrapper>
         </BodyWrapper>
       ) : (
+        // <BodyWrapper>
+        //   <LeftWrapper>
+        //     <Article episodeId={episodeId} />
+        //     <ClassWrapper>
+        //       <ClassTitle />
+        //       <ClassList />
+        //     </ClassWrapper>
+        //   </LeftWrapper>
+        //   <RightWrapper>
+        //     <Note episodeId={episodeId} />
+        //     {/* <Note /> */}
+        //   </RightWrapper>
+        // </BodyWrapper>
         <BodyWrapper>
-          <LeftWrapper>
-            <Article episodeId={episodeId} />
-            <ClassWrapper>
-              <ClassTitle />
-              <ClassList />
-            </ClassWrapper>
-          </LeftWrapper>
-          <RightWrapper>
-            <Note episodeId={episodeId} />
-            {/* <Note /> */}
-          </RightWrapper>
+          <TopWrapper>
+            <Article epsiodeId={episodeId} />
+            <ClassTitle />
+          </TopWrapper>
+          <MidWrapper>
+            <Note epsiodeId={episodeId} />
+          </MidWrapper>
+          <BottomWrapper>
+            <ClassList />
+          </BottomWrapper>
         </BodyWrapper>
       )}
     </PageWrapper>

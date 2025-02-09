@@ -113,7 +113,8 @@ const SkeletonArticleWrapper = styled.div`
   justify-content: center;
 
   width: 100%;
-  height: 552px;
+  // height: 490px;
+  height: 91%;
   border-radius: 11.483px;
   background: rgba(0, 0, 0, 0.08);
   box-shadow: 1.077px 1.435px 6.459px 0px rgba(0, 0, 0, 0.1);

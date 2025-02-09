@@ -8,7 +8,8 @@ const ArticleWrapper = styled.div`
   justify-content: center;
 
   width: 100%;
-  height: 552px;
+  // height: 552px;
+  height: 91%;
   border-radius: 11.483px;
   background: #b5b5b5;
   box-shadow: 1.077px 1.435px 6.459px 0px rgba(0, 0, 0, 0.1);
