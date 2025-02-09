@@ -19,6 +19,7 @@ import NaverblogLine from '../../assets/platformicon/naverblog_ic.svg';
 import YoutubeLine from '../../assets/platformicon/youtube_ic.svg';
 import OnStudying from '../../assets/onstudying.svg';
 import CompletedStamp from '../../assets/completedStamp.svg';
+import { SearchResult } from './searchResult';
 
 const ColumnFlexDiv = styled.div`
   display: flex;
@@ -394,14 +395,19 @@ const Label = styled.span<{
   fontSize?: string;
   letterSpacing?: string;
   lineHeight?: string;
+  width?: string;
 }>`
   color: ${(props) => props.color};
   font-size: ${(props) => props.fontSize || '10px'};
   font-weight: 350;
   line-height: ${(props) => props.lineHeight || '15px'};
   letter-spacing: ${(props) => props.letterSpacing || '-0.2px'};
+  width: ${(props) => props.width};
 
   align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const CompletedStampIcon = styled.div`
@@ -415,7 +421,6 @@ const CompletedStampIcon = styled.div`
 const Gradient = styled.div`
   width: 100%;
   height: 40px;
-  border-radius: 0px 0px 16px 16px;
   position: absolute;
   bottom: 0px;
   fill: var(
@@ -429,7 +434,27 @@ const Gradient = styled.div`
   backdrop-filter: blur(0.9571801424026489px);
 `;
 
-const HoverCollection = ({ status }: { status: string }) => {
+const interestFieldMap: Record<string, string> = {
+  APP_DEVELOPMENT: '앱개발',
+  WEB_DEVELOPMENT: '웹개발',
+  PROGRAMMING_LANGUAGE: '컴퓨터언어',
+  DEEP_LEARNING: '딥러닝',
+  STATISTICS: '통계',
+  DATA_ANALYSIS: '데이터분석',
+  UI_UX: 'UX/UI',
+  PLANNING: '기획',
+  BUSINESS_PRODUCTIVITY: '업무생산성',
+  FOREIGN_LANGUAGE: '외국어',
+  CAREER: '취업',
+};
+
+const HoverCollection = ({
+  data,
+  status,
+}: {
+  data: SearchResult;
+  status: string;
+}) => {
   return (
     <HoverWrapper>
       <HoverBackgroundTopWrapper>
@@ -442,7 +467,7 @@ const HoverCollection = ({ status }: { status: string }) => {
         <>
           <Image src={HoverBackground} alt="hover background" />
           <CollectionHeader>
-            <Number status="학습완료">총 8회차</Number>
+            <Number status="학습완료">총 {data.amount}회차</Number>
             <LineWrapper status="학습완료">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -462,9 +487,9 @@ const HoverCollection = ({ status }: { status: string }) => {
             </LineWrapper>
             <CollectionDetail>
               <Detail>아티클</Detail>
-              <Number>2</Number>
+              <Number>{data.textCount}</Number>
               <Detail marginLeft={'5px'}>영상</Detail>
-              <Number>6</Number>
+              <Number>{data.videoCount}</Number>
             </CollectionDetail>
           </CollectionHeader>
 
@@ -530,7 +555,9 @@ const HoverCollection = ({ status }: { status: string }) => {
                 />
               </Thumbnail>
             </ThumbnailWrapper>
-            <Detail style={{ position: 'absolute', left: '83px' }}>+4</Detail>
+            <Detail style={{ position: 'absolute', left: '83px' }}>
+              +{data.amount}
+            </Detail>
             <LineWrapper>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -550,9 +577,9 @@ const HoverCollection = ({ status }: { status: string }) => {
             </LineWrapper>
             <CollectionDetail>
               <Detail>아티클</Detail>
-              <Number>2</Number>
+              <Number>{data.textCount}</Number>
               <Detail marginLeft={'5px'}>영상</Detail>
-              <Number>6</Number>
+              <Number>{data.videoCount}</Number>
             </CollectionDetail>
           </CollectionHeader>
 
@@ -563,8 +590,8 @@ const HoverCollection = ({ status }: { status: string }) => {
               </ThumbnailWrapper>
               <Content>
                 <Label color={'#BBB6FF'}>1회차</Label>
-                <Label color={'#fff'}>
-                  1회차 콘텐츠의 제목을 입력해주세요.
+                <Label color={'#fff'} width={'206px'}>
+                  {data.resource[0].episodeName}
                 </Label>
               </Content>
             </ContentWrapper>
@@ -579,8 +606,8 @@ const HoverCollection = ({ status }: { status: string }) => {
               </ThumbnailWrapper>
               <Content>
                 <Label color={'#BBB6FF'}>2회차</Label>
-                <Label color={'#fff'}>
-                  2회차 콘텐츠의 제목을 입력해주세요.
+                <Label color={'#fff'} width={'206px'}>
+                  {data.resource[1].episodeName}
                 </Label>
               </Content>
             </ContentWrapper>
@@ -595,8 +622,8 @@ const HoverCollection = ({ status }: { status: string }) => {
               </ThumbnailWrapper>
               <Content>
                 <Label color={'#BBB6FF'}>3회차</Label>
-                <Label color={'#fff'}>
-                  3회차 콘텐츠의 제목을 입력해주세요.
+                <Label color={'#fff'} width={'206px'}>
+                  {data.resource[2].episodeName}
                 </Label>
               </Content>
             </ContentWrapper>
@@ -608,7 +635,13 @@ const HoverCollection = ({ status }: { status: string }) => {
   );
 };
 
-const BoardingPassBottom = ({ status }: { status?: string }) => {
+const BoardingPassBottom = ({
+  data,
+  status,
+}: {
+  data: SearchResult;
+  status?: string;
+}) => {
   return (
     <Bottom>
       {status == '학습중' ? (
@@ -628,7 +661,7 @@ const BoardingPassBottom = ({ status }: { status?: string }) => {
             <Level>입문자</Level>
           </Departure>
           <ColumnFlexDiv>
-            <Step>n 시간</Step>
+            <Step>{data.runtime} 시간</Step>
             <PlaneWrapper>
               <PlaneLine></PlaneLine>
               <Image src={Plane} alt="plane" style={{ margin: '0 5px' }} />
@@ -646,8 +679,10 @@ const BoardingPassBottom = ({ status }: { status?: string }) => {
 };
 
 const BoardingPass = ({
+  data,
   showHoverCollection,
 }: {
+  data: SearchResult;
   showHoverCollection?: boolean;
 }) => {
   return (
@@ -657,17 +692,15 @@ const BoardingPass = ({
       <StatusTag status=""></StatusTag>
       <Body>
         <TagWrapper>
-          <Category>관심분야</Category>
-          <Keyword>키워드1</Keyword>
-          <Keyword>키워드2</Keyword>
+          <Category>{interestFieldMap[data.interestField]}</Category>
+          <Keyword>{data.keywords[0]}</Keyword>
+          <Keyword>{data.keywords[1]}</Keyword>
         </TagWrapper>
-        <Title>
-          컬렉션의 <br></br>제목을 입력해주세요
-        </Title>
-        <Author>컬렉션 제작자명</Author>
+        <Title>{data.title}</Title>
+        <Author>{data.creator}</Author>
       </Body>
-      <BoardingPassBottom status="" />
-      {showHoverCollection && <HoverCollection status="" />}
+      <BoardingPassBottom data={data} status="" />
+      {showHoverCollection && <HoverCollection data={data} status="" />}
     </Container>
   );
 };

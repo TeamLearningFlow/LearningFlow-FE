@@ -133,6 +133,7 @@ const SearchIcon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 `;
 
 const ProfileIcon = styled.div`
@@ -197,6 +198,7 @@ const Header: React.FC = () => {
       if (!searchValue.trim()) {
         setSearchState('Inactive'); // 텍스트 없으면 초기화
       } else {
+        handleSearch();
         setSearchState('Completed'); // 텍스트 있으면 Completed 상태
       }
     }
@@ -205,6 +207,11 @@ const Header: React.FC = () => {
   const handleClear = () => {
     setSearchValue(''); // 텍스트 삭제
     setSearchState('Active'); // 아이콘 상태 초기화
+  };
+
+  const handleSearch = () => {
+    if (searchValue.trim() === '') return; // 빈 값 방지
+    router.push(`/search?keyword=${encodeURIComponent(searchValue)}`); // 쿼리스트링 적용
   };
 
   // 사용자 아이콘 클릭 시 모달 토글
@@ -260,6 +267,8 @@ const Header: React.FC = () => {
               event.preventDefault(); // 기본 동작 방지
               event.stopPropagation(); // 이벤트 버블링 방지
               handleClear(); // 텍스트 클리어
+            } else {
+              handleSearch();
             }
           }}
         >
