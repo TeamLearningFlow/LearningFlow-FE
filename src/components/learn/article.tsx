@@ -13,9 +13,6 @@ const ArticleWrapper = styled.div`
   border-radius: 11.483px;
   background: #b5b5b5;
   box-shadow: 1.077px 1.435px 6.459px 0px rgba(0, 0, 0, 0.1);
-  // margin-bottom: 20px;
-
-  // border: 10px solid pink;
 `;
 
 const Iframe = styled.iframe`

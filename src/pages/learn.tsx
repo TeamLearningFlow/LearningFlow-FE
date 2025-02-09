@@ -18,7 +18,6 @@ const PageWrapper = styled.div``;
 const BodyWrapper = styled.div`
   padding: 0 2.5%;
   margin-top: 30px;
-  display: flex;
 
   display: grid;
   grid-template-columns: 62vw 30vw;
@@ -27,31 +26,46 @@ const BodyWrapper = styled.div`
 
   @media (max-width: 850px) {
     display: flex;
-    // flex-direction: column;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
 
     padding: 0 20px;
-    margin-top: 2%;
+    margin-top: 4%;
+    // gap: 1%;
   }
 
   @media (max-width: 560px) {
-    // display: flex;
-    // flex-direction: column;
-    // align-items: center;
-    // justify-content: center;
-
     padding: 0 5%;
   }
 `;
 
-const TopWrapper = styled.div``;
+const TopWrapper = styled.div`
+  @media (max-width: 850px) {
+    // width: 100vw;
+    width: 95vw;
+    height: 50vh;
+    padding: 0 25px;
+  }
+`;
 
 const MidWrapper = styled.div`
   grid-column: 2/4;
+
+  @media (max-width: 850px) {
+    width: 100vw;
+    width: 95vw;
+    padding: 0 25px;
+  }
 `;
 
-const BottomWrapper = styled.div``;
+const BottomWrapper = styled.div`
+  @media (max-width: 850px) {
+    width: 100vw;
+    width: 95vw;
+    padding: 0 25px;
+  }
+`;
 
 const LearnPage: React.FC = () => {
   const { episodeId } = useParams(); // episodeId 파라미터 가져오기
@@ -80,19 +94,6 @@ const LearnPage: React.FC = () => {
           </BottomWrapper>
         </BodyWrapper>
       ) : (
-        // <BodyWrapper>
-        //   <LeftWrapper>
-        //     <Article episodeId={episodeId} />
-        //     <ClassWrapper>
-        //       <ClassTitle />
-        //       <ClassList />
-        //     </ClassWrapper>
-        //   </LeftWrapper>
-        //   <RightWrapper>
-        //     <Note episodeId={episodeId} />
-        //     {/* <Note /> */}
-        //   </RightWrapper>
-        // </BodyWrapper>
         <BodyWrapper>
           <TopWrapper>
             <Article epsiodeId={episodeId} />
