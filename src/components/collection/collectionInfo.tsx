@@ -33,16 +33,29 @@ interface CollectionData {
 }
 
 const difficultyMap: { [key: number]: string } = {
-  1: "입문",
-  2: "초급",
-  3: "중급",
-  4: "실무",
+  1: '입문',
+  2: '초급',
+  3: '중급',
+  4: '실무',
 };
-
 
 interface CollectionInfoProps {
   data: CollectionData;
 }
+
+const interestFieldMap: Record<string, string> = {
+  APP_DEVELOPMENT: '앱개발',
+  WEB_DEVELOPMENT: '웹개발',
+  PROGRAMMING_LANGUAGE: '컴퓨터언어',
+  DEEP_LEARNING: '딥러닝',
+  STATISTICS: '통계',
+  DATA_ANALYSIS: '데이터분석',
+  UI_UX: 'UX/UI',
+  PLANNING: '기획',
+  BUSINESS_PRODUCTIVITY: '업무생산성',
+  FOREIGN_LANGUAGE: '외국어',
+  CAREER: '취업',
+};
 
 const CollectionInfo: React.FC<CollectionInfoProps> = ({ data }) => {
   return (
@@ -60,7 +73,9 @@ const CollectionInfo: React.FC<CollectionInfoProps> = ({ data }) => {
         </CollectionRightIMGBox>
         <CollectionUpperDescription>
           <KeywordBox>
-            <Interest>{data.interestField}</Interest>
+            <Interest interestField={data.interestField}>
+              {interestFieldMap[data.interestField]}
+            </Interest>
             <Keyword>{data.keywords[0]}</Keyword>
             <Keyword>{data.keywords[1]}</Keyword>
           </KeywordBox>
@@ -88,25 +103,29 @@ const CollectionInfo: React.FC<CollectionInfoProps> = ({ data }) => {
             {/* </TypeImgLetterBox> */}
             {/* </TypeImgLetterBoxWrapper> */}
           </TypeImgBox>
-          <Title>
-            {data.title}
-          </Title>
+          <Title>{data.title}</Title>
           <Author>{data.creator}</Author>
         </CollectionUpperDescription>
         <Departure>
           <DepartureLeft>
             <DepartureLetter>Departure</DepartureLetter>
-            <DepartureLevel>{difficultyMap[data.difficulties?.[0]] || "알 수 없음"}</DepartureLevel>
+            <DepartureLevel>
+              {difficultyMap[data.difficulties?.[0]] || '알 수 없음'}
+            </DepartureLevel>
           </DepartureLeft>
           <DepartureCenter>
-            <DepartureToArrivalLetter>{data.runtime}시간</DepartureToArrivalLetter>
+            <DepartureToArrivalLetter>
+              {data.runtime}시간
+            </DepartureToArrivalLetter>
             <Hr />
             <PlaneImg src={plane} alt="비행기" />
             <Hr />
           </DepartureCenter>
           <DepartureRight>
             <ArrivalLetter>Arrival</ArrivalLetter>
-            <ArrivalLevel>{difficultyMap[data.difficulties?.[1]] || "알 수 없음"}</ArrivalLevel>
+            <ArrivalLevel>
+              {difficultyMap[data.difficulties?.[1]] || '알 수 없음'}
+            </ArrivalLevel>
           </DepartureRight>
         </Departure>
       </CollectionTicket>
@@ -221,18 +240,101 @@ const KeywordBox = styled.div`
   }
 `;
 
-const Interest = styled.span`
+// const Interest = styled.span`
+//   width: 150px;
+//   display: inline;
+//   padding: 7.339px 18.349px;
+//   margin-right: 10px;
+
+//   border-radius: 6px;
+//   background-color: rgba(245, 245, 255, 1);
+//   color: rgba(94, 82, 255, 1);
+//   font-size: 14px;
+//   font-weight: 600;
+//   line-height: 23.996px;
+
+//   @media (max-width: 850px) {
+//     width: 120px;
+//     font-size: 8px;
+//     padding: 3px 8px;
+//     margin-right: 5px;
+//   }
+
+//   @media (max-width: 560px) {
+//     width: 80px;
+//     font-size: 5px;
+//     padding: 2px 5px;
+//     margin-right: 3px;
+//   }
+// `;
+
+const Interest = styled.div<{ interestField: string }>`
   width: 150px;
   display: inline;
   padding: 7.339px 18.349px;
   margin-right: 10px;
 
   border-radius: 6px;
-  background-color: rgba(245, 245, 255, 1);
-  color: rgba(94, 82, 255, 1);
   font-size: 14px;
   font-weight: 600;
   line-height: 23.996px;
+
+  background-color: ${({ interestField }) => {
+    switch (interestField) {
+      case 'APP_DEVELOPMENT':
+        return '#E5F6FE';
+      case 'WEB_DEVELOPMENT':
+        return '#EAF2FE';
+      case 'PROGRAMMING_LANGUAGE':
+        return '#DEFAFF';
+      case 'DEEP_LEARNING':
+        return '#FEECEC';
+      case 'STATISTICS':
+        return '#FDE8F0';
+      case 'DATA_ANALYSIS':
+        return '#FEEEE5';
+      case 'UI_UX':
+        return '#F5F5FF';
+      case 'PLANNING':
+        return '#FFF5D6';
+      case 'BUSINESS_PRODUCTIVITY':
+        return '#E3FFF7';
+      case 'FOREIGN_LANGUAGE':
+        return '#F9EDFF';
+      case 'CAREER':
+        return '#F2FFF6';
+      default:
+        return 'gray';
+    }
+  }};
+  color: ${({ interestField }) => {
+    switch (interestField) {
+      case 'APP_DEVELOPMENT':
+        return '#00AEFF';
+      case 'WEB_DEVELOPMENT':
+        return '#0066FF';
+      case 'PROGRAMMING_LANGUAGE':
+        return '#00BDDE';
+      case 'DEEP_LEARNING':
+        return '#FF4242';
+      case 'STATISTICS':
+        return '#F04588';
+      case 'DATA_ANALYSIS':
+        return '#FF5E00';
+      case 'UI_UX':
+        return '#5E52FF';
+      case 'PLANNING':
+        return '#FFAA00';
+      case 'BUSINESS_PRODUCTIVITY':
+        return '#12C79A';
+      case 'FOREIGN_LANGUAGE':
+        return '#CB59FF';
+      case 'CAREER':
+        return '#00BF40';
+      default:
+        return 'gray';
+    }
+  }};
 
   @media (max-width: 850px) {
     width: 120px;

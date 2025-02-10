@@ -10,7 +10,7 @@ const App = () => {
         <Link href="/emailAuth"></Link>
         <Link href="/landing"></Link>
         <Link href="/search"></Link>
-        <Link href="/colllection"></Link>
+        <Link href="/collection"></Link>
         <Link href="/learn"></Link>
         <Link href="/mypage"></Link>
         <Link href="/home"></Link>
