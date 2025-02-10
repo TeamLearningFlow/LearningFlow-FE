@@ -1,18 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const emailAuthModal: React.FC = ({ onClose, onContinue }) => {
+interface LearnModalProps {
+    onClose: () => void;
+  }
+
+const LearnModal: React.FC<LearnModalProps> = ({ onClose }) => {
   return (
     <>
       <ModalWrapper>
         <ModalBox>
-          <Title>이전 페이지로 돌아갈까요?</Title>
+          <Title>다시 학습할까요?</Title>
           <Description>
-            {`이전 페이지로 돌아가면\n입력하신 회원가입 정보가 삭제됩니다.`}
+            {`다시 학습하면 학습률이 초기화 돼요.\nUX 라이팅 필요`}
           </Description>
           <Button>
-            <BackButton onClick={onClose}>돌아갈래요</BackButton>
-            <ForwardButton onClick={onContinue}>이어서하기</ForwardButton>
+            <BackButton>다시 학습</BackButton>
+            <ForwardButton onClick={onClose}>학습 완료</ForwardButton>
           </Button>
         </ModalBox>
       </ModalWrapper>
@@ -20,7 +24,7 @@ const emailAuthModal: React.FC = ({ onClose, onContinue }) => {
   );
 };
 
-export default emailAuthModal;
+export default LearnModal;
 
 const ModalWrapper = styled.div`
   white-space: nowrap;
@@ -41,8 +45,6 @@ const ModalBox = styled.div`
   box-sizing: border-box;
   padding: 34px 55px 30px 55px;
   flex-direction: column;
-  // align-items: flex-end;
-
   height: 250px;
 
   border-radius: 16px;
