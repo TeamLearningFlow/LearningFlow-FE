@@ -108,7 +108,9 @@ export default function CollectionPage() {
       setLoading(true); // 🔥 API 요청 전에 로딩 상태 설정
 
       try {
-        const response = await axios.get(`/collections/${collectionId}`);
+        const response = await axios.get(
+          `http://onboarding.p-e.kr:8080/resources/collections/${collectionId}`,
+        );
 
         if (response.data.isSuccess) {
           setCollection(response.data.result);

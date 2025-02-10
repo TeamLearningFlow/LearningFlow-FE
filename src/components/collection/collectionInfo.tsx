@@ -33,9 +33,9 @@ interface CollectionData {
 }
 
 const difficultyMap: { [key: number]: string } = {
-  1: '입문',
-  2: '초급',
-  3: '중급',
+  1: '입문자',
+  2: '초급자',
+  3: '중급자',
   4: '실무',
 };
 
