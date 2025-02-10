@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from '../components/learnHeader';
@@ -34,10 +34,6 @@ const BodyWrapper = styled.div`
     margin-top: 4%;
     // gap: 1%;
   }
-
-  @media (max-width: 560px) {
-    padding: 0 5%;
-  }
 `;
 
 const TopWrapper = styled.div`
@@ -46,6 +42,9 @@ const TopWrapper = styled.div`
     width: 95vw;
     height: 50vh;
     padding: 0 25px;
+  }
+  @media (max-width: 560px) {
+    padding: 0 10px;
   }
 `;
 
@@ -57,6 +56,9 @@ const MidWrapper = styled.div`
     width: 95vw;
     padding: 0 25px;
   }
+  @media (max-width: 560px) {
+    padding: 0 10px;
+  }
 `;
 
 const BottomWrapper = styled.div`
@@ -64,6 +66,9 @@ const BottomWrapper = styled.div`
     width: 100vw;
     width: 95vw;
     padding: 0 25px;
+  }
+  @media (max-width: 560px) {
+    padding: 0 10px;
   }
 `;
 
