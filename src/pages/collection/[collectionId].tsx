@@ -109,7 +109,7 @@ export default function CollectionPage() {
 
       try {
         const response = await axios.get(
-          `http://onboarding.p-e.kr:8080/resources/collections/${collectionId}`,
+          `http://onboarding.p-e.kr:8080/collections/${collectionId}`,
         );
 
         if (response.data.isSuccess) {

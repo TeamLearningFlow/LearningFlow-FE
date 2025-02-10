@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 // import userProfile from '../../assets/userphoto.svg';
 import Guest from '../../assets/Guest.svg';
 import CheckIcon from '../../assets/checkIconGray.svg';
+import DownIcon from '../../assets/downIcon.svg';
+import UpIcon from '../../assets/upIcon.svg';
 import ProfileCategoryList from '../../components/mypage/profileCategoryList';
 import PreferSlider from '../../components/mypage/preferSlider';
 
@@ -73,7 +75,7 @@ const SectionTitle = styled.h2`
 const InfoGrid = styled.div`
   display: grid;
   grid-template-columns: 90px 1fr;
-  row-gap: 16px;
+  row-gap: 28px;
   column-gap: 20px;
   align-items: start;
 
@@ -106,16 +108,16 @@ const InfoValue = styled.span`
 `;
 
 const Input = styled.input`
-  width: 100%;
-  height: 40px;
-  padding: 10px;
-  border: 0.9px solid #323538;
+  width: 82.5%;
+  height: 45px;
+  padding: 10px 18px;
+  border: 1px solid #323538;
   border-radius: 6px;
   font-size: 14px;
-
-  &::placeholder {
-    color: #afb8c1;
-  }
+  font-weight: 400;
+  line-height: 150%; /* 24px */
+  letter-spacing: -0.32px;
+  color: #1f1f1f;
 
   &:focus {
     border-color: #5e52ff;
@@ -123,10 +125,6 @@ const Input = styled.input`
       1px 1px 1px 0px rgba(94, 82, 255, 0.3),
       -1px -1px 1px 0px rgba(94, 82, 255, 0.3);
     outline: none;
-  }
-
-  @media (max-width: 1024px) {
-    width: 90%;
   }
 `;
 
@@ -139,11 +137,11 @@ const BannerContainer = styled.div`
   position: relative;
 `;
 
-const Banner = styled.div<{ background?: string }>`
-  width: 580px;
-  max-width: 580px;
-  height: 90px;
-  border-radius: 16px 16px 0 0;
+const Banner = styled.div<{ background?: string; isEditing: boolean }>`
+  width: ${({ isEditing }) => (isEditing ? '714px' : '600px')};
+  max-width: ${({ isEditing }) => (isEditing ? '714px' : '600px')};
+  height: ${({ isEditing }) => (isEditing ? '119px' : '100px')};
+  border-radius: 12.8px 12.8px 0 0;
   background: ${({ background }) =>
     background
       ? `url(${background})`
@@ -176,8 +174,8 @@ const ProfileContainer = styled.div`
 const ProfileImage = styled.div`
   display: flex;
   align-items: center;
-  width: 95px;
-  height: 95px;
+  width: 100px;
+  height: 100px;
   overflow: hidden;
 `;
 
@@ -186,21 +184,18 @@ const ChangeContainerBanner = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 2px;
+  gap: 30px;
 `;
 
 const ChangeContainerImage = styled.div`
   position: absolute;
   top: 50%;
-  margin-left: 110px;
+  margin-left: 120px;
+  gap: 30px;
   transform: translateY(-50%);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-
-  @media (max-width: 480px) {
-    margin-left: 95px;
-  }
 `;
 
 const ChangeButton = styled.label`
@@ -213,7 +208,7 @@ const ChangeButton = styled.label`
   cursor: pointer;
   color: #000;
   width: auto;
-  height: 30px;
+  height: 29px;
 
   &:hover {
     background: rgba(118, 118, 128, 0.12);
@@ -221,12 +216,12 @@ const ChangeButton = styled.label`
 `;
 
 const CheckList = styled.div`
-  margin-top: 5px;
+  // margin-top: 12px;
   font-size: 12px;
   color: #959ca4;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
 
   img {
     width: 14px;
@@ -240,6 +235,56 @@ const CheckList = styled.div`
   }
 `;
 
+const Dropdown = styled.div<{ focused: boolean }>`
+  width: 82.5%;
+  height: 45px;
+  padding: 10px 18px;
+  border: 1px solid ${(props) => (props.focused ? '#5e52ff' : '#323538')};
+  box-shadow: ${(props) =>
+    props.focused
+      ? '1.806px 1.806px 1.806px 0px rgba(94, 82, 255, 0.30), -1.806px -1.806px 1.806px 0px rgba(94, 82, 255, 0.30)'
+      : 'none'};
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 150%; /* 24px */
+  letter-spacing: -0.32px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+`;
+
+const DropdownMenu = styled.ul`
+  position: absolute;
+  top: 50px;
+  left: 0;
+  width: 100%;
+  height: auto;
+  border: 1px solid ##eceef0;
+  border-radius: 8px;
+  background-color: white;
+  list-style: none;
+  z-index: 2;
+  overflow-y: auto;
+  box-shadow:
+    3px 3px 3px 0px rgba(200, 200, 200, 0.5),
+    -1px -1px 1px 0px rgba(200, 200, 200, 0.5);
+`;
+
+const DropdownOption = styled.li<{ selected: boolean }>`
+  padding: 12px 17px;
+  cursor: pointer;
+  border-radius: 8px;
+  color: ${(props) => (props.selected ? '#5E52FF' : '#181818')};
+  &:hover {
+    background-color: #f5f5f5;
+  }
+`;
+
+const jobOptions = ['대학생', '직장인', '이직/취업 준비생', '성인', '기타'];
+
 const MyProfile = () => {
   const [isEditing, setIsEditing] = useState(false); // 편집 모드
   const [originalProfileData, setOriginalProfileData] = useState({
@@ -251,6 +296,9 @@ const MyProfile = () => {
     selectedCategories: [] as string[],
   });
   const [profileData, setProfileData] = useState(originalProfileData);
+
+  const [isJobDropdownOpen, setIsJobDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -270,6 +318,30 @@ const MyProfile = () => {
       }));
     }
   }; */
+
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
+        setIsJobDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, []);
+
+  // 직업 선택 시 상태 업데이트
+  const handleJobSelect = (job: string) => {
+    setProfileData((prev) => ({
+      ...prev,
+      job,
+    }));
+    setIsJobDropdownOpen(false);
+  };
 
   const handleCategoryChange = (newCategories: string[]) => {
     setProfileData((prev) => ({
@@ -316,51 +388,80 @@ const MyProfile = () => {
           </ButtonContainer>
         )}
       </SectionHeader>
+
       <InfoGrid>
-        <InfoLabel>배너</InfoLabel>
-        <BannerContainer>
-          <Banner background={profileData.bannerImage} />
-          {isEditing && (
-            <ChangeContainerBanner>
-              <ChangeButton>변경</ChangeButton>
-              <CheckList>
-                <span>
-                  <Image src={CheckIcon} alt="check" /> png, jpg, jpeg의 확장자
-                </span>
-                <span>
-                  <Image src={CheckIcon} alt="check" /> 8MB 이하의 이미지
-                </span>
-                <span>
-                  <Image src={CheckIcon} alt="check" /> 6:1 비율의 이미지
-                </span>
-              </CheckList>
-            </ChangeContainerBanner>
-          )}
-        </BannerContainer>
-        <InfoLabel>이미지</InfoLabel>
-        <ProfileContainer>
-          <ProfileImage>
-            <Image
-              src={profileData.profileImage}
-              alt="guest profile"
-              width={80}
-              height={80}
-            />
-          </ProfileImage>
-          {isEditing && (
-            <ChangeContainerImage>
-              <ChangeButton>변경</ChangeButton>
-              <CheckList>
-                <span>
-                  <Image src={CheckIcon} alt="check" /> png, jpg, jpeg의 확장자
-                </span>
-                <span>
-                  <Image src={CheckIcon} alt="check" /> 8MB 이하의 이미지
-                </span>
-              </CheckList>
-            </ChangeContainerImage>
-          )}
-        </ProfileContainer>
+        {isEditing ? (
+          <>
+            <InfoLabel>이미지</InfoLabel>
+            <ProfileContainer>
+              <ProfileImage>
+                <Image
+                  src={profileData.profileImage}
+                  alt="guest profile"
+                  width={100}
+                  height={100}
+                />
+              </ProfileImage>
+              <ChangeContainerImage>
+                <ChangeButton>변경</ChangeButton>
+                <CheckList>
+                  <span>
+                    <Image src={CheckIcon} alt="check" /> png, jpg, jpeg의
+                    확장자
+                  </span>
+                  <span>
+                    <Image src={CheckIcon} alt="check" /> 8MB 이하의 이미지
+                  </span>
+                </CheckList>
+              </ChangeContainerImage>
+            </ProfileContainer>
+
+            <InfoLabel>배너</InfoLabel>
+            <BannerContainer>
+              <Banner
+                background={profileData.bannerImage}
+                isEditing={isEditing}
+              />
+              <ChangeContainerBanner>
+                <ChangeButton>변경</ChangeButton>
+                <CheckList>
+                  <span>
+                    <Image src={CheckIcon} alt="check" /> png, jpg, jpeg의
+                    확장자
+                  </span>
+                  <span>
+                    <Image src={CheckIcon} alt="check" /> 8MB 이하의 이미지
+                  </span>
+                  <span>
+                    <Image src={CheckIcon} alt="check" /> 6:1 비율의 이미지
+                  </span>
+                </CheckList>
+              </ChangeContainerBanner>
+            </BannerContainer>
+          </>
+        ) : (
+          <>
+            <InfoLabel>배너</InfoLabel>
+            <BannerContainer>
+              <Banner
+                background={profileData.bannerImage}
+                isEditing={isEditing}
+              />
+            </BannerContainer>
+
+            <InfoLabel>이미지</InfoLabel>
+            <ProfileContainer>
+              <ProfileImage>
+                <Image
+                  src={profileData.profileImage}
+                  alt="guest profile"
+                  width={80}
+                  height={80}
+                />
+              </ProfileImage>
+            </ProfileContainer>
+          </>
+        )}
 
         <InfoLabel>닉네임</InfoLabel>
         {isEditing ? (
@@ -368,7 +469,6 @@ const MyProfile = () => {
             type="text"
             name="nickname"
             value={profileData.nickname}
-            // placeholder={profileData.nickname}
             onChange={handleInputChange}
           />
         ) : (
@@ -377,13 +477,35 @@ const MyProfile = () => {
 
         <InfoLabel>직업</InfoLabel>
         {isEditing ? (
-          <Input
-            type="text"
-            name="job"
-            value={profileData.job}
-            // placeholder={profileData.job}
-            onChange={handleInputChange}
-          />
+          <Dropdown
+            ref={dropdownRef}
+            onClick={() => setIsJobDropdownOpen(!isJobDropdownOpen)}
+            focused={isJobDropdownOpen}
+          >
+            <span>{profileData.job}</span>
+            <Image
+              src={isJobDropdownOpen ? UpIcon : DownIcon}
+              alt="Dropdown Icon"
+              width={20}
+              height={20}
+            />
+            {isJobDropdownOpen && (
+              <DropdownMenu>
+                {jobOptions.map((option) => (
+                  <DropdownOption
+                    key={option}
+                    selected={profileData.job === option}
+                    onClick={(e) => {
+                      e.stopPropagation(); // 부모 클릭 이벤트 방지
+                      handleJobSelect(option);
+                    }}
+                  >
+                    {option}
+                  </DropdownOption>
+                ))}
+              </DropdownMenu>
+            )}
+          </Dropdown>
         ) : (
           <InfoValue>{profileData.job}</InfoValue>
         )}

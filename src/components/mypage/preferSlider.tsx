@@ -48,6 +48,15 @@ const TooltipContainer = styled.div<{ position: number }>`
         position <= 40 ? position * 0.85 : position * 0.65 + 10;
       return `calc(${Math.min(Math.max(basePosition, 6), 92)}%)`;
     }};
+  }
+
+  @media (max-width: 768px) {
+    left: ${({ position }) => {
+      const basePosition =
+        position <= 40 ? position * 0.72 + 6 : position * 0.6 + 12;
+      return `calc(${Math.min(Math.max(basePosition, 11), 88)}%)`;
+    }};
+  }
 
   @media (max-width: 480px) {
     left: ${(props) => Math.min(Math.max(props.position, 15), 88)}%;

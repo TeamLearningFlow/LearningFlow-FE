@@ -29,7 +29,7 @@ import JobIconW from '../../assets/categoryIcon/jobIcon_w.svg';
 const CategoryListWrapper = styled.div`
   display: flex;
   justify-content: flex-start;
-  gap: 5px;
+  gap: 5.3px;
   background-color: #ffffff;
   overflow-x: auto;
   white-space: nowrap;
@@ -73,7 +73,6 @@ const IconWrapper = styled.div<{ isHovered: boolean; active?: boolean }>`
   align-items: center;
   width: ${({ isHovered, active }) => (isHovered || active ? '28px' : '25px')};
   height: ${({ isHovered, active }) => (isHovered || active ? '28px' : '25px')};
-  margin-top: 6px;
   position: relative;
 `;
 
@@ -85,12 +84,19 @@ const StyledImage = styled(Image)<{ isHovered: boolean; active?: boolean }>`
 `;
 
 const CategoryText = styled.div<{ active?: boolean }>`
-  font-size: 8.5px;
+  margin-top: 3px;
+  font-size: 10px;
   font-weight: 500;
   line-height: 21px; /* 150% */
   letter-spacing: -0.28px;
-  color: ${({ active }) => (active ? '#ffffff' : '#64696E')};
+  color: ${({ active }) => (active ? '#1f1f1f' : '#64696E')};
   text-align: center;
+`;
+
+const CategoryItemContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const CategoryItem = ({
@@ -109,22 +115,24 @@ const CategoryItem = ({
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <CategoryItemWrapper
-      active={active}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onClick={onClick}
-    >
-      <IconWrapper isHovered={isHovered} active={active}>
-        <StyledImage
-          src={active ? imageW : image}
-          alt={`${text} 아이콘`}
-          isHovered={isHovered}
-          active={active}
-        />
-      </IconWrapper>
+    <CategoryItemContainer>
+      <CategoryItemWrapper
+        active={active}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onClick={onClick}
+      >
+        <IconWrapper isHovered={isHovered} active={active}>
+          <StyledImage
+            src={active ? imageW : image}
+            alt={`${text} 아이콘`}
+            isHovered={isHovered}
+            active={active}
+          />
+        </IconWrapper>
+      </CategoryItemWrapper>
       <CategoryText active={active}>{text}</CategoryText>
-    </CategoryItemWrapper>
+    </CategoryItemContainer>
   );
 };
 
