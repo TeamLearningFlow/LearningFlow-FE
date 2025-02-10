@@ -54,15 +54,15 @@ const TitleBox = styled.div`
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 500;
   margin-left: 15px;
   margin-top: -2px;
 
   @media (max-width: 850px) {
-    font-size: 15px;
+    font-size: 16px;
   }
-  @media (max-width: 850px) {
+  @media (max-width: 560px) {
     font-size: 13px;
     margin-top: -4px;
   }
