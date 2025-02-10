@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
+import Tooltip from '../../assets/emailTooltip.svg';
 import X from '../../assets/X_red.svg';
 import InvisibleIcon from '../../assets/invisibleicon.svg';
 import VisibleIcon from '../../assets/visibleicon.svg';
@@ -19,7 +20,7 @@ const SectionTitle = styled.h2`
 const InfoRow = styled.div`
   display: flex;
   align-items: start;
-  margin-bottom: 20px;
+  margin-bottom: 32px;
 
   @media (max-width: 1024px) {
     flex-direction: column;
@@ -134,6 +135,40 @@ const Button = styled.button<{ primary?: boolean }>`
   }
 `;
 
+const TooltipWrapper = styled.div`
+  position: relative;
+  display: inline-block;
+  align-items: center;
+  margin-left: 5px;
+
+  &:hover div {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  img {
+    position: relative;
+    top: 3px;
+  }
+`;
+
+const TooltipBox = styled.div`
+  visibility: hidden;
+  width: 180px;
+  background-color: rgba(50, 53, 56, 1);
+  color: #ffffff;
+  font-size: 12px;
+  text-align: center;
+  padding: 0px 8px;
+  border-radius: 4px;
+  position: absolute;
+  bottom: -26px;
+  left: 0px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+`;
+
 const BasicInfo = () => {
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [isEditingPassword, setIsEditingPassword] = useState(false);
@@ -246,7 +281,13 @@ const BasicInfo = () => {
       <SectionTitle>기본정보</SectionTitle>
 
       <InfoRow>
-        <Label>이메일</Label>
+        <Label>
+          이메일
+          <TooltipWrapper>
+            <Image src={Tooltip} alt="tooltip" width={20} height={20} />
+            <TooltipBox>이메일 변경 후, 재인증이 필요해요</TooltipBox>
+          </TooltipWrapper>
+        </Label>
         {isEditingEmail ? (
           <InputContainer>
             <InputWrapper
