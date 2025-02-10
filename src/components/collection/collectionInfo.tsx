@@ -58,6 +58,16 @@ const interestFieldMap: Record<string, string> = {
 };
 
 const CollectionInfo: React.FC<CollectionInfoProps> = ({ data }) => {
+  // 줄바꿈을 <br /> 태그로 변환하는 함수
+  const renderTitleWithLineBreaks = (title: string) => {
+    return title.split('\n').map((item, index) => (
+      <React.Fragment key={index}>
+        {item}
+        {index < title.split('\n').length - 1 && <br />}
+      </React.Fragment>
+    ));
+  };
+
   return (
     <CollectionInfoWrapper>
       <CollectionTicket>
@@ -103,7 +113,7 @@ const CollectionInfo: React.FC<CollectionInfoProps> = ({ data }) => {
             {/* </TypeImgLetterBox> */}
             {/* </TypeImgLetterBoxWrapper> */}
           </TypeImgBox>
-          <Title>{data.title}</Title>
+          <Title>{renderTitleWithLineBreaks(data.title)}</Title>
           <Author>{data.creator}</Author>
         </CollectionUpperDescription>
         <Departure>
@@ -390,6 +400,10 @@ const Title = styled.div`
   margin-left: 25px;
   width: 327.273px;
 
+  whitespace: pre-line;
+  display: flex;
+  flex-direction: column;
+
   @media (max-width: 850px) {
     font-size: 16px;
     line-height: 21px;
@@ -408,7 +422,7 @@ const Title = styled.div`
 const Author = styled.div`
   position: absolute;
   color: #7c8389;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
 
   margin-left: 25px;
@@ -687,9 +701,10 @@ const VideoNumber = styled.span`
   }
 `;
 
-const Departure = styled.span`
+const Departure = styled.div`
   display: flex;
   align-items: center;
+  justify-content: flex-start;
 
   margin-top: 184px;
   margin-left: -54vw;

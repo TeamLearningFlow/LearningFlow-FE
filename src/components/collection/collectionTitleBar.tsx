@@ -18,7 +18,7 @@ const TitleWrapper = styled.div`
 
 const LetterWrapper = styled.div`
   display: flex;
-  width: 80vw;
+  width: 78.5vw;
   justify-content: flex-start;
   align-items: center;
 `;
@@ -60,7 +60,7 @@ const TitleBox = styled.div`
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 17px;
+  font-size: 15px;
   font-weight: 500;
   margin-left: 15px;
   margin-top: -2px;
