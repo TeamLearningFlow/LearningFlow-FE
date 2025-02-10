@@ -33,11 +33,13 @@ const ComponentWrapper = styled.div`
   }
 
   @media (max-width: 850px) {
-    max-height: 500px;
+    max-height: 200px;
+    margin-bottom: 20px;
   }
 
   @media (max-width: 560px) {
-    max-height: 350px;
+    max-height: 150px;
+    margin-bottom: 10px;
   }
 `;
 
@@ -62,7 +64,7 @@ const ClassList: React.FC = () => {
     {
       orderText: '5회차',
       title: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
-    }
+    },
   ];
 
   return (

@@ -15,7 +15,6 @@ const TitleWrapper = styled.div`
   }
 
   @media (max-width: 560px) {
-
   }
 `;
 
@@ -32,11 +31,11 @@ const TitleBox = styled.div`
   }
 
   @media (max-width: 560px) {
-    font-size: 12px;
+    font-size: 14px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 180px; 
+    max-width: 180px;
   }
 `;
 
@@ -61,9 +60,9 @@ const ButtonWrapper = styled.button`
   }
 
   @media (max-width: 560px) {
-    width: 60px;
-    height: 20px;
-    font-size: 8px;
+    // width: 60px;
+    // height: 20px;
+    // font-size: 8px;
     gap: 1px;
   }
 `;
@@ -96,7 +95,12 @@ const ClassTitle: React.FC<ClassTitleProps> = ({
       <TitleBox>{title}</TitleBox>
       <ButtonWrapper>
         <IconBox>
-          <Image src={CheckIcon} alt="Check Icon" fill style={{ objectFit: 'contain' }} />
+          <Image
+            src={CheckIcon}
+            alt="Check Icon"
+            fill
+            style={{ objectFit: 'contain' }}
+          />
         </IconBox>
         수강완료
       </ButtonWrapper>

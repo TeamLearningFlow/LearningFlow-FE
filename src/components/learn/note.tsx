@@ -15,7 +15,7 @@ const NoteWrapper = styled.div`
     margin-top: 15px;
   }
   @media (max-width: 560px) {
-    margin-top: -5px;
+    margin-top: 2px;
   }
 `;
 
