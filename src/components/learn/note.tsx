@@ -15,7 +15,7 @@ const NoteWrapper = styled.div`
     margin-top: 15px;
   }
   @media (max-width: 560px) {
-    margin-top: -5px;
+    margin-top: 5px;
   }
 `;
 
@@ -175,15 +175,27 @@ const Note: React.FC<{ episodeId?: string }> = ({ episodeId }) => {
     }
 
     if (!isNoteEmpty) {
-      localStorage.setItem('noteContent', noteContent);
+      localStorage.setItem('noteContent_${epsiodeId}', noteContent);
       alert('노트가 저장되었습니다!');
       try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          alert('로그인이 필요합니다.');
+          console.log('토큰이 없습니다.');
+          return;
+        }
+
         const response = await axios.post(
-          `http://onboarding.p-e.kr:8080/resources/{episodeId}/memo`,
+          `http://onboarding.p-e.kr:8080/resources/${episodeId}/memo`,
           {
-            memoContents: noteContent,
+            contents: noteContent,
           },
-          // { headers: { "Content-Type": "application/json" } } // JSON 데이터 전송
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          }, // JSON 데이터 전송
         );
 
         // 로컬 스토리지에도 저장
@@ -197,7 +209,12 @@ const Note: React.FC<{ episodeId?: string }> = ({ episodeId }) => {
         }
       } catch (err: any) {
         console.log('Error:', err.response?.data || err.message);
-        if (err.response?.data?.message) {
+        if (err.response?.status === 401) {
+          // 토큰 만료 시 로그아웃 처리
+          alert('세션이 만료되었습니다. 다시 로그인해주세요.');
+          localStorage.removeItem('token');
+          window.location.href = '/login'; // 로그인 페이지로 이동
+        } else if (err.response?.data?.message) {
           console.log('Error Message:', err.response.data.message);
         } else {
           console.log('메모 작성 중 오류 발생');
@@ -206,10 +223,10 @@ const Note: React.FC<{ episodeId?: string }> = ({ episodeId }) => {
     }
   };
 
-  useEffect(() => {
-    setNoteContent(noteContent);
-    setIsNoteEmpty(isNoteEmpty);
-  }, [noteContent, isNoteEmpty]);
+  // useEffect(() => {
+  //   setNoteContent(noteContent);
+  //   setIsNoteEmpty(isNoteEmpty);
+  // }, [noteContent, isNoteEmpty]);
 
   return (
     <>

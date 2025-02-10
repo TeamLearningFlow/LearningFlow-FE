@@ -14,11 +14,10 @@ const TitleWrapper = styled.div`
   padding: 1.5% 0 1.5% 0;
 
   @media (max-width: 850px) {
-    padding: 2.5% 0 2.5% 0;
+    padding: 2% 0 2.5% 0;
   }
 
   @media (max-width: 560px) {
-
   }
 `;
 
@@ -35,11 +34,11 @@ const TitleBox = styled.div`
   }
 
   @media (max-width: 560px) {
-    font-size: 12px;
+    font-size: 15px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 180px; 
+    max-width: 180px;
   }
 `;
 
@@ -68,16 +67,18 @@ const ButtonWrapper = styled.button<{ isClicked: boolean, isCompleted: boolean }
 
 
   @media (max-width: 850px) {
-    width: 100px;
-    height: 32px;
+    width: 95px;
+    height: 34px;
     font-size: 12px;
   }
 
   @media (max-width: 560px) {
-    width: 60px;
-    height: 20px;
-    font-size: 8px;
-    gap: 1px;
+    // width: 60px;
+    // height: 20px;
+    gap: 5px;
+    width: 85px;
+    height: 30px;
+    font-size: 10px;
   }
 `;
 
@@ -141,9 +142,13 @@ const EffectDownWrapper = styled.div<{ isClicked: boolean, isCompleted: boolean 
   }
 
   @media (max-width: 560px) {
-    width: 11px;
-    height: 11px;
+    width: 13px;
+    height: 13px;
   }
+`;
+
+const ButtonLetter = styled.div`
+  margin-top: -2px;
 `;
 
 interface ClassTitleProps {
@@ -199,7 +204,7 @@ const ClassTitle: React.FC<ClassTitleProps> = ({
         <IconBox>
           <FaCheck size="15px"/>
         </IconBox>
-        수강완료
+        <ButtonLetter>수강완료</ButtonLetter>
       </ButtonWrapper>
 
       {isModalVisible && <LearnModal onClose={handleCloseModal} />}
