@@ -8,6 +8,7 @@ import NoteBookGraphic from '../assets/noteBook.svg';
 const leftUI: React.FC = () => {
   return (
     <LoginPageCover>
+      <ShadowWrapper />
       <LogoWrapper>
         <LogoGraphicImg src={LogoGraphic} alt="Logo Graphic" />
       </LogoWrapper>
@@ -17,7 +18,6 @@ const leftUI: React.FC = () => {
       <NoteBookWrapper>
         <NoteBookGraphicImg src={NoteBookGraphic} alt="NoteBook Graphic" />
       </NoteBookWrapper>
-      <ShadowWrapper />
       <InstructionContainer>
         <Instruction1>성장을 원한다면,</Instruction1>
         <Instruction2>
@@ -48,7 +48,7 @@ const LoginPageCover = styled.div`
 const LogoWrapper = styled.div`
   display: flex;
   position: absolute;
-  bottom: 13%;
+  bottom: 14%;
   right: -2%;
   // transform: rotate(15deg);
 
@@ -81,11 +81,37 @@ const LogoGraphicImg = styled(Image)`
   }
 `;
 
+const ShadowWrapper = styled.div`
+  position: absolute;
+  bottom: 5%;
+  right: -10%;
+  width: 28vw;
+  height: 4vh;
+  background: rgba(172, 172, 172, 0.55);
+  filter: blur(25px) brightness(1);
+  border-radius: 50%;
+  z-index: 0;
+
+  animation: shadowGlow 1.5s ease-in-out infinite alternate;
+
+  @keyframes shadowGlow {
+    0% {
+      background: rgba(172, 172, 172, 0.55);
+      filter: blur(25px) brightness(1);
+    }
+    100% {
+      background: rgba(172, 172, 172, 0.3); 
+      filter: blur(40px) brightness(1.5);
+    }
+  }
+`;
+
+
 const IconWrapper = styled.div`
   display: flex;
   position: absolute;
-  bottom: 26.5%;
-  left: 16%;
+  bottom: 29%;
+  left: 18%;
   
   @media (max-width: 768px) {
 
@@ -131,32 +157,6 @@ const NoteBookGraphicImg = styled(Image)`
   }
 `;
 
-const ShadowWrapper = styled.div`
-  display: flex;
-  position: absolute;
-  bottom: 9%;
-  right: 11%;
-  width: 5vw;
-  height: 0.5vh;
-  background-color: transparent;
-  border-radius: 60%;
-  animation: shadowChange 1.5s ease-in-out infinite alternate;
-
-  box-shadow: 0px 10px 20px rgba(172, 172, 172, 0.55);
-
-  @keyframes shadowChange {
-    0% {
-      box-shadow: 0px 10px 100px rgba(172, 172, 172, 0.55);
-    }
-    100% {
-      box-shadow: 0px 0px 100px rgb(255, 0, 0);
-    }
-  }
-
-  @media (max-width: 768px) {
-    /* 반응형 스타일 추가 */
-  }
-`;
 
 
 const InstructionContainer = styled.div`
@@ -174,7 +174,7 @@ const InstructionContainer = styled.div`
 `;
 
 const Instruction1 = styled.div`
-  font-size: 50px;
+  font-size: 47px;
   font-weight: 600;
   color: #181818;
   text-align: left;
@@ -190,7 +190,7 @@ const Instruction1 = styled.div`
 `;
 
 const Instruction2 = styled.div`
-  font-size: 50px;
+  font-size: 47px;
   font-weight: 600;
   text-align: left;
   letter-spacing: -1.5px;
