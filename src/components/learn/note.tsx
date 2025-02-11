@@ -4,7 +4,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 
 const NoteWrapper = styled.div`
-  width: 30vw;
+  width: 23vw;
 
   border-radius: 16px;
   box-shadow: 1.5px 2px 8px 0px rgba(0, 0, 0, 0.1);

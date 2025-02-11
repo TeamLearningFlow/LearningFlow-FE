@@ -20,9 +20,9 @@ const BodyWrapper = styled.div`
   margin-top: 30px;
 
   display: grid;
-  grid-template-columns: 62vw 30vw;
+  grid-template-columns: 70vw 20vw;
   grid-template-rows: 60vh 20vh;
-  gap: 2.5%;
+  gap: 2%;
 
   @media (max-width: 850px) {
     display: flex;
@@ -74,12 +74,12 @@ const BottomWrapper = styled.div`
 
 const LearnPage: React.FC = () => {
   // const { episodeId } = useParams(); // episodeId 파라미터 가져오기
-  const episodeId: number = 1;
+  // const episodeId: number = 1;   // test용
   const loading = false; // Skeleton UI 확인용
 
   const collection = {
     title: '제목',
-    interestField: '필드',
+    interestField: 'APP_DEVELOPMENT',
   };
 
   return (
@@ -109,7 +109,6 @@ const LearnPage: React.FC = () => {
             <Note episodeId={episodeId} />
           </MidWrapper>
           <BottomWrapper>
-            <h2>{episodeId}</h2>
             <ClassList />
           </BottomWrapper>
         </BodyWrapper>

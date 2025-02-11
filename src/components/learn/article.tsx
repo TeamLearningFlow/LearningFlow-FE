@@ -22,36 +22,48 @@ const Iframe = styled.iframe`
 `;
 
 const Article: React.FC<{ episodeId?: string }> = ({ episodeId }) => {
-  const [contentUrl, setContentUrl] = useState<string | null>(null);
+  const isTestMode = true; // 테스트용
+  const [contentUrl, setContentUrl] = useState<string | null>('');
   const [memo, setMemo] = useState<string | null>(null); // 백에 있길래 일단 추가
-  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (!episodeId) return;
 
     const fetchContent = async () => {
       try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          alert('로그인이 필요합니다.');
-          console.log('토큰이 없습니다.');
+        if (isTestMode) {
+          console.warn('테스트 모드 활성화 - Mock 데이터 사용');
+          setContentUrl('https://blog.naver.com/stjjamrabbit/223165753698'); // 예제 블로그 링크
+          setMemo('이것은 테스트용 메모입니다.');
           return;
         }
+        // 실제 API 요청
+        // const token = localStorage.getItem('token');
+        // if (!token) {
+        //   alert('로그인이 필요합니다.');
+        //   console.log('토큰이 없습니다.');
+        //   return;
+        // }
 
         // 유튜브 URL
 
         // 블로그 API 호출
-        // const blogResponse = await axios.get(
-        //   `http://onboarding.p-e.kr:8080/resources/${episodeId}/blog`,
-        //   {
-        //     headers: {
-        //       Authorization: `Bearer ${token}`,
-        //       'Content-Type': 'application/json',
-        //     },
-        //   },
-        // );
+        const blogResponse = await axios.get(
+          `http://onboarding.p-e.kr:8080/resources/${episodeId}/blog/content`,
+          {
+            headers: {
+              // Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+        // console.log('api 응답:', blogResponse);
 
-        // 블로그 HTML 콘텐츠 API 호출
+        if (blogResponse.status === 200) {
+          const data = blogResponse.data;
+          // console.log('응답 데이터:', data);
+          setContentUrl(data.episodeContents);
+        }
       } catch (error) {
         console.error('콘텐츠 로딩 오류:', error);
       }
