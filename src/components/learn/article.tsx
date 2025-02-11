@@ -22,10 +22,8 @@ const Iframe = styled.iframe`
 `;
 
 const Article: React.FC<{ episodeId?: string }> = ({ episodeId }) => {
-  // const [contentUrl, setContentUrl] = useState<string>(
-  //   'https://www.youtube.com/watch?v=r_cfD_17SJU',
-  // );
   const [contentUrl, setContentUrl] = useState<string | null>(null);
+  const [memo, setMemo] = useState<string | null>(null); // 백에 있길래 일단 추가
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -33,33 +31,27 @@ const Article: React.FC<{ episodeId?: string }> = ({ episodeId }) => {
 
     const fetchContent = async () => {
       try {
-        // 유튜브 URL
-        const youtubeResponse = await fetch(
-          `http://onboarding.p-e.kr:8080/resources/${episodeId}/youtube`,
-        );
-        if (youtubeResponse.ok) {
-          const youtubeData = await youtubeResponse.json();
-          setContentUrl(youtubeData.url);
+        const token = localStorage.getItem('token');
+        if (!token) {
+          alert('로그인이 필요합니다.');
+          console.log('토큰이 없습니다.');
           return;
         }
 
+        // 유튜브 URL
+
         // 블로그 API 호출
-        const blogResponse = await fetch(
-          `http://onboarding.p-e.kr:8080/resources/${episodeId}/blog`,
-        );
-        if (!blogResponse.ok) throw new Error('블로그 API 호출 실패');
+        // const blogResponse = await axios.get(
+        //   `http://onboarding.p-e.kr:8080/resources/${episodeId}/blog`,
+        //   {
+        //     headers: {
+        //       Authorization: `Bearer ${token}`,
+        //       'Content-Type': 'application/json',
+        //     },
+        //   },
+        // );
 
         // 블로그 HTML 콘텐츠 API 호출
-        const blogContentResponse = await fetch(
-          `http://onboarding.p-e.kr:8080/resources/${episodeId}/blog/content`,
-        );
-        if (!blogContentResponse.ok)
-          throw new Error('블로그 콘텐츠 API 호출 실패');
-
-        const blogData = await blogContentResponse.text();
-        setContentUrl(
-          `data:text/html;charset=utf-8,${encodeURIComponent(blogData)}`,
-        );
       } catch (error) {
         console.error('콘텐츠 로딩 오류:', error);
       }

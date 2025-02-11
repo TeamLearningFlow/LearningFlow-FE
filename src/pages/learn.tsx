@@ -73,7 +73,8 @@ const BottomWrapper = styled.div`
 `;
 
 const LearnPage: React.FC = () => {
-  const { episodeId } = useParams(); // episodeId 파라미터 가져오기
+  // const { episodeId } = useParams(); // episodeId 파라미터 가져오기
+  const episodeId: number = 1;
   const loading = false; // Skeleton UI 확인용
 
   const collection = {
@@ -101,13 +102,14 @@ const LearnPage: React.FC = () => {
       ) : (
         <BodyWrapper>
           <TopWrapper>
-            <Article epsiodeId={episodeId} />
+            <Article episodeId={episodeId} />
             <ClassTitle />
           </TopWrapper>
           <MidWrapper>
-            <Note epsiodeId={episodeId} />
+            <Note episodeId={episodeId} />
           </MidWrapper>
           <BottomWrapper>
+            <h2>{episodeId}</h2>
             <ClassList />
           </BottomWrapper>
         </BodyWrapper>

@@ -140,7 +140,6 @@ const Note: React.FC<{ episodeId?: string }> = ({ episodeId }) => {
   const [noteContent, setNoteContent] = useState<string>('');
   const [isNoteEmpty, setIsNoteEmpty] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(true);
-  // const { episodeId } = useParams(); // episodeId 파라미터 가져오기
 
   // 로컬 스토리지에서 저장된 노트를 불러오는 함수
   useEffect(() => {
@@ -175,8 +174,9 @@ const Note: React.FC<{ episodeId?: string }> = ({ episodeId }) => {
     }
 
     if (!isNoteEmpty) {
-      localStorage.setItem('noteContent_${epsiodeId}', noteContent);
+      localStorage.setItem(`noteContent_${episodeId}`, noteContent);
       alert('노트가 저장되었습니다!');
+
       try {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -195,7 +195,7 @@ const Note: React.FC<{ episodeId?: string }> = ({ episodeId }) => {
               Authorization: `Bearer ${token}`,
               'Content-Type': 'application/json',
             },
-          }, // JSON 데이터 전송
+          },
         );
 
         // 로컬 스토리지에도 저장
@@ -209,12 +209,7 @@ const Note: React.FC<{ episodeId?: string }> = ({ episodeId }) => {
         }
       } catch (err: any) {
         console.log('Error:', err.response?.data || err.message);
-        if (err.response?.status === 401) {
-          // 토큰 만료 시 로그아웃 처리
-          alert('세션이 만료되었습니다. 다시 로그인해주세요.');
-          localStorage.removeItem('token');
-          window.location.href = '/login'; // 로그인 페이지로 이동
-        } else if (err.response?.data?.message) {
+        if (err.response?.data?.message) {
           console.log('Error Message:', err.response.data.message);
         } else {
           console.log('메모 작성 중 오류 발생');
@@ -222,11 +217,6 @@ const Note: React.FC<{ episodeId?: string }> = ({ episodeId }) => {
       }
     }
   };
-
-  // useEffect(() => {
-  //   setNoteContent(noteContent);
-  //   setIsNoteEmpty(isNoteEmpty);
-  // }, [noteContent, isNoteEmpty]);
 
   return (
     <>
