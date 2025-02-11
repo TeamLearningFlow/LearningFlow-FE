@@ -16,6 +16,7 @@ interface UserData {
   birthDay: string;
   preferType: string;
   profileImgUrl: string;
+  birthday?: string;
 }
 
 const Container = styled.div`
@@ -74,7 +75,8 @@ const Profile = () => {
     const fetchUserData = async () => {
       try {
         // 로컬 스토리지에서 토큰 가져오기 (로그인 시에만 접근 가능)
-        const token = localStorage.getItem('authToken');
+        const token = localStorage.getItem('token');
+
         if (!token) {
           console.error('로그인 토큰이 없습니다.');
           return;
@@ -87,9 +89,18 @@ const Profile = () => {
           },
         });
 
-        setUserData(response.data.result); // 사용자 정보 result
-      } catch (error) {
-        console.error('사용자 정보 가져오기 실패: ', error);
+        console.log('Profile Response Data:', response.data);
+
+        setUserData(response.data.result); // 생일 정보 삭제 요청 해야함
+      } catch (error: any) {
+        if (error.response?.status === 401) {
+          console.error(
+            '토큰이 만료되었거나 잘못되었습니다. 다시 로그인해주세요.',
+          );
+          localStorage.removeItem('token'); // 만료된 토큰 삭제
+        } else {
+          console.error('사용자 정보 가져오기 실패:', error);
+        }
       }
     };
 
@@ -103,14 +114,14 @@ const Profile = () => {
   return (
     <Container>
       <ProfileContainer>
-            <MyProfile
-              name={userData.name}
-              job={userData.job}
-              profileImgUrl={userData.profileImgUrl}
-              interestFields={userData.interestFields}
-              preferType={userData.preferType}
-            />
-            <BasicInfo email={userData.email} birthDay={userData.birthDay} />
+        <MyProfile
+          name={userData.name}
+          job={userData.job}
+          profileImgUrl={userData.profileImgUrl}
+          interestFields={userData.interestFields}
+          preferType={userData.preferType}
+        />
+        <BasicInfo email={userData.email} />
       </ProfileContainer>
       <DeleteAccount
         onMouseEnter={() => setIsHovered(true)}

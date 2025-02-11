@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 import styled from 'styled-components';
 import Image from 'next/image';
 // import userProfile from '../../assets/userphoto.svg';
@@ -312,7 +312,47 @@ interface MyProfileProps {
   preferType: string;
 }
 
-const jobOptions = ['대학생', '직장인', '이직/취업 준비생', '성인', '기타'];
+const jobOptions = [
+  '대학생(휴학생)',
+  '직장인',
+  '이직/취업 준비생',
+  '성인',
+  '기타',
+];
+
+const jobMap: { [key: string]: string } = {
+  STUDENT: '대학생(휴학생)',
+  ADULT: '성인',
+  EMPLOYEE: '직장인',
+  JOB_SEEKER: '이직/취업 준비생',
+  OTHER: '기타',
+};
+
+const categoryMap: { [key: string]: string } = {
+  APP_DEVELOPMENT: '앱개발',
+  WEB_DEVELOPMENT: '웹개발',
+  PROGRAMMING_LANGUAGE: '컴퓨터언어',
+  DEEP_LEARNING: '딥러닝',
+  STATISTICS: '통계',
+  DATA_ANALYSIS: '데이터분석',
+  UI_UX: 'UX/UI',
+  PLANNING: '기획',
+  BUSINESS_PRODUCTIVITY: '업무생산성',
+  FOREIGN_LANGUAGE: '외국어',
+  CAREER: '취업',
+};
+
+const PreferTypeToSliderValue = (preferType: string): number => {
+  if (preferType === 'TEXT') return 0;
+  if (preferType === 'VIDEO') return 100;
+  return 50; // NO_PREFERENCE
+};
+
+/* const PreferTypeFromSlider = (value: number): string => {
+  if (value <= 40) return 'TEXT';
+  if (value >= 60) return 'VIDEO';
+  return 'NO_PREFERENCE';
+}; */
 
 const MyProfile = ({
   name,
@@ -328,10 +368,10 @@ const MyProfile = ({
   // 부모로부터 받은 데이터를 디폴트 값으로 설정
   const [originalProfileData, setOriginalProfileData] = useState({
     nickname: name,
-    job,
+    job: jobMap[job],
     profileImage: profileImgUrl || Guest,
-    preferredMedia: preferType,
-    selectedCategories: interestFields,
+    preferredMedia: PreferTypeToSliderValue(preferType),
+    selectedCategories: interestFields.map((field) => categoryMap[field]),
   });
 
   const [profileData, setProfileData] = useState(originalProfileData);
@@ -395,7 +435,7 @@ const MyProfile = ({
     };
   }, []);
 
-  // 직업 선택 시 상태 업데이트
+  // 직업 선택
   const handleJobSelect = (job: string) => {
     setProfileData((prev) => ({
       ...prev,
@@ -404,6 +444,7 @@ const MyProfile = ({
     setIsJobDropdownOpen(false);
   };
 
+  // 카테고리 변경
   const handleCategoryChange = (newCategories: string[]) => {
     setProfileData((prev) => ({
       ...prev,
@@ -411,19 +452,22 @@ const MyProfile = ({
     }));
   };
 
-  const handleMediaPreferenceChange = (value: string) => {
+  // 매체 선호도 변경
+  const handleMediaPreferenceChange = (value: number) => {
     setProfileData((prev) => ({
       ...prev,
       preferredMedia: value,
     }));
   };
 
+  // 수정 모드
   const handleEdit = () => {
     setOriginalProfileData(profileData); // 초기 데이터 저장
     // setProfileData((prev) => ({ ...prev, nickname: '', job: '' })); // 닉네임 초기화
     setIsEditing(true);
   };
 
+  // 저장 버튼 눌렀을 때
   const handleSave = () => {
     if (!nicknameError && profileData.nickname.length > 0) {
       setIsEditing(false); // 편집 모드 비활성화
