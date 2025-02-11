@@ -74,7 +74,7 @@ const BottomWrapper = styled.div`
 
 const LearnPage: React.FC = () => {
   // const { episodeId } = useParams(); // episodeId 파라미터 가져오기
-  // const episodeId: number = 1;   // test용
+  const episodeId: number = 1; // test용
   const loading = false; // Skeleton UI 확인용
 
   const collection = {

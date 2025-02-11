@@ -143,11 +143,16 @@ const Note: React.FC<{ episodeId?: string }> = ({ episodeId }) => {
 
   // 로컬 스토리지에서 저장된 노트를 불러오는 함수
   useEffect(() => {
-    if (episodeId) {
-      const savedNote = localStorage.getItem(`noteContent_${episodeId}`);
-      if (savedNote) {
-        setNoteContent(savedNote);
-        setIsNoteEmpty(savedNote === '');
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setNoteContent(''); // 로그인 X -> 노트 저장 X
+    } else {
+      if (episodeId) {
+        const savedNote = localStorage.getItem(`noteContent_${episodeId}`);
+        if (savedNote) {
+          setNoteContent(savedNote);
+          setIsNoteEmpty(savedNote === '');
+        }
       }
     }
   }, [episodeId]);
@@ -173,18 +178,18 @@ const Note: React.FC<{ episodeId?: string }> = ({ episodeId }) => {
       return;
     }
 
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('로그인이 필요합니다.');
+      console.log('토큰이 없습니다.');
+      console.log(noteContent);
+      return;
+    }
+
     if (!isNoteEmpty) {
       localStorage.setItem(`noteContent_${episodeId}`, noteContent);
-      alert('노트가 저장되었습니다!');
 
       try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          alert('로그인이 필요합니다.');
-          console.log('토큰이 없습니다.');
-          return;
-        }
-
         const response = await axios.post(
           `http://onboarding.p-e.kr:8080/resources/${episodeId}/memo`,
           {
@@ -200,12 +205,11 @@ const Note: React.FC<{ episodeId?: string }> = ({ episodeId }) => {
 
         // 로컬 스토리지에도 저장
         localStorage.setItem(`noteContent_${episodeId}`, noteContent);
-        console.log('메모 저장 완료');
-        console.log('episodeId: ', episodeId);
-        console.log('Response:', response);
+        console.log('메모 저장 완료', response);
 
         if (response.status === 200) {
           console.log(noteContent);
+          alert('노트가 저장되었습니다');
         }
       } catch (err: any) {
         console.log('Error:', err.response?.data || err.message);
