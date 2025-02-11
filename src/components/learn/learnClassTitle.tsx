@@ -103,7 +103,7 @@ const EffectUpWrapper = styled.div<{ isClicked: boolean, isCompleted: boolean }>
   display: flex;
   flex-direction: column;
   position: absolute;
-  bottom: 30.7%;
+  bottom: 29.7%;
   right: 41%;
   width: 20px;
   height: 20px;
@@ -127,7 +127,7 @@ const EffectDownWrapper = styled.div<{ isClicked: boolean, isCompleted: boolean 
   display: flex;
   flex-direction: column;
   position: absolute;
-  bottom: 24.5%;
+  bottom: 23.5%;
   right: 37.5%;
   width: 20px;
   height: 20px;

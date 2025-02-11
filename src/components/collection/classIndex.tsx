@@ -7,11 +7,15 @@ import PlayButton from '../../assets/playButton.svg';
 import CompletedIndexIcon from '../../assets/completedRadio.svg';
 import EndIndexIcon from '../../assets/defaultRadio.svg';
 import CheckedYoutube from '../../assets/platformicon/youtube_checked_ic.svg';
+import CheckedBlog from '../../assets/platformicon/naver blog_checked_ic.svg';
+import CheckedTistory from '../../assets/platformicon/tistory_checked_ic.svg';
+import CheckedVelog from '../../assets/platformicon/velog_checked_ic.svg';
+
 
 interface ClassIndexProps {
   classData: {
     episodeName: string;
-    url: string; // "/resources/{episodeId}/youtube" 형식
+    url: string;
     resourceSource: string;
     episodeNumber: number;
   };
@@ -22,7 +26,7 @@ const ClassIndex: React.FC<ClassIndexProps> = ({ classData }) => {
   const router = useRouter();
 
   const handleClick = async () => {
-    const episodeId = classData.url.split("/")[2]; // URL에서 episodeId 추출
+    const episodeId = classData.episodeNumber
 
     try {
       const response = await axios.get(`/resources/${episodeId}/youtube`);
@@ -34,7 +38,22 @@ const ClassIndex: React.FC<ClassIndexProps> = ({ classData }) => {
         });
       }
     } catch (error) {
-      console.error("Failed to fetch episode data:", error);
+      console.error("강의 불러오기 실패:", error);
+    }
+  };
+
+  const getPlatformIcon = () => {
+    switch (classData.resourceSource) {
+      case 'youtube':
+        return <Image src={CheckedYoutube} alt="YouTube" fill style={{ objectFit: "contain" }} />;
+      case 'naverBlog':
+        return <Image src={CheckedBlog} alt="Naver Blog" fill style={{ objectFit: "contain" }} />;
+      case 'tistory':
+        return <Image src={CheckedTistory} alt="Tistory" fill style={{ objectFit: "contain" }} />;
+      case 'velog':
+        return <Image src={CheckedVelog} alt="Velog" fill style={{ objectFit: "contain" }} />;
+      default:
+        return null;
     }
   };
 
@@ -52,12 +71,7 @@ const ClassIndex: React.FC<ClassIndexProps> = ({ classData }) => {
       </RadioWrapper>
       <IndexWrapper>
         <PlatformIcon>
-          <Image
-            src={CheckedYoutube}
-            alt="platform-icon"
-            fill
-            style={{ objectFit: "contain" }}
-          />
+          {getPlatformIcon()}  {/* Display the platform icon */}
         </PlatformIcon>
         <IndexContainer>
           <OrderBox>{classData.episodeNumber}회차</OrderBox>
