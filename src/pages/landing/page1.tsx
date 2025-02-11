@@ -106,7 +106,7 @@ const Dropdown = styled.div<{ focused: boolean }>`
   width: 320px;
   height: 45px;
   padding: 10px 18px;
-  border: 1px solid ${(props) => (props.focused ? '#5e52ff' : '#181818')};
+  border: ${(props) => (props.focused ? '1.823px solid #5e52ff' : '1px solid #181818')};
   box-shadow: ${(props) =>
     props.focused
       ? '1.806px 1.806px 1.806px 0px rgba(94, 82, 255, 0.30), -1.806px -1.806px 1.806px 0px rgba(94, 82, 255, 0.30)'
@@ -134,9 +134,9 @@ const DropdownOptions = styled.ul`
   padding: 0;
   margin: 0;
   z-index: 100;
-  box-shadow:
-    1px 1px 1px 0px rgba(94, 82, 255, 0.3),
-    -1px -1px 1px 0px rgba(94, 82, 255, 0.3);
+ box-shadow:
+    3px 3px 3px 0px rgba(200, 200, 200, 0.5),
+    -1px -1px 1px 0px rgba(200, 200, 200, 0.5);
 `;
 
 const DropdownOption = styled.li<{ selected: boolean }>`
@@ -171,11 +171,11 @@ const NextButton = styled.button<{ active: boolean }>`
   color: #ffffff;
   background-color: ${(props) => (props.active ? '#5e52ff' : '#dde0e4')};
   border: none;
-  border-radius: 100px;
+  border-radius: 8px;
   cursor: ${(props) => (props.active ? 'pointer' : 'not-allowed')};
 `;
 
-const LandingPage: React.FC<{
+const Page1: React.FC<{
   onNext: (data: { nickname: string; job: string; imgUrl: string }) => void;
 }> = ({ onNext }) => {
   const [isHovered, setIsHovered] = useState(false); // 편집 아이콘 hover
@@ -361,4 +361,4 @@ const LandingPage: React.FC<{
   );
 };
 
-export default LandingPage;
+export default Page1;

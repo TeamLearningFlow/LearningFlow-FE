@@ -96,6 +96,7 @@ const LandingPage: React.FC = () => {
       )}
       {currentPage === 2 && (
         <Page2
+          nickname={nickname}
           onPrev={() => setCurrentPage(1)}
           onNext={(selectedInterests) => {
             setInterestFields(selectedInterests);
@@ -105,6 +106,7 @@ const LandingPage: React.FC = () => {
       )}
       {currentPage === 3 && (
         <Page3
+          nickname={nickname}
           onPrev={() => setCurrentPage(2)}
           onNext={(selectedPreferType) => {
             setPreferType(selectedPreferType); // preferType 업데이트

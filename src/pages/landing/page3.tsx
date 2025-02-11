@@ -134,9 +134,10 @@ const NextButton = styled.button<{ active: boolean }>`
 `;
 
 const Page3: React.FC<{
+  nickname: string;
   onPrev: () => void;
   onNext: (preferType: string) => void;
-}> = ({ onPrev, onNext }) => {
+}> = ({ nickname, onPrev, onNext }) => {
   const [sliderValue, setSliderValue] = useState(50);
 
   const getTooltipText = (value: number) => {
@@ -163,7 +164,7 @@ const Page3: React.FC<{
 
   return (
     <Content>
-      <Title>00님이 선호하시는 매체 종류를 알려주세요</Title>
+      <Title>{nickname}님이 선호하시는 매체 종류를 알려주세요</Title>
       <SubTitle>
         매체 선호도(글/영상)에 따라 어울리는 컬렉션을 추천해드릴게요
       </SubTitle>
