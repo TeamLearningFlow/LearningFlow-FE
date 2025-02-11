@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import Image from 'next/image';
 import Tooltip from '../../assets/emailTooltip.svg';
@@ -155,7 +156,7 @@ const TooltipWrapper = styled.div`
 const TooltipBox = styled.div`
   visibility: hidden;
   width: 180px;
-  background-color: rgba(50, 53, 56, 1);
+  background-color: #4f5357;
   color: #ffffff;
   font-size: 12px;
   text-align: center;
@@ -169,11 +170,16 @@ const TooltipBox = styled.div`
   z-index: 10;
 `;
 
+interface BasicInfoProps {
+  email: string;
+  // birthDay: string;
+}
+
 const BasicInfo = () => {
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [isEditingPassword, setIsEditingPassword] = useState(false);
-  const [originalEmail, setOriginalEmail] = useState('onboarding@gmail.com'); // 이메일 예시
-  const [originalPassword, setOriginalPassword] = useState('Abcd1234%&'); // 비밀번호 예시
+  const [originalEmail, setOriginalEmail] = useState(''); // 이메일
+  const [originalPassword, setOriginalPassword] = useState(''); // 비밀번호
   const [email, setEmail] = useState(originalEmail);
   const [password, setPassword] = useState(originalPassword);
   const [showPassword, setShowPassword] = useState(false);
@@ -203,6 +209,27 @@ const BasicInfo = () => {
     };
     return Object.values(conditions).every(Boolean);
   };
+
+  // API 호출
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get('http://onboarding.p-e.kr:8080/user');
+        const data = response.data;
+
+        // 이메일과 비밀번호 초기값 설정
+        setOriginalEmail(data.email);
+        setOriginalPassword('********'); // 보안 유지
+
+        setEmail(data.email);
+        setPassword('********');
+      } catch (error) {
+        console.error('사용자 정보 불러오기 실패:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);

@@ -35,8 +35,15 @@ const SliderWrapper = styled.div`
 const TooltipContainer = styled.div<{ position: number }>`
   position: absolute;
   top: -35px;
-  left: ${({ position }) =>
-    `calc(${Math.min(Math.max(position * (position < 40 ? 0.42 : 0.4) + (position < 40 ? 2 : 0), 6), 92)}%)`};
+  left: ${({ position }) => {
+    if (position >= 40 && position <= 60) {
+      return `calc(${Math.min(Math.max(position * 0.43 + 0.5, 6), 92)}%)`;
+    } else if (position > 60) {
+      return `calc(${Math.min(Math.max(position * 0.4 + 0.7, 6), 92)}%)`;
+    } else {
+      return `calc(${Math.min(Math.max(position * 0.41 + 4, 6), 92)}%)`;
+    }
+  }};
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;

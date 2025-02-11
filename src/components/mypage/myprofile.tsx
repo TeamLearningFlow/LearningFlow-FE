@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import Image from 'next/image';
 // import userProfile from '../../assets/userphoto.svg';
@@ -30,20 +31,27 @@ const ButtonContainer = styled.div`
   display: flex;
 `;
 
-const SetButton = styled.button<{ primary?: boolean }>`
+const SetButton = styled.button<{ primary?: boolean; disabled?: boolean }>`
   border-radius: 6px;
   border: 0.5px solid #bdc5cc;
-  background: ${(props) => (props.primary ? '#5e52ff' : '#fff')};
-  color: ${(props) => (props.primary ? '#fff' : '#000')};
+  background: ${(props) =>
+    props.disabled ? '#DDE0E4' : props.primary ? '#5e52ff' : '#fff'};
+  color: ${(props) =>
+    props.disabled ? '#fff' : props.primary ? '#fff' : '#000'};
   padding: 4px 12px;
   font-size: 14px;
-  cursor: pointer;
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
   height: 30px;
   margin-left: ${(props) => (props.primary ? '8px' : '0')};
+  pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
 
   &:hover {
     background: ${(props) =>
-      props.primary ? '#3C31C8' : 'rgba(118, 118, 128, 0.12)'};
+      props.disabled
+        ? '#DDE0E4'
+        : props.primary
+          ? '#3C31C8'
+          : 'rgba(118, 118, 128, 0.12)'};
   }
 `;
 
@@ -125,6 +133,10 @@ const Input = styled.input`
       1px 1px 1px 0px rgba(94, 82, 255, 0.3),
       -1px -1px 1px 0px rgba(94, 82, 255, 0.3);
     outline: none;
+  }
+
+  &::placeholder {
+    color: #afb8c1;
   }
 `;
 
@@ -283,25 +295,74 @@ const DropdownOption = styled.li<{ selected: boolean }>`
   }
 `;
 
+/* const NicknameError = styled.div`
+  color: #ec2d30;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 150%;
+  letter-spacing: -0.32px;
+  margin-top: 4px;
+`; */
+
+interface MyProfileProps {
+  name: string;
+  job: string;
+  profileImgUrl: string;
+  interestFields: string[];
+  preferType: string;
+}
+
 const jobOptions = ['대학생', '직장인', '이직/취업 준비생', '성인', '기타'];
 
-const MyProfile = () => {
-  const [isEditing, setIsEditing] = useState(false); // 편집 모드
+const MyProfile = ({
+  name,
+  job,
+  profileImgUrl,
+  interestFields,
+  preferType,
+}: MyProfileProps) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [isModified, setIsModified] = useState(false);
+  const [nicknameError, setNicknameError] = useState('');
+
+  // 부모로부터 받은 데이터를 디폴트 값으로 설정
   const [originalProfileData, setOriginalProfileData] = useState({
-    nickname: '푸글',
-    job: '대학생',
-    profileImage: Guest,
-    bannerImage: '',
-    preferredMedia: 50,
-    selectedCategories: [] as string[],
+    nickname: name,
+    job,
+    profileImage: profileImgUrl || Guest,
+    preferredMedia: preferType,
+    selectedCategories: interestFields,
   });
+
   const [profileData, setProfileData] = useState(originalProfileData);
+
+  useEffect(() => {
+    const isChanged =
+      profileData.nickname !== originalProfileData.nickname ||
+      profileData.job !== originalProfileData.job ||
+      profileData.selectedCategories.join(',') !==
+        originalProfileData.selectedCategories.join(',') ||
+      profileData.preferredMedia !== originalProfileData.preferredMedia;
+
+    setIsModified(isChanged);
+  }, [profileData, originalProfileData]);
 
   const [isJobDropdownOpen, setIsJobDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
+    if (name === 'nickname') {
+      if (value.length === 0) {
+        setNicknameError('닉네임을 입력해주세요');
+      } else if (value.length > 15) {
+        setNicknameError('닉네임은 15자 이내로 입력해주세요');
+      } else {
+        setNicknameError('');
+      }
+    }
+
     setProfileData((prev) => ({
       ...prev,
       [name]: value,
@@ -350,7 +411,7 @@ const MyProfile = () => {
     }));
   };
 
-  const handleMediaPreferenceChange = (value: number) => {
+  const handleMediaPreferenceChange = (value: string) => {
     setProfileData((prev) => ({
       ...prev,
       preferredMedia: value,
@@ -359,13 +420,16 @@ const MyProfile = () => {
 
   const handleEdit = () => {
     setOriginalProfileData(profileData); // 초기 데이터 저장
+    // setProfileData((prev) => ({ ...prev, nickname: '', job: '' })); // 닉네임 초기화
     setIsEditing(true);
   };
 
   const handleSave = () => {
-    setIsEditing(false); // 편집 모드 비활성화
-    setOriginalProfileData(profileData); // 데이터 업데이트
-    console.log(profileData); // 변경 데이터 확인
+    if (!nicknameError && profileData.nickname.length > 0) {
+      setIsEditing(false); // 편집 모드 비활성화
+      setOriginalProfileData(profileData); // 데이터 업데이트
+      console.log(profileData); // 변경 데이터 확인
+    }
   };
 
   const handleCancel = () => {
@@ -382,7 +446,11 @@ const MyProfile = () => {
         ) : (
           <ButtonContainer>
             <CancelButton onClick={handleCancel}>취소</CancelButton>
-            <SetButton primary onClick={handleSave}>
+            <SetButton
+              primary
+              onClick={handleSave}
+              disabled={!isModified || nicknameError !== ''}
+            >
               저장
             </SetButton>
           </ButtonContainer>
@@ -470,6 +538,7 @@ const MyProfile = () => {
             name="nickname"
             value={profileData.nickname}
             onChange={handleInputChange}
+            placeholder={originalProfileData.nickname}
           />
         ) : (
           <InfoValue>{profileData.nickname}</InfoValue>
@@ -482,7 +551,11 @@ const MyProfile = () => {
             onClick={() => setIsJobDropdownOpen(!isJobDropdownOpen)}
             focused={isJobDropdownOpen}
           >
-            <span>{profileData.job}</span>
+            <span
+              style={{ color: profileData.job === '' ? '#AFB8C1' : '#1f1f1f' }}
+            >
+              {profileData.job || originalProfileData.job}
+            </span>
             <Image
               src={isJobDropdownOpen ? UpIcon : DownIcon}
               alt="Dropdown Icon"
