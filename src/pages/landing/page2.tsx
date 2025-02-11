@@ -131,7 +131,7 @@ const NextButton = styled.button<{ active: boolean }>`
   color: #ffffff;
   background-color: ${(props) => (props.active ? '#5e52ff' : '#dde0e4')};
   border: none;
-  border-radius: 100px;
+  border-radius: 8px;
   cursor: ${(props) => (props.active ? 'pointer' : 'not-allowed')};
 `;
 
