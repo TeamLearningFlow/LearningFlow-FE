@@ -136,7 +136,7 @@ const SaveButton = styled.div<{ isValid: boolean }>`
   }
 `;
 
-const Note: React.FC<{ episodeId?: string }> = ({ episodeId }) => {
+const Note: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
   const [noteContent, setNoteContent] = useState<string>('');
   const [isNoteEmpty, setIsNoteEmpty] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(true);

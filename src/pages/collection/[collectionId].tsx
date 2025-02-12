@@ -164,7 +164,9 @@ export default function CollectionPage() {
         <>
           {collection && <CollectionInfo data={collection} />}
           <ContentWrapper>
-            {collection && <CollectionList classes={collection.resource} progress={0.5}/>}
+            {collection && (
+              <CollectionList classes={collection.resource} progress={0.5} />
+            )}
           </ContentWrapper>
         </>
       )}
