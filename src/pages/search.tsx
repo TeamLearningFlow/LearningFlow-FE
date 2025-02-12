@@ -25,8 +25,18 @@ const SearchPage: React.FC = () => {
   const router = useRouter();
   const { query } = router;
   const [searchResult, setSearchResult] = useState<[]>([]);
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
+    // query에 page가 없으면 기본값 1로 설정
+    if (!query.page) {
+      router.replace({
+        pathname: '/search',
+        query: { ...query, page: '1' },
+      });
+    }
+
     if (
       !query?.keyword &&
       !query?.interestFields &&
@@ -40,6 +50,26 @@ const SearchPage: React.FC = () => {
       fetchSearchResults();
     }
   }, [JSON.stringify(query)]);
+
+  useEffect(() => {
+    // page가 아닌 다른 query가 변경되면 page를 1로 리셋
+    const { page, ...otherQueries } = query; // page를 제외한 query만 추출
+
+    router.replace(
+      {
+        pathname: '/search',
+        query: { ...otherQueries, page: '1' }, // 다른 query 유지, page만 1로 설정
+      },
+      undefined,
+      { shallow: true },
+    );
+  }, [
+    query.keyword,
+    query.interestFields,
+    query.difficulties,
+    query.amounts,
+    query.preferMediaType,
+  ]);
 
   const fetchSearchResults = async () => {
     try {
@@ -60,6 +90,8 @@ const SearchPage: React.FC = () => {
       });
       const data = await response.data.result;
       setSearchResult(data.searchResults);
+      setTotalPages(data.totalPages);
+      setCurrentPage(data.currentPage);
     } catch (error) {
       console.error('검색 오류:', error);
     }
@@ -82,7 +114,12 @@ const SearchPage: React.FC = () => {
       <div>
         <CategoryList />
         <Filters />
-        <SearchResult result={searchResult} />
+        <SearchResult
+          result={searchResult}
+          totalPages={totalPages}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
         <Footer />
       </div>
     </SearchWrapper>

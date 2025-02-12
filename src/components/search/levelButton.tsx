@@ -104,7 +104,7 @@ const LevelButton: React.FC<DropdownProps & { selectedTags: string[] }> = ({
         const foundOption = difficultyOptions.find(
           (option) => option.label === label,
         );
-        return foundOption ? foundOption.id : null;
+        return foundOption ? foundOption.id : undefined;
       })
       .filter((id): id is number => id !== null);
 
@@ -116,7 +116,8 @@ const LevelButton: React.FC<DropdownProps & { selectedTags: string[] }> = ({
       pathname: '/search',
       query: {
         ...query,
-        difficulties: queryValues?.length > 0 ? queryValues?.join(',') : null,
+        difficulties:
+          queryValues?.length > 0 ? queryValues?.join(',') : undefined,
       },
     });
   };

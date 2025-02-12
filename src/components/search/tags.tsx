@@ -53,54 +53,68 @@ const Tags: React.FC<TagsProps> = ({ tags, onRemove }) => {
   const router = useRouter();
   const { query } = router;
 
-  const levelTags: string[] = []; // 난이도 태그
-  const amountTags: string[] = []; // 분량 태그
-  const preferTags: string = ''; // 매체 선호도 태그
+  const levelTags = tags
+    .filter((tag) => tag.type === '난이도')
+    .map((tag) => tag.label);
 
-  const checkedLevelIds = levelTags
-    .map((label) => {
-      const foundOption = difficultyOptions.find(
-        (option) => option.label === label,
-      );
-      return foundOption ? foundOption.id : null;
-    })
-    .filter((id): id is number => id !== null);
+  const amountTags = tags
+    .filter((tag) => tag.type === '분량')
+    .map((tag) => tag.label);
 
-  const checkedAmountValues = amountTags
-    .map((label) => {
-      const foundOption = amountOptions.find(
-        (option) => option.label === label,
-      );
-      return foundOption ? foundOption.queryValue : null;
-    })
-    .filter((queryValue): queryValue is string => queryValue !== null);
+  const preferTags = tags
+    .filter((tag) => tag.type === '매체 선호도')
+    .map((tag) => tag.label);
 
-  const foundOption = mediaOptions.find(
-    (option) => option.label === preferTags,
-  );
-  const selectedMediaType = foundOption ? foundOption.id : null;
-
-  const handleQuery = (type: string) => {
+  const handleQuery = (type: string, label: string) => {
     if (type === '난이도') {
-      handleDifficultiesQuery();
+      handleDifficultiesQuery(label);
     } else if (type === '분량') {
-      handleAmountsQuery();
+      handleAmountsQuery(label);
     } else if (type === '매체 선호도') {
-      handlePreferMediaTypeQuery();
+      handlePreferMediaTypeQuery(label);
     }
   };
-  const handleDifficultiesQuery = () => {
+
+  const handleDifficultiesQuery = (label: string) => {
+    const updatedOptions = levelTags.includes(label)
+      ? levelTags.filter((tag) => tag !== label)
+      : [...levelTags, label];
+
+    const checkedDifficultyIds = updatedOptions
+      .map((label) => {
+        const foundOption = difficultyOptions.find(
+          (option) => option.label === label,
+        );
+        return foundOption ? foundOption.id : undefined;
+      })
+      .filter((id): id is number => id !== null);
+
     router.push({
       pathname: '/search',
       query: {
         ...query,
         difficulties:
-          checkedLevelIds?.length > 0 ? checkedLevelIds?.join(',') : null,
+          checkedDifficultyIds?.length > 0
+            ? checkedDifficultyIds?.join(',')
+            : undefined,
       },
     });
   };
 
-  const handleAmountsQuery = () => {
+  const handleAmountsQuery = (label: string) => {
+    const updatedOptions = amountTags.includes(label)
+      ? amountTags.filter((tag) => tag !== label)
+      : [...amountTags, label];
+
+    const checkedAmountValues = updatedOptions
+      .map((label) => {
+        const foundOption = amountOptions.find(
+          (option) => option.label === label,
+        );
+        return foundOption ? foundOption.queryValue : undefined;
+      })
+      .filter((queryValue): queryValue is string => queryValue !== null);
+
     router.push({
       pathname: '/search',
       query: {
@@ -113,12 +127,16 @@ const Tags: React.FC<TagsProps> = ({ tags, onRemove }) => {
     });
   };
 
-  const handlePreferMediaTypeQuery = () => {
+  const handlePreferMediaTypeQuery = (label: string) => {
+    const updatedOptions = preferTags.includes(label)
+      ? preferTags.filter((tag) => tag !== label)
+      : [...preferTags, label];
+
     router.push({
       pathname: '/search',
       query: {
         ...query,
-        preferMediaType: selectedMediaType ? selectedMediaType : null,
+        preferMediaType: updatedOptions ? updatedOptions : undefined,
       },
     });
   };
@@ -131,7 +149,7 @@ const Tags: React.FC<TagsProps> = ({ tags, onRemove }) => {
           <button
             onClick={() => {
               onRemove(tag.type, tag.label);
-              handleQuery(tag.type);
+              handleQuery(tag.type, tag.label);
             }}
           >
             <Image src={CloseIcon} alt="closeicon" width={14} height={14} />
