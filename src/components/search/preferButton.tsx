@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import Polygon from '../../assets/polygon.svg';
+import { useRouter } from 'next/router';
+import { mediaOptions } from './filterOptions';
 
 // filters.tsx에 전달
 type DropdownProps = {
@@ -157,16 +159,19 @@ const PreferButton: React.FC<DropdownProps> = ({
   onTagChange,
   selectedTags,
 }) => {
+  const router = useRouter();
+  const { query } = router;
+
   const [isOpen, setIsOpen] = React.useState(false);
   const [sliderValue, setSliderValue] = React.useState(50);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const getTooltipText = (value: number) => {
-    if (value <= 20) return '텍스트만';
-    if (value <= 40) return '텍스트가 좋아요';
-    if (value <= 60) return '상관 없어요';
-    if (value <= 80) return '영상이 좋아요';
-    return '영상만';
+    if (value <= 20) return mediaOptions[0].label;
+    if (value <= 40) return mediaOptions[1].label;
+    if (value <= 60) return mediaOptions[2].label;
+    if (value <= 80) return mediaOptions[3].label;
+    return mediaOptions[4].label;
   };
 
   const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -174,13 +179,30 @@ const PreferButton: React.FC<DropdownProps> = ({
     setSliderValue(value);
 
     let selectedTag = null;
-    if (value <= 20) selectedTag = '텍스트만';
-    else if (value <= 40) selectedTag = '텍스트가 좋아요';
-    else if (value <= 60) selectedTag = '상관 없어요';
-    else if (value <= 80) selectedTag = '영상이 좋아요';
-    else selectedTag = '영상만';
+    if (value <= 20) selectedTag = mediaOptions[0].label;
+    else if (value <= 40) selectedTag = mediaOptions[1].label;
+    else if (value <= 60) selectedTag = mediaOptions[2].label;
+    else if (value <= 80) selectedTag = mediaOptions[3].label;
+    else selectedTag = mediaOptions[4].label;
 
     onTagChange(selectedTag ? [selectedTag] : []); // 부모 상태 업데이트
+
+    const foundOption = mediaOptions.find(
+      (option) => option.label === selectedTag,
+    );
+    const selectedOptionId = foundOption ? foundOption.id : null;
+
+    pushQuery(selectedOptionId);
+  };
+
+  const pushQuery = (queryValue: number | null) => {
+    router.push({
+      pathname: '/search',
+      query: {
+        ...query,
+        preferMediaType: queryValue ? queryValue : null,
+      },
+    });
   };
 
   // 외부 클릭 시 드롭다운 클로즈

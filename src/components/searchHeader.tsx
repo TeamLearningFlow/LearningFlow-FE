@@ -171,11 +171,11 @@ const Header: React.FC = () => {
   const profileIconRef = useRef<HTMLDivElement>(null);
 
   const router = useRouter();
+  const { query } = router;
 
   const handleFocus = () => {
     setSearchState('Active'); // 검색 박스 활성화
     // onSearchStateChange(true); 검색 페이지 활성화
-    router.push('/search'); // 검색 페이지 활성화 시 /search로 이동
   };
 
   const handleBlur = () => {
@@ -211,7 +211,14 @@ const Header: React.FC = () => {
 
   const handleSearch = () => {
     if (searchValue.trim() === '') return; // 빈 값 방지
-    router.push(`/search?keyword=${encodeURIComponent(searchValue)}`); // 쿼리스트링 적용
+
+    router.push({
+      pathname: '/search',
+      query: {
+        ...query,
+        keyword: searchValue.trim(),
+      },
+    });
   };
 
   // 사용자 아이콘 클릭 시 모달 토글

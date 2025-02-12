@@ -3,12 +3,8 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import ChevronDown from '../../assets/chevronDown.svg';
 import ChevronDownG from '../../assets/chevronDown_G.svg';
-
-// 타입 정의
-type Option = {
-  label: string;
-  description: string;
-};
+import { useRouter } from 'next/router';
+import { amountOptions } from './filterOptions';
 
 // filters.tsx에 전달
 type DropdownProps = {
@@ -91,20 +87,38 @@ const AmountButton: React.FC<DropdownProps & { selectedTags: string[] }> = ({
   onTagChange,
   selectedTags,
 }) => {
+  const router = useRouter();
+  const { query } = router;
+
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  const options: Option[] = [
-    { label: '짧아요', description: '1 - 5 회차' },
-    { label: '적당해요', description: '5 - 10 회차' },
-    { label: '많아요', description: '11 회차 이상' },
-  ];
 
   const toggleOption = (label: string) => {
     const updatedOptions = selectedTags.includes(label)
       ? selectedTags.filter((tag) => tag !== label)
       : [...selectedTags, label];
     onTagChange(updatedOptions); // 부모 상태 업데이트
+
+    const checkedOptionValues = updatedOptions
+      .map((label) => {
+        const foundOption = amountOptions.find(
+          (option) => option.label === label,
+        );
+        return foundOption ? foundOption.queryValue : null;
+      })
+      .filter((queryValue): queryValue is string => queryValue !== null);
+
+    pushQuery(checkedOptionValues);
+  };
+
+  const pushQuery = (queryValues: string[]) => {
+    router.push({
+      pathname: '/search',
+      query: {
+        ...query,
+        amounts: queryValues?.length > 0 ? queryValues?.join(',') : undefined,
+      },
+    });
   };
 
   // 외부 클릭 시 드롭다운 클로즈
@@ -136,7 +150,7 @@ const AmountButton: React.FC<DropdownProps & { selectedTags: string[] }> = ({
       </DropdownButton>
       {isOpen && (
         <DropdownMenu>
-          {options.map((option, index) => (
+          {amountOptions.map((option, index) => (
             <DropdownItem key={index}>
               <Checkbox
                 type="checkbox"
