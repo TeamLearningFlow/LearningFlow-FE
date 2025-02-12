@@ -28,7 +28,7 @@ const ContentWrapper = styled.div`
   flex-direction: column;
 `;
 
-interface CollectionData {
+export interface CollectionData {
   id: number;
   interestField: string;
   title: string;
@@ -105,7 +105,7 @@ export default function CollectionPage() {
     }
 
     const fetchCollection = async () => {
-      setLoading(true); // 🔥 API 요청 전에 로딩 상태 설정
+      setLoading(true);
 
       try {
         const response = await axios.get(
