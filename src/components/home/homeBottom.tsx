@@ -87,8 +87,7 @@ const CollectionList = styled.div`
   }
 `;
 
-const HomeCollection: React.FC<{ nickname: string }> = ({ nickname }) => {
-
+const HomeCollection = () => {
   return (
     <>
       <HomeCollectionWrapper>
@@ -102,8 +101,8 @@ const HomeCollection: React.FC<{ nickname: string }> = ({ nickname }) => {
             />
           </IconWrapper>
           <HeaderText>
-            <h1>‘서비스 기획’ 분야를 학습하고 계신 {nickname}님!</h1>
-            <p>{nickname}님 맞춤 컬렉션을 추천해 드릴게요</p>
+            <h1>‘서비스 기획’ 분야를 학습하고 계신 푸글 님!</h1>
+            <p>푸글 님 맞춤 컬렉션을 추천해 드릴게요</p>
           </HeaderText>
         </CollectionHeader>
         <CollectionList>

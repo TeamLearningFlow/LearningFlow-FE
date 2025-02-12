@@ -1,8 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import Image from 'next/image';
 import tmpIMG from '../../assets/collection-clock.png';
 import collectionInfoIMG from '../../assets/CollectionInfo.png';
+import yesBookMarked from '../../assets/yesBookMarked.svg';
+import noBookMarked from '../../assets/noBookMarked.svg';
 import NaverblogIcon from '../../assets/platformicon/naverblog_nostroke_ic.svg';
 import TistoryIcon from '../../assets/platformicon/tistory_nostroke_ic.svg';
 import VelogIcon from '../../assets/platformicon/velog_nostroke_ic.svg';
@@ -58,6 +61,44 @@ const interestFieldMap: Record<string, string> = {
 };
 
 const CollectionInfo: React.FC<CollectionInfoProps> = ({ data }) => {
+  const [isBookMarked, setIsBookMarked] = useState<boolean>(false);
+
+  const handleBookMarked = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('로그인이 필요합니다.');
+      console.log('토큰이 없습니다.');
+      return;
+    } else {
+      try {
+        const response = await axios.post(
+          `http://onboarding.p-e.kr:8080//collections/{collectionId}/likes`,
+          {
+            isBookMarked: !isBookMarked,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Refresh-Token': `${token}`, // 확인
+            },
+          },
+        );
+
+        if (response.status === 200) {
+          setIsBookMarked(!isBookMarked);
+          console.log('북마크 상태 변경: ', !isBookMarked);
+        }
+      } catch (err: any) {
+        console.log('Error: ', err.response?.data || err.message);
+        if (err.response?.data?.message) {
+          console.log('Error Message:', err.response.data.message);
+        } else {
+          console.log('북마크 등록 중 오류 발생');
+        }
+      }
+    }
+  };
+
   // 줄바꿈을 <br /> 태그로 변환하는 함수
   const renderTitleWithLineBreaks = (title: string) => {
     return title.split('\n').map((item, index) => (
@@ -89,6 +130,14 @@ const CollectionInfo: React.FC<CollectionInfoProps> = ({ data }) => {
             <Keyword>{data.keywords[0]}</Keyword>
             <Keyword>{data.keywords[1]}</Keyword>
           </KeywordBox>
+          <BookMarkedBox onClick={handleBookMarked}>
+            <BookMarkedIMG
+              src={isBookMarked ? yesBookMarked : noBookMarked}
+              alt={isBookMarked ? '북마크됨' : '북마크 안 됨'}
+              width={30}
+              height={30}
+            />
+          </BookMarkedBox>
           <TypeImgBox>
             <TypeImgList>
               <TypeImg src={YoutubeIcon} alt="youtube" index={0} />
@@ -387,6 +436,17 @@ const Keyword = styled.span`
     padding: 2px 5px;
     margin-right: 3px;
   }
+`;
+
+const BookMarkedBox = styled.div`
+  position: absolute;
+
+  // margin-left: 750px;
+  margin-left: 52vw;
+`;
+
+const BookMarkedIMG = styled(Image)`
+  cursor: pointer;
 `;
 
 const Title = styled.div`

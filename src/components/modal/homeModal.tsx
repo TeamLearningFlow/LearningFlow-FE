@@ -152,12 +152,7 @@ const HomeModal: React.FC<ModalProps> = ({ onClose, nickname }) => {
           <br />
           온보딩에 오신 것을 환영해요!
         </Title>
-        <Image
-            src={Icon}
-            alt="Icon"
-            width={210}
-            height={210}
-          />
+        <Image src={Icon} alt="Icon" width={210} height={210} />
         <Subtitle>
           필터링을 통해 꼭 맞는 컬렉션으로 <br />
           학습여정을 시작해요!
