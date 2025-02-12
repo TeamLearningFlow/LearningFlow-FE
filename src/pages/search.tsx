@@ -32,7 +32,8 @@ const SearchPage: React.FC = () => {
       !query?.interestFields &&
       !query?.difficulties &&
       !query?.amounts &&
-      !query?.preferMediaType
+      !query?.preferMediaType &&
+      !query?.page
     ) {
       fetchAllResults();
     } else {
@@ -50,6 +51,7 @@ const SearchPage: React.FC = () => {
           difficulties: query?.difficulties,
           amounts: query?.amounts,
           preferMediaType: query?.preferMediaType,
+          page: query?.page,
         }).filter(([_, value]) => value), // 빈 값('') 또는 undefined는 필터링
       );
 

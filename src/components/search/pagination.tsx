@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-// import axios from 'axios';
+import axios from 'axios';
 import prevpage from '../../assets/prevPage.svg';
 import prevpage_disabled from '../../assets/prevpage_disabled.svg';
 import nextpage from '../../assets/nextPage.svg';
 import nextpage_disabled from '../../assets/nextPage_disabled.svg';
+import { useRouter } from 'next/router';
 
 const PageButtonWrapper = styled.div`
   margin-bottom: 32px;
@@ -15,12 +16,12 @@ const PageButtonWrapper = styled.div`
   align-items: center;
 `;
 
-const PageButton = styled.button<{ isClicked?: boolean }>`
+const PageButton = styled.button<{ isClicked?: boolean; disabled: boolean }>`
   height: 32px;
   width: 32px;
   background-color: ${(props) => (props.isClicked ? '#5E52FF' : '#FAFAFC')};
-  color: ${(props) => (props.isClicked ? '#fff' : '#4F5357')};
-
+  color: ${(props) =>
+    props.disabled ? '#DDE0E4' : props.isClicked ? '#fff' : '#4F5357'};
   cursor: pointer;
   border-radius: 4px;
   border: 1px solid #dde0e4;
@@ -46,6 +47,9 @@ const PageButton = styled.button<{ isClicked?: boolean }>`
 const MovingPageButton = styled(PageButton)``;
 
 const Pagination: React.FC = () => {
+  const router = useRouter();
+  const { query } = router;
+
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -55,12 +59,22 @@ const Pagination: React.FC = () => {
 
   const fetchTotalPageData = async () => {
     try {
-      // const response = await axios.get(`http://localhost:3000/result`);
-      // console.log('total page:', response.data.totalPages);
-      // setTotalPages(response.data.totalPages);
+      const response = await axios.get(`http://onboarding.p-e.kr:8080/search`);
+      const data = await response.data.result;
+      setTotalPages(data.totalPages);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
+  };
+
+  const pushQuery = (queryValue: number | null) => {
+    router.push({
+      pathname: '/search',
+      query: {
+        ...query,
+        page: queryValue ? queryValue : null,
+      },
+    });
   };
 
   const pagesPerView = 3; // 한 번에 보여줄 페이지 수
@@ -90,7 +104,13 @@ const Pagination: React.FC = () => {
   return (
     <>
       <PageButtonWrapper>
-        <MovingPageButton onClick={handlePrevPage} disabled={currentPage === 1}>
+        <MovingPageButton
+          onClick={() => {
+            handlePrevPage();
+            pushQuery(currentPage - 1);
+          }}
+          disabled={currentPage === 1}
+        >
           <Image src={prevpageicon} alt={prevpageAltText} />
         </MovingPageButton>
 
@@ -99,15 +119,21 @@ const Pagination: React.FC = () => {
             key={startPage + index}
             onClick={() => {
               setCurrentPage(startPage + index);
+              pushQuery(startPage + index);
+              window.scrollTo(0, 0);
             }}
             isClicked={currentPage === startPage + index}
+            disabled={startPage + index > totalPages}
           >
             {startPage + index}
           </PageButton>
         ))}
 
         <MovingPageButton
-          onClick={handleNextPage}
+          onClick={() => {
+            handleNextPage();
+            pushQuery(currentPage + 1);
+          }}
           disabled={currentPage === totalPages}
         >
           <Image src={nextpageicon} alt={nextpageAltText} />
