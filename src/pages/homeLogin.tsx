@@ -24,9 +24,19 @@ const Main = styled.div`
 
 const HomeLogin: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [nickname, setNickname] = useState('');
 
   useEffect(() => {
-    // 로컬 스토리지에서 모달 표시 여부 확인
+    // 닉네임 연동
+    const storedNickname = localStorage.getItem('nickname');
+
+    if (storedNickname) {
+      setNickname(storedNickname);
+    }
+
+    console.log('닉네임:', storedNickname);
+
+    // 모달 표시 여부 확인
     const showModal = localStorage.getItem('showHomeModal');
     if (showModal === 'true') {
       setIsModalOpen(true);
@@ -45,7 +55,9 @@ const HomeLogin: React.FC = () => {
       <RecentCollection />
       <HomeCollection />
       <Wrapper>
-        {isModalOpen && <HomeModal onClose={handleCloseModal} />}
+        {isModalOpen && (
+          <HomeModal onClose={handleCloseModal} nickname={nickname} />
+        )}
         {!isModalOpen && <Main></Main>}
       </Wrapper>
       <Footer />

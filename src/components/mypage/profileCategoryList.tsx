@@ -163,17 +163,33 @@ const ProfileCategoryList = ({
     { id: 12, image: WorkIcon, imageW: WorkIconW, text: '업무생산성' },
   ];
 
+  const categoryMap: { [key: string]: string } = {
+    웹개발: 'WEB_DEVELOPMENT',
+    앱개발: 'APP_DEVELOPMENT',
+    컴퓨터언어: 'PROGRAMMING_LANGUAGE',
+    딥러닝: 'DEEP_LEARNING',
+    통계: 'STATISTICS',
+    데이터분석: 'DATA_ANALYSIS',
+    'UX/UI': 'UI_UX',
+    기획: 'PLANNING',
+    외국어: 'FOREIGN_LANGUAGE',
+    취업: 'CAREER',
+    업무생산성: 'BUSINESS_PRODUCTIVITY',
+  };
+
   const handleClick = (categoryText: string) => {
-    if (selectedCategories.includes(categoryText)) {
+    const mappedKey = categoryMap[categoryText];
+
+    if (selectedCategories.includes(mappedKey)) {
       // 이미 선택된 경우 선택 해제
       const updatedCategories = selectedCategories.filter(
-        (text) => text !== categoryText,
+        (text) => text !== mappedKey,
       );
       onChange(updatedCategories);
     } else {
       // 새로운 카테고리 최대 3개까지 가능
       if (selectedCategories.length < 3) {
-        onChange([...selectedCategories, categoryText]);
+        onChange([...selectedCategories, mappedKey]);
       }
     }
   };

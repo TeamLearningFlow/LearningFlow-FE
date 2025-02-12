@@ -131,7 +131,7 @@ const NextButton = styled.button<{ active: boolean }>`
   color: #ffffff;
   background-color: ${(props) => (props.active ? '#5e52ff' : '#dde0e4')};
   border: none;
-  border-radius: 100px;
+  border-radius: 8px;
   cursor: ${(props) => (props.active ? 'pointer' : 'not-allowed')};
 `;
 
@@ -171,9 +171,10 @@ const CategoryItem = ({
 };
 
 const Page2: React.FC<{
+  nickname: string;
   onPrev: () => void;
   onNext: (interestFields: string[]) => void;
-}> = ({ onPrev, onNext }) => {
+}> = ({ nickname, onPrev, onNext }) => {
   const [activeCategories, setActiveCategories] = useState<number[]>([]); // 활성화된 카테고리 ID 추적
 
   const categories = [
@@ -270,7 +271,7 @@ const Page2: React.FC<{
 
   return (
     <Content>
-      <Title>00님의 관심 분야를 알려주세요</Title>
+      <Title>{nickname}님의 관심 분야를 알려주세요</Title>
       <SubTitle>최대 3개 관심분야에 어울리는 컬렉션을 소개해드릴게요</SubTitle>
       <CategoryListWrapper>
         {categories.map((category) => (

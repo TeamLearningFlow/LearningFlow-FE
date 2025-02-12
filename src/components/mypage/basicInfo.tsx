@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+// import axios from 'axios';
 import styled from 'styled-components';
 import Image from 'next/image';
 import Tooltip from '../../assets/emailTooltip.svg';
@@ -155,7 +156,7 @@ const TooltipWrapper = styled.div`
 const TooltipBox = styled.div`
   visibility: hidden;
   width: 180px;
-  background-color: rgba(50, 53, 56, 1);
+  background-color: #4f5357;
   color: #ffffff;
   font-size: 12px;
   text-align: center;
@@ -169,13 +170,17 @@ const TooltipBox = styled.div`
   z-index: 10;
 `;
 
-const BasicInfo = () => {
+interface BasicInfoProps {
+  email: string;
+}
+
+const BasicInfo: React.FC<BasicInfoProps> = ({ email }) => {
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [isEditingPassword, setIsEditingPassword] = useState(false);
-  const [originalEmail, setOriginalEmail] = useState('onboarding@gmail.com'); // 이메일 예시
-  const [originalPassword, setOriginalPassword] = useState('Abcd1234%&'); // 비밀번호 예시
-  const [email, setEmail] = useState(originalEmail);
-  const [password, setPassword] = useState(originalPassword);
+  const [originalEmail, setOriginalEmail] = useState(''); // 이메일
+  const [editedEmail, setEditedEmail] = useState(email);
+  // const [originalPassword, setOriginalPassword] = useState(''); // 비밀번호
+  const [password, setPassword] = useState("**********");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [passwordError, setPasswordError] = useState('');
@@ -188,7 +193,7 @@ const BasicInfo = () => {
 
   const validateEmail = (value: string) => {
     const emailRegex =
-      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|org|net|edu|gov|io|ai)$/;
+      /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)/;
     return emailRegex.test(value);
   };
 
@@ -205,7 +210,7 @@ const BasicInfo = () => {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
+    setEditedEmail(e.target.value);
     setIsChecked(false);
     setError('');
     setIsValid(true);
@@ -247,17 +252,18 @@ const BasicInfo = () => {
   };
 
   const handleSaveEmail = () => {
-    if (validateEmail(email)) {
-      setOriginalEmail(email); // 변경된 이메일 저장
+    if (validateEmail(editedEmail)) {
+      setOriginalEmail(editedEmail); // 변경된 이메일 저장
       setIsEditingEmail(false);
     } else {
       setError('올바른 이메일 형식이 아닙니다');
+      setIsValid(false);
     }
   };
 
   const handleSavePassword = () => {
     if (validatePassword(password)) {
-      setOriginalPassword(password); // 변경된 비밀번호 저장
+      // setOriginalPassword(password); // 변경된 비밀번호 저장
       setIsEditingPassword(false);
     } else {
       setPasswordError(
@@ -267,12 +273,12 @@ const BasicInfo = () => {
   };
 
   const handleCancelEmail = () => {
-    setEmail(originalEmail);
+    setEditedEmail(originalEmail);
     setIsEditingEmail(false);
   };
 
   const handleCancelPassword = () => {
-    setPassword(originalPassword);
+    setPassword('**********');
     setIsEditingPassword(false);
   };
 
@@ -374,7 +380,7 @@ const BasicInfo = () => {
           </InputContainer>
         ) : (
           <>
-            <Value>**********</Value>
+            <Value>{password}</Value>
             {!isEditingEmail && (
               <SetButton onClick={() => setIsEditingPassword(true)}>
                 설정

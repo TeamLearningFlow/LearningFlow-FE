@@ -73,7 +73,9 @@ const LandingPage: React.FC = () => {
 
       console.log('회원가입 성공:', response.data);
       alert('회원가입이 완료되었습니다.');
+      localStorage.setItem('nickname', nickname); // 닉네임 저장
       localStorage.setItem('showHomeModal', 'true'); // 모달 표시 여부 결정
+
       router.push('/home'); // 회원가입 완료 후 홈페이지로 이동
     } catch (error) {
       console.error('회원가입 실패:', error);
@@ -96,6 +98,7 @@ const LandingPage: React.FC = () => {
       )}
       {currentPage === 2 && (
         <Page2
+          nickname={nickname}
           onPrev={() => setCurrentPage(1)}
           onNext={(selectedInterests) => {
             setInterestFields(selectedInterests);
@@ -105,6 +108,7 @@ const LandingPage: React.FC = () => {
       )}
       {currentPage === 3 && (
         <Page3
+          nickname={nickname}
           onPrev={() => setCurrentPage(2)}
           onNext={(selectedPreferType) => {
             setPreferType(selectedPreferType); // preferType 업데이트

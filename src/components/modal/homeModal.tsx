@@ -96,9 +96,10 @@ const Confetti = styled(motion.div)`
 
 interface ModalProps {
   onClose: () => void;
+  nickname: string;
 }
 
-const HomeModal: React.FC<ModalProps> = ({ onClose }) => {
+const HomeModal: React.FC<ModalProps> = ({ onClose, nickname }) => {
   const confettiArray = [
     Confetti1,
     Confetti2,
@@ -147,7 +148,7 @@ const HomeModal: React.FC<ModalProps> = ({ onClose }) => {
       <ModalOverlay onClick={onClose} />
       <ModalContainer>
         <Title>
-          00님,
+          {nickname}님,
           <br />
           온보딩에 오신 것을 환영해요!
         </Title>
