@@ -181,6 +181,9 @@ const LoginPage: React.FC = () => {
 
       if (response.status === 200 && token) {
         localStorage.setItem('token', token); // 토큰을 로컬 스토리지에 저장
+        
+        const userName = response.data.result.name;
+        localStorage.setItem('userName', userName);
         // localStorage.setItem('showHomeModal', 'true');
         
         context.actions.setIsLoggedIn(true); // 로그인 시

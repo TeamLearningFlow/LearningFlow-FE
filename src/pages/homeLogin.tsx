@@ -28,8 +28,8 @@ const HomeLogin: React.FC = () => {
 
   useEffect(() => {
     // 닉네임 연동
-    const storedNickname = localStorage.getItem('nickname');
-
+    const storedNickname = localStorage.getItem('userName');
+    
     if (storedNickname) {
       setNickname(storedNickname);
     }
@@ -51,7 +51,7 @@ const HomeLogin: React.FC = () => {
       <Header />
       <Banner />
       <RecentCollection />
-      <HomeCollection />
+      <HomeCollection nickname={nickname}/>
       <Wrapper>
         {isModalOpen && (
           <HomeModal onClose={handleCloseModal} nickname={nickname} />
