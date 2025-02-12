@@ -115,11 +115,11 @@ const InfoValue = styled.span`
   color: #000;
 `;
 
-const Input = styled.input`
+const Input = styled.input<{ hasError?: boolean }>`
   width: 82.5%;
   height: 45px;
   padding: 10px 18px;
-  border: 1px solid #323538;
+  border: 1px solid ${(props) => (props.hasError ? '#ec2d30' : '#323538')};
   border-radius: 6px;
   font-size: 14px;
   font-weight: 400;
@@ -128,10 +128,11 @@ const Input = styled.input`
   color: #1f1f1f;
 
   &:focus {
-    border-color: #5e52ff;
-    box-shadow:
-      1px 1px 1px 0px rgba(94, 82, 255, 0.3),
-      -1px -1px 1px 0px rgba(94, 82, 255, 0.3);
+    border-color: ${(props) => (props.hasError ? '#ec2d30' : '#5e52ff')};
+    box-shadow: ${(props) =>
+      props.hasError
+        ? 'none'
+        : '1px 1px 1px 0px rgba(94, 82, 255, 0.3), -1px -1px 1px 0px rgba(94, 82, 255, 0.3)'};
     outline: none;
   }
 
@@ -618,7 +619,7 @@ const MyProfile = ({
                     확장자
                   </span>
                   <span>
-                    <Image src={CheckIcon} alt="check" /> 8MB 이하의 이미지
+                    <Image src={CheckIcon} alt="check" /> 5MB 이하의 이미지
                   </span>
                 </CheckList>
               </ChangeContainerImage>
@@ -679,6 +680,7 @@ const MyProfile = ({
             value={profileData.nickname}
             onChange={handleInputChange}
             placeholder={originalProfileData.nickname}
+            hasError={nicknameError !== ''}
           />
         ) : (
           <InfoValue>{profileData.nickname}</InfoValue>

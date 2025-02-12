@@ -14,7 +14,7 @@ const MiddleWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 1080px;
+  height: 1000px;
   background-color: #fff;
   position: relative;
   overflow: hidden;
