@@ -1,9 +1,90 @@
 import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
+import { useRouter } from "next/router";
+import axios from "axios";
 import PlayButton from '../../assets/playButton.svg';
-import YoutubeIcon from '../../assets/platformicon/youtube_ic.svg';
+import Youtube from '../../assets/platformicon/youtube_ic.svg';
+import Blog from '../../assets/platformicon/naverblog_ic.svg';
+import Tistory from '../../assets/platformicon/tistory_ic.svg';
+import Velog from '../../assets/platformicon/velog_ic.svg';
 import DefaultRadio from '../../assets/defaultRadio.svg';
+
+interface ClassIndexProps {
+  classData: {
+    episodeName: string;
+    url: string;
+    resourceSource: string;
+    episodeNumber: number;
+  };
+}
+
+const NextClassIndex: React.FC<ClassIndexProps> = ({ classData }) =>  {
+  const router = useRouter();
+  
+  const handleClick = async () => {
+    const episodeId = classData.episodeNumber
+
+    try {
+      const response = await axios.get(`/resources/${episodeId}/youtube`);
+      if (response.status === 200) {
+        const data = response.data;
+        router.push({
+          pathname: `/learn/${episodeId}`, // LearnPage로 이동
+          query: { data: JSON.stringify(data) }, // 응답 데이터를 쿼리로 전달
+        });
+      }
+    } catch (error) {
+      console.error("강의 불러오기 실패:", error);
+    }
+  };
+
+  const getPlatformIcon = () => {
+    switch (classData.resourceSource) {
+      case 'youtube':
+        return <Image src={Youtube} alt="YouTube" fill style={{ objectFit: "contain" }} />;
+      case 'naverBlog':
+        return <Image src={Blog} alt="Naver Blog" fill style={{ objectFit: "contain" }} />;
+      case 'tistory':
+        return <Image src={Tistory} alt="Tistory" fill style={{ objectFit: "contain" }} />;
+      case 'velog':
+        return <Image src={Velog} alt="Velog" fill style={{ objectFit: "contain" }} />;
+      default:
+        return null;
+    }
+  };
+  
+  return (
+      <ComponentWrapper>
+      <RadioWrapper>
+        <IndexIcon>
+          <Image
+            src={DefaultRadio}
+            alt="completed-icon"
+            fill
+            style={{ objectFit: 'contain' }}
+          />
+        </IndexIcon>
+      </RadioWrapper>
+        <IndexWrapper>
+          <PlatformIcon>
+            {getPlatformIcon()}
+          </PlatformIcon>
+          <IndexContainer>
+            <OrderBox>{classData.episodeNumber}회차</OrderBox>
+            <TitleBox>{classData.episodeName}</TitleBox>
+          </IndexContainer>
+          <ButtonWrapper onClick={handleClick}>
+            <Image src={PlayButton} alt="Next Play Button" fill style={{ objectFit: 'contain' }} />
+          </ButtonWrapper>
+        </IndexWrapper>
+      </ComponentWrapper>
+  );
+};
+
+export default NextClassIndex;
+
+
 
 const ComponentWrapper = styled.div`
   display: flex;
@@ -242,33 +323,3 @@ const TitleBox = styled.div`
   }
 `;
 
-const NextClassIndex: React.FC = () => {
-  return (
-      <ComponentWrapper>
-      <RadioWrapper>
-        <IndexIcon>
-          <Image
-            src={DefaultRadio}
-            alt="completed-icon"
-            fill
-            style={{ objectFit: 'contain' }}
-          />
-        </IndexIcon>
-      </RadioWrapper>
-        <IndexWrapper>
-          <PlatformIcon>
-            <Image src={YoutubeIcon} alt="platform-icon" fill style={{ objectFit: 'contain' }} />
-          </PlatformIcon>
-          <IndexContainer>
-            <OrderBox>3회차</OrderBox>
-            <TitleBox>브랜치 포스터 "와이어프레임을 활용하는 이유"</TitleBox>
-          </IndexContainer>
-          <ButtonWrapper>
-            <Image src={PlayButton} alt="Next Play Button" fill style={{ objectFit: 'contain' }} />
-          </ButtonWrapper>
-        </IndexWrapper>
-      </ComponentWrapper>
-  );
-};
-
-export default NextClassIndex;

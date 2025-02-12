@@ -1,11 +1,109 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
+import { useRouter } from "next/router";
+import axios from "axios";
 import CurrentPlayButton from '../../assets/currentPlayButton.svg';
 import HoverPlayButton from '../../assets/hoverPlayButton.svg';
 import ActiveRadio from '../../assets/activeRadio.svg';
 import YoutubeHoverIcon from '../../assets/platformicon/youtube_ic.svg';
+import BlogHoverIcon from '../../assets/platformicon/naverblog_ic.svg';
+import VelogHoverIcon from '../../assets/platformicon/velog_ic.svg';
+import TistoryHoverIcon from '../../assets/platformicon/tistory_ic.svg';
 import YoutubeActiveIcon from '../../assets/platformicon/youtube_active_ic.svg';
+import BlogActiveIcon from '../../assets/platformicon/naverblog_active_ic.svg';
+import VelogActiveIcon from '../../assets/platformicon/velog_active_ic.svg';
+import TistoryActiveIcon from '../../assets/platformicon/tistory_active_ic.svg';
+
+interface ClassIndexProps {
+  classData: {
+    episodeName: string;
+    url: string;
+    resourceSource: "youtube" | "naverBlog" | "tistory" | "velog";
+    episodeNumber: number;
+  };
+}
+
+const NowPlaying: React.FC<ClassIndexProps> = ({ classData }) => {
+  const router = useRouter();
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleClick = async () => {
+    const episodeId = classData.episodeNumber
+
+    try {
+      const response = await axios.get(`/resources/${episodeId}/youtube`);
+      if (response.status === 200) {
+        const data = response.data;
+        router.push({
+          pathname: `/learn/${episodeId}`, // LearnPage로 이동
+          query: { data: JSON.stringify(data) }, // 응답 데이터를 쿼리로 전달
+        });
+      }
+    } catch (error) {
+      console.error("강의 불러오기 실패:", error);
+    }
+  };
+
+  const getPlatformIcon = () => {
+    const activeIcons = {
+      youtube: YoutubeActiveIcon,
+      naverBlog: BlogActiveIcon,
+      tistory: TistoryActiveIcon,
+      velog: VelogActiveIcon,
+    };
+
+    const hoverIcons = {
+      youtube: YoutubeHoverIcon,
+      naverBlog: BlogHoverIcon,
+      tistory: TistoryHoverIcon,
+      velog: VelogHoverIcon,
+    };
+
+    const platform = classData.resourceSource;
+    const icon = isHovered ? hoverIcons[platform] : activeIcons[platform];
+    
+    return icon ? <Image src={icon} alt={platform} fill style={{ objectFit: "contain" }} /> : null;
+  };
+
+  return (
+    <ComponentWrapper>
+      <RadioWrapper>
+        <IndexIcon>
+          <Image
+            src={ActiveRadio}
+            alt="Active-icon"
+            fill
+            style={{ objectFit: 'contain' }}
+          />
+        </IndexIcon>
+      </RadioWrapper>
+      <IndexWrapper
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        <PlatformIcon>
+          {getPlatformIcon()}
+        </PlatformIcon>
+        <IndexContainer>
+          <OrderBox>{classData.episodeNumber}회차</OrderBox>
+          <TitleBox>{classData.episodeName}</TitleBox>
+        </IndexContainer>
+        <ButtonWrapper onClick={handleClick}>
+          <Image
+            src={isHovered ? HoverPlayButton : CurrentPlayButton}
+            alt="Current Play Button"
+            fill
+            style={{ objectFit: 'contain' }}
+          />
+        </ButtonWrapper>
+      </IndexWrapper>
+    </ComponentWrapper>
+  );
+};
+
+export default NowPlaying;
+
 
 const ComponentWrapper = styled.div`
   display: flex;
@@ -248,49 +346,3 @@ const TitleBox = styled.div`
     max-width: 170px;
   }
 `;
-
-const NowPlaying: React.FC = () => {
-  const [isHovered, setIsHovered] = useState(false);
-
-  return (
-    <ComponentWrapper>
-      <RadioWrapper>
-        <IndexIcon>
-          <Image
-            src={ActiveRadio}
-            alt="Active-icon"
-            fill
-            style={{ objectFit: 'contain' }}
-          />
-        </IndexIcon>
-      </RadioWrapper>
-      <IndexWrapper
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        <PlatformIcon>
-          <Image
-            src={isHovered ? YoutubeHoverIcon : YoutubeActiveIcon}
-            alt="platform-icon"
-            fill
-            style={{ objectFit: 'contain' }}
-          />
-        </PlatformIcon>
-        <IndexContainer>
-          <OrderBox>3회차</OrderBox>
-          <TitleBox>브랜치 포스터 "와이어프레임을 활용하는 이유"</TitleBox>
-        </IndexContainer>
-        <ButtonWrapper>
-          <Image
-            src={isHovered ? HoverPlayButton : CurrentPlayButton}
-            alt="Current Play Button"
-            fill
-            style={{ objectFit: 'contain' }}
-          />
-        </ButtonWrapper>
-      </IndexWrapper>
-    </ComponentWrapper>
-  );
-};
-
-export default NowPlaying;

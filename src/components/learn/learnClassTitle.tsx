@@ -104,11 +104,13 @@ const EffectUpWrapper = styled.div<{ isClicked: boolean, isCompleted: boolean }>
   flex-direction: column;
   position: absolute;
   bottom: 29.7%;
-  right: 41%;
+  right: 33%;
   width: 20px;
   height: 20px;
   gap: 50px;
   z-index: 20;
+  // opacity: 1; /* 항상 보이도록 설정 */
+  // visibility: visible; /* 항상 보이도록 설정 */
   opacity: ${(props) => (props.isCompleted ? 0 : props.isClicked ? 1 : 0)};
   transition: opacity 1s ease;
 
@@ -128,11 +130,13 @@ const EffectDownWrapper = styled.div<{ isClicked: boolean, isCompleted: boolean 
   flex-direction: column;
   position: absolute;
   bottom: 23.5%;
-  right: 37.5%;
+  right: 29.5%;
   width: 20px;
   height: 20px;
   gap: 50px;
   z-index: 20;
+  // opacity: 1; /* 항상 보이도록 설정 */
+  // visibility: visible; /* 항상 보이도록 설정 */
   opacity: ${(props) => (props.isCompleted ? 0 : props.isClicked ? 1 : 0)};
   transition: opacity 1s ease;
 

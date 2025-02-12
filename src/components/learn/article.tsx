@@ -116,6 +116,7 @@ const Article: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
 
   const saveProgress = async (resourceType: "VIDEO" | "TEXT", progress: number) => {
     try {
+      console.log("진도 저장 시작");
       await axios.post(
         `http://onboarding.p-e.kr:8080/resources/${episodeId}/save-progress`,
         { resourceType, progress },
@@ -136,7 +137,8 @@ const Article: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
       const scrollTop = articleWrapper.scrollTop;
       const scrollHeight = articleWrapper.scrollHeight - articleWrapper.clientHeight;
       if (scrollHeight > 0) {
-        saveProgress("TEXT", scrollTop / scrollHeight);
+        const progress = scrollTop / scrollHeight;
+        saveProgress("TEXT", progress);
       }
     };
 
