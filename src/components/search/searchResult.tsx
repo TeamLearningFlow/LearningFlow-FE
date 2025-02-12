@@ -5,6 +5,7 @@ import Pagination from './pagination';
 import NoResult from './noResult';
 
 export type SearchResult = {
+  collectionId: number;
   interestField: string;
   keywords: string[];
   title: string;
