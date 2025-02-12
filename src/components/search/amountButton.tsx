@@ -104,7 +104,7 @@ const AmountButton: React.FC<DropdownProps & { selectedTags: string[] }> = ({
         const foundOption = amountOptions.find(
           (option) => option.label === label,
         );
-        return foundOption ? foundOption.queryValue : null;
+        return foundOption ? foundOption.queryValue : undefined;
       })
       .filter((queryValue): queryValue is string => queryValue !== null);
 

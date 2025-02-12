@@ -190,17 +190,17 @@ const PreferButton: React.FC<DropdownProps> = ({
     const foundOption = mediaOptions.find(
       (option) => option.label === selectedTag,
     );
-    const selectedOptionId = foundOption ? foundOption.id : null;
+    const selectedOptionId = foundOption ? foundOption.id : undefined;
 
     pushQuery(selectedOptionId);
   };
 
-  const pushQuery = (queryValue: number | null) => {
+  const pushQuery = (queryValue: number | undefined) => {
     router.push({
       pathname: '/search',
       query: {
         ...query,
-        preferMediaType: queryValue ? queryValue : null,
+        preferMediaType: queryValue ? queryValue : undefined,
       },
     });
   };

@@ -22,7 +22,17 @@ export type SearchResult = {
   }[];
 };
 
-const SearchResult = ({ result }: { result: SearchResult[] }) => {
+const SearchResult = ({
+  result,
+  totalPages,
+  currentPage,
+  setCurrentPage,
+}: {
+  result: SearchResult[];
+  totalPages: number;
+  currentPage: number;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+}) => {
   if (result.length === 0) {
     return <NoResult />;
   }
@@ -34,7 +44,11 @@ const SearchResult = ({ result }: { result: SearchResult[] }) => {
           <BoardingPass key={index} data={item} showHoverCollection={true} />
         ))}
       </BoardingPassList>
-      <Pagination />
+      <Pagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />
     </>
   );
 };

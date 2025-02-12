@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import axios from 'axios';
 import prevpage from '../../assets/prevPage.svg';
 import prevpage_disabled from '../../assets/prevpage_disabled.svg';
 import nextpage from '../../assets/nextPage.svg';
@@ -46,26 +45,17 @@ const PageButton = styled.button<{ isClicked?: boolean; disabled: boolean }>`
 
 const MovingPageButton = styled(PageButton)``;
 
-const Pagination: React.FC = () => {
+const Pagination = ({
+  totalPages,
+  currentPage,
+  setCurrentPage,
+}: {
+  totalPages: number;
+  currentPage: number;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+}) => {
   const router = useRouter();
   const { query } = router;
-
-  const [totalPages, setTotalPages] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
-
-  useEffect(() => {
-    fetchTotalPageData();
-  }, []);
-
-  const fetchTotalPageData = async () => {
-    try {
-      const response = await axios.get(`http://onboarding.p-e.kr:8080/search`);
-      const data = await response.data.result;
-      setTotalPages(data.totalPages);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
 
   const pushQuery = (queryValue: number | null) => {
     router.push({
