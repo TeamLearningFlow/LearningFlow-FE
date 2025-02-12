@@ -76,7 +76,7 @@ const BottomWrapper = styled.div`
 
 const LearnPage: React.FC = () => {
   // const { episodeId } = useParams<{ episodeId: number }>();
-  const episodeId = 2;
+  const episodeId = 34;
   const [type, setType] = useState<'youtube' | 'blog' | null>(null);
   const [loading, setLoading] = useState(false);
 
