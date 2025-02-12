@@ -27,7 +27,7 @@ const HeaderWrapper = styled.header`
   }
 
   @media (max-width: 480px) {
-    padding: 0 2.5%; /* 폰 화면 */
+    padding: 0 1%; /* 폰 화면 */
   }
 `;
 
@@ -58,8 +58,9 @@ const SearchWrapper = styled.div`
 
   @media (max-width: 480px) {
     flex-grow: 0;
-    max-width: 100px;
-    margin: 0 1%;
+    max-width: 200px;
+    min-width: 50px;
+    margin: 0 3%;
     height: 37px;
     padding: 10px;
   }

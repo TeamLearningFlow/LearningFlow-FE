@@ -13,8 +13,9 @@ const TopWrapper = styled.div`
   align-items: center;
   justify-content: center;
   height: 1020px;
-  background-color: #fafafc;
+  background-color: #fff;
   position: relative;
+  overflow-x: hidden;
 
   @media (max-width: 1024px) {
     height: 900px;

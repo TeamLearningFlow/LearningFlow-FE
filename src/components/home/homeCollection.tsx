@@ -37,7 +37,7 @@ const HeaderText = styled.div`
     font-feature-settings:
       'liga' off,
       'clig' off;
-    font-size: 19px;
+    font-size: 20px;
     font-weight: 500;
     line-height: 150%; /* 36px */
     letter-spacing: -0.48px;
