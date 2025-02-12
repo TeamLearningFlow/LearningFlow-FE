@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import styled from 'styled-components';
-import Header from '../../components/searchHeader';
+import Header from '../../components/header';
 import CategoryList from '../../components/search/categoryList';
 import BoardingPass from '../../components/search/boardingPass';
 import Filters from '../../components/search/filters';

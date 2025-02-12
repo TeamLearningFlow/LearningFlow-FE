@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import Header from '../components/searchHeader';
+import Header from '../components/header';
 import Banner from '../components/home/homeBanner';
 import Footer from '../components/homeFooter';
 import HomeCollection from '../components/home/homeCollection';
@@ -33,8 +33,6 @@ const HomeLogin: React.FC = () => {
     if (storedNickname) {
       setNickname(storedNickname);
     }
-
-    console.log('닉네임:', storedNickname);
 
     // 모달 표시 여부 확인
     const showModal = localStorage.getItem('showHomeModal');

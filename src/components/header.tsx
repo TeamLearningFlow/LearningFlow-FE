@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
@@ -6,6 +6,8 @@ import Image from 'next/image';
 
 import LogoDark from '../assets/logo_dark.png';
 import Search from '../assets/searchicon.svg';
+import Guest from '../assets/Guest.svg';
+import UserModal from './modal/userModal';
 
 const HeaderWrapper = styled.header`
   display: flex;
@@ -27,7 +29,7 @@ const HeaderWrapper = styled.header`
   }
 
   @media (max-width: 480px) {
-    padding: 0 2.5%; /* 폰 화면 */
+    padding: 0 1%; /* 폰 화면 */
   }
 `;
 
@@ -80,7 +82,6 @@ const Input = styled.input`
 
   &::placeholder {
     color: #bbc0c5;
-    text-overflow: ellipsis;
   }
 
   /* 반응형 설정 */
@@ -93,39 +94,75 @@ const SearchIcon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 `;
 
-const LoginButton = styled.button`
-  height: 38px;
-  width: 65px;
-  background-color: #5e52ff;
-  color: #ffffff;
-  border: none;
-  padding: 10px 13px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 10px;
-  letter-spacing: -0.36px;
-  justify-content: center;
+const ProfileIcon = styled.div`
+  display: flex;
   align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+`;
 
-  @media (max-width: 480px) {
-    height: 37px;
-    width: 63px;
-    font-size: 14px;
-    padding: 10px 10px;
+const ProfileUser = styled.div`
+  position: absolute;
+  display: flex;
+  // width: 100%;
+  // width: 30%;
+  // justify-content: flex-end;
+  margin-right: 10%;
+  top: 60px;
+  right: 0px;
+  margin-top: 7px;
+
+  z-index: 200;
+
+  @media (max-width: 650px) {
+    margin-right: 1%;
   }
 `;
 
-const NotLoginHeader: React.FC = () => {
+const Header: React.FC = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const profileIconRef = useRef<HTMLDivElement>(null);
+
   const router = useRouter();
+
+  // 사용자 아이콘 클릭 시 모달 토글
+  const toggleModal = () => {
+    setIsModalOpen((prev) => !prev);
+  };
 
   // 검색창 클릭 시 검색 페이지로 이동
   const handleSearchClick = () => {
     router.push('/search');
   };
+
+  // 모달 외부 클릭 시 닫기
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node) &&
+        profileIconRef.current &&
+        !profileIconRef.current.contains(event.target as Node) // 프로필 아이콘 클릭 여부 체크
+      ) {
+        setIsModalOpen(false);
+      }
+    };
+
+    if (isModalOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isModalOpen]);
 
   return (
     <HeaderWrapper>
@@ -141,11 +178,24 @@ const NotLoginHeader: React.FC = () => {
           <Image src={Search} alt="icon" width={20} height={20} />
         </SearchIcon>
       </SearchWrapper>
-      <Link href="/login" passHref>
-        <LoginButton>로그인</LoginButton>
-      </Link>
+
+      <ProfileIcon>
+        <Image
+          src={Guest}
+          alt="profile"
+          width={40}
+          height={40}
+          onClick={toggleModal}
+          ref={profileIconRef}
+        />
+      </ProfileIcon>
+      {isModalOpen && (
+        <ProfileUser ref={modalRef}>
+          <UserModal />
+        </ProfileUser>
+      )}
     </HeaderWrapper>
   );
 };
 
-export default NotLoginHeader;
+export default Header;
