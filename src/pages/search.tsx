@@ -8,6 +8,8 @@ import Footer from '@/components/homeFooter';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import SearchResult from '@/components/search/searchResult';
+import { useQuery } from '@tanstack/react-query';
+import SkeletonList from '@/components/skeleton/skeletonList_boardingPass_S';
 
 const SearchWrapper = styled.div`
   background-color: #fafafc;
@@ -107,6 +109,11 @@ const SearchPage: React.FC = () => {
     }
   };
 
+  const { isLoading } = useQuery({
+    queryKey: ['searchResults'], // 캐싱 키
+    queryFn: fetchSearchResults,
+  });
+
   return (
     <SearchWrapper>
       <Header />
@@ -114,12 +121,16 @@ const SearchPage: React.FC = () => {
       <div>
         <CategoryList />
         <Filters />
-        <SearchResult
-          result={searchResult}
-          totalPages={totalPages}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-        />
+        {isLoading ? (
+          <SkeletonList />
+        ) : (
+          <SearchResult
+            result={searchResult}
+            totalPages={totalPages}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+        )}
         <Footer />
       </div>
     </SearchWrapper>
