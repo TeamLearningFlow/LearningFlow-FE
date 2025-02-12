@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 import Image from 'next/image';
 import styled from 'styled-components';
 // import TopLogo from '../../components/landingHeader';
@@ -106,7 +107,8 @@ const Dropdown = styled.div<{ focused: boolean }>`
   width: 320px;
   height: 45px;
   padding: 10px 18px;
-  border: ${(props) => (props.focused ? '1.823px solid #5e52ff' : '1px solid #181818')};
+  border: ${(props) =>
+    props.focused ? '1.823px solid #5e52ff' : '1px solid #181818'};
   box-shadow: ${(props) =>
     props.focused
       ? '1.806px 1.806px 1.806px 0px rgba(94, 82, 255, 0.30), -1.806px -1.806px 1.806px 0px rgba(94, 82, 255, 0.30)'
@@ -134,7 +136,7 @@ const DropdownOptions = styled.ul`
   padding: 0;
   margin: 0;
   z-index: 100;
- box-shadow:
+  box-shadow:
     3px 3px 3px 0px rgba(200, 200, 200, 0.5),
     -1px -1px 1px 0px rgba(200, 200, 200, 0.5);
 `;
@@ -246,11 +248,52 @@ const Page1: React.FC<{
     setIsJobDropdownOpen(false);
   };
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      const uploadedFile = event.target.files[0];
-      const objectUrl = URL.createObjectURL(uploadedFile);
-      setImgUrl(objectUrl);
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    if (!event.target.files || event.target.files.length === 0) return;
+
+    const file = event.target.files[0];
+
+    // 이미지 업로드 api 연결
+    if (file.size > 5 * 1024 * 1024) {
+      alert('파일 크기는 5MB 이하만 가능합니다.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('로그인이 필요합니다.');
+        return;
+      }
+
+      const response = await axios.post(
+        'http://onboarding.p-e.kr:8080/image/upload',
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      );
+
+      console.log('이미지 업로드 성공:', response.data);
+
+      if (response.data?.result) {
+        const uploadedImageUrl = response.data.result;
+        console.log('이미지 URL:', uploadedImageUrl);
+        setImgUrl(uploadedImageUrl); // 상태 업데이트
+        localStorage.setItem('profileImgUrl', uploadedImageUrl); // 로컬 스토리지 업데이트
+      } else {
+        console.error('이미지 URL을 찾을 수 없습니다.');
+      }
+    } catch (error) {
+      console.error('이미지 업로드 실패:', error);
     }
   };
 
@@ -280,7 +323,7 @@ const Page1: React.FC<{
           </PencilButton>
           <FileInput
             type="file"
-            accept="image/*"
+            accept="image/jpeg, image/png"
             ref={fileInputRef}
             onChange={handleImageUpload}
           />

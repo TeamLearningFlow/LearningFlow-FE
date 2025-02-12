@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import Icon from '../../assets/oversea.svg';
@@ -96,10 +96,9 @@ const Confetti = styled(motion.div)`
 
 interface ModalProps {
   onClose: () => void;
-  nickname: string;
 }
 
-const HomeModal: React.FC<ModalProps> = ({ onClose, nickname }) => {
+const HomeModal: React.FC<ModalProps> = ({ onClose }) => {
   const confettiArray = [
     Confetti1,
     Confetti2,
@@ -121,6 +120,17 @@ const HomeModal: React.FC<ModalProps> = ({ onClose, nickname }) => {
     Confetti18,
     Confetti19,
   ];
+
+  const [nickname, setNickname] = useState('');
+
+  useEffect(() => {
+      // 닉네임 연동
+      const storedNickname = localStorage.getItem('userName');
+      
+      if (storedNickname) {
+        setNickname(storedNickname);
+      }
+    }, []);
 
   return (
     <>

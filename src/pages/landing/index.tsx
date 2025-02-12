@@ -43,14 +43,14 @@ const LandingPage: React.FC = () => {
   const router = useRouter();
 
   const handleComplete = async (finalPreferType: string) => {
-    const defaultImgUrl = imgUrl || Guest.src; // 디폴트 이미지
+    const storedImgUrl = localStorage.getItem('profileImgUrl') || Guest.src; // 디폴트 이미지
 
     const requestData = {
       name: nickname,
       job,
       interestFields,
       preferType: finalPreferType,
-      imgUrl: defaultImgUrl,
+      imgUrl: storedImgUrl,
     };
 
     console.log('requestData:', requestData);
@@ -71,12 +71,17 @@ const LandingPage: React.FC = () => {
         },
       );
 
-      const userName = response.data.result.name;
-      localStorage.setItem('userName', userName); // 닉네임 저장
-      localStorage.setItem('showHomeModal', 'true'); // 모달 표시 여부 결정
-
       console.log('회원가입 성공:', response.data);
       alert('회원가입이 완료되었습니다.');
+
+      const userName = response.data.result.name;
+      localStorage.setItem('userName', userName); // 닉네임 저장
+      console.log('저장된 닉네임:', response.data.result.name);
+
+      localStorage.setItem('profileImgUrl', storedImgUrl);
+      console.log('저장된 이미지 URL:', storedImgUrl);
+
+      localStorage.setItem('showHomeModal', 'true'); // 모달 표시 여부 결정
 
       router.push('/home'); // 회원가입 완료 후 홈페이지로 이동
     } catch (error) {
