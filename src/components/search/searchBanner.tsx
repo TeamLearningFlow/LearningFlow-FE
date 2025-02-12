@@ -61,6 +61,7 @@ const Title = styled.div`
   line-height: 140%;
   letter-spacing: -0.76px;
   justify-content: center;
+  white-space: nowrap;
 
   @media (max-width: 1024px) {
     font-size: 30px;

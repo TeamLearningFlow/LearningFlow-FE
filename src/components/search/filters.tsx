@@ -15,7 +15,8 @@ const FiltersContainer = styled.div<{ hasTags: boolean }>`
   height: ${(props) =>
     props.hasTags ? '109px' : '70px'}; /* 태그 생성 시 버튼 위치 조정 */
   background-color: #ffffff;
-  border-bottom: 1px solid #dde0e4;
+  border-bottom: none;
+  box-shadow: 0px 1px 4px 0px rgba(12, 12, 13, 0.05);
 `;
 
 const SectionContainer = styled.div`

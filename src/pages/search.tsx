@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import Header from '../components/searchHeader';
 import Banner from '../components/search/searchBanner';
 import CategoryList from '../components/search/categoryList';
@@ -7,6 +8,11 @@ import Footer from '@/components/homeFooter';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import SearchResult from '@/components/search/searchResult';
+
+const SearchWrapper = styled.div`
+  background-color: #fafafc;
+  width: 100%;
+`;
 
 const SearchPage: React.FC = () => {
   /* const [searchActive, setSearchActive] = useState(false); // 검색창 활성화 상태
@@ -54,7 +60,7 @@ const SearchPage: React.FC = () => {
   };
 
   return (
-    <>
+    <SearchWrapper>
       <Header />
       <Banner />
       <div>
@@ -63,7 +69,7 @@ const SearchPage: React.FC = () => {
         <SearchResult result={searchResult} />
         <Footer />
       </div>
-    </>
+    </SearchWrapper>
   );
 };
 

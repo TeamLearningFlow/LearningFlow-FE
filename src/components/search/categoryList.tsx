@@ -36,7 +36,7 @@ const CategoryListWrapper = styled.div`
   gap: 22px;
   height: 141px;
   background-color: #ffffff;
-  border-bottom: 1px solid #dde0e4;
+  border-bottom: 1px solid #f5f5f5;
   overflow-x: auto;
   white-space: nowrap;
 
