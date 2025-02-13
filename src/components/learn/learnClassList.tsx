@@ -44,40 +44,68 @@ const ComponentWrapper = styled.div`
 `;
 
 const ClassList: React.FC = () => {
-  const completedClasses = [
+  const Classes = [
     {
-      orderText: '1회차',
-      title: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
+      episodeName: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
+      resourceSource: 'youtube',
+      episodeNumber: 1,
+      progress: 1
     },
     {
-      orderText: '2회차',
-      title: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
+      episodeName: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
+      resourceSource: 'youtube',
+      episodeNumber: 2,
+      progress: 1
     },
     {
-      orderText: '3회차',
-      title: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
+      episodeName: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
+      resourceSource: 'youtube',
+      episodeNumber: 3,
+      progress: 1
     },
     {
-      orderText: '4회차',
-      title: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
+      episodeName: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
+      resourceSource: 'youtube',
+      episodeNumber: 4,
+      progress: 1
     },
     {
-      orderText: '5회차',
-      title: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
+      episodeName: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
+      resourceSource: 'youtube',
+      episodeNumber: 5,
+      progress: 1
     },
+    {
+      episodeName: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
+      resourceSource: 'naverBlog',
+      episodeNumber: 6,
+      progress: 0.3
+    },{
+      episodeName: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
+      resourceSource: 'tistory',
+      episodeNumber: 7,
+      progress: 0
+    },
+    {
+      episodeName: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
+      resourceSource: 'velog',
+      episodeNumber: 8,
+      progress: 0
+    },
+    
   ];
-
+ 
   return (
     <ComponentWrapper>
-      {completedClasses.map((classItem, index) => (
-        <CompletedClass
-          key={index}
-          orderText={classItem.orderText}
-          title={classItem.title}
-        />
-      ))}
-      <CurrentClass />
-      <NextClass />
+      {Classes.map((classItem) => {
+        if (classItem.progress >= 0.8) {
+          return <CompletedClass key={classItem.episodeNumber} {...classItem} />;
+        } else if (classItem.progress > 0) {
+          return <CurrentClass key={classItem.episodeNumber} {...classItem} />;
+        } else {
+          return <NextClass key={classItem.episodeNumber} {...classItem} />;
+        }
+      })}
     </ComponentWrapper>
   );
 };

@@ -7,7 +7,7 @@ import TitleBar from '../components/learn/learnTitleBar';
 import ClassTitle from '../components/learn/learnClassTitle';
 import ClassList from '../components/learn/learnClassList';
 import Article from '../components/learn/article';
-import YoutubeArticle from '@/components/learn/article/youtubeArticle';
+import YoutubeArticle from '../components/learn/articleFolder/youtubeArticle';
 import Note from '../components/learn/note';
 import {
   SkeletonClassList_S,
