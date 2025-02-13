@@ -2,7 +2,101 @@ import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import CheckedYoutube from '../../assets/platformicon/youtube_checked_ic.svg';
-import YoutubeIcon from '../../assets/platformicon/youtube_nostroke_ic.svg';
+import CheckedBlog from '../../assets/platformicon/naver blog_checked_ic.svg';
+import CheckedTistory from '../../assets/platformicon/tistory_checked_ic.svg';
+import CheckedVelog from '../../assets/platformicon/velog_checked_ic.svg';
+import YoutubeActiveIcon from '../../assets/platformicon/youtube_active_ic.svg';
+import BlogActiveIcon from '../../assets/platformicon/naverblog_active_ic.svg';
+import VelogActiveIcon from '../../assets/platformicon/velog_active_ic.svg';
+import TistoryActiveIcon from '../../assets/platformicon/tistory_active_ic.svg';
+import Youtube from '../../assets/platformicon/youtube_nostroke_ic.svg';
+import Blog from '../../assets/platformicon/naverblog_nostroke_ic.svg';
+import Tistory from '../../assets/platformicon/tistory_nostroke_ic.svg';
+import Velog from '../../assets/platformicon/velog_nostroke_ic.svg';
+
+
+interface ClassListProps {
+  episodeNumber: number;
+  episodeName: string;
+  resourceSource: string;
+  progress: number;
+}
+
+
+const getPlatformIcon = (
+  resourceSource: "youtube" | "naverBlog" | "tistory" | "velog",
+  type: "checked" | "active" | "default"
+) => {
+  const icons = {
+    youtube: {
+      checked: CheckedYoutube,
+      active: YoutubeActiveIcon,
+      default: Youtube,
+    },
+    naverBlog: {
+      checked: CheckedBlog,
+      active: BlogActiveIcon,
+      default: Blog,
+    },
+    tistory: {
+      checked: CheckedTistory,
+      active: TistoryActiveIcon,
+      default: Tistory,
+    },
+    velog: {
+      checked: CheckedVelog,
+      active: VelogActiveIcon,
+      default: Velog,
+    },
+  };
+
+  return icons[resourceSource]?.[type] || Youtube;
+};
+
+
+ 
+export const CompletedClass: React.FC<ClassListProps> = ({ episodeNumber, episodeName, resourceSource }) => {
+  return (
+    <IndexWrapper>
+      <PlatformIcon>
+        <Image src={getPlatformIcon(resourceSource, "checked")} alt="platform-icon" fill style={{ objectFit: "contain" }} />
+      </PlatformIcon>
+      <IndexContainer>
+        <OrderBox>{episodeNumber}회차</OrderBox>
+        <TitleBox>{episodeName}</TitleBox>
+      </IndexContainer>
+    </IndexWrapper>
+  );
+};
+
+export const CurrentClass: React.FC<ClassListProps> = ({ episodeNumber, episodeName, resourceSource }) => {
+  return (
+    <CurrentIndexWrapper>
+      <CurrentPlatformIcon>
+        <Image src={getPlatformIcon(resourceSource, "active")} alt="platform-icon" fill style={{ objectFit: "contain" }} />
+      </CurrentPlatformIcon>
+      <IndexContainer>
+        <CurrentOrderBox>{episodeNumber}회차</CurrentOrderBox>
+        <TitleBox>{episodeName}</TitleBox>
+      </IndexContainer>
+    </CurrentIndexWrapper>
+  );
+};
+
+export const NextClass: React.FC<ClassListProps> = ({ episodeNumber, episodeName, resourceSource }) => {
+  return (
+    <IndexWrapper>
+      <PlatformIcon>
+        <Image src={getPlatformIcon(resourceSource, "default")} alt="platform-icon" fill style={{ objectFit: "contain" }} />
+      </PlatformIcon>
+      <IndexContainer>
+        <OrderBox>{episodeNumber}회차</OrderBox>
+        <TitleBox>{episodeName}</TitleBox>
+      </IndexContainer>
+    </IndexWrapper>
+  );
+};
+
 
 const IndexWrapper = styled.div`
   display: flex;
@@ -171,56 +265,3 @@ const TitleBox = styled.div`
   }
 `;
 
-interface ClassListProps {
-  orderText?: string;
-  title?: string;
-}
-
-export const CompletedClass: React.FC<ClassListProps> = ({
-  orderText = '1회차',
-  title = '브랜치 포스터 "와이어프레임을 활용하는 이유"',
-}) => {
-  return (
-    <IndexWrapper>
-      <PlatformIcon>
-        <Image
-          src={CheckedYoutube}
-          alt="platform-icon"
-          fill style={{ objectFit: 'contain' }}
-        />
-      </PlatformIcon>
-      <IndexContainer>
-        <OrderBox>{orderText}</OrderBox>
-        <TitleBox>{title}</TitleBox>
-      </IndexContainer>
-    </IndexWrapper>
-  );
-};
-
-export const CurrentClass: React.FC = () => {
-  return (
-    <CurrentIndexWrapper>
-      <CurrentPlatformIcon>
-        <Image src={YoutubeIcon} alt="platform-icon" fill style={{ objectFit: 'contain' }} />
-      </CurrentPlatformIcon>
-      <IndexContainer>
-        <CurrentOrderBox>6회차</CurrentOrderBox>
-        <TitleBox>브랜치 포스터 "와이어프레임을 활용하는 이유"</TitleBox>
-      </IndexContainer>
-    </CurrentIndexWrapper>
-  );
-};
-
-export const NextClass: React.FC = () => {
-  return (
-    <IndexWrapper>
-      <PlatformIcon>
-        <Image src={YoutubeIcon} alt="platform-icon" fill style={{ objectFit: 'contain' }} />
-      </PlatformIcon>
-      <IndexContainer>
-        <OrderBox>7회차</OrderBox>
-        <TitleBox>브랜치 포스터 "와이어프레임을 활용하는 이유"</TitleBox>
-      </IndexContainer>
-    </IndexWrapper>
-  );
-};
