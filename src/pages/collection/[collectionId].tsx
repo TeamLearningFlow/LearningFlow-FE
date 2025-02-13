@@ -44,6 +44,7 @@ export interface CollectionData {
     url: string;
     resourceSource: string;
     episodeNumber: number;
+    progress: number; // 테스트용
   }[];
   bookmarkCount: number;
   bookmarked: boolean;
@@ -79,19 +80,29 @@ export default function CollectionPage() {
         url: 'https://youtube.com/1',
         resourceSource: 'youtube',
         episodeNumber: 1,
+        progress: 1, //테스트용
       },
       {
         episodeName: '프로젝트 설정하기',
         url: 'https://youtube.com/2',
         resourceSource: 'youtube',
         episodeNumber: 2,
+        progress: 0.8,
       },
       {
         episodeName: '첫 애플리케이션 만들기',
         url: 'https://naver.com/3',
         resourceSource: 'naverBlog',
         episodeNumber: 3,
+        progress: 0.5,
       },
+      {
+        episodeName: '첫 애플리케이션 만들기',
+        url: 'https://tistory.com/4',
+        resourceSource: 'tistory',
+        episodeNumber: 4,
+        progress: 0,
+      }
     ],
     bookmarkCount: 1,
     bookmarked: false,
@@ -165,7 +176,7 @@ export default function CollectionPage() {
           {collection && <CollectionInfo data={collection} />}
           <ContentWrapper>
             {collection && (
-              <CollectionList classes={collection.resource} progress={0.5} />
+              <CollectionList classes={collection.resource} />
             )}
           </ContentWrapper>
         </>

@@ -40,6 +40,7 @@ const NextClassIndex: React.FC<ClassIndexProps> = ({ classData }) =>  {
   };
 
   const getPlatformIcon = () => {
+    console.log("4회차 resourceSource:", classData.resourceSource);
     switch (classData.resourceSource) {
       case 'youtube':
         return <Image src={Youtube} alt="YouTube" fill style={{ objectFit: "contain" }} />;

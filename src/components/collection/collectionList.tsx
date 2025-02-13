@@ -51,11 +51,11 @@ interface CollectionListProps {
   { episodeName: string; 
     url: string; 
     resourceSource: "youtube" | "naverBlog" | "tistory" | "velog";
-    episodeNumber: number }[];
-    progress: number;
+    episodeNumber: number;
+    progress: number; }[];
 }
 
-  const CollectionList: React.FC<CollectionListProps> = ({ classes, progress }) => {
+  const CollectionList: React.FC<CollectionListProps> = ({ classes }) => {
 
   return (
     <CollectionListWrapper>
@@ -66,10 +66,10 @@ interface CollectionListProps {
         <StartIndex />
         <ListContainer>
         {classes.map((classData) => {
-            // 진도율에 따라 컴포넌트를 다르게 렌더링
-            if (progress === 0) {
+            // 각 강의의 개별 progress를 기준으로 컴포넌트 선택
+            if (classData.progress === 0) {
               return <NextClassIndex key={classData.episodeNumber} classData={classData} />;
-            } else if (progress >= 0.8) {
+            } else if (classData.progress >= 0.8) {
               return <ClassIndex key={classData.episodeNumber} classData={classData} />;
             } else {
               return <NowPlaying key={classData.episodeNumber} classData={classData} />;

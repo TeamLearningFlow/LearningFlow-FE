@@ -48,7 +48,7 @@ const YoutubeArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
             }
           : { 'Content-Type': 'application/json' };
 
-        if (episodeId === 1) {
+        if (episodeId === 55) {
           const response = await axios.get(
             `http://onboarding.p-e.kr:8080/resources/${episodeId}/youtube`,
             { headers },
@@ -81,7 +81,7 @@ const YoutubeArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
     if (isTestMode) {
       setContentUrl(
         episodeId === 1
-          ? 'https://www.youtube.com/embed/ekr2nIex040'
+          ? 'https://www.youtube.com/embed/LclObYwGj90'
           : 'https://blog.naver.com/stjjamrabbit/223165753698',
       );
       return;
