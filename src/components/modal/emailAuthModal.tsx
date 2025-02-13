@@ -8,7 +8,7 @@ const emailAuthModal: React.FC = ({ onClose, onContinue }) => {
         <ModalBox>
           <Title>이전 페이지로 돌아갈까요?</Title>
           <Description>
-            {`이전 페이지로 돌아가면\n입력하신 회원가입 정보가 삭제됩니다.`}
+            {`이전 페이지로 돌아가면\n입력한 회원가입 정보가 삭제돼요. 계속할까요?`}
           </Description>
           <Button>
             <BackButton onClick={onClose}>돌아갈래요</BackButton>
