@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import Header from '../components/learnHeader';
 import TitleBar from '../components/learn/learnTitleBar';
@@ -75,9 +76,10 @@ const BottomWrapper = styled.div`
 
 const LearnPage: React.FC = () => {
   // const { episodeId } = useParams<{ episodeId: number }>();
-  const episodeId = 34;
+  const episodeId: number = 34;
   const [type, setType] = useState<'youtube' | 'blog' | null>(null);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   // // 테스트용
   // const testEpisodeIds = [1, 2]; // 1: 유튜브, 2 : 블로그
@@ -91,8 +93,13 @@ const LearnPage: React.FC = () => {
 
     const checkResourceType = async () => {
       try {
+        const token = localStorage.getItem('token');
+        console.log('토큰: ', token);
+        const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
         const youtubeResponse = await fetch(
           `http://onboarding.p-e.kr:8080/resources/${episodeId}/youtube`,
+          { headers },
         );
 
         if (youtubeResponse.ok) {
@@ -102,6 +109,7 @@ const LearnPage: React.FC = () => {
           // YouTube가 아니라면 Blog
           const blogResponse = await fetch(
             `http://onboarding.p-e.kr:8080/resources/${episodeId}/blog`,
+            { headers },
           );
 
           if (blogResponse.ok) {
@@ -124,15 +132,14 @@ const LearnPage: React.FC = () => {
   }, [episodeId]);
   // }, [currentEpisodeId]);
 
-  // useEffect(() => {
-  //   console.log(`현재 에피소드 ID: ${currentEpisodeId}`);
-  // }, [currentEpisodeId]);
+  useEffect(() => {
+    console.log(`현재 에피소드 ID: ${episodeId}`);
+  }, [episodeId]);
 
   const collection = {
     title: '제목',
     interestField: 'APP_DEVELOPMENT',
   };
-
 
   return (
     <PageWrapper>
@@ -154,7 +161,15 @@ const LearnPage: React.FC = () => {
       ) : (
         <BodyWrapper>
           <TopWrapper>
-          {collection && <Article episodeId={episodeId} />}
+            {collection && <Article episodeId={episodeId} />}
+            {/* <Article episodeId={episodeId} /> */}
+            {/* // (type === 'youtube' ? (
+              //   <YoutubeArticle episodeId={episodeId} />
+              // ) : (
+              //   // <YoutubeArticle episodeId={currentEpisodeId} />
+              //   <BlogArticle episodeId={episodeId} />
+              //   // <BlogArticle episodeId={currentEpisodeId} />
+              // ))} */}
             <ClassTitle />
           </TopWrapper>
           <MidWrapper>

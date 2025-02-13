@@ -98,7 +98,7 @@ const SearchIcon = styled.div`
 
 const LoginButton = styled.button`
   height: 38px;
-  width: 65px;
+  // width: 65px;
   background-color: #5e52ff;
   color: #ffffff;
   border: none;
@@ -111,6 +111,8 @@ const LoginButton = styled.button`
   letter-spacing: -0.36px;
   justify-content: center;
   align-items: center;
+
+  space-between: nowrap;
 
   @media (max-width: 480px) {
     height: 37px;
