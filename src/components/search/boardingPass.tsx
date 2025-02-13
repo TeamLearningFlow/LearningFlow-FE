@@ -20,6 +20,7 @@ import YoutubeLine from '../../assets/platformicon/youtube_ic.svg';
 import OnStudying from '../../assets/onstudying.svg';
 import CompletedStamp from '../../assets/completedStamp.svg';
 import { SearchResult } from './searchResult';
+import { useRouter } from 'next/router';
 
 const ColumnFlexDiv = styled.div`
   display: flex;
@@ -42,6 +43,7 @@ const Container = styled(ColumnFlexDiv)`
   position: relative;
   background: transparent;
   overflow: hidden;
+  cursor: pointer;
 `;
 
 const BoardingPassImage = styled(Image)`
@@ -740,8 +742,9 @@ const BoardingPass = ({
   data: SearchResult;
   showHoverCollection?: boolean;
 }) => {
+  const router = useRouter();
   return (
-    <Container>
+    <Container onClick={() => router.push(`/collection/${data.collectionId}`)}>
       <Image src={BoardingPassContainer} alt="boarding pass" />
       <BoardingPassImage src={CollectionImage} alt="collection image" />
       <StatusTag status=""></StatusTag>

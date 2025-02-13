@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from '../components/learnHeader';
@@ -74,9 +74,59 @@ const BottomWrapper = styled.div`
 `;
 
 const LearnPage: React.FC = () => {
-  // const { episodeId } = useParams(); // episodeId 파라미터 가져오기
-  const episodeId: number = 1; // test용
-  const loading = false; // Skeleton UI 확인용
+  // const { episodeId } = useParams<{ episodeId: number }>();
+  const episodeId = 34;
+  const [type, setType] = useState<'youtube' | 'blog' | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  // // 테스트용
+  // const testEpisodeIds = [1, 2]; // 1: 유튜브, 2 : 블로그
+  // const [currentEpisodeId, setCurrentEpisodeId] = useState<number>(
+  //   testEpisodeIds[0],
+  // );
+
+  useEffect(() => {
+    if (!episodeId) return;
+    // if (!currentEpisodeId) return; // 테스트
+
+    const checkResourceType = async () => {
+      try {
+        const youtubeResponse = await fetch(
+          `http://onboarding.p-e.kr:8080/resources/${episodeId}/youtube`,
+        );
+
+        if (youtubeResponse.ok) {
+          setType('youtube');
+          // console.log(`유튜브 테스트 : ${currentEpisodeId}`);
+        } else {
+          // YouTube가 아니라면 Blog
+          const blogResponse = await fetch(
+            `http://onboarding.p-e.kr:8080/resources/${episodeId}/blog`,
+          );
+
+          if (blogResponse.ok) {
+            setType('blog');
+            // console.log(`블로그 테스트 : ${currentEpisodeId}`);
+          } else {
+            console.error('유튜브로 블로그도 아닌 오류');
+            setType(null);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching resource type:', error);
+        setType(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkResourceType();
+  }, [episodeId]);
+  // }, [currentEpisodeId]);
+
+  // useEffect(() => {
+  //   console.log(`현재 에피소드 ID: ${currentEpisodeId}`);
+  // }, [currentEpisodeId]);
 
   const collection = {
     title: '제목',

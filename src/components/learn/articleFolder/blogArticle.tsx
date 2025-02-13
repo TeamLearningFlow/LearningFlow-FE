@@ -231,9 +231,8 @@ const StyledImg = styled.img`
 
 // png 사용
 const BlogArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
-  const isTestMode = true; // 테스트용
+  const isTestMode = false; // 테스트용
   const [contentUrl, setContentUrl] = useState<string | null>('');
-  const [memo, setMemo] = useState<string | null>(null); // 백에 있길래 일단 추가
   const [progress, setProgress] = useState<number>(0);
   const [learningCompleted, setLearningCompleted] = useState<boolean>(false);
   const imgRef = useRef<HTMLImageElement>(null); // 이미지 참조
@@ -249,11 +248,6 @@ const BlogArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
       try {
         if (isTestMode) {
           console.warn('테스트 모드 활성화 - Mock 데이터 사용');
-          // setContentUrl('https://suinchoi.tistory.com/66');
-          // setContentUrl('https://blog.naver.com/clstat/222508865056');
-          // setContentUrl(
-          // `https://velog.io/@sukyeongs/Database-%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98Transaction%EC%9D%B4%EB%9E%80`,
-          // );
           setContentUrl(
             `https://learningflow.s3.amazonaws.com/blog_screenshots/f11112d7206890ce2f859b9872f06c7f.png`,
           );
@@ -267,8 +261,6 @@ const BlogArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
           console.log('토큰이 없습니다.');
           return;
         }
-
-        // 유튜브 API 호출
 
         // 블로그 API 호출
         const blogResponse = await axios.get(

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-// import axios from 'axios';
+import axios from 'axios';
 import styled from 'styled-components';
 import Image from 'next/image';
 // import userProfile from '../../assets/userphoto.svg';
@@ -115,11 +115,11 @@ const InfoValue = styled.span`
   color: #000;
 `;
 
-const Input = styled.input`
+const Input = styled.input<{ hasError?: boolean }>`
   width: 82.5%;
   height: 45px;
   padding: 10px 18px;
-  border: 1px solid #323538;
+  border: 1px solid ${(props) => (props.hasError ? '#ec2d30' : '#323538')};
   border-radius: 6px;
   font-size: 14px;
   font-weight: 400;
@@ -128,10 +128,11 @@ const Input = styled.input`
   color: #1f1f1f;
 
   &:focus {
-    border-color: #5e52ff;
-    box-shadow:
-      1px 1px 1px 0px rgba(94, 82, 255, 0.3),
-      -1px -1px 1px 0px rgba(94, 82, 255, 0.3);
+    border-color: ${(props) => (props.hasError ? '#ec2d30' : '#5e52ff')};
+    box-shadow: ${(props) =>
+      props.hasError
+        ? 'none'
+        : '1px 1px 1px 0px rgba(94, 82, 255, 0.3), -1px -1px 1px 0px rgba(94, 82, 255, 0.3)'};
     outline: none;
   }
 
@@ -188,6 +189,7 @@ const ProfileImage = styled.div`
   align-items: center;
   width: 100px;
   height: 100px;
+  border-radius: 50%;
   overflow: hidden;
 `;
 
@@ -382,7 +384,8 @@ const MyProfile = ({
       profileData.job !== originalProfileData.job ||
       profileData.selectedCategories.join(',') !==
         originalProfileData.selectedCategories.join(',') ||
-      profileData.preferredMedia !== originalProfileData.preferredMedia;
+      profileData.preferredMedia !== originalProfileData.preferredMedia ||
+      profileData.profileImage !== originalProfileData.profileImage;
 
     setIsModified(isChanged);
   }, [profileData, originalProfileData]);
@@ -409,16 +412,53 @@ const MyProfile = ({
     }));
   };
 
-  /* const handleImageUpload = (e, type) => {
-    const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setProfileData((prev) => ({
-        ...prev,
-        [type]: imageUrl,
-      }));
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // 파일 크기 제한 (5MB 이하)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('파일 크기는 5MB 이하만 가능합니다.');
+      return;
     }
-  }; */
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('로그인이 필요합니다.');
+        return;
+      }
+
+      const response = await axios.post(
+        'http://onboarding.p-e.kr:8080/image/upload',
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      );
+
+      console.log('이미지 업로드 성공:', response.data);
+
+      const imgUrl = response.data.result;
+
+      if (imgUrl) {
+        console.log('이미지 URL:', imgUrl);
+        setProfileData((prev) => ({ ...prev, profileImage: imgUrl }));
+      } else {
+        console.error('이미지 URL을 찾을 수 없습니다.', response.data);
+      }
+    } catch (error) {
+      console.error('이미지 업로드 실패:', error);
+    }
+  };
 
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
@@ -467,12 +507,59 @@ const MyProfile = ({
     setIsEditing(true);
   };
 
-  // 저장 버튼 눌렀을 때
-  const handleSave = () => {
+  // 저장 버튼 눌렀을 때 수정 사항 반영하는 api 연결
+  const handleSave = async () => {
     if (!nicknameError && profileData.nickname.length > 0) {
-      setIsEditing(false); // 편집 모드 비활성화
-      setOriginalProfileData(profileData); // 데이터 업데이트
-      console.log(profileData); // 변경 데이터 확인
+      try {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+          console.error('로그인이 필요합니다.');
+          return;
+        }
+
+        const jobKey = Object.keys(jobMap).find(
+          (key) => jobMap[key] === profileData.job,
+        );
+        const interestFields = profileData.selectedCategories
+          .map((category) =>
+            Object.keys(categoryMap).find(
+              (key) => categoryMap[key] === category,
+            ),
+          )
+          .filter(Boolean);
+
+        /*const preferredMedia =
+          profileData.preferredMedia < 40
+            ? 'TEXT'
+            : profileData.preferredMedia > 60
+              ? 'VIDEO'
+              : 'NO_PREFERENCE'; */
+
+        const payload = {
+          name: profileData.nickname,
+          job: jobKey,
+          imgUrl: profileData.profileImage,
+          interestFields: interestFields, // 변환된 관심분야 리스트
+          // preferType: preferredMedia,
+        };
+
+        const response = await axios.put(
+          'http://onboarding.p-e.kr:8080/user',
+          payload,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+        console.log('업데이트 성공:', response.data);
+        setIsEditing(false); // 편집 모드 비활성화
+        setOriginalProfileData(profileData); // 데이터 업데이트
+      } catch (error) {
+        console.error('업데이트 실패:', error);
+      }
     }
   };
 
@@ -515,14 +602,24 @@ const MyProfile = ({
                 />
               </ProfileImage>
               <ChangeContainerImage>
-                <ChangeButton>변경</ChangeButton>
+                <ChangeButton>
+                  변경
+                  <input
+                    type="file"
+                    accept="image/jpeg, image/png"
+                    style={{
+                      display: 'none',
+                    }}
+                    onChange={handleImageUpload}
+                  />
+                </ChangeButton>
                 <CheckList>
                   <span>
                     <Image src={CheckIcon} alt="check" /> png, jpg, jpeg의
                     확장자
                   </span>
                   <span>
-                    <Image src={CheckIcon} alt="check" /> 8MB 이하의 이미지
+                    <Image src={CheckIcon} alt="check" /> 5MB 이하의 이미지
                   </span>
                 </CheckList>
               </ChangeContainerImage>
@@ -567,8 +664,8 @@ const MyProfile = ({
                 <Image
                   src={profileData.profileImage}
                   alt="guest profile"
-                  width={80}
-                  height={80}
+                  width={100}
+                  height={100}
                 />
               </ProfileImage>
             </ProfileContainer>
@@ -583,6 +680,7 @@ const MyProfile = ({
             value={profileData.nickname}
             onChange={handleInputChange}
             placeholder={originalProfileData.nickname}
+            hasError={nicknameError !== ''}
           />
         ) : (
           <InfoValue>{profileData.nickname}</InfoValue>

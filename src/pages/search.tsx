@@ -8,6 +8,8 @@ import Footer from '@/components/homeFooter';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import SearchResult from '@/components/search/searchResult';
+import { useQuery } from '@tanstack/react-query';
+import SkeletonList from '@/components/skeleton/skeletonList_boardingPass_S';
 
 const SearchWrapper = styled.div`
   background-color: #fafafc;
@@ -25,20 +27,51 @@ const SearchPage: React.FC = () => {
   const router = useRouter();
   const { query } = router;
   const [searchResult, setSearchResult] = useState<[]>([]);
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
+    // query에 page가 없으면 기본값 1로 설정
+    if (!query.page) {
+      router.replace({
+        pathname: '/search',
+        query: { ...query, page: '1' },
+      });
+    }
+
     if (
       !query?.keyword &&
       !query?.interestFields &&
       !query?.difficulties &&
       !query?.amounts &&
-      !query?.preferMediaType
+      !query?.preferMediaType &&
+      !query?.page
     ) {
       fetchAllResults();
     } else {
       fetchSearchResults();
     }
   }, [JSON.stringify(query)]);
+
+  useEffect(() => {
+    // page가 아닌 다른 query가 변경되면 page를 1로 리셋
+    const { page, ...otherQueries } = query; // page를 제외한 query만 추출
+
+    router.replace(
+      {
+        pathname: '/search',
+        query: { ...otherQueries, page: '1' }, // 다른 query 유지, page만 1로 설정
+      },
+      undefined,
+      { shallow: true },
+    );
+  }, [
+    query.keyword,
+    query.interestFields,
+    query.difficulties,
+    query.amounts,
+    query.preferMediaType,
+  ]);
 
   const fetchSearchResults = async () => {
     try {
@@ -50,6 +83,7 @@ const SearchPage: React.FC = () => {
           difficulties: query?.difficulties,
           amounts: query?.amounts,
           preferMediaType: query?.preferMediaType,
+          page: query?.page,
         }).filter(([_, value]) => value), // 빈 값('') 또는 undefined는 필터링
       );
 
@@ -58,6 +92,8 @@ const SearchPage: React.FC = () => {
       });
       const data = await response.data.result;
       setSearchResult(data.searchResults);
+      setTotalPages(data.totalPages);
+      setCurrentPage(data.currentPage);
     } catch (error) {
       console.error('검색 오류:', error);
     }
@@ -73,6 +109,11 @@ const SearchPage: React.FC = () => {
     }
   };
 
+  const { isLoading } = useQuery({
+    queryKey: ['searchResults'], // 캐싱 키
+    queryFn: fetchSearchResults,
+  });
+
   return (
     <SearchWrapper>
       <Header />
@@ -80,7 +121,16 @@ const SearchPage: React.FC = () => {
       <div>
         <CategoryList />
         <Filters />
-        <SearchResult result={searchResult} />
+        {isLoading ? (
+          <SkeletonList />
+        ) : (
+          <SearchResult
+            result={searchResult}
+            totalPages={totalPages}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+        )}
         <Footer />
       </div>
     </SearchWrapper>

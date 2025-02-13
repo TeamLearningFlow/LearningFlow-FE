@@ -163,7 +163,7 @@ const ProfileCategoryList = ({
     { id: 12, image: WorkIcon, imageW: WorkIconW, text: '업무생산성' },
   ];
 
-  const categoryMap: { [key: string]: string } = {
+  /* const categoryMap: { [key: string]: string } = {
     웹개발: 'WEB_DEVELOPMENT',
     앱개발: 'APP_DEVELOPMENT',
     컴퓨터언어: 'PROGRAMMING_LANGUAGE',
@@ -175,37 +175,37 @@ const ProfileCategoryList = ({
     외국어: 'FOREIGN_LANGUAGE',
     취업: 'CAREER',
     업무생산성: 'BUSINESS_PRODUCTIVITY',
-  };
+  }; */
 
   const handleClick = (categoryText: string) => {
-    const mappedKey = categoryMap[categoryText];
-
-    if (selectedCategories.includes(mappedKey)) {
+    if (selectedCategories.includes(categoryText)) {
       // 이미 선택된 경우 선택 해제
       const updatedCategories = selectedCategories.filter(
-        (text) => text !== mappedKey,
+        (text) => text !== categoryText,
       );
       onChange(updatedCategories);
     } else {
       // 새로운 카테고리 최대 3개까지 가능
       if (selectedCategories.length < 3) {
-        onChange([...selectedCategories, mappedKey]);
+        onChange([...selectedCategories, categoryText]);
       }
     }
   };
 
   return (
     <CategoryListWrapper>
-      {categories.map((category) => (
-        <CategoryItem
-          key={category.id}
-          image={category.image}
-          imageW={category.imageW}
-          text={category.text}
-          active={selectedCategories.includes(category.text)} // 활성화 상태 확인
-          onClick={() => handleClick(category.text)} // 클릭 이벤트 설정
-        />
-      ))}
+      {categories.map((category) => {
+        return (
+          <CategoryItem
+            key={category.id}
+            image={category.image}
+            imageW={category.imageW}
+            text={category.text}
+            active={selectedCategories.includes(category.text)} // 활성화 상태 확인
+            onClick={() => handleClick(category.text)} // 클릭 이벤트 설정
+          />
+        );
+      })}
     </CategoryListWrapper>
   );
 };
