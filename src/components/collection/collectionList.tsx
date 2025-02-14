@@ -97,7 +97,7 @@ interface CollectionListProps {
             // 각 강의의 개별 progress를 기준으로 컴포넌트 선택
             if (classData.progress === 0) {
               return <NextClassIndex key={classData.episodeNumber} classData={classData} />;
-            } else if (classData.progress >= 0.8) {
+            } else if (classData.progress >= 80) {
               return <ClassIndex key={classData.episodeNumber} classData={classData} />;
             } else {
               return <NowPlaying key={classData.episodeNumber} classData={classData} />;

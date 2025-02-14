@@ -166,7 +166,7 @@ const Footer: React.FC = () => {
           <StyledLink href="/register/contracts" target="_blank" rel="noopener noreferrer">
             이용약관
           </StyledLink>
-          <StyledLink href="/register/contracts" target="_blank" rel="noopener noreferrer">
+          <StyledLink href="/help" target="_blank" rel="noopener noreferrer">
             도움말
           </StyledLink>
           <StyledLink href="/register/contracts" target="_blank" rel="noopener noreferrer">

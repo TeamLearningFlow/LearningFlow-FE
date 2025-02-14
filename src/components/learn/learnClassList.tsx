@@ -49,42 +49,42 @@ const ClassList: React.FC = () => {
       episodeName: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
       resourceSource: 'youtube',
       episodeNumber: 1,
-      progress: 1
+      progress: 100
     },
     {
       episodeName: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
       resourceSource: 'youtube',
       episodeNumber: 2,
-      progress: 1
+      progress: 100
     },
     {
       episodeName: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
       resourceSource: 'youtube',
       episodeNumber: 3,
-      progress: 1
+      progress: 100
     },
     {
       episodeName: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
       resourceSource: 'youtube',
       episodeNumber: 4,
-      progress: 1
+      progress: 100
     },
     {
       episodeName: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
       resourceSource: 'youtube',
       episodeNumber: 5,
-      progress: 1
+      progress: 100
     },
     {
       episodeName: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
       resourceSource: 'naverBlog',
       episodeNumber: 6,
-      progress: 1
+      progress: 100
     },{
       episodeName: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
       resourceSource: 'velog',
       episodeNumber: 7,
-      progress: 0
+      progress: 70
     },
     {
       episodeName: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
@@ -98,7 +98,7 @@ const ClassList: React.FC = () => {
   return (
     <ComponentWrapper>
       {Classes.map((classItem) => {
-        if (classItem.progress >= 0.8) {
+        if (classItem.progress >= 80) {
           return <CompletedClass key={classItem.episodeNumber} {...classItem} />;
         } else if (classItem.progress > 0) {
           return <CurrentClass key={classItem.episodeNumber} {...classItem} />;

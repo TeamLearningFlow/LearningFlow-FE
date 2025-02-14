@@ -65,7 +65,7 @@ const YoutubeArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
         const currentTime = playerRef.current.getCurrentTime();
         const duration = playerRef.current.getDuration();
         if (duration > 0) {
-          const progressValue = Math.round((currentTime / duration) * 100);
+          const progressValue = Math.round((currentTime / duration));
           setProgress(progressValue);
           console.log(`진도율 업데이트: ${progressValue}%`);
         }
