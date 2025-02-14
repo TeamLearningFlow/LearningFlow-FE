@@ -665,51 +665,6 @@ const HoverCollection = ({
             </CollectionDetail>
           </CollectionHeader>
           <CollectionWrapper>
-<<<<<<< HEAD
-            <ContentWrapper>
-              <ThumbnailWrapper>
-                <Image src={VelogLine} alt="velogline" width={26} height={26} />
-              </ThumbnailWrapper>
-              <Content>
-                <Label color={'#BBB6FF'}>1회차</Label>
-                <Label color={'#fff'} width={'206px'}>
-                  {data?.resource[0]?.episodeName}
-                </Label>
-              </Content>
-            </ContentWrapper>
-            <ContentWrapper>
-              <ThumbnailWrapper>
-                <Image
-                  src={NaverblogLine}
-                  alt="blogline"
-                  width={26}
-                  height={26}
-                />
-              </ThumbnailWrapper>
-              <Content>
-                <Label color={'#BBB6FF'}>2회차</Label>
-                <Label color={'#fff'} width={'206px'}>
-                  {data?.resource[1]?.episodeName}
-                </Label>
-              </Content>
-            </ContentWrapper>
-            <ContentWrapper>
-              <ThumbnailWrapper>
-                <Image
-                  src={YoutubeLine}
-                  alt="youtubeline"
-                  width={26}
-                  height={26}
-                />
-              </ThumbnailWrapper>
-              <Content>
-                <Label color={'#BBB6FF'}>3회차</Label>
-                <Label color={'#fff'} width={'206px'}>
-                  {data?.resource[2]?.episodeName}
-                </Label>
-              </Content>
-            </ContentWrapper>
-=======
             {data.resource.slice(0, 3).map((item, index) => (
               <ContentWrapper key={index}>
                 {PlatformIcon(item?.resourceSource)}
@@ -721,7 +676,6 @@ const HoverCollection = ({
                 </Content>
               </ContentWrapper>
             ))}
->>>>>>> 5e2d3993c4f47b827be47d0ae03e01ef57b430a2
             <Gradient />
           </CollectionWrapper>
         </>
