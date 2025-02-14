@@ -7,14 +7,13 @@ import TitleBar from '../components/learn/learnTitleBar';
 import ClassTitle from '../components/learn/learnClassTitle';
 import ClassList from '../components/learn/learnClassList';
 import Article from '../components/learn/article';
-import YoutubeArticle from '../components/learn/articleFolder/youtubeArticle';
+import YoutubeArticle from '@/components/learn/article/youtubeArticle';
 import Note from '../components/learn/note';
 import {
   SkeletonClassList_S,
   SkeletonClassTitle,
   SkeletonArticle,
 } from '@/components/skeleton/skeleton_learnComponents';
-import BlogArticle from '@/components/learn/articleFolder/blogArticle';
 
 const PageWrapper = styled.div``;
 
@@ -113,27 +112,9 @@ const LearnPage: React.FC = () => {
             { headers },
           );
 
-    const youtubeResponse = await fetch(
-      `http://onboarding.p-e.kr:8080/resources/${episodeId}/youtube`,
-      { headers } // 헤더 추가
-    );
-    console.log('YouTube 응답 상태:', youtubeResponse.status);
-    if (youtubeResponse.ok) {
-      const youtubeData = await youtubeResponse.json(); // 응답 데이터 확인
-      console.log('YouTube 데이터:', youtubeData);
-      setType('youtube');
-    } else {
-      console.error('YouTube 응답 실패:', youtubeResponse.statusText); // 실패 메시지 출력
-      // YouTube가 아니라면 Blog
-      const blogResponse = await fetch(
-        `http://onboarding.p-e.kr:8080/resources/${episodeId}/blog`,
-        { headers } // 헤더 추가
-      );
-    
           if (blogResponse.ok) {
-            const blogData = await blogResponse.json(); // 블로그 데이터 확인
-            console.log('블로그 데이터:', blogData);
             setType('blog');
+            // console.log(`블로그 테스트 : ${currentEpisodeId}`);
           } else {
             console.error('유튜브로 블로그도 아닌 오류');
             setType(null);
