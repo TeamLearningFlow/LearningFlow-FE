@@ -169,7 +169,6 @@ const MidTitle = styled.div`
   margin-top: 3px;
   margin-bottom: 15px;
 
-  cursor: pointer;
   display: inline-block;
 
   @media (max-width: 850px) {
@@ -470,7 +469,7 @@ const userModal: React.FC = () => {
       </InfoTop>
       <Hr />
       <InfoMid>
-        <MidTitle onClick={() => router.push('/mypage')}>마이페이지</MidTitle>
+        <MidTitle>마이페이지</MidTitle>
         <MidLearning>
           <MidLearningIMG>
             <BookIMG src={bookIMG} alt="학습방" width={20} height={20} />
@@ -483,8 +482,8 @@ const userModal: React.FC = () => {
           <MidLikeIMG>
             <LikeIMG src={likeIMG} alt="좋아요" width={20} height={20} />
           </MidLikeIMG>
-          <MidLikeLetter onClick={() => router.push('/mypage')}>
-            좋아요
+          <MidLikeLetter onClick={() => router.push('/mypage?tab=liked')}>
+            관심 컬렉션
           </MidLikeLetter>
         </MidLike>
         <MidSettings>

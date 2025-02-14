@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import NotCompleted from './notCompleted';
 import Completed from '../mypage/completed';
@@ -113,14 +114,28 @@ const TabContent = styled.div<{ shown: boolean }>`
 `;
 
 const Tab = () => {
+  const router = useRouter();
+  const { tab } = router.query; // 쿼리에서 tab 값 가져오기
   const [isSelected, setIsSelected] = useState(true);
 
-  const selectMenuHandler = () => {
-    if (isSelected == true) {
+  // const selectMenuHandler = () => {
+  //   if (isSelected == true) {
+  //     setIsSelected(false);
+  //   } else if (isSelected == false) {
+  //     setIsSelected(true);
+  //   }
+  // };
+
+  useEffect(() => {
+    if (tab === 'liked') {
       setIsSelected(false);
-    } else if (isSelected == false) {
+    } else {
       setIsSelected(true);
     }
+  }, [tab]);
+
+  const selectMenuHandler = () => {
+    setIsSelected((prev) => !prev);
   };
 
   return (
