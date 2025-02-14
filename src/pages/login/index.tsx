@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import axios from 'axios';
@@ -9,6 +9,7 @@ import Divider from '../../components/divider';
 import GoogleAuthButton from '../../components/googleAuthButton';
 import AuthButton from '../../components/login/authButton';
 import TopLogo from '../../components/topLogo_header';
+import NoLoginModal from '../../components/modal/noLoginModal';
 import { LoginContext } from '../context/LoginContext';
 
 const PageContainer = styled.div`
@@ -150,6 +151,7 @@ const FormGroup = styled.div`
 const LoginPage: React.FC = () => {
   const router = useRouter();
   const context = useContext(LoginContext);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   if (!context) throw new Error('LoginContext를 찾을 수 없습니다.');
 
@@ -186,20 +188,11 @@ const LoginPage: React.FC = () => {
         router.push('/home'); // 홈 페이지로 이동
       } else {
         console.error('로그인 응답에 Authorization 헤더가 없습니다.');
-        alert('로그인 실패');
+        setIsModalOpen(true);
       }
     } catch (err: any) {
       console.log('Error:', err.response?.data || err.message);
-
-      if (err.response?.data?.message) {
-        alert(
-          '로그인에 실패하였습니다. 이메일 또는 비밀번호를 다시 확인해주세요.',
-        );
-      } else {
-        alert(
-          '로그인에 실패하였습니다. 이메일 또는 비밀번호를 다시 확인해주세요.',
-        );
-      }
+      setIsModalOpen(true); // 로그인 실패 시 모달 띄우기
     }
   };
 
@@ -242,6 +235,8 @@ const LoginPage: React.FC = () => {
           </FormContainer>
         </RightSection>
       </PageContainer>
+
+      {isModalOpen && <NoLoginModal onClose={() => setIsModalOpen(false)} />}
     </>
   );
 };
