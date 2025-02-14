@@ -1,5 +1,5 @@
 import React from 'react';
-import NotLoginHeader from '../components/notLoginHeader';
+import NotLoginHeader from '../components/home/homeNotLoginHeader';
 import HomeTop from '../components/home/homeTop';
 import HomeMiddle from '../components/home/homeMiddle';
 import HomeCollection from '../components/home/homeBottom';
