@@ -4,6 +4,7 @@ import { LoginContext } from '../../pages/context/LoginContext';
 import Image from 'next/image';
 import invisibleicon from '../../assets/invisibleicon.svg';
 import visibleicon from '../../assets/visibleicon.svg';
+import X from '../../assets/X_red.svg';
 
 const Label = styled.label`
   display: block;
@@ -14,10 +15,10 @@ const Label = styled.label`
 `;
 
 const InputWrapper = styled.div<{
-  isFocused: boolean;
   isValid: boolean;
-  isChecked: boolean;
+  isFocused: boolean;
   isError: boolean;
+  isEmpty: boolean;
 }>`
   display: flex;
   width: 100%;
@@ -26,35 +27,34 @@ const InputWrapper = styled.div<{
   align-items: center;
 
   border: 0.696px solid
-    ${(props) => {
-      if (props.isError) {
-        return '#ec2d30'; // 오류 상태일 때 빨간 테두리
-      }
-      if (props.isFocused) {
-        return props.isValid ? '#5e52ff' : '#ec2d30'; // 포커스 상태
-      }
-      return '#181818'; // 기본 상태
-    }};
+    ${(props) =>
+      props.isError
+        ? '#ec2d30' // 오류 시 빨간 테두리
+        : props.isEmpty
+          ? props.isFocused
+            ? '#5e52ff' // 입력이 없을 때 포커스 시 보라색 테두리
+            : '#323538' // 기본 테두리
+          : props.isValid
+            ? '#323538' // 유효할 때 기본 테두리
+            : props.isFocused
+              ? '#5e52ff' // 포커스 시 보라색 테두리
+              : '#323538'}; // 기본 테두리
 
   border-radius: 6.962px;
 
-  background-color: ${(props) => {
-    if (props.isChecked) {
-      // 유효성 검사가 실행되었을 때
-      return props.isValid ? '#F5F5FF' : '#FFFFFF';
-    }
-    // 유효성 검사가 실행되지 않은 초기 상태
-    return '#FFFFFF';
-  }};
-  box-shadow: ${(props) => {
-    if (props.isError) {
-      return 'none'; // 오류 상태일 때 그림자 제거
-    }
-    if (props.isFocused && props.isValid) {
-      return '2px 2px 2px 0px rgba(94, 82, 255, 0.30), -2px -2px 2px 0px rgba(94, 82, 255, 0.30)';
-    }
-    return 'none'; // 기본 상태
-  }};
+  background-color: ${(props) =>
+    props.isValid && !props.isEmpty ? '#f5f5ff' : '#fff'};
+
+  box-shadow: ${(props) =>
+    props.isEmpty
+      ? props.isFocused
+        ? '2px 2px 2px 0px rgba(94, 82, 255, 0.30), -2px -2px 2px 0px rgba(94, 82, 255, 0.30)'
+        : 'none'
+      : props.isValid || props.isError
+        ? 'none'
+        : props.isFocused
+          ? '2px 2px 2px 0px rgba(94, 82, 255, 0.30), -2px -2px 2px 0px rgba(94, 82, 255, 0.30)'
+          : 'none'};
 
   padding: 12px;
   margin-bottom: 6px;
@@ -72,7 +72,7 @@ const InputWrapper = styled.div<{
   }
 `;
 
-const Input = styled.input<{ isValid: boolean; isError: boolean }>`
+const Input = styled.input<{ isError: boolean }>`
   flex: 1;
   border: none;
   outline: none;
@@ -83,10 +83,7 @@ const Input = styled.input<{ isValid: boolean; isError: boolean }>`
   text-overflow: ellipsis;
   white-space: nowrap;
 
-  color: ${(props) =>
-    props.isError
-      ? '#ec2d30' // 로그인 실패 시 빨간색
-      : '#1f1f1f'};
+  color: ${(props) => (props.isError ? '#ec2d30' : '#1f1f1f')};
 
   background-color: transparent;
 
@@ -110,72 +107,81 @@ const IconWrapper = styled.div`
   right: 20px;
 `;
 
-const LoginErrorMsg = styled.span`
+const ErrorContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 4px;
+`;
+
+const XImg = styled(Image)`
+  margin-top: -2px;
+`;
+
+const PasswordErrorMsg = styled.span`
+  margin-left: 4px;
   font-size: 14px;
   color: #ec2d30;
-  margin-bottom: 15px;
 `;
 
 const InputPw: React.FC = () => {
   const [showPwChecked, setShowPwChecked] = useState<boolean>(false);
   const [isFocused, setIsFocused] = useState<boolean>(false);
+  const [isValidPassword, setIsValidPassword] = useState<boolean>(false);
 
   const context = useContext(LoginContext);
   if (!context) throw new Error('LoginContext를 찾을 수 없습니다.');
 
-  const { password, isPasswordChecked, formErrorMsg } = context.state;
-  const { setPassword, setIsPasswordChecked, setFormErrorMsg } =
-    context.actions;
+  const { password } = context.state;
+  const { setPassword, setIsPasswordChecked } = context.actions;
 
   const handlePwChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-    setIsPasswordChecked(false); // 입력 중에는 유효성 검사 초기화
-    setFormErrorMsg(''); // 입력 중에는 오류 메시지 제거
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+    setIsPasswordChecked(false);
+
+    const isValid = validatePassword(newPassword);
+    setIsValidPassword(isValid);
+    if (isValid) {
+      setIsPasswordChecked(true);
+    }
   };
 
   const handleShowPwChecked = () => {
     setShowPwChecked(!showPwChecked);
   };
 
-  const validatePassword = (password: string): boolean => {
-    return password !== ''; // 빈 값이 아니면 유효
+  const validatePassword = (value: string) => {
+    return (
+      /[A-Z]/.test(value) && // 대문자 포함
+      /[a-z]/.test(value) && // 소문자 포함
+      /[!@#$%^&*()_+]/.test(value) && // 특수문자 포함
+      /[0-9]/.test(value) && // 숫자 포함
+      value.length >= 8 &&
+      value.length <= 16 && // 길이 체크
+      !/\s/.test(value) // 공백 체크
+    );
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key == 'Enter') {
-      if (!validatePassword(password)) {
-        setFormErrorMsg('이메일 또는 비밀번호를 확인해주세요');
-        setIsPasswordChecked(false);
-      } else {
-        setFormErrorMsg(''); // 오류 메시지 초기화
-        setIsPasswordChecked(true); // 성공
-        setIsFocused(false); // 포커스 초기회
-      }
-    }
-  };
+  const isError = password !== '' && !isValidPassword;
+  const isEmpty = password === '';
 
   return (
     <div>
       <Label htmlFor="password">비밀번호</Label>
       <InputWrapper
         isFocused={isFocused}
-        isValid={formErrorMsg === ''} // 오류 메시지 없으면 유효
-        isChecked={isPasswordChecked}
-        isError={formErrorMsg !== ''} // 오류 메시지 있으면 에러 상태
+        isValid={isValidPassword}
+        isError={isError}
+        isEmpty={isEmpty}
       >
         <Input
           type={showPwChecked ? 'text' : 'password'}
           placeholder="비밀번호를 입력해주세요"
           value={password}
-          onFocus={() => {
-            setIsFocused(true);
-            setFormErrorMsg(''); // 포커스 시 오류 메시지 제거
-          }}
-          onChange={handlePwChange}
+          onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          onKeyDown={handleKeyPress}
-          isValid={formErrorMsg === ''} // 오류 메시지 없으면 유효
-          isError={formErrorMsg !== ''} // 오류일 때 글씨 빨간색
+          onChange={handlePwChange}
+          isError={isError}
         />
         <IconWrapper onClick={handleShowPwChecked}>
           <Image
@@ -184,7 +190,14 @@ const InputPw: React.FC = () => {
           />
         </IconWrapper>
       </InputWrapper>
-      {formErrorMsg && <LoginErrorMsg>{formErrorMsg}</LoginErrorMsg>}
+      {isError && (
+        <ErrorContainer>
+          <XImg src={X} alt="X" />
+          <PasswordErrorMsg>
+            비밀번호는 8~16자, 대/소문자, 특수문자, 숫자가 포함되어야 합니다
+          </PasswordErrorMsg>
+        </ErrorContainer>
+      )}
     </div>
   );
 };

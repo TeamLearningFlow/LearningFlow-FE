@@ -153,15 +153,11 @@ const LoginPage: React.FC = () => {
 
   if (!context) throw new Error('LoginContext를 찾을 수 없습니다.');
 
-  const { email, password, isValidEmail, isEmailChecked, isPasswordChecked } =
-    context.state;
+  const { email, password, isEmailChecked, isPasswordChecked } = context.state;
 
   // const { setRemember } = context.actions;
 
-  const isButtonValid =
-    isEmailChecked === true &&
-    isValidEmail === true &&
-    isPasswordChecked === true;
+  const isButtonValid = isEmailChecked === true && isPasswordChecked === true;
 
   const handleLogin = async () => {
     try {
@@ -181,11 +177,11 @@ const LoginPage: React.FC = () => {
 
       if (response.status === 200 && token) {
         localStorage.setItem('token', token); // 토큰을 로컬 스토리지에 저장
-        
+
         const userName = response.data.result.name;
         localStorage.setItem('userName', userName);
         // localStorage.setItem('showHomeModal', 'true');
-        
+
         context.actions.setIsLoggedIn(true); // 로그인 시
         router.push('/home'); // 홈 페이지로 이동
       } else {
