@@ -53,10 +53,12 @@ const ActiveWrapper = styled.div<{ height: number }>`
   }
 `;
 
+interface IndexLineProps {
+  classRound: number;
+}
 
 
-const IndexLine: React.FC = () => {
-  const classRound = 3; // 현재 강의 회차
+const IndexLine: React.FC<IndexLineProps> = ({classRound}) => {
   const [activeHeight, setActiveHeight] = useState(120 * classRound);
 
 
@@ -66,7 +68,7 @@ const IndexLine: React.FC = () => {
       if (window.innerWidth <= 560) {
         baseHeight = 60; // 작은 화면에서는 높이를 줄이기
       } else if (window.innerWidth <= 850) {
-        baseHeight = 100; // 중간 크기 화면
+        baseHeight = 105; // 중간 크기 화면
       }
       setActiveHeight(baseHeight * classRound);
     };
@@ -74,7 +76,7 @@ const IndexLine: React.FC = () => {
     updateHeight(); // 초기 설정
     window.addEventListener('resize', updateHeight); // 화면 크기 변경 감지
 
-    return () => window.removeEventListener('resize', updateHeight); // 클린업
+    return () => window.removeEventListener('resize', updateHeight);
   }, [classRound]);
 
   return (

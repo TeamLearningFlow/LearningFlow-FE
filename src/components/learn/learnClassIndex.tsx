@@ -18,7 +18,7 @@ import Velog from '../../assets/platformicon/velog_nostroke_ic.svg';
 interface ClassListProps {
   episodeNumber: number;
   episodeName: string;
-  resourceSource: string;
+  resourceSource: "youtube" | "naverBlog" | "tistory" | "velog";
   progress: number;
 }
 

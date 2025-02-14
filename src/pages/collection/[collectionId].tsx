@@ -63,7 +63,7 @@ export default function CollectionPage() {
     setSearchActive(active);
   };
 
-  const dummyData: CollectionData = {
+  const dummyData:  CollectionData = {
     id: 1,
     interestField: 'WEB_DEVELOPMENT',
     title: `처음 배우는\n스프링 부트 스프링 부트`,
@@ -87,21 +87,21 @@ export default function CollectionPage() {
         url: 'https://youtube.com/2',
         resourceSource: 'youtube',
         episodeNumber: 2,
-        progress: 0.8,
+        progress: 1,
       },
       {
         episodeName: '첫 애플리케이션 만들기',
         url: 'https://naver.com/3',
-        resourceSource: 'naverBlog',
+        resourceSource: 'youtube',
         episodeNumber: 3,
-        progress: 0.5,
+        progress: 1,
       },
       {
         episodeName: '첫 애플리케이션 만들기',
         url: 'https://tistory.com/4',
         resourceSource: 'tistory',
         episodeNumber: 4,
-        progress: 0,
+        progress: 1,
       }
     ],
     bookmarkCount: 1,

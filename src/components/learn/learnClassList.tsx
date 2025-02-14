@@ -79,10 +79,10 @@ const ClassList: React.FC = () => {
       episodeName: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
       resourceSource: 'naverBlog',
       episodeNumber: 6,
-      progress: 0.3
+      progress: 1
     },{
       episodeName: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
-      resourceSource: 'tistory',
+      resourceSource: 'velog',
       episodeNumber: 7,
       progress: 0
     },
