@@ -154,10 +154,10 @@ const Footer: React.FC = () => {
       </FooterLeft>
 
       <TextWrapper>
-        <SloganWrapper>서비스 슬로건</SloganWrapper>
+        <SloganWrapper>당신의 곁에서 성장의 순간을 함께합니다</SloganWrapper>
         <CaptionWrapper>
-          정리된 학습 컬렉션으로 배움의 여정을 쉽고 빠르게!<br />
-          코멘트에 대한 설명을 추가 설명을 적어주세요.
+          나에게 딱 맞는 학습 경로를 설정하여<br />
+          학습 컬렉션으로 배움의 여정을 쉽고 빠르게 즐겨봐요
         </CaptionWrapper>
         <MenuWrapper>
           <StyledLink href="/register/privacyContracts" target="_blank" rel="noopener noreferrer">
