@@ -1,6 +1,101 @@
-import React, { useState, useEffect, useRef } from 'react';
-import axios, { AxiosError } from 'axios';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+
+
+const YoutubeArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
+  const [progress, setProgress] = useState<number>(0);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const isTestMode = true;
+
+  // iframe으로 유튜브 영상 불러오기
+  useEffect(() => {
+    if (!episodeId) return;
+
+    const contentUrl = isTestMode
+      ? "https://www.youtube-nocookie.com/embed/LclObYwGj90?enablejsapi=1&origin=http://localhost"
+      : `https://www.youtube.com/embed/${episodeId}?enablejsapi=1&origin=http://localhost`;
+
+    if (iframeRef.current) {
+      iframeRef.current.src = contentUrl;
+      console.log("Iframe src set:", contentUrl);  // iframe이 제대로 로드되는지 확인
+    }
+  }, [episodeId, isTestMode]);
+
+  // 메시지 리스너로 진도율 추적
+  useEffect(() => {
+    const handlePostMessage = (event: MessageEvent) => {
+      console.log("Message received:", event);  // 메시지 수신 확인
+
+      if (event.origin !== "https://www.youtube.com") return;
+
+      const data = JSON.parse(event.data);
+      console.log("Data received:", data);  // 데이터를 제대로 받았는지 확인
+
+      if (data.event === "onStateChange") {
+        const { data: playerState } = data;
+        if (playerState === 1) {
+          // 영상이 재생 중일 때 진도율 추적
+          trackProgress();
+        }
+      }
+
+      if (data.event === "onProgress") {
+        const { seconds, duration } = data.info;
+        const played = Math.round((seconds / duration) * 100);
+        setProgress(played);
+        console.log(`진도율: ${played}%`);  // 진도율 출력
+      }
+    };
+
+    window.addEventListener("message", handlePostMessage);
+    console.log("Message listener added");
+
+    return () => {
+      window.removeEventListener("message", handlePostMessage);
+      console.log("Message listener removed");
+    };
+  }, []);
+
+  // 진도율 추적 함수
+  const trackProgress = () => {
+    if (iframeRef.current) {
+      const iframe = iframeRef.current;
+      const player = iframe.contentWindow;
+
+      // getCurrentTime 호출
+      player?.postMessage(
+        JSON.stringify({ event: "command", func: "getCurrentTime" }),
+        "*"
+      );
+      console.log("getCurrentTime sent");
+
+      // getDuration 호출
+      player?.postMessage(
+        JSON.stringify({ event: "command", func: "getDuration" }),
+        "*"
+      );
+      console.log("getDuration sent");
+    }
+  };
+
+ 
+  return (
+    <ArticleWrapper>
+      <Iframe
+        ref={iframeRef}
+        src=""
+        frameBorder="0"
+        allowFullScreen
+        width="560"
+        height="315"
+      />
+    </ArticleWrapper>
+  );
+};
+
+export default YoutubeArticle;
+
+
 
 const ArticleWrapper = styled.div`
   display: flex;
@@ -14,175 +109,9 @@ const ArticleWrapper = styled.div`
   overflow-y: auto;
 `;
 
+
 const Iframe = styled.iframe`
   width: 100%;
   height: 100%;
   border: none;
 `;
-
-declare global {
-  interface Window {
-    YT: any;
-    onYouTubeIframeAPIReady: () => void;
-  }
-}
-
-const YoutubeArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
-  const [contentUrl, setContentUrl] = useState<string | null>(null);
-  const iframeRef = useRef<HTMLIFrameElement>(null);
-  const playerRef = useRef<any>(null);
-  const progressInterval = useRef<NodeJS.Timeout | null>(null);
-  const isTestMode = true;
-
-  useEffect(() => {
-    if (!episodeId) return;
-
-    const fetchContent = async () => {
-      try {
-        let url = '';
-        const token = localStorage.getItem('token');
-        const headers = token
-          ? {
-              Authorization: `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            }
-          : { 'Content-Type': 'application/json' };
-
-        if (episodeId === 55) {
-          const response = await axios.get(
-            `http://onboarding.p-e.kr:8080/resources/${episodeId}/youtube`,
-            { headers },
-          );
-          url = response.data.url.replace(
-            'youtube.com',
-            'youtube-nocookie.com',
-          );
-        } else if (episodeId === 2) {
-          const response = await axios.get(
-            `http://onboarding.p-e.kr:8080/resources/${episodeId}/blog/content`,
-            { headers },
-          );
-          url = response.data.episodeContents;
-        } else {
-          console.error('유효하지 않은 episodeId');
-          return;
-        }
-
-        setContentUrl(url);
-      } catch (error) {
-        if (error instanceof AxiosError) {
-          console.error('API 오류:', error.response?.data);
-        } else {
-          console.error('알 수 없는 오류:', error);
-        }
-      }
-    };
-
-    if (isTestMode) {
-      setContentUrl(
-        episodeId === 1
-          ? 'https://www.youtube.com/embed/LclObYwGj90'
-          : 'https://blog.naver.com/stjjamrabbit/223165753698',
-      );
-      return;
-    }
-
-    fetchContent();
-  }, [episodeId]);
-
-  useEffect(() => {
-    if (!contentUrl?.includes('youtube')) return;
-
-    const script = document.createElement('script');
-    script.src = 'https://www.youtube.com/iframe_api';
-    script.async = true;
-    document.body.appendChild(script);
-
-    window.onYouTubeIframeAPIReady = () => {
-      if (iframeRef.current) {
-        playerRef.current = new window.YT.Player(iframeRef.current, {
-          events: {
-            onStateChange: (event: any) => {
-              if (event.data === window.YT.PlayerState.PLAYING) {
-                progressInterval.current = setInterval(() => {
-                  if (playerRef.current) {
-                    const currentTime = playerRef.current.getCurrentTime();
-                    const duration = playerRef.current.getDuration();
-                    if (duration > 0) {
-                      saveProgress('VIDEO', currentTime / duration);
-                    }
-                  }
-                }, 5000);
-              } else if (
-                event.data === window.YT.PlayerState.PAUSED ||
-                event.data === window.YT.PlayerState.ENDED
-              ) {
-                if (progressInterval.current)
-                  clearInterval(progressInterval.current);
-              }
-            },
-          },
-        });
-      }
-    };
-
-    return () => {
-      document.body.removeChild(script);
-      if (progressInterval.current) clearInterval(progressInterval.current);
-    };
-  }, [contentUrl]);
-
-  const saveProgress = async (
-    resourceType: 'VIDEO' | 'TEXT',
-    progress: number,
-  ) => {
-    try {
-      await axios.post(
-        `http://onboarding.p-e.kr:8080/resources/${episodeId}/save-progress`,
-        { resourceType, progress },
-        { headers: { 'Content-Type': 'application/json' } },
-      );
-    } catch (error) {
-      console.error('진도 저장 실패:', error);
-    }
-  };
-
-  useEffect(() => {
-    if (!contentUrl || contentUrl.includes('youtube')) return;
-
-    const handleScroll = () => {
-      const articleWrapper = document.getElementById('articleWrapper');
-      if (!articleWrapper) return;
-
-      const scrollTop = articleWrapper.scrollTop;
-      const scrollHeight =
-        articleWrapper.scrollHeight - articleWrapper.clientHeight;
-      if (scrollHeight > 0) {
-        saveProgress('TEXT', scrollTop / scrollHeight);
-      }
-    };
-
-    const articleWrapper = document.getElementById('articleWrapper');
-    articleWrapper?.addEventListener('scroll', handleScroll);
-    return () => articleWrapper?.removeEventListener('scroll', handleScroll);
-  }, [contentUrl]);
-
-  return (
-    <ArticleWrapper id="articleWrapper">
-      {contentUrl ? (
-        <Iframe
-          id="player"
-          src={contentUrl}
-          frameBorder="0"
-          allowFullScreen
-          referrerPolicy="no-referrer-when-downgrade"
-          ref={iframeRef}
-        />
-      ) : (
-        <p>로딩 중...</p>
-      )}
-    </ArticleWrapper>
-  );
-};
-
-export default YoutubeArticle;

@@ -71,7 +71,7 @@ const ClassIndex: React.FC<ClassIndexProps> = ({ classData }) => {
       </RadioWrapper>
       <IndexWrapper>
         <PlatformIcon>
-          {getPlatformIcon()}  {/* Display the platform icon */}
+          {getPlatformIcon()}
         </PlatformIcon>
         <IndexContainer>
           <OrderBox>{classData.episodeNumber}회차</OrderBox>
@@ -114,27 +114,28 @@ const StartIndex = () => {
   );
 };
 
-const EndIndex = () => {
+const EndIndex: React.FC<{allProgressed: boolean}> = ({allProgressed}) => {
   return (
     <EndComponentWrapper>
       <RadioWrapper>
         <IndexIcon>
-          <Image
-            src={EndIndexIcon}
+        <Image
+            src={allProgressed ? CompletedIndexIcon : EndIndexIcon}
             alt="End-icon"
-            fill
             style={{ objectFit: 'contain' }}
           />
         </IndexIcon>
       </RadioWrapper>
       <StartIndexWrapper>
-        <EndIndexContainer>
+        <EndIndexContainer allProgressed={allProgressed}>
             Congrats! 컬렉션 완주를 축하드려요!
         </EndIndexContainer>
       </StartIndexWrapper>
     </EndComponentWrapper>
   );
 };
+
+
 
 export { ClassIndex, StartIndex, EndIndex };
 
@@ -358,6 +359,7 @@ const PlatformIcon = styled.div`
 const StartIndexContainer = styled.div`
   font-size: 18px;
   font-weight: 600;
+  color:  rgba(79, 83, 87, 1);
 
   @media (max-width: 850px) {
     font-size: 16px;
@@ -368,10 +370,11 @@ const StartIndexContainer = styled.div`
   }
 `;
 
-const EndIndexContainer = styled.div`
+const EndIndexContainer = styled.div<{ allProgressed: boolean }>`
   font-size: 18px;
   font-weight: 600;
-  color: rgba(221, 224, 228, 1);
+  color: ${(props) =>
+    props.allProgressed ? 'rgba(79, 83, 87, 1)' : 'rgba(221, 224, 228, 1)'};
 
   @media (max-width: 850px) {
     font-size: 16px;

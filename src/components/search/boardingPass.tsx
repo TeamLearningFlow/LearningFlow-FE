@@ -648,7 +648,7 @@ const HoverCollection = ({
               <Content>
                 <Label color={'#BBB6FF'}>1회차</Label>
                 <Label color={'#fff'} width={'206px'}>
-                  {data.resource[0].episodeName}
+                  {data?.resource[0]?.episodeName}
                 </Label>
               </Content>
             </ContentWrapper>
@@ -664,7 +664,7 @@ const HoverCollection = ({
               <Content>
                 <Label color={'#BBB6FF'}>2회차</Label>
                 <Label color={'#fff'} width={'206px'}>
-                  {data.resource[1].episodeName}
+                  {data?.resource[1]?.episodeName}
                 </Label>
               </Content>
             </ContentWrapper>
@@ -680,7 +680,7 @@ const HoverCollection = ({
               <Content>
                 <Label color={'#BBB6FF'}>3회차</Label>
                 <Label color={'#fff'} width={'206px'}>
-                  {data.resource[2].episodeName}
+                  {data?.resource[2]?.episodeName}
                 </Label>
               </Content>
             </ContentWrapper>

@@ -13,6 +13,7 @@ import {
   SkeletonClassTitle,
   SkeletonArticle,
 } from '@/components/skeleton/skeleton_learnComponents';
+import BlogArticle from '@/components/learn/articleFolder/blogArticle';
 
 const PageWrapper = styled.div``;
 
@@ -75,7 +76,7 @@ const BottomWrapper = styled.div`
 
 const LearnPage: React.FC = () => {
   // const { episodeId } = useParams<{ episodeId: number }>();
-  const episodeId = 34;
+  const episodeId =42;
   const [type, setType] = useState<'youtube' | 'blog' | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -91,22 +92,30 @@ const LearnPage: React.FC = () => {
 
     const checkResourceType = async () => {
       try {
-        const youtubeResponse = await fetch(
-          `http://onboarding.p-e.kr:8080/resources/${episodeId}/youtube`,
-        );
+        const token = localStorage.getItem('token');
+    const headers: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {}; // 빈 객체로 설정
 
-        if (youtubeResponse.ok) {
-          setType('youtube');
-          // console.log(`유튜브 테스트 : ${currentEpisodeId}`);
-        } else {
-          // YouTube가 아니라면 Blog
-          const blogResponse = await fetch(
-            `http://onboarding.p-e.kr:8080/resources/${episodeId}/blog`,
-          );
-
+    const youtubeResponse = await fetch(
+      `http://onboarding.p-e.kr:8080/resources/${episodeId}/youtube`,
+      { headers } // 헤더 추가
+    );
+    console.log('YouTube 응답 상태:', youtubeResponse.status);
+    if (youtubeResponse.ok) {
+      const youtubeData = await youtubeResponse.json(); // 응답 데이터 확인
+      console.log('YouTube 데이터:', youtubeData);
+      setType('youtube');
+    } else {
+      console.error('YouTube 응답 실패:', youtubeResponse.statusText); // 실패 메시지 출력
+      // YouTube가 아니라면 Blog
+      const blogResponse = await fetch(
+        `http://onboarding.p-e.kr:8080/resources/${episodeId}/blog`,
+        { headers } // 헤더 추가
+      );
+    
           if (blogResponse.ok) {
+            const blogData = await blogResponse.json(); // 블로그 데이터 확인
+            console.log('블로그 데이터:', blogData);
             setType('blog');
-            // console.log(`블로그 테스트 : ${currentEpisodeId}`);
           } else {
             console.error('유튜브로 블로그도 아닌 오류');
             setType(null);
@@ -154,7 +163,7 @@ const LearnPage: React.FC = () => {
       ) : (
         <BodyWrapper>
           <TopWrapper>
-          {collection && <Article episodeId={episodeId} />}
+          {collection && <YoutubeArticle episodeId={episodeId} />}
             <ClassTitle />
           </TopWrapper>
           <MidWrapper>
