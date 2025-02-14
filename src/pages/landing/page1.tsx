@@ -267,7 +267,7 @@ const Page1: React.FC<{
     try {
       const token = localStorage.getItem('token');
       if (!token) {
-        console.error('로그인이 필요합니다.');
+        console.error('토큰이 필요합니다.');
         return;
       }
 
@@ -304,11 +304,8 @@ const Page1: React.FC<{
       <Content>
         <Title>닉네임과 직업을 설정해주세요</Title>
         <ProfileContainer>
-          {imgUrl ? (
-            <UploadedImage src={imgUrl} alt="Uploaded Profile" />
-          ) : (
-            <Image src={Guest} alt="Profile" width={120} height={120} />
-          )}
+          <UploadedImage src={imgUrl || Guest.src} alt="profileImage" />
+
           <PencilButton
             onMouseEnter={() => setIsHovered(true)} // 마우스가 올려졌을 때
             onMouseLeave={() => setIsHovered(false)} // 마우스가 떠났을 때

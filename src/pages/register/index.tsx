@@ -138,6 +138,14 @@ const RegisterPage: React.FC = () => {
   const handleShowEmailAuth = () => {
     console.log('Email:', email);
     console.log('Password:', password);
+
+    if (email && password) {
+      localStorage.setItem('email', email);
+      localStorage.setItem('password', password);
+    } else {
+      console.error('이메일 또는 비밀번호를 작성해주세요.');
+    }
+
     setShowEmailAuth(true);
     registeraxios();
   };
@@ -155,6 +163,8 @@ const RegisterPage: React.FC = () => {
       console.log('Response:', response);
 
       if (response.status === 200) {
+        localStorage.setItem('email', email);
+        localStorage.setItem('password', password);
         console.log('이메일 인증 페이지로 이동');
       }
     } catch (err: any) {

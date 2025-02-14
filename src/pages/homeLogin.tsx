@@ -29,16 +29,15 @@ const HomeLogin: React.FC = () => {
   useEffect(() => {
     // 닉네임 연동
     const storedNickname = localStorage.getItem('userName');
-    
+
     if (storedNickname) {
       setNickname(storedNickname);
     }
 
-    // 모달 표시 여부 확인
-    const showModal = localStorage.getItem('showHomeModal');
-    if (showModal === 'true') {
-      setIsModalOpen(true);
-      localStorage.removeItem('showHomeModal');
+    // 회원가입 후 모달 표시 여부 확인
+    if (localStorage.getItem('isFromSignup') === 'true') {
+      setIsModalOpen(true); // 모달 열기
+      localStorage.removeItem('isFromSignup'); // 플래그 제거
     }
   }, []);
 
@@ -51,10 +50,10 @@ const HomeLogin: React.FC = () => {
       <Header />
       <Banner />
       <RecentCollection />
-      <HomeCollection nickname={nickname}/>
+      <HomeCollection nickname={nickname} />
       <Wrapper>
         {isModalOpen && (
-          <HomeModal onClose={handleCloseModal} nickname={nickname} />
+          <HomeModal onClose={handleCloseModal} />
         )}
         {!isModalOpen && <Main></Main>}
       </Wrapper>

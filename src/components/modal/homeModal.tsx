@@ -124,13 +124,13 @@ const HomeModal: React.FC<ModalProps> = ({ onClose }) => {
   const [nickname, setNickname] = useState('');
 
   useEffect(() => {
-      // 닉네임 연동
-      const storedNickname = localStorage.getItem('userName');
-      
-      if (storedNickname) {
-        setNickname(storedNickname);
-      }
-    }, []);
+    // 닉네임 연동
+    const storedNickname = localStorage.getItem('userName');
+
+    if (storedNickname) {
+      setNickname(storedNickname);
+    }
+  }, []);
 
   return (
     <>
