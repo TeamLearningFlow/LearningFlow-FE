@@ -4,17 +4,18 @@ import styled from 'styled-components';
 
 const ArticleWrapper = styled.div`
   display: flex;
-  align-items: center;
+  // align-items: center;
   justify-content: center;
   width: 100%;
-  height: 91%;
-  // height: 60%;
+  // height: 91%;
+  height: 54.4vh;
   border-radius: 11.483px;
   background: #b5b5b5;
   box-shadow: 1.077px 1.435px 6.459px 0px rgba(0, 0, 0, 0.1);
 
-  overflow: hidden;
-  overflow-y: scroll;
+  // overflow: hidden;
+  overflow: auto;
+  // overflow-y: scroll;
 `;
 
 const ImgBox = styled.div`
@@ -24,12 +25,12 @@ const ImgBox = styled.div`
 const StyledImg = styled.img`
   width: 100%;
   // height: 100%;
+  height: auto;
   border: none;
 
-  overflow: hidden;
-  overflow-y: scroll;
-
-  margin-top: 3384px;
+  margin-top: -500px;
+  // margin-top: 300vh;
+  z-index: 999;
 `;
 
 // iframe 사용
@@ -236,6 +237,7 @@ const BlogArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
   const [progress, setProgress] = useState<number>(0);
   const [learningCompleted, setLearningCompleted] = useState<boolean>(false);
   const imgRef = useRef<HTMLImageElement>(null); // 이미지 참조
+  const articleWrapperRef = useRef<HTMLDivElement>(null); // ArticleWrapper 참조
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -246,19 +248,20 @@ const BlogArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
 
     const fetchContent = async () => {
       try {
+        const token = localStorage.getItem('token');
+        // if (!token) {
+        //   alert('로그인이 필요합니다.');
+        //   console.log('토큰이 없습니다.');
+        //   return;
+        // }
+        console.log('토큰: ', token);
+        console.log('episodeId:', episodeId);
+
         if (isTestMode) {
           console.warn('테스트 모드 활성화 - Mock 데이터 사용');
           setContentUrl(
             `https://learningflow.s3.amazonaws.com/blog_screenshots/f11112d7206890ce2f859b9872f06c7f.png`,
           );
-          setMemo('테스트용 메모');
-          return;
-        }
-
-        const token = localStorage.getItem('token');
-        if (!token) {
-          alert('로그인이 필요합니다.');
-          console.log('토큰이 없습니다.');
           return;
         }
 
@@ -268,36 +271,56 @@ const BlogArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
           {
             headers: {
               Authorization: `Bearer ${token}`,
-              'Content-Type': 'application/json',
+              // 'Content-Type': 'application/json',
             },
           },
         );
-        console.log('api 응답:', blogResponse);
+        console.log('blogResponse:', blogResponse);
 
-        if (blogResponse.status === 200) {
-          // const data = blogResponse.data;
-          // console.log(data);
+        // if (blogResponse.status === 200) {
+        //   // const data = blogResponse.data;
+        //   // console.log(data);
 
-          // /content 호출하여 PNG 이미지 URL 얻기
-          const contentResponse = await axios.get(
-            `http://onboarding.p-e.kr:8080/resources/${episodeId}/blog/content`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-              },
-              responseType: 'blob', // Blob으로 응답 받음
-            },
-          );
-
-          if (contentResponse.status === 200) {
-            // blob을 URL로 변환
-            const imageUrl = URL.createObjectURL(contentResponse.data);
-            setContentUrl(imageUrl);
-          }
+        if (blogResponse.status !== 200) {
+          console.error('블로그 API 응답 오류:', blogResponse);
+          return;
         }
+
+        // /content 호출하여 PNG 이미지 URL 얻기
+        const contentResponse = await axios.get(
+          `http://onboarding.p-e.kr:8080/resources/${episodeId}/blog/content`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              // 'Content-Type': 'application/json',
+            },
+            // responseType: 'blob', // Blob으로 응답 받음
+          },
+        );
+
+        console.log('contentResponse:', contentResponse);
+        // console.log('contentResponse.status:', contentResponse.status);
+        // console.log('contentResponse:', contentResponse.data);
+        // console.log('Blob 크기:', contentResponse.data.size);
+
+        // if (contentResponse.status === 200) {
+        //   // blob을 URL로 변환
+        //   const imageUrl = URL.createObjectURL(contentResponse.data);
+        //   setContentUrl(imageUrl);
+        // } else {
+        //   console.error('콘텐츠 API 응답 오류:', contentResponse);
+        // }
+        if (contentResponse.status === 200 && contentResponse.data) {
+          setContentUrl(contentResponse.data.result);
+        } else {
+          console.error('콘텐츠 API 응답 오류:', contentResponse);
+        }
+        // }
       } catch (error) {
-        console.error('콘텐츠 로딩 오류:', error);
+        console.error(
+          '콘텐츠 로딩 오류:',
+          error.response ? error.response : error,
+        );
       }
     };
 
@@ -305,15 +328,22 @@ const BlogArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
   }, [episodeId]);
 
   const saveProgress = async (scrolled: number) => {
+    const token = localStorage.getItem('token');
+
     if (!episodeId) return;
 
     try {
       await axios.post(
         `http://onboarding.p-e.kr:8080/resources/${episodeId}/save-progress`,
-        { resourceType: 'TEXT', progress: scrolled },
+        // { resourceType: 'TEXT', progress: scrolled },
+        { resourceType: 'TEXT', progress: 0 },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        },
       );
-
-      console.log(`진도율(${scrolled}%) 저장 성공`);
     } catch (error) {
       console.error('진도 저장 오류:', error);
     }
@@ -323,10 +353,12 @@ const BlogArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
     if (!episodeId || learningCompleted) return;
 
     const token = localStorage.getItem('token');
+    console.log('토큰: ', token);
 
     try {
       const response = await axios.post(
         `http://onboarding.p-e.kr:8080/resources/${episodeId}/update-complete`,
+        {},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -344,11 +376,17 @@ const BlogArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
   };
 
   const handleScroll = () => {
-    if (!imgRef.current) return;
+    // if (!imgRef.current) return;
+    if (!articleWrapperRef.current) return;
 
     try {
       // 이미지의 보이는 영역과 전체 높이를 사용하여 진도율 계산
-      const { scrollTop, clientHeight, scrollHeight } = imgRef.current;
+      // const { scrollTop, clientHeight, scrollHeight } = imgRef.current;
+      const { scrollTop, clientHeight, scrollHeight } =
+        articleWrapperRef.current;
+
+      // scrollHeight가 clientHeight와 같거나 0일 경우 NaN이 되지 않도록 처리
+      // if (scrollHeight === clientHeight || scrollHeight === 0) return;
 
       // 현재 스크롤된 부분의 비율을 계산
       const scrolled = Math.round(
@@ -358,6 +396,9 @@ const BlogArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
       if (scrolled !== progress) {
         setProgress(scrolled); // 진도율 업데이트
         saveProgress(scrolled);
+        console.log('scrollTop: ', scrollTop);
+        console.log('clientHeight: ', clientHeight);
+        console.log('scrollHeight: ', scrollHeight);
         console.log(`진도율: ${scrolled}%`);
 
         // debounce로 서버 저장을 지연시킴
@@ -388,16 +429,26 @@ const BlogArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
     console.log('contentUrl:', contentUrl);
     console.log('progress:', progress);
     console.log('learningCompleted:', learningCompleted);
-  }, [contentUrl, progress, learningCompleted]);
+    console.log({ episodeId });
+  }, [contentUrl, progress, learningCompleted, episodeId]);
+
+  // 이미지 존재확인
+  useEffect(() => {
+    console.log('imgRef:', imgRef.current);
+  }, [contentUrl]);
 
   return (
     <>
-      <ArticleWrapper onScroll={handleScroll}>
+      <ArticleWrapper ref={articleWrapperRef} onScroll={handleScroll}>
         {contentUrl ? (
           <>
             <ImgBox>
-              <StyledImg ref={imgRef} src={contentUrl} alt="content" />
-              {/* <h2>진도율: {progress}%</h2> */}
+              <StyledImg
+                ref={imgRef}
+                src={contentUrl}
+                alt="content"
+                onError={() => console.error('이미지 로드 실패')}
+              />
             </ImgBox>
           </>
         ) : (

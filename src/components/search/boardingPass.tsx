@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import BoardingPassContainer from '../../assets/S_Background.svg';
@@ -16,6 +16,7 @@ import VelogIcon from '../../assets/platformicon/velog_nostroke_ic.svg';
 import YoutubeIcon from '../../assets/platformicon/youtube_nostroke_ic.svg';
 import VelogLine from '../../assets/platformicon/velog_ic.svg';
 import NaverblogLine from '../../assets/platformicon/naverblog_ic.svg';
+import TistoryLine from '../../assets/platformicon/tistory_ic.svg';
 import YoutubeLine from '../../assets/platformicon/youtube_ic.svg';
 import OnStudying from '../../assets/onstudying.svg';
 import CompletedStamp from '../../assets/completedStamp.svg';
@@ -212,19 +213,11 @@ const Bottom = styled(RowFlexDiv)`
   border-radius: 0px 0px 16px 16px;
   background: #f5f5ff;
   height: 53px;
-  padding: 10px 15px;
+  padding: 10px 20px;
   position: absolute;
   top: 281px;
   left: 1px;
   gap: 10px;
-`;
-
-const Departure = styled(ColumnFlexDiv)`
-  margin-right: 10px;
-`;
-
-const Arrival = styled(ColumnFlexDiv)`
-  margin-left: 10px;
 `;
 
 const DepartureArrival = styled.span`
@@ -264,7 +257,8 @@ const PlaneWrapper = styled(RowFlexSpan)`
 `;
 
 const PlaneLine = styled.span`
-  width: 45px;
+  min-width: 45px; // 값 임의 지정함
+  max-width: 61px;
   height: 0.25px;
   background: #5e52ff;
 `;
@@ -505,6 +499,37 @@ const interestFieldMap: Record<string, string> = {
   CAREER: '취업',
 };
 
+const PlatformIcon = (source: string) => {
+  switch (source) {
+    case 'youtube':
+      return (
+        <ThumbnailWrapper>
+          <Image src={YoutubeLine} alt="youtubeline" width={26} height={26} />
+        </ThumbnailWrapper>
+      );
+    case 'naverBlog':
+      return (
+        <ThumbnailWrapper>
+          <Image src={NaverblogLine} alt="blogline" width={26} height={26} />
+        </ThumbnailWrapper>
+      );
+    case 'tistory':
+      return (
+        <ThumbnailWrapper>
+          <Image src={TistoryLine} alt="velogline" width={26} height={26} />
+        </ThumbnailWrapper>
+      );
+    case 'velog':
+      return (
+        <ThumbnailWrapper>
+          <Image src={VelogLine} alt="velogline" width={26} height={26} />
+        </ThumbnailWrapper>
+      );
+    default:
+      return null;
+  }
+};
+
 const HoverCollection = ({
   data,
   status,
@@ -639,8 +664,8 @@ const HoverCollection = ({
               <Number>{data.videoCount}</Number>
             </CollectionDetail>
           </CollectionHeader>
-
           <CollectionWrapper>
+<<<<<<< HEAD
             <ContentWrapper>
               <ThumbnailWrapper>
                 <Image src={VelogLine} alt="velogline" width={26} height={26} />
@@ -684,6 +709,19 @@ const HoverCollection = ({
                 </Label>
               </Content>
             </ContentWrapper>
+=======
+            {data.resource.slice(0, 3).map((item, index) => (
+              <ContentWrapper key={index}>
+                {PlatformIcon(item?.resourceSource)}
+                <Content>
+                  <Label color={'#BBB6FF'}>{item?.episodeNumber}회차</Label>
+                  <Label color={'#fff'} width={'206px'}>
+                    {item?.episodeName}
+                  </Label>
+                </Content>
+              </ContentWrapper>
+            ))}
+>>>>>>> 5e2d3993c4f47b827be47d0ae03e01ef57b430a2
             <Gradient />
           </CollectionWrapper>
         </>
@@ -699,6 +737,51 @@ const BoardingPassBottom = ({
   data: SearchResult;
   status?: string;
 }) => {
+  const [departureLabel, setDepartureLabel] = useState('');
+  const [arrivalLabel, setArrivalLabel] = useState('');
+
+  const setDifficultyLabel = () => {
+    const equals = (a: number[], b: number[]) =>
+      a.length === b.length && a.every((v, i) => v === b[i]);
+
+    const level = data.difficulties.sort();
+
+    if (equals(level, [1])) {
+      setDepartureLabel('입문자');
+      setArrivalLabel('초급자');
+      return;
+    }
+    if (equals(level, [2])) {
+      setDepartureLabel('초급자');
+      setArrivalLabel('중급자');
+      return;
+    }
+    if (equals(level, [3])) {
+      setDepartureLabel('중급자');
+      setArrivalLabel('마스터');
+      return;
+    }
+    if (equals(level, [1, 2])) {
+      setDepartureLabel('입문·초급자');
+      setArrivalLabel('중급자');
+      return;
+    }
+    if (equals(level, [2, 3])) {
+      setDepartureLabel('초급·중급자');
+      setArrivalLabel('마스터');
+      return;
+    }
+    if (equals(level, [1, 2, 3])) {
+      setDepartureLabel('입문·초급·중급자');
+      setArrivalLabel('마스터');
+      return;
+    }
+  };
+
+  useEffect(() => {
+    setDifficultyLabel();
+  }, []);
+
   return (
     <Bottom>
       {status == '학습중' ? (
@@ -713,10 +796,10 @@ const BoardingPassBottom = ({
         </ProgressWrapper>
       ) : (
         <>
-          <Departure>
+          <ColumnFlexDiv>
             <DepartureArrival>Departure</DepartureArrival>
-            <Level>입문자</Level>
-          </Departure>
+            <Level>{departureLabel}</Level>
+          </ColumnFlexDiv>
           <ColumnFlexDiv>
             <Step>{data.runtime} 시간</Step>
             <PlaneWrapper>
@@ -725,10 +808,10 @@ const BoardingPassBottom = ({
               <PlaneLine></PlaneLine>
             </PlaneWrapper>
           </ColumnFlexDiv>
-          <Arrival>
+          <ColumnFlexDiv>
             <DepartureArrival>Arrival</DepartureArrival>
-            <Level>초급자</Level>
-          </Arrival>
+            <Level>{arrivalLabel}</Level>
+          </ColumnFlexDiv>
         </>
       )}
     </Bottom>
