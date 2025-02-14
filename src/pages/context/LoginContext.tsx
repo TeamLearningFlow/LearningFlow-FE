@@ -49,7 +49,7 @@ export const LoginProvider: React.FC<LoginProviderProps> = ({ children }) => {
 
   const [remember, setRemember] = useState<boolean>(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [userName, setUserName] = useState<string>(''); 
+  const [userName, setUserName] = useState<string>('');
 
   // 회원가입 후 자동 로그인 상태 반영
   useEffect(() => {
@@ -58,7 +58,6 @@ export const LoginProvider: React.FC<LoginProviderProps> = ({ children }) => {
 
     if (storedToken) {
       setIsLoggedIn(true);
-      console.log('자동 로그인 완료');
     }
 
     if (storedUserName) {

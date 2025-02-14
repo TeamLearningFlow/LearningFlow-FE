@@ -5,6 +5,7 @@ import Image from 'next/image';
 // import userProfile from '../../assets/userphoto.svg';
 import Guest from '../../assets/Guest.svg';
 import CheckIcon from '../../assets/checkIconGray.svg';
+import CheckIconB from '../../assets/checkIconB.svg';
 import DownIcon from '../../assets/downIcon.svg';
 import UpIcon from '../../assets/upIcon.svg';
 import ProfileCategoryList from '../../components/mypage/profileCategoryList';
@@ -232,7 +233,7 @@ const ChangeButton = styled.label`
 const CheckList = styled.div`
   // margin-top: 12px;
   font-size: 12px;
-  color: #959ca4;
+  // color: #959ca4;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -312,6 +313,7 @@ interface MyProfileProps {
   profileImgUrl: string;
   interestFields: string[];
   preferType: string;
+  bannerImgUrl: string;
 }
 
 const jobOptions = [
@@ -362,6 +364,7 @@ const MyProfile = ({
   profileImgUrl,
   interestFields,
   preferType,
+  bannerImgUrl,
 }: MyProfileProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isModified, setIsModified] = useState(false);
@@ -372,6 +375,7 @@ const MyProfile = ({
     nickname: name,
     job: jobMap[job],
     profileImage: profileImgUrl || Guest,
+    bannerImage: bannerImgUrl || '',
     preferredMedia: PreferTypeToSliderValue(preferType),
     selectedCategories: interestFields.map((field) => categoryMap[field]),
   });
@@ -385,7 +389,8 @@ const MyProfile = ({
       profileData.selectedCategories.join(',') !==
         originalProfileData.selectedCategories.join(',') ||
       profileData.preferredMedia !== originalProfileData.preferredMedia ||
-      profileData.profileImage !== originalProfileData.profileImage;
+      profileData.profileImage !== originalProfileData.profileImage ||
+      profileData.bannerImage !== originalProfileData.bannerImage;
 
     setIsModified(isChanged);
   }, [profileData, originalProfileData]);
@@ -412,18 +417,39 @@ const MyProfile = ({
     }));
   };
 
-  const handleImageUpload = async (
+  // 프로필, 배너 이미지 조건 확인
+  const [isProfileValid, setIsProfileValid] = useState(false);
+  const [isBannerValid, setIsBannerValid] = useState(false);
+
+  // 프로필 체크 조건
+  const validateProfileImage = (file: File) => {
+    const isValidFormat = ['image/jpeg', 'image/png'].includes(file.type);
+    const isValidSize = file.size <= 5 * 1024 * 1024; // 5MB 이하
+
+    return isValidFormat && isValidSize;
+  };
+
+  // 배너 체크 조건
+  const validateBannerImage = (file: File) => {
+    const isValidFormat = ['image/jpeg', 'image/png'].includes(file.type);
+    const isValidSize = file.size <= 5 * 1024 * 1024; // 5MB 이하
+
+    return isValidFormat && isValidSize;
+  };
+
+  // 프로필 이미지 변경 api 연결
+  const handleProfileUpload = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    // 파일 크기 제한 (5MB 이하)
-    if (file.size > 5 * 1024 * 1024) {
-      alert('파일 크기는 5MB 이하만 가능합니다.');
+    if (!validateProfileImage(file)) {
+      alert('파일이 조건을 만족하지 않습니다');
       return;
     }
 
+    setIsProfileValid(true);
     const formData = new FormData();
     formData.append('image', file);
 
@@ -450,13 +476,56 @@ const MyProfile = ({
       const imgUrl = response.data.result;
 
       if (imgUrl) {
-        console.log('이미지 URL:', imgUrl);
         setProfileData((prev) => ({ ...prev, profileImage: imgUrl }));
-      } else {
-        console.error('이미지 URL을 찾을 수 없습니다.', response.data);
       }
     } catch (error) {
       console.error('이미지 업로드 실패:', error);
+    }
+  };
+
+  // 배너 이미지 변경 api 연결
+  const handleBannerUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (!validateBannerImage(file)) {
+      alert('파일이 조건을 만족하지 않습니다');
+      return;
+    }
+
+    setIsBannerValid(true);
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('로그인이 필요합니다.');
+        return;
+      }
+
+      const response = await axios.post(
+        'http://onboarding.p-e.kr:8080/image/upload',
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      );
+
+      console.log('배너 업로드 성공:', response.data);
+
+      const imgUrl = response.data.result;
+
+      if (imgUrl) {
+        setProfileData((prev) => ({ ...prev, bannerImage: imgUrl }));
+      }
+    } catch (error) {
+      console.error('배너 업로드 실패:', error);
     }
   };
 
@@ -539,10 +608,13 @@ const MyProfile = ({
         const payload = {
           name: profileData.nickname,
           job: jobKey,
-          imgUrl: profileData.profileImage,
+          imgProfileUrl: profileData.profileImage,
+          imgBannerUrl: profileData.bannerImage,
           interestFields: interestFields, // 변환된 관심분야 리스트
           // preferType: preferredMedia,
         };
+
+        console.log('전송 데이터:', payload);
 
         const response = await axios.put(
           'http://onboarding.p-e.kr:8080/user',
@@ -555,8 +627,26 @@ const MyProfile = ({
           },
         );
         console.log('업데이트 성공:', response.data);
-        setIsEditing(false); // 편집 모드 비활성화
-        setOriginalProfileData(profileData); // 데이터 업데이트
+
+        if (response.data.isSuccess) {
+          setProfileData((prev) => ({
+            ...prev,
+            profileImage:
+              response.data.result.imgProfileUrl || prev.profileImage, // 서버 응답이 없으면 기존 값 유지
+            bannerImage: response.data.result.imgBannerUrl || prev.bannerImage, // 배너 이미지도 마찬가지
+          }));
+
+          setOriginalProfileData((prev) => ({
+            ...prev,
+            profileImage:
+              response.data.result.imgProfileUrl || prev.profileImage,
+            bannerImage: response.data.result.imgBannerUrl || prev.bannerImage,
+          }));
+
+          setIsEditing(false);
+        } else {
+          console.error('업데이트 실패: ', response.data.message);
+        }
       } catch (error) {
         console.error('업데이트 실패:', error);
       }
@@ -589,88 +679,87 @@ const MyProfile = ({
       </SectionHeader>
 
       <InfoGrid>
-        {isEditing ? (
-          <>
-            <InfoLabel>이미지</InfoLabel>
-            <ProfileContainer>
-              <ProfileImage>
-                <Image
-                  src={profileData.profileImage}
-                  alt="guest profile"
-                  width={100}
-                  height={100}
+        <InfoLabel>이미지</InfoLabel>
+        <ProfileContainer>
+          <ProfileImage>
+            <Image
+              src={profileData.profileImage}
+              alt="guest profile"
+              width={100}
+              height={100}
+            />
+          </ProfileImage>
+          {isEditing && (
+            <ChangeContainerImage>
+              <ChangeButton>
+                변경
+                <input
+                  type="file"
+                  accept="image/jpeg, image/png"
+                  style={{ display: 'none' }}
+                  onChange={handleProfileUpload}
                 />
-              </ProfileImage>
-              <ChangeContainerImage>
-                <ChangeButton>
-                  변경
-                  <input
-                    type="file"
-                    accept="image/jpeg, image/png"
-                    style={{
-                      display: 'none',
-                    }}
-                    onChange={handleImageUpload}
-                  />
-                </ChangeButton>
-                <CheckList>
-                  <span>
-                    <Image src={CheckIcon} alt="check" /> png, jpg, jpeg의
-                    확장자
-                  </span>
-                  <span>
-                    <Image src={CheckIcon} alt="check" /> 5MB 이하의 이미지
-                  </span>
-                </CheckList>
-              </ChangeContainerImage>
-            </ProfileContainer>
+              </ChangeButton>
+              <CheckList>
+                <span style={{ color: isProfileValid ? '#165BFA' : '#959ca4' }}>
+                  <Image
+                    src={isProfileValid ? CheckIconB : CheckIcon}
+                    alt="check"
+                  />{' '}
+                  png, jpg, jpeg의 확장자
+                </span>
+                <span style={{ color: isProfileValid ? '#165BFA' : '#959ca4' }}>
+                  <Image
+                    src={isProfileValid ? CheckIconB : CheckIcon}
+                    alt="check"
+                  />{' '}
+                  5MB 이하의 이미지
+                </span>
+              </CheckList>
+            </ChangeContainerImage>
+          )}
+        </ProfileContainer>
 
-            <InfoLabel>배너</InfoLabel>
-            <BannerContainer>
-              <Banner
-                background={profileData.bannerImage}
-                isEditing={isEditing}
-              />
-              <ChangeContainerBanner>
-                <ChangeButton>변경</ChangeButton>
-                <CheckList>
-                  <span>
-                    <Image src={CheckIcon} alt="check" /> png, jpg, jpeg의
-                    확장자
-                  </span>
-                  <span>
-                    <Image src={CheckIcon} alt="check" /> 8MB 이하의 이미지
-                  </span>
-                  <span>
-                    <Image src={CheckIcon} alt="check" /> 6:1 비율의 이미지
-                  </span>
-                </CheckList>
-              </ChangeContainerBanner>
-            </BannerContainer>
-          </>
-        ) : (
-          <>
-            <InfoLabel>배너</InfoLabel>
-            <BannerContainer>
-              <Banner
-                background={profileData.bannerImage}
-                isEditing={isEditing}
-              />
-            </BannerContainer>
-
-            <InfoLabel>이미지</InfoLabel>
-            <ProfileContainer>
-              <ProfileImage>
-                <Image
-                  src={profileData.profileImage}
-                  alt="guest profile"
-                  width={100}
-                  height={100}
+        <InfoLabel>배너</InfoLabel>
+        <BannerContainer>
+          <Banner background={profileData.bannerImage} isEditing={isEditing} />
+          {isEditing && (
+            <ChangeContainerBanner>
+              <ChangeButton>
+                변경
+                <input
+                  type="file"
+                  accept="image/jpeg, image/png"
+                  style={{ display: 'none' }}
+                  onChange={handleBannerUpload}
                 />
-              </ProfileImage>
-            </ProfileContainer>
-          </>
-        )}
+              </ChangeButton>
+              <CheckList>
+                <span style={{ color: isBannerValid ? '#165BFA' : '#959ca4' }}>
+                  <Image
+                    src={isBannerValid ? CheckIconB : CheckIcon}
+                    alt="check"
+                  />{' '}
+                  png, jpg, jpeg의 확장자
+                </span>
+                <span style={{ color: isBannerValid ? '#165BFA' : '#959ca4' }}>
+                  <Image
+                    src={isBannerValid ? CheckIconB : CheckIcon}
+                    alt="check"
+                  />{' '}
+                  5MB 이하의 이미지
+                </span>
+                <span style={{ color: isBannerValid ? '#165BFA' : '#959ca4' }}>
+                  <Image
+                    src={isBannerValid ? CheckIconB : CheckIcon}
+                    alt="check"
+                  />{' '}
+                  6:1 비율의 이미지
+                </span>
+              </CheckList>
+            </ChangeContainerBanner>
+          )}
+        </BannerContainer>
 
         <InfoLabel>닉네임</InfoLabel>
         {isEditing ? (

@@ -186,7 +186,7 @@ const Page1: React.FC<{
   const [isNicknameValid, setIsNicknameValid] = useState<boolean | null>(null);
   const [job, setJob] = useState('');
   const [isJobDropdownOpen, setIsJobDropdownOpen] = useState(false);
-  const [imgUrl, setImgUrl] = useState(''); // 이미지 URL 상태 추가
+  const [imgUrl, setImgUrl] = useState(Guest.src); // 이미지 디폴트 값
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // 부모에게 전달 할 string 정의
@@ -304,7 +304,7 @@ const Page1: React.FC<{
       <Content>
         <Title>닉네임과 직업을 설정해주세요</Title>
         <ProfileContainer>
-          <UploadedImage src={imgUrl || Guest.src} alt="profileImage" />
+          <UploadedImage src={imgUrl ? imgUrl : Guest.src} alt="profileImage" />
 
           <PencilButton
             onMouseEnter={() => setIsHovered(true)} // 마우스가 올려졌을 때

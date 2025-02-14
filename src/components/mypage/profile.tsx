@@ -16,7 +16,7 @@ interface UserData {
   birthDay: string;
   preferType: string;
   profileImgUrl: string;
-  birthday?: string;
+  bannerImgUrl: string;
 }
 
 const Container = styled.div`
@@ -118,6 +118,7 @@ const Profile = () => {
           name={userData.name}
           job={userData.job}
           profileImgUrl={userData.profileImgUrl}
+          bannerImgUrl={userData.bannerImgUrl}
           interestFields={userData.interestFields}
           preferType={userData.preferType}
         />
