@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import BoardingPassContainer from '../../assets/M_Background.svg';
@@ -16,9 +16,12 @@ import VelogIcon from '../../assets/platformicon/velog_nostroke_ic.svg';
 import YoutubeIcon from '../../assets/platformicon/youtube_nostroke_ic.svg';
 import VelogLine from '../../assets/platformicon/velog_ic.svg';
 import NaverblogLine from '../../assets/platformicon/naverblog_ic.svg';
+import TistoryLine from '../../assets/platformicon/tistory_ic.svg';
 import YoutubeLine from '../../assets/platformicon/youtube_ic.svg';
 import OnStudying from '../../assets/onstudying.svg';
 import CompletedStamp from '../../assets/completedStamp.svg';
+import { RecommendedCollection } from './homeCollection';
+import { useRouter } from 'next/router';
 
 const ColumnFlexDiv = styled.div`
   display: flex;
@@ -41,6 +44,7 @@ const Container = styled(ColumnFlexDiv)`
   position: relative;
   background: transparent;
   overflow: hidden;
+  cursor: pointer;
 `;
 
 const BoardingPassImage = styled(Image)`
@@ -115,9 +119,64 @@ const Tag = styled.span`
   line-height: 15px; /* 150% */
 `;
 
-const Category = styled(Tag)`
-  background-color: #f5f5ff;
-  color: #5e52ff;
+const Category = styled(Tag)<{ interestField: string }>`
+  background-color: ${({ interestField }) => {
+    switch (interestField) {
+      case 'APP_DEVELOPMENT':
+        return '#E5F6FE';
+      case 'WEB_DEVELOPMENT':
+        return '#EAF2FE';
+      case 'PROGRAMMING_LANGUAGE':
+        return '#DEFAFF';
+      case 'DEEP_LEARNING':
+        return '#FEECEC';
+      case 'STATISTICS':
+        return '#FDE8F0';
+      case 'DATA_ANALYSIS':
+        return '#FEEEE5';
+      case 'UI_UX':
+        return '#F5F5FF';
+      case 'PLANNING':
+        return '#FFF5D6';
+      case 'BUSINESS_PRODUCTIVITY':
+        return '#E3FFF7';
+      case 'FOREIGN_LANGUAGE':
+        return '#F9EDFF';
+      case 'CAREER':
+        return '#F2FFF6';
+      default:
+        return 'gray';
+    }
+  }};
+
+  color: ${({ interestField }) => {
+    switch (interestField) {
+      case 'APP_DEVELOPMENT':
+        return '#00AEFF';
+      case 'WEB_DEVELOPMENT':
+        return '#0066FF';
+      case 'PROGRAMMING_LANGUAGE':
+        return '#00BDDE';
+      case 'DEEP_LEARNING':
+        return '#FF4242';
+      case 'STATISTICS':
+        return '#F04588';
+      case 'DATA_ANALYSIS':
+        return '#FF5E00';
+      case 'UI_UX':
+        return '#5E52FF';
+      case 'PLANNING':
+        return '#FFAA00';
+      case 'BUSINESS_PRODUCTIVITY':
+        return '#12C79A';
+      case 'FOREIGN_LANGUAGE':
+        return '#CB59FF';
+      case 'CAREER':
+        return '#00BF40';
+      default:
+        return 'gray';
+    }
+  }};
 `;
 
 const Keyword = styled(Tag)`
@@ -156,14 +215,6 @@ const Bottom = styled(RowFlexDiv)`
   top: 391px;
   left: 1px;
   gap: 10px;
-`;
-
-const Departure = styled(ColumnFlexDiv)`
-  margin-right: 10px;
-`;
-
-const Arrival = styled(ColumnFlexDiv)`
-  margin-left: 10px;
 `;
 
 const DepartureArrival = styled.span`
@@ -358,14 +409,14 @@ const CollectionWrapper = styled(ColumnFlexDiv)`
   position: absolute;
   left: 20px;
   top: 123px;
-  width: 242px;
-  height: 109px;
-  gap: 8px;
+  width: 328px;
+  height: 168px;
+  gap: 18px;
 `;
 
 const ContentWrapper = styled(RowFlexDiv)`
   align-items: center;
-  width: 384px;
+  width: 328px;
 `;
 
 const Content = styled(ColumnFlexDiv)<{ status?: string }>`
@@ -386,6 +437,7 @@ const Label = styled.span<{
   letterSpacing?: string;
   lineHeight?: string;
   marginTop?: string;
+  width?: string;
 }>`
   color: ${(props) => props.color};
   font-size: ${(props) => props.fontSize || '12px'};
@@ -393,8 +445,12 @@ const Label = styled.span<{
   line-height: ${(props) => props.lineHeight || '17px'};
   letter-spacing: ${(props) => props.letterSpacing || '-0.2px'};
   margin-top: ${(props) => props.marginTop || '0px'};
+  width: ${(props) => props.width};
 
   align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const CompletedStampIcon = styled.div`
@@ -406,12 +462,11 @@ const CompletedStampIcon = styled.div`
 `;
 
 const Gradient = styled.div`
-  width: 383px;
-  height: 58px;
-  border-radius: 0px 0px 20px 20px;
+  width: 328px;
+  height: 64px;
   position: absolute;
-  top: 110px;
-  left: -19px;
+  bottom: 0;
+  left: 0;
   fill: var(
     --collection_linear,
     linear-gradient(
@@ -423,7 +478,276 @@ const Gradient = styled.div`
   backdrop-filter: blur(1.2999999523162842px);
 `;
 
-const HoverCollection = ({ status }: { status: string }) => {
+const interestFieldMap: Record<string, string> = {
+  APP_DEVELOPMENT: '앱개발',
+  WEB_DEVELOPMENT: '웹개발',
+  PROGRAMMING_LANGUAGE: '컴퓨터언어',
+  DEEP_LEARNING: '딥러닝',
+  STATISTICS: '통계',
+  DATA_ANALYSIS: '데이터분석',
+  UI_UX: 'UX/UI',
+  PLANNING: '기획',
+  BUSINESS_PRODUCTIVITY: '업무생산성',
+  FOREIGN_LANGUAGE: '외국어',
+  CAREER: '취업',
+};
+
+const PlatformIcon = (source: string) => {
+  switch (source) {
+    case 'youtube':
+      return (
+        <ThumbnailWrapper>
+          <Image src={YoutubeLine} alt="youtubeline" width={26} height={26} />
+        </ThumbnailWrapper>
+      );
+    case 'naverBlog':
+      return (
+        <ThumbnailWrapper>
+          <Image src={NaverblogLine} alt="blogline" width={26} height={26} />
+        </ThumbnailWrapper>
+      );
+    case 'tistory':
+      return (
+        <ThumbnailWrapper>
+          <Image src={TistoryLine} alt="velogline" width={26} height={26} />
+        </ThumbnailWrapper>
+      );
+    case 'velog':
+      return (
+        <ThumbnailWrapper>
+          <Image src={VelogLine} alt="velogline" width={26} height={26} />
+        </ThumbnailWrapper>
+      );
+    default:
+      return null;
+  }
+};
+
+const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
+  const platformSources = [
+    ...new Set(data.resource.map((episode) => episode?.resourceSource)),
+  ];
+
+  const areArraysEqual = (arr1: string[], arr2: string[]) => {
+    return (
+      arr1.length === arr2.length &&
+      new Set(arr1).size === new Set([...arr1, ...arr2]).size
+    );
+  };
+
+  if (
+    areArraysEqual(platformSources, [
+      'youtube',
+      'tistory',
+      'naverBlog',
+      'velog',
+    ])
+  ) {
+    return (
+      <ThumbnailWrapper>
+        <Thumbnail left={0} zIndex={3}>
+          <Image src={YoutubeIcon} alt="youtube" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={18} zIndex={2}>
+          <Image src={TistoryIcon} alt="tistory" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={35} zIndex={1}>
+          <Image src={NaverblogIcon} alt="naverblog" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={53} zIndex={0}>
+          <Image src={VelogIcon} alt="velog" width={26} height={26} />
+        </Thumbnail>
+      </ThumbnailWrapper>
+    );
+  }
+  if (areArraysEqual(platformSources, ['youtube', 'tistory', 'naverBlog'])) {
+    return (
+      <ThumbnailWrapper>
+        <Thumbnail left={0} zIndex={3}>
+          <Image src={YoutubeIcon} alt="youtube" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={18} zIndex={2}>
+          <Image src={TistoryIcon} alt="tistory" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={35} zIndex={1}>
+          <Image src={NaverblogIcon} alt="naverblog" width={26} height={26} />
+        </Thumbnail>
+      </ThumbnailWrapper>
+    );
+  }
+  if (areArraysEqual(platformSources, ['youtube', 'tistory', 'velog'])) {
+    return (
+      <ThumbnailWrapper>
+        <Thumbnail left={0} zIndex={3}>
+          <Image src={YoutubeIcon} alt="youtube" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={18} zIndex={2}>
+          <Image src={TistoryIcon} alt="tistory" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={35} zIndex={1}>
+          <Image src={VelogIcon} alt="velog" width={26} height={26} />
+        </Thumbnail>
+      </ThumbnailWrapper>
+    );
+  }
+  if (areArraysEqual(platformSources, ['youtube', 'naverBlog', 'velog'])) {
+    return (
+      <ThumbnailWrapper>
+        <Thumbnail left={0} zIndex={3}>
+          <Image src={YoutubeIcon} alt="youtube" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={18} zIndex={2}>
+          <Image src={NaverblogIcon} alt="naverblog" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={35} zIndex={1}>
+          <Image src={VelogIcon} alt="velog" width={26} height={26} />
+        </Thumbnail>
+      </ThumbnailWrapper>
+    );
+  }
+  if (areArraysEqual(platformSources, ['tistory', 'naverBlog', 'velog'])) {
+    return (
+      <ThumbnailWrapper>
+        <Thumbnail left={0} zIndex={3}>
+          <Image src={TistoryIcon} alt="tistory" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={18} zIndex={2}>
+          <Image src={NaverblogIcon} alt="naverblog" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={35} zIndex={1}>
+          <Image src={VelogIcon} alt="velog" width={26} height={26} />
+        </Thumbnail>
+      </ThumbnailWrapper>
+    );
+  }
+  if (areArraysEqual(platformSources, ['youtube', 'tistory'])) {
+    return (
+      <ThumbnailWrapper>
+        <Thumbnail left={0} zIndex={3}>
+          <Image src={YoutubeIcon} alt="youtube" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={18} zIndex={2}>
+          <Image src={TistoryIcon} alt="tistory" width={26} height={26} />
+        </Thumbnail>
+      </ThumbnailWrapper>
+    );
+  }
+  if (areArraysEqual(platformSources, ['youtube', 'naverBlog'])) {
+    return (
+      <ThumbnailWrapper>
+        <Thumbnail left={0} zIndex={3}>
+          <Image src={YoutubeIcon} alt="youtube" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={18} zIndex={2}>
+          <Image src={NaverblogIcon} alt="naverblog" width={26} height={26} />
+        </Thumbnail>
+      </ThumbnailWrapper>
+    );
+  }
+  if (areArraysEqual(platformSources, ['youtube', 'velog'])) {
+    return (
+      <ThumbnailWrapper>
+        <Thumbnail left={0} zIndex={3}>
+          <Image src={YoutubeIcon} alt="youtube" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={18} zIndex={2}>
+          <Image src={VelogIcon} alt="velog" width={26} height={26} />
+        </Thumbnail>
+      </ThumbnailWrapper>
+    );
+  }
+  if (areArraysEqual(platformSources, ['tistory', 'naverBlog'])) {
+    return (
+      <ThumbnailWrapper>
+        <Thumbnail left={0} zIndex={3}>
+          <Image src={TistoryIcon} alt="tistory" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={18} zIndex={2}>
+          <Image src={NaverblogIcon} alt="naverblog" width={26} height={26} />
+        </Thumbnail>
+      </ThumbnailWrapper>
+    );
+  }
+  if (areArraysEqual(platformSources, ['tistory', 'velog'])) {
+    return (
+      <ThumbnailWrapper>
+        <Thumbnail left={0} zIndex={3}>
+          <Image src={TistoryIcon} alt="tistory" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={18} zIndex={2}>
+          <Image src={VelogIcon} alt="velog" width={26} height={26} />
+        </Thumbnail>
+      </ThumbnailWrapper>
+    );
+  }
+  if (areArraysEqual(platformSources, ['naverBlog', 'velog'])) {
+    return (
+      <ThumbnailWrapper>
+        <Thumbnail left={0} zIndex={3}>
+          <Image src={NaverblogIcon} alt="naverblog" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={18} zIndex={2}>
+          <Image src={VelogIcon} alt="velog" width={26} height={26} />
+        </Thumbnail>
+      </ThumbnailWrapper>
+    );
+  }
+  if (areArraysEqual(platformSources, ['tistory'])) {
+    return (
+      <ThumbnailWrapper>
+        <Thumbnail left={0} zIndex={3}>
+          <Image src={TistoryIcon} alt="velog" width={26} height={26} />
+        </Thumbnail>
+      </ThumbnailWrapper>
+    );
+  }
+  if (areArraysEqual(platformSources, ['naverBlog'])) {
+    return (
+      <ThumbnailWrapper>
+        <Thumbnail left={0} zIndex={3}>
+          <Image src={NaverblogIcon} alt="naverblog" width={26} height={26} />
+        </Thumbnail>
+      </ThumbnailWrapper>
+    );
+  }
+  if (areArraysEqual(platformSources, ['velog'])) {
+    return (
+      <ThumbnailWrapper>
+        <Thumbnail left={0} zIndex={3}>
+          <Image src={VelogIcon} alt="velog" width={26} height={26} />
+        </Thumbnail>
+      </ThumbnailWrapper>
+    );
+  }
+  if (areArraysEqual(platformSources, ['youtube'])) {
+    return (
+      <ThumbnailWrapper>
+        <Thumbnail left={0} zIndex={3}>
+          <Image src={YoutubeIcon} alt="youtube" width={26} height={26} />
+        </Thumbnail>
+      </ThumbnailWrapper>
+    );
+  }
+};
+
+const CollectionAmount = ({ data }: { data: RecommendedCollection }) => {
+  return (
+    <CollectionDetail>
+      {data.textCount !== 0 && <Detail>아티클</Detail>}
+      {data.textCount !== 0 && <Number>{data.textCount}</Number>}
+      {data.videoCount !== 0 && <Detail marginLeft={'5px'}>영상</Detail>}
+      {data.videoCount !== 0 && <Number>{data.videoCount}</Number>}
+    </CollectionDetail>
+  );
+};
+
+const HoverCollection = ({
+  data,
+  status,
+}: {
+  data: RecommendedCollection;
+  status: string;
+}) => {
   return (
     <HoverWrapper>
       <HoverBackgroundTopWrapper>
@@ -440,7 +764,7 @@ const HoverCollection = ({ status }: { status: string }) => {
             style={{ top: '57px', position: 'absolute' }}
           />
           <CollectionHeader>
-            <Number status="학습완료">총 8회차</Number>
+            <Number status="학습완료">총 {data.amount}회차</Number>
             <LineWrapper status="학습완료">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -458,12 +782,7 @@ const HoverCollection = ({ status }: { status: string }) => {
               </svg>
               <Image src={Circle} alt="circle" />
             </LineWrapper>
-            <CollectionDetail>
-              <Detail>아티클</Detail>
-              <Number>2</Number>
-              <Detail marginLeft={'5px'}>영상</Detail>
-              <Number>6</Number>
-            </CollectionDetail>
+            <CollectionAmount data={data} />
           </CollectionHeader>
 
           <CollectionWrapper>
@@ -481,7 +800,7 @@ const HoverCollection = ({ status }: { status: string }) => {
                     fontSize="13px"
                     lineHeight="18px"
                     letterSpacing="-0.24px"
-                    style={{ marginTop: "3px",}}
+                    style={{ marginTop: '3px' }}
                   >
                     학습기간
                   </Label>
@@ -514,25 +833,7 @@ const HoverCollection = ({ status }: { status: string }) => {
             style={{ top: '57px', position: 'absolute' }}
           />
           <CollectionHeader>
-            <ThumbnailWrapper>
-              <Thumbnail left={0} zIndex={3}>
-                <Image src={YoutubeIcon} alt="youtube" width={36} height={36} />
-              </Thumbnail>
-              <Thumbnail left={23} zIndex={2}>
-                <Image src={VelogIcon} alt="velog" width={36} height={36} />
-              </Thumbnail>
-              <Thumbnail left={46} zIndex={1}>
-                <Image src={TistoryIcon} alt="tistory" width={36} height={36} />
-              </Thumbnail>
-              <Thumbnail left={69} zIndex={0}>
-                <Image
-                  src={NaverblogIcon}
-                  alt="naverblog"
-                  width={36}
-                  height={36}
-                />
-              </Thumbnail>
-            </ThumbnailWrapper>
+            <PlatformSet data={data} />
             {/*<Detail style={{ position: 'absolute', left: '150px' }}>+4</Detail>*/}
             <LineWrapper>
               <svg
@@ -550,64 +851,21 @@ const HoverCollection = ({ status }: { status: string }) => {
               </svg>
               <Image src={Circle} alt="circle" />
             </LineWrapper>
-            <CollectionDetail>
-              <Detail>아티클</Detail>
-              <Number>2</Number>
-              <Detail marginLeft={'8px'}>영상</Detail>
-              <Number>6</Number>
-            </CollectionDetail>
+            <CollectionAmount data={data} />
           </CollectionHeader>
 
           <CollectionWrapper>
-            <ContentWrapper>
-              <ThumbnailWrapper>
-                <Image src={VelogLine} alt="velogline" width={36} height={36} />
-              </ThumbnailWrapper>
-              <Content>
-                <Label color={'#BBB6FF'} fontSize="12px" marginTop="11px">
-                  1회차
-                </Label>
-                <Label color={'#fff'} fontSize="14px">
-                  1회차 콘텐츠의 제목을 입력해주세요.
-                </Label>
-              </Content>
-            </ContentWrapper>
-            <ContentWrapper>
-              <ThumbnailWrapper>
-                <Image
-                  src={NaverblogLine}
-                  alt="blogline"
-                  width={36}
-                  height={36}
-                />
-              </ThumbnailWrapper>
-              <Content>
-                <Label color={'#BBB6FF'} fontSize="12px" marginTop="11px">
-                  2회차
-                </Label>
-                <Label color={'#fff'} fontSize="14px">
-                  2회차 콘텐츠의 제목을 입력해주세요.
-                </Label>
-              </Content>
-            </ContentWrapper>
-            <ContentWrapper>
-              <ThumbnailWrapper>
-                <Image
-                  src={YoutubeLine}
-                  alt="youtubeline"
-                  width={36}
-                  height={36}
-                />
-              </ThumbnailWrapper>
-              <Content>
-                <Label color={'#BBB6FF'} fontSize="12px" marginTop="11px">
-                  3회차
-                </Label>
-                <Label color={'#fff'} fontSize="14px">
-                  3회차 콘텐츠의 제목을 입력해주세요.
-                </Label>
-              </Content>
-            </ContentWrapper>
+            {data.resource.slice(0, 3).map((item, index) => (
+              <ContentWrapper key={index}>
+                {PlatformIcon(item?.resourceSource)}
+                <Content>
+                  <Label color={'#BBB6FF'}>{item?.episodeNumber}회차</Label>
+                  <Label color={'#fff'} width={'275px'}>
+                    {item?.episodeName}
+                  </Label>
+                </Content>
+              </ContentWrapper>
+            ))}
             <Gradient />
           </CollectionWrapper>
         </>
@@ -616,7 +874,58 @@ const HoverCollection = ({ status }: { status: string }) => {
   );
 };
 
-const BoardingPassBottom = ({ status }: { status?: string }) => {
+const BoardingPassBottom = ({
+  data,
+  status,
+}: {
+  data: RecommendedCollection;
+  status?: string;
+}) => {
+  const [departureLabel, setDepartureLabel] = useState('');
+  const [arrivalLabel, setArrivalLabel] = useState('');
+
+  const setDifficultyLabel = () => {
+    const equals = (a: number[], b: number[]) =>
+      a.length === b.length && a.every((v, i) => v === b[i]);
+
+    const level = data.difficulties.sort();
+
+    if (equals(level, [1])) {
+      setDepartureLabel('입문자');
+      setArrivalLabel('초급자');
+      return;
+    }
+    if (equals(level, [2])) {
+      setDepartureLabel('초급자');
+      setArrivalLabel('중급자');
+      return;
+    }
+    if (equals(level, [3])) {
+      setDepartureLabel('중급자');
+      setArrivalLabel('마스터');
+      return;
+    }
+    if (equals(level, [1, 2])) {
+      setDepartureLabel('입문·초급자');
+      setArrivalLabel('중급자');
+      return;
+    }
+    if (equals(level, [2, 3])) {
+      setDepartureLabel('초급·중급자');
+      setArrivalLabel('마스터');
+      return;
+    }
+    if (equals(level, [1, 2, 3])) {
+      setDepartureLabel('입문·초급·중급자');
+      setArrivalLabel('마스터');
+      return;
+    }
+  };
+
+  useEffect(() => {
+    setDifficultyLabel();
+  }, []);
+
   return (
     <Bottom>
       {status == '학습중' ? (
@@ -631,22 +940,22 @@ const BoardingPassBottom = ({ status }: { status?: string }) => {
         </ProgressWrapper>
       ) : (
         <>
-          <Departure>
-            <DepartureArrival>Departure</DepartureArrival>
-            <Level>입문자</Level>
-          </Departure>
           <ColumnFlexDiv>
-            <Step>n 시간</Step>
+            <DepartureArrival>Departure</DepartureArrival>
+            <Level>{departureLabel}</Level>
+          </ColumnFlexDiv>
+          <ColumnFlexDiv>
+            <Step>{data.runtime} 시간</Step>
             <PlaneWrapper>
               <PlaneLine></PlaneLine>
               <Image src={Plane} alt="plane" style={{ margin: '0 5px' }} />
               <PlaneLine></PlaneLine>
             </PlaneWrapper>
           </ColumnFlexDiv>
-          <Arrival>
+          <ColumnFlexDiv>
             <DepartureArrival>Arrival</DepartureArrival>
-            <Level>초급자</Level>
-          </Arrival>
+            <Level>{arrivalLabel}</Level>
+          </ColumnFlexDiv>
         </>
       )}
     </Bottom>
@@ -654,28 +963,33 @@ const BoardingPassBottom = ({ status }: { status?: string }) => {
 };
 
 const BoardingPass = ({
+  data,
   showHoverCollection,
 }: {
+  data: RecommendedCollection;
   showHoverCollection?: boolean;
 }) => {
+  const router = useRouter();
+  console.log('BoardingPass 데이터 ', data);
+
   return (
-    <Container>
+    <Container onClick={() => router.push(`/collection/${data.collectionId}`)}>
       <Image src={BoardingPassContainer} alt="boardingpass" />
       <BoardingPassImage src={CollectionImage} alt="collection image" />
       <StatusTag status=""></StatusTag>
       <Body>
         <TagWrapper>
-          <Category>관심분야</Category>
-          <Keyword>키워드1</Keyword>
-          <Keyword>키워드2</Keyword>
+          <Category interestField={data.interestField}>
+            {interestFieldMap[data.interestField]}
+          </Category>
+          <Keyword>{data.keywords[0]}</Keyword>
+          <Keyword>{data.keywords[1]}</Keyword>
         </TagWrapper>
-        <Title>
-          컬렉션의 <br></br>제목을 입력해주세요
-        </Title>
-        <Author>컬렉션 제작자명</Author>
+        <Title>{data.title}</Title>
+        <Author>{data.creator}</Author>
       </Body>
-      <BoardingPassBottom status="" />
-      {showHoverCollection && <HoverCollection status="" />}
+      <BoardingPassBottom data={data} status="" />
+      {showHoverCollection && <HoverCollection data={data} status="" />}
     </Container>
   );
 };

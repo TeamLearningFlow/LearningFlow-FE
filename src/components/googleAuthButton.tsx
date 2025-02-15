@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import googlelogo from '../assets/googleLogo.svg';
+import { useRouter } from 'next/router';
+import axios from 'axios';
 
 const Button = styled.button`
   display: flex;
@@ -51,12 +53,84 @@ const GoogleLogo = styled(Image)`
 `;
 
 const GoogleAuthButton = ({ text }: { text: string }) => {
-  const CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
-  const REDIRECT_URI = process.env.NEXT_PUBLIC_REDIRECT_URI;
+  const router = useRouter();
 
   const handleGoogleLogin = () => {
-    const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=email profile`;
-    window.location.href = googleAuthUrl;
+    const popup = window.open(
+      'http://onboarding.p-e.kr:8080/login/google',
+      '_blank',
+      'width=600,height=800',
+    );
+
+    window.addEventListener('message', (event) => {
+      if (event.origin !== 'http://onboarding.p-e.kr:8080') {
+        return;
+      }
+
+      const { accessToken } = event.data;
+
+      if (accessToken) {
+        localStorage.setItem('accessToken', 'Bearer ' + accessToken);
+
+        // 홈(/)으로 인증된 GET 요청 (401 에러 처리)
+        axios
+          .get('http://onboarding.p-e.kr:8080', {
+            headers: {
+              Authorization: 'Bearer ' + accessToken,
+            },
+            withCredentials: true,
+          })
+          .then((response) => {
+            console.log('Home page response:', response.data);
+            router.push('/homePage');
+          })
+          .catch(async (error) => {
+            if (error.response && error.response.status === 401) {
+              // Access Token 만료시 백엔드에서 새 Access Token을 보냈는지 확인
+              const newAccessToken = error.response.headers.authorization;
+
+              if (newAccessToken) {
+                // 새 Access Token 저장
+                localStorage.setItem('accessToken', newAccessToken);
+
+                // 새 Access Token으로 원래 요청 다시 시도
+                try {
+                  const retryResponse = await axios.get(
+                    'http://onboarding.p-e.kr:8080',
+                    {
+                      headers: {
+                        Authorization: newAccessToken,
+                      },
+                      withCredentials: true,
+                    },
+                  );
+                  console.log(
+                    'Home page response (retry):',
+                    retryResponse.data,
+                  );
+                  router.push('/homePage');
+                } catch (retryError) {
+                  console.error('Error after retry:', retryError);
+                  handleAuthFailure(); // 재시도 실패 시 처리
+                }
+              } else {
+                // Refresh Token도 만료된 경우
+                handleAuthFailure();
+              }
+            } else {
+              console.error('Error fetching home page:', error);
+            }
+          });
+      } else {
+        console.error('Authentication failed: No access token received.');
+      }
+    });
+  };
+
+  // 인증 실패/만료 시 처리 함수
+  const handleAuthFailure = () => {
+    localStorage.removeItem('accessToken');
+    router.push('/login');
   };
 
   return (
