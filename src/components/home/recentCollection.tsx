@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import BoardingPass from '../mypage/boardingPass';
+import RecentBoardingPass from './recentBoardingPass';
 import { useRouter } from 'next/router';
 import plane from '../../assets/plane_today.svg';
 import naverblogChecked from '../../assets/platformicon/naver blog_checked_ic.svg';
@@ -147,9 +147,9 @@ const ProgressBarFull = styled.div`
   border-radius: 17.515px;
 `;
 
-const ProgressBar = styled.div`
+const ProgressBar = styled.div<{ percent: number }>`
   height: 100%;
-  width: 20%;
+  width: ${(props) => props.percent}%;
   background-color: #5e52ff;
   border-radius: 17.515px;
 `;
@@ -308,6 +308,33 @@ const Button = styled.button`
   letter-spacing: -0.44px;
 `;
 
+export type RecentLearning = {
+  amount: number;
+  collectionId: number;
+  completedDate: number[];
+  startDate: number[];
+  creator: string;
+  difficulties: number[];
+  imageUrl: string;
+  interestField: string;
+  keywords: string[];
+  learningStatus: string;
+  liked: boolean;
+  likesCount: number;
+  progressRatePercentage: number;
+  progressRatio: string;
+  title: string;
+  runtime: number;
+  textCount: number;
+  videoCount: number;
+  resource: {
+    episodeNumber: number;
+    episodeName: string;
+    resourceSource: string;
+    url: string;
+  }[];
+};
+
 const TodayContent = ({ children }: { children: ReactNode }) => {
   return (
     <TodayContentWrapper>
@@ -321,8 +348,13 @@ const TodayContent = ({ children }: { children: ReactNode }) => {
   );
 };
 
-const RecentCollection: React.FC = () => {
+const RecentCollection = ({
+  collectionInfo,
+}: {
+  collectionInfo: RecentLearning;
+}) => {
   const router = useRouter();
+
   return (
     <>
       <Container>
@@ -337,15 +369,19 @@ const RecentCollection: React.FC = () => {
           </BlackLabel>
         </LabelWrapper>
         <CollectionWrapper>
-          <BoardingPass />
+          <RecentBoardingPass collectionInfo={collectionInfo} />
           <ContentDescription>
             <LearningRate>
-              <TitleLabel>&lt;와이어 프레임 입문&gt; 컬렉션 학습률</TitleLabel>
+              <TitleLabel>
+                &lt;{collectionInfo.title}&gt; 컬렉션 학습률
+              </TitleLabel>
               <ProgressWrapper>
                 <ProgressBarFull>
-                  <ProgressBar />
+                  <ProgressBar
+                    percent={collectionInfo.progressRatePercentage}
+                  />
                 </ProgressBarFull>
-                <ProgressRate>4 / 20회차 (20%)</ProgressRate>
+                <ProgressRate>{collectionInfo.progressRatio}</ProgressRate>
                 <ProgressLabel>조금 더 힘을 내요!</ProgressLabel>
               </ProgressWrapper>
             </LearningRate>
@@ -391,7 +427,13 @@ const RecentCollection: React.FC = () => {
             </ContentList>
           </ContentDescription>
         </CollectionWrapper>
-        <Button onClick={() => router.push('/search')}>바로 학습할래요</Button>
+        <Button
+          onClick={() =>
+            router.push(`/collection/${collectionInfo.collectionId}`)
+          }
+        >
+          바로 학습할래요
+        </Button>
       </Container>
     </>
   );

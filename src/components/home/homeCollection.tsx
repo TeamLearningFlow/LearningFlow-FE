@@ -87,8 +87,38 @@ const CollectionList = styled.div`
   }
 `;
 
-const HomeCollection: React.FC<{ nickname: string }> = ({ nickname }) => {
+export type RecommendedCollection = {
+  amount: number;
+  collectionId: number;
+  completedDate: number[];
+  startDate: number[];
+  creator: string;
+  difficulties: number[];
+  imageUrl: string;
+  interestField: string;
+  keywords: string[];
+  learningStatus: string;
+  liked: boolean;
+  likesCount: number;
+  progressRatePercentage: number;
+  progressRatio: string;
+  title: string;
+  runtime: number;
+  textCount: number;
+  videoCount: number;
+  resource: {
+    episodeNumber: number;
+    episodeName: string;
+    resourceSource: string;
+    url: string;
+  }[];
+};
 
+const HomeCollection: React.FC<{
+  nickname: string;
+  collections: RecommendedCollection[];
+}> = ({ nickname, collections }) => {
+  console.log('collections: ', collections);
   return (
     <>
       <HomeCollectionWrapper>
@@ -107,12 +137,9 @@ const HomeCollection: React.FC<{ nickname: string }> = ({ nickname }) => {
           </HeaderText>
         </CollectionHeader>
         <CollectionList>
-          <BoardingPass showHoverCollection={true} />
-          <BoardingPass showHoverCollection={true} />
-          <BoardingPass showHoverCollection={true} />
-          <BoardingPass showHoverCollection={true} />
-          <BoardingPass showHoverCollection={true} />
-          <BoardingPass showHoverCollection={true} />
+          {collections.map((item, index) => (
+            <BoardingPass key={index} data={item} showHoverCollection={true} />
+          ))}
         </CollectionList>
       </HomeCollectionWrapper>
     </>
