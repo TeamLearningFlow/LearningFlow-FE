@@ -178,7 +178,11 @@ const NextButton = styled.button<{ active: boolean }>`
 `;
 
 const Page1: React.FC<{
-  onNext: (data: { nickname: string; job: string; imgUrl: string }) => void;
+  onNext: (data: {
+    nickname: string;
+    job: string;
+    imgUrl: string | null;
+  }) => void;
 }> = ({ onNext }) => {
   const [isHovered, setIsHovered] = useState(false); // 편집 아이콘 hover
   const [nickname, setNickname] = useState('');
@@ -186,7 +190,7 @@ const Page1: React.FC<{
   const [isNicknameValid, setIsNicknameValid] = useState<boolean | null>(null);
   const [job, setJob] = useState('');
   const [isJobDropdownOpen, setIsJobDropdownOpen] = useState(false);
-  const [imgUrl, setImgUrl] = useState(Guest.src); // 이미지 디폴트 값
+  const [imgUrl, setImgUrl] = useState<string | null>(null); // null 값일 때 디폴트
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // 부모에게 전달 할 string 정의
@@ -304,7 +308,7 @@ const Page1: React.FC<{
       <Content>
         <Title>닉네임과 직업을 설정해주세요</Title>
         <ProfileContainer>
-          <UploadedImage src={imgUrl ? imgUrl : Guest.src} alt="profileImage" />
+          <UploadedImage src={imgUrl || Guest.src} alt="profileImage" />
 
           <PencilButton
             onMouseEnter={() => setIsHovered(true)} // 마우스가 올려졌을 때

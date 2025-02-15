@@ -430,7 +430,12 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
           )}
         </InfoRow>
       )}
-      {isModalOpen && <EmailChangeModal email={editedEmail} onConfirm={handleConfirmEmailChange} />}
+      {isModalOpen && (
+        <EmailChangeModal
+          email={editedEmail}
+          onConfirm={handleConfirmEmailChange}
+        />
+      )}
     </Section>
   );
 };
