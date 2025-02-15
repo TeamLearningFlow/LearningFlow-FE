@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import LogoGraphic from '../../assets/logoMark.svg';
 import Airplane from '../../assets/homeAirplane.svg';
-import Window from '../../assets/homeWindow.svg'; // 이미지 수정 필요
+import Window from '../../assets/window.svg';
+import WindowIn from '../../assets/windowIn.gif';
 import Search from '../../assets/searchIcon.svg';
 
 const TopWrapper = styled.div`
@@ -33,7 +34,7 @@ const TopWrapper = styled.div`
 const Title = styled.h1`
   color: #000;
   text-align: center;
-  font-family: 'Sandoll Geobok'; // 글씨체 변경 필요
+  font-family: 'Sandoll Geobok';
   font-feature-settings:
     'liga' off,
     'clig' off;
@@ -41,7 +42,7 @@ const Title = styled.h1`
   font-weight: 700;
   line-height: 130%; /* 93.6px */
   letter-spacing: -1.32px;
-  margin: -259px 0 82px 0;
+  margin: -259px 0 65px 0;
   z-index: 1;
 
   @media (max-width: 1024px) {
@@ -70,7 +71,8 @@ const SearchWrapper = styled.div`
   width: 65%;
   height: 65px;
   cursor: pointer;
-  z-index: 1;
+  z-index: 5;
+  margin-bottom: 50px;
 
   @media (max-width: 1024px) {
     height: 60px;
@@ -150,68 +152,164 @@ const Background = styled.div`
 
 const AirplaneWrapper = styled.div`
   position: absolute;
-  top: 1%;
-  left: 5%;
-  // flex-shrink: 0;
+  top: 10%;
+  left: -8%;
+  width: 500px;
+  height: 400px;
+
+  animation: airplaneMove 3s ease-in-out infinite;
+
+  @keyframes airplaneMove {
+    0% {
+      transform: translate(0px, 0px);
+    }
+    100% {
+      transform: translate(200px, -200px); /* 오른쪽 위로 이동 */
+    }
+  }
 
   img {
-    width: 600px;
-    height: 500px;
+    width: 100%;
+    height: auto;
+  }
 
-    @media (max-width: 1024px) {
-      width: 500px;
-      height: 400px;
+  @media (max-width: 1024px) {
+    width: 400px;
+    height: 400px;
+    top: 10%;
+    left: -12%;
+  }
+
+  @media (max-width: 768px) {
+    width: 300px;
+    height: 300px;
+    top: 18%;
+    left: -12%;
+  }
+
+  @media (max-width: 480px) {
+    width: 250px;
+    height: 250px;
+    top: 20%;
+    left: -16%;
+
+    @keyframes airplaneMove {
+      0% {
+        transform: translate(0px, 0px);
+      }
+      100% {
+        transform: translate(100px, -200px);
+      }
     }
+  }
+`;
 
-    @media (max-width: 768px) {
-      width: 400px;
-      height: 300px;
+const GasEffect = styled.div`
+  position: absolute;
+  bottom: -13%;
+  left: -10%;
+  width: 327.53px;
+  height: 55.779px;
+  background: #ebeaff;
+  filter: blur(34.4px);
+  border-radius: 327.53px;
+  opacity: 0.8;
+  transform: rotate(-50deg);
+
+  animation: gasFlow 1.5s ease-out infinite alternate;
+
+  @keyframes gasFlow {
+    0% {
+      transform: rotate(-47.016deg) scale(0.9);
+      opacity: 0.9;
     }
-
-    @media (max-width: 480px) {
-      width: 400px;
-      height: 300px;
+    100% {
+      transform: rotate(-47.016deg) scale(1.3);
+      opacity: 0.5;
     }
   }
 
   @media (max-width: 1024px) {
-    top: 0%;
+    width: 250px;
+    height: 40px;
   }
 
   @media (max-width: 768px) {
-    top: 2%;
-    left: 2%;
+    width: 200px;
+    height: 35px;
   }
 
   @media (max-width: 480px) {
-    left: -17%;
+    width: 180px;
+    height: 30px;
   }
 `;
 
 const WindowWrapper = styled.div`
   position: absolute;
-  bottom: 15%;
-  left: 0;
+  bottom: 0;
+  left: 2%;
   // flex-shrink: 0;
 
-  img {
-    width: 466.39px;
-    height: 618.061px;
+  width: 400px;
+  height: 500px;
 
-    @media (max-width: 1024px) {
-      width: 400px;
-      height: 600px;
-    }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: auto;
+    max-width: 400px;
+    max-height: 500px;
 
     @media (max-width: 768px) {
-      width: 320px;
-      height: 500px;
+      max-width: 320px;
+      max-height: 400px;
+      left: 0%;
     }
 
     @media (max-width: 480px) {
-      width: 280px;
-      height: 400px;
+      max-width: 280px;
+      max-height: 300px;
+      left: -4%;
+      top: 40%;
     }
+  }
+`;
+
+const WindowImage = styled(Image)`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+`;
+
+const WindowInGif = styled(Image)`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 30.5%;
+  left: -1%;
+  border-radius: 180px;
+  clip-path: inset(0% 15% 0% 20% round 180px);
+  z-index: 1;
+  object-fit: contain;
+  transform: rotate(-25deg);
+
+  @media (max-width: 768px) {
+    top: 34%;
+    left: -1%;
+    clip-path: inset(0% 15% 0% 20% round 180px);
+  }
+
+  @media (max-width: 470px) {
+    position: relative;
+    margin-top: -44%;
+    margin-left: -35%;
+    clip-path: inset(0% 13% 0% 23% round 180px);
   }
 `;
 
@@ -295,6 +393,17 @@ const ShadowWrapper = styled.div`
   }
 `;
 
+const WindowShadow = styled.div`
+  position: absolute;
+  bottom: 6%;
+  left: 15%;
+  width: 23vw;
+  height: 1vh;
+  background: rgba(160, 160, 160, 0.7);
+  filter: blur(38px);
+  border-radius: 406.111px;
+`;
+
 const HomeTop: React.FC = () => {
   const router = useRouter();
 
@@ -315,11 +424,19 @@ const HomeTop: React.FC = () => {
 
       <Background>
         <AirplaneWrapper>
-          <Image src={Airplane} alt="airplane" width={600} height={500} />
+          <GasEffect />
+          <Image src={Airplane} alt="airplane" />
         </AirplaneWrapper>
         <WindowWrapper>
-          <Image src={Window} alt="window" width={466.39} height={618.061} />
+          <WindowInGif src={WindowIn} alt="window-in" unoptimized />
+          <WindowImage
+            src={Window}
+            alt="window"
+            width={466.39}
+            height={618.061}
+          />
         </WindowWrapper>
+        <WindowShadow />
         <LogoMarkWrapper>
           <LogoGraphicImg
             src={LogoGraphic}

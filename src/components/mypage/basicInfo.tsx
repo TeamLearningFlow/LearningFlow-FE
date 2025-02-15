@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-// import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import Image from 'next/image';
 import Tooltip from '../../assets/emailTooltip.svg';
@@ -88,8 +88,8 @@ const Input = styled.input<{ isValid: boolean }>`
 const ErrorContainer = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 8px;
-  gap: 6px;
+  margin-top: 6px;
+  gap: 4px;
   color: #ec2d30;
   font-feature-settings:
     'liga' off,
@@ -178,15 +178,16 @@ interface BasicInfoProps {
 }
 
 const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
-  const [isEditingEmail, setIsEditingEmail] = useState(false);
-  const [isEditingPassword, setIsEditingPassword] = useState(false);
-  const [originalEmail, setOriginalEmail] = useState(''); // 이메일
-  const [editedEmail, setEditedEmail] = useState(email);
+  const [currentEmail, setCurrentEmail] = useState(email); // 현재 이메일 상태
+  const [isEditingEmail, setIsEditingEmail] = useState(false); // 이메일 편집 여부
+  const [isEditingPassword, setIsEditingPassword] = useState(false); // 비밀번호 편집 여부
+  const [originalEmail, setOriginalEmail] = useState(''); // 원래 이메일 값
+  const [editedEmail, setEditedEmail] = useState(email); // 수정 중인 이메일 값
   // const [originalPassword, setOriginalPassword] = useState(''); // 비밀번호
-  const [password, setPassword] = useState('**********');
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
+  const [password, setPassword] = useState('**********'); // 처음 비밀번호 상태
+  const [showPassword, setShowPassword] = useState(false); // 비밀번호 토글
+  const [error, setError] = useState(''); // 이메일 오류 메시지
+  const [passwordError, setPasswordError] = useState(''); // 비밀번호 오류 메시지
   const [isFocused, setIsFocused] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [isValid, setIsValid] = useState(true);
@@ -194,7 +195,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
   const [isPasswordChecked, setIsPasswordChecked] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(true);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false); // 이메일 변경 모달
 
   // console.log('소셜 타입:', socialType);
   const isGoogleLogin = socialType === 'GOOGLE';
@@ -219,7 +220,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newEmail = e.target.value;
-    setEditedEmail(newEmail);
+    setEditedEmail(newEmail); // 이메일 변경 상태 업데이트
     const isValid = validateEmail(newEmail);
 
     setIsValid(isValid);
@@ -267,23 +268,67 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
     }
   };
 
-  const handleSaveEmail = () => {
-    if (validateEmail(editedEmail)) {
-      setOriginalEmail(editedEmail); // 변경된 이메일 저장
-      setIsEditingEmail(false);
-      setIsChecked(true);
-      setIsModalOpen(true);
-    } else {
+  const sendEmailVerification = async (email: string) => {
+    try {
+      // 로컬 스토리지에서 토큰 가져오기 (로그인 시에만 접근 가능)
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        alert('로그인이 필요한 서비스입니다.');
+        return false;
+      }
+
+      const response = await axios.post(
+        'http://onboarding.p-e.kr:8080/user/send/change-email',
+        { email },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      if (response.status === 200) {
+        console.log('이메일 인증 요청 성공:', response.data);
+        return true;
+      } else {
+        throw new Error('이메일 인증 요청 실패');
+      }
+    } catch (error) {
+      console.error('이메일 인증 요청 실패:', error);
+      return false;
+    }
+  };
+
+  const handleSaveEmail = async () => {
+    if (isGoogleLogin) {
+      // alert('구글 로그인 사용자는 이메일을 변경할 수 없습니다');
+      return;
+    }
+
+    if (!validateEmail(editedEmail)) {
       setError('올바른 이메일 형식이 아닙니다');
       setIsValid(false);
+      return;
+    }
+
+    const isSent = await sendEmailVerification(editedEmail);
+
+    if (isSent) {
+      setIsModalOpen(true);
+    } else {
+      // alert('이메일 변경 요청 중 오류가 발생했습니다. 다시 시도해주세요.');
     }
   };
 
   const handleConfirmEmailChange = () => {
-    setOriginalEmail(editedEmail); // 이메일 변경 적용
+    setCurrentEmail(editedEmail); // 이메일 변경 적용
+    setOriginalEmail(editedEmail);
     setIsEditingEmail(false);
     setIsModalOpen(false);
   };
+
+  useEffect(() => {
+    setEditedEmail(originalEmail); // 이메일 변경 즉시 반영
+  }, [originalEmail]);
 
   const handleSavePassword = () => {
     if (validatePassword(password)) {
@@ -297,7 +342,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
   };
 
   const handleCancelEmail = () => {
-    setEditedEmail(originalEmail);
+    setEditedEmail(currentEmail);
     setIsEditingEmail(false);
   };
 
@@ -361,7 +406,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
           </InputContainer>
         ) : (
           <>
-            <Value>{email}</Value>
+            <Value>{currentEmail}</Value>
             {!isGoogleLogin && !isEditingPassword && (
               <SetButton
                 onClick={() => {

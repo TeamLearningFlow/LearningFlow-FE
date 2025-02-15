@@ -14,7 +14,7 @@ const MiddleWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 1000px;
+  height: 1080px;
   background-color: #fff;
   position: relative;
   overflow: hidden;
@@ -29,6 +29,7 @@ const HomeMiddleHeader = styled.div`
 const IconWrapper = styled.div`
   width: 74px;
   height: 64.8px;
+  margin-top: 64px;
 `;
 
 const HeaderText = styled.div`
@@ -98,6 +99,7 @@ const StepBox = styled.div`
   box-shadow: 0px 3.721px 8.558px 0px #e9e7ff;
   transition: all 0.3s ease-in-out;
   white-space: nowrap;
+  z-index: 1;
 
   @media (max-width: 480px) {
     width: 380px;
@@ -170,14 +172,34 @@ const NotebookImage = styled(Image)<{ isHovered: boolean }>`
   }
 `;
 
-const PlaneWrapper = styled.div`
+const PlaneWrapper = styled.div<{ activeStep: number | null }>`
   position: absolute;
   width: 280.943px;
   height: 247.626px;
   transform: rotate(1.135deg);
-  top: 670px;
-  left: 156px;
 
+  ${({ activeStep }) => {
+    if (activeStep === 2) {
+      return `
+        top: 50%;
+        left: 40%;
+        transform: rotate(17.883deg);
+      `;
+    }
+    if (activeStep === 3) {
+      return `
+        top: 32%;
+        left: 80%;
+        transform: rotate(-7.622deg);
+      `;
+    }
+    return `
+      top: 670px;
+      left: 40px;
+      transform: rotate(1.135deg);
+    `;
+  }}
+  
   @media (max-width: 1024px) {
     display: none;
   }
@@ -265,7 +287,7 @@ const HomeMiddle: React.FC = () => {
         />
       </NotebookContainer>
 
-      <PlaneWrapper>
+      <PlaneWrapper activeStep={active}>
         <Image src={Plane} alt="paper plane" width={280.943} height={247.626} />
       </PlaneWrapper>
     </MiddleWrapper>
