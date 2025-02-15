@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import axios from 'axios';
 import styled from 'styled-components';
 import Image from 'next/image';
@@ -11,6 +12,7 @@ import CheckIconB from '../../assets/checkIconB.svg';
 
 import EmailChangeModal from '../../components/modal/emailChangeModal';
 import PasswordChangeCheckModal from '../../components/modal/passwordChangeCheckModal';
+import PasswordChangeModal from '../../components/modal/passwordChangeModal';
 
 const Section = styled.div`
   margin-bottom: 20px;
@@ -200,9 +202,14 @@ const ValidationRow = styled.div<{ valid: boolean; isEmpty: boolean }>`
 interface BasicInfoProps {
   email: string;
   socialType: string;
+  isEditingPassword: boolean;
 }
 
-const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
+const BasicInfo: React.FC<BasicInfoProps> = ({
+  email,
+  socialType,
+  isEditingPassword,
+}) => {
   const [currentEmail, setCurrentEmail] = useState(email); // 현재 이메일 상태
   const [isEditingEmail, setIsEditingEmail] = useState(false); // 이메일 편집 여부
   const [originalEmail, setOriginalEmail] = useState(''); // 원래 이메일 값
@@ -214,7 +221,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
   const [isChecked, setIsChecked] = useState(false);
   const [isValid, setIsValid] = useState(true);
 
-  const [isEditingPassword, setIsEditingPassword] = useState(false);
+  const [isEditing, setIsEditing] = useState(isEditingPassword);
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -237,9 +244,15 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false); // 이메일 변경 모달
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [isPasswordChangeModalOpen, setIsPasswordChangeModalOpen] =
+    useState(false);
 
   // console.log('소셜 타입:', socialType);
   const isGoogleLogin = socialType === 'GOOGLE';
+
+  useEffect(() => {
+    setIsEditing(isEditingPassword); // prop 변경 시 업데이트
+  }, [isEditingPassword]);
 
   const validateEmail = (value: string) => {
     const emailRegex =
@@ -256,7 +269,6 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
   const passwordCriteria = validatePassword(newPassword);
   const isPasswordValid = Object.values(passwordCriteria).every(Boolean);
   const isConfirmValid = newPassword === confirmPassword;
-  // const isEmpty = newEmail === '';
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newEmail = e.target.value;
@@ -345,11 +357,121 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
     setEditedEmail(originalEmail); // 이메일 변경 즉시 반영
   }, [originalEmail]);
 
-  const handleSavePassword = () => {
+  // 비밀번호 변경 메일 인증 api 연결
+  const sendPasswordChangeRequest = async () => {
+    try {
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        alert('로그인이 필요한 서비스입니다.');
+        return false;
+      }
+
+      const response = await axios.post(
+        'http://onboarding.p-e.kr:8080/user/send/change-password',
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      if (response.status === 200) {
+        console.log('비밀번호 변경 요청 성공:', response.data);
+        return true;
+      } else {
+        throw new Error('비밀번호 변경 요청 실패');
+      }
+    } catch (error) {
+      console.error('비밀번호 변경 요청 실패:', error);
+      return false;
+    }
+  };
+
+  const handlePasswordChangeRequest = async () => {
+    const isSent = await sendPasswordChangeRequest(); // API 호출
+
+    if (isSent) {
+      setIsPasswordChangeModalOpen(true);
+    } else {
+      alert('비밀번호 변경 요청 실패');
+    }
+  };
+
+  // 이메일 링크 클릭 시 토큰 검증 후 편집상태 활성화
+  const router = useRouter();
+  const { passwordResetCode } = router.query;
+
+  useEffect(() => {
+    if (passwordResetCode) {
+      verifyPasswordResetCode(passwordResetCode as string);
+    }
+  }, [passwordResetCode]);
+
+  const verifyPasswordResetCode = async (code: string) => {
+    try {
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        alert('로그인이 필요한 서비스입니다.');
+        router.push('/login');
+        return;
+      }
+
+      const response = await axios.get(
+        `http://onboarding.p-e.kr:8080/user/change-password?passwordResetCode=${code}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      if (response.data.isSuccess) {
+        setIsEditing(true); // 비밀번호 편집 상태 활성화
+        console.log('비밀번호 변경 페이지로 이동 완료');
+      } else {
+        router.push('/login');
+      }
+    } catch (error) {
+      console.error('비밀번호 코드 검증 실패:', error);
+      alert('비밀번호 재설정 코드가 유효하지 않습니다.');
+      router.push('/login');
+    }
+  };
+
+  // 변경된 비밀번호 저장 api 연결
+  const handleSavePassword = async () => {
     if (!isPasswordValid || !isConfirmValid) {
+      alert('비밀번호를 다시 확인 해주세요.');
       return; // 비밀번호가 유효하지 않으면 저장하지 않음
     }
-    setIsPasswordModalOpen(true); // 모달 표시
+    try {
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        alert('로그인이 필요한 서비스입니다.');
+        router.push('/login');
+        return;
+      }
+
+      const response = await axios.post(
+        `http://onboarding.p-e.kr:8080/user/change-password?passwordResetCode=${passwordResetCode}`,
+        {
+          currentPassword,
+          newPassword,
+        },
+
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      if (response.data.isSuccess) {
+        setIsPasswordModalOpen(true);
+      } else {
+        alert('비밀번호 변경에 실패하였습니다.');
+      }
+    } catch (error) {
+      console.error('비밀번호 변경 오류:', error);
+    }
   };
 
   const handleCancelEmail = () => {
@@ -361,7 +483,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
     setCurrentPassword('');
     setNewPassword('');
     setConfirmPassword('');
-    setIsEditingPassword(false);
+    setIsEditing(false);
     setIsPasswordChecked(false);
     setIsNewPasswordInvalid(false);
     setIsConfirmPasswordInvalid(false);
@@ -441,7 +563,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
       {!isGoogleLogin && (
         <InfoRow>
           <Label>비밀번호</Label>
-          {isEditingPassword ? (
+          {isEditing ? (
             <InputContainer>
               <InputWrapper
                 isFocused={isCurrentPasswordFocused}
@@ -573,9 +695,9 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
             </InputContainer>
           ) : (
             <>
-              <Value>{currentPassword}</Value>
+              <Value>**********</Value>
               {!isEditingEmail && (
-                <SetButton onClick={() => setIsEditingPassword(true)}>
+                <SetButton onClick={handlePasswordChangeRequest}>
                   설정
                 </SetButton>
               )}
@@ -594,9 +716,14 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
         <PasswordChangeCheckModal
           onConfirm={() => {
             setIsPasswordModalOpen(false);
-            setIsEditingPassword(false);
+            setIsEditing(false);
           }}
           onClose={() => setIsPasswordModalOpen(false)}
+        />
+      )}
+      {isPasswordChangeModalOpen && (
+        <PasswordChangeModal
+          onClose={() => setIsPasswordChangeModalOpen(false)}
         />
       )}
     </Section>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import axios from 'axios';
 import styled from 'styled-components';
 import Image from 'next/image';
@@ -71,6 +72,10 @@ const Profile = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [socialType, setSocialType] = useState<string | null>(null); // 소셜 타입 가져오기
 
+  const router = useRouter();
+  const { passwordResetCode } = router.query;
+  const [isEditingPassword, setIsEditingPassword] = useState(false);
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -109,6 +114,42 @@ const Profile = () => {
     fetchUserData();
   }, []);
 
+  useEffect(() => {
+    if (!passwordResetCode) return;
+
+    const verifyResetCode = async () => {
+      try {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+          alert('로그인이 필요한 서비스입니다.');
+          router.replace('/login');
+          return;
+        }
+
+        const response = await axios.get(
+          `http://onboarding.p-e.kr:8080/user/change-password?passwordResetCode=${passwordResetCode}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+
+        if (response.data.isSuccess) {
+          setIsEditingPassword(true); // 편집 상태 활성화
+        } else {
+          alert('비밀번호 재설정 코드가 유효하지 않습니다.');
+          router.replace('/login');
+        }
+      } catch (error) {
+        console.error('비밀번호 코드 검증 실패:', error);
+        alert('비밀번호 재설정 코드가 유효하지 않습니다.');
+        router.replace('/login');
+      }
+    };
+
+    verifyResetCode();
+  }, [passwordResetCode, router]);
+
   if (!userData) {
     return <p>정보 없음</p>;
   }
@@ -124,7 +165,11 @@ const Profile = () => {
           interestFields={userData.interestFields}
           preferType={userData.preferType}
         />
-        <BasicInfo email={userData.email} socialType={socialType ?? ""}/>
+        <BasicInfo
+          email={userData.email}
+          socialType={socialType ?? ''}
+          isEditingPassword={isEditingPassword}
+        />
       </ProfileContainer>
       <DeleteAccount
         onMouseEnter={() => setIsHovered(true)}

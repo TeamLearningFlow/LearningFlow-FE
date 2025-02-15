@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useRouter } from 'next/router';
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -75,28 +74,23 @@ const Button = styled.button`
 
 interface PasswordChangeCheckProps {
   onClose: () => void;
-  onConfirm?: () => void;
 }
 
-const PasswordChangeCheck: React.FC<PasswordChangeCheckProps> = ({
+const PasswordChangeModal: React.FC<PasswordChangeCheckProps> = ({
   onClose,
-  onConfirm,
 }) => {
-  const router = useRouter();
 
   const handleConfirm = () => {
-    if (onConfirm) onConfirm();
     onClose();
-    router.push('/login');
   };
 
   return (
     <ModalOverlay>
       <ModalContainer>
-        <ModalTitle>비밀번호 변경 완료</ModalTitle>
+        <ModalTitle>비밀번호 재인증 메일 발송</ModalTitle>
         <ModalMessage>
-          비밀번호가 변경되었습니다.
-          <br /> 보안을 위해 다시 로그인해 주세요.
+          재인증 메일을 보내드렸어요.
+          <br /> 메일이 확인되지 않을 경우, 스팸함을 확인해주세요.
         </ModalMessage>
         <ButtonContainer>
           <Button onClick={handleConfirm}>확인</Button>
@@ -106,4 +100,4 @@ const PasswordChangeCheck: React.FC<PasswordChangeCheckProps> = ({
   );
 };
 
-export default PasswordChangeCheck;
+export default PasswordChangeModal;
