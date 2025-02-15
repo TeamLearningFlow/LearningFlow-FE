@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import Image from 'next/image';
-import LogoMark from '../../assets/logoMark.svg';
+import LogoGraphic from '../../assets/logoMark.svg';
 import Airplane from '../../assets/homeAirplane.svg';
 import Window from '../../assets/homeWindow.svg'; // 이미지 수정 필요
 import Search from '../../assets/searchIcon.svg';
@@ -33,14 +33,15 @@ const TopWrapper = styled.div`
 const Title = styled.h1`
   color: #000;
   text-align: center;
+  font-family: 'Sandoll Geobok'; // 글씨체 변경 필요
   font-feature-settings:
     'liga' off,
     'clig' off;
-  font-size: 65px;
+  font-size: 66px;
   font-weight: 700;
-  line-height: 120%; /* 93.6px */
-  letter-spacing: -1.44px;
-  margin: -180px 0 50px 0;
+  line-height: 130%; /* 93.6px */
+  letter-spacing: -1.32px;
+  margin: -259px 0 82px 0;
   z-index: 1;
 
   @media (max-width: 1024px) {
@@ -63,9 +64,9 @@ const SearchWrapper = styled.div`
   display: flex;
   align-items: center;
   background-color: #fff;
-  border-radius: 7.388px;
-  box-shadow: 0px 4px 2.3px 0px rgba(0, 0, 0, 0.13);
-  padding: 14.775px 19.7px;
+  border-radius: 8px;
+  box-shadow: 1.5px 2px 8px 0px rgba(0, 0, 0, 0.1);
+  padding: 14px 20px;
   width: 65%;
   height: 65px;
   cursor: pointer;
@@ -216,9 +217,9 @@ const WindowWrapper = styled.div`
 
 const LogoMarkWrapper = styled.div`
   position: absolute;
-  top: 25%;
-  right: -4%;
-  transform: rotate(15deg);
+  top: 30%;
+  right: -2%;
+  // transform: rotate(0deg);
   // flex-shrink: 0;
 
   img {
@@ -242,15 +243,55 @@ const LogoMarkWrapper = styled.div`
   }
 
   @media (max-width: 1024px) {
-    right: -8%;
+    right: -6%;
   }
 
   @media (max-width: 768px) {
-    right: -10%;
+    right: -8%;
   }
 
   @media (max-width: 480px) {
-    right: -14%;
+    right: -12%;
+  }
+`;
+
+const LogoGraphicImg = styled(Image)`
+  // width: 35vw;
+  height: auto;
+  animation: floatUpDown 1.5s ease-in-out infinite alternate;
+
+  @keyframes floatUpDown {
+    0% {
+      transform: translateY(0px);
+    }
+    100% {
+      transform: translateY(-8px);
+    }
+  }
+`;
+
+const ShadowWrapper = styled.div`
+  position: absolute;
+  bottom: 18%;
+  right: -5%;
+  width: 28vw;
+  height: 4vh;
+  background: rgba(172, 172, 172, 0.3);
+  filter: blur(35px);
+  border-radius: 402.5px;
+  z-index: 0;
+
+  animation: shadowGlow 1.5s ease-in-out infinite alternate;
+
+  @keyframes shadowGlow {
+    0% {
+      background: rgba(172, 172, 172, 0.3);
+      filter: blur(25px) brightness(0.9);
+    }
+    100% {
+      background: rgba(172, 172, 172, 0.3);
+      filter: blur(40px) brightness(1.2);
+    }
   }
 `;
 
@@ -261,7 +302,8 @@ const HomeTop: React.FC = () => {
     <TopWrapper>
       <Title>
         Welcome Onboard!
-        <br /> Fasten your Learning Journey!
+        <br /> Fasten your Learning
+        <br /> Journey!
       </Title>
 
       <SearchWrapper onClick={() => router.push('/search')}>
@@ -279,8 +321,14 @@ const HomeTop: React.FC = () => {
           <Image src={Window} alt="window" width={466.39} height={618.061} />
         </WindowWrapper>
         <LogoMarkWrapper>
-          <Image src={LogoMark} alt="logo" width={530.994} height={465.077} />
+          <LogoGraphicImg
+            src={LogoGraphic}
+            alt="logo"
+            width={530.994}
+            height={465.077}
+          />
         </LogoMarkWrapper>
+        <ShadowWrapper />
       </Background>
     </TopWrapper>
   );
