@@ -171,6 +171,7 @@ const ClassTitle: React.FC<ClassTitleProps> = ({
   const [progress, setProgress] = useState(0);
 
   const handleClick = async () => {
+    if (isCompleted) return;
     setIsClicked(true);
   
     try {
@@ -191,17 +192,18 @@ const ClassTitle: React.FC<ClassTitleProps> = ({
     } catch (error) {
       console.error("수강 상태 변경 실패:", error);
     } finally {
-      setTimeout(() => {
+      setIsClicked(false);
+      {/* setTimeout(() => {
         setIsClicked(false);
-      }, 1000);
+      }, 1000); */}
     }
   };
   
-  useEffect(() => {
+  {/* useEffect(() => {
     if (isClicked) {
       handleClick();  // isClicked가 true로 변경될 때마다 API 호출
     }
-  }, [isClicked]);
+  }, [isClicked]); */}
 
 
   useEffect(() => {
@@ -222,14 +224,14 @@ const ClassTitle: React.FC<ClassTitleProps> = ({
     if (isCompleted) {
       handleShowModal(); // isCompleted가 true일 때만 모달을 열도록
     } else {
-      handleClick(); // isCompleted가 false일 때는 handleClick 실행
+      handleClick();
     }
   };
 
   const handleRetakeClass = () => {
-    setProgress(0);  // 진도율 초기화
-    setIsCompleted(false);  // isCompleted 상태 초기화 (보라색으로 돌아감)
-    setIsModalVisible(false);  // 모달 닫기
+    setProgress(0);
+    setIsCompleted(false);  // isCompleted 상태 초기화 (버튼 보라색으로 돌아감)
+    setIsModalVisible(false);
   };
 
   return (

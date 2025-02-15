@@ -10,7 +10,7 @@ interface LearnModalProps {
   }
     
 
-const LearnModal: React.FC<LearnModalProps> = ({ onClose, episodeId,onRetakeClass }) => {
+const LearnModal: React.FC<LearnModalProps> = ({ onClose, episodeId, onRetakeClass }) => {
 
   const [isClicked, setIsClicked] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -36,7 +36,7 @@ const LearnModal: React.FC<LearnModalProps> = ({ onClose, episodeId,onRetakeClas
         }
       } catch (error) {
         console.error("수강 상태 변경 실패:", error);
-      } finally {
+      } finally { 
         setIsClicked(false);
       }
     };
@@ -47,7 +47,7 @@ const LearnModal: React.FC<LearnModalProps> = ({ onClose, episodeId,onRetakeClas
         <ModalBox>
           <Title>다시 학습할까요?</Title>
           <Description>
-            {`다시 학습하면 학습률이 초기화 돼요.\nUX 라이팅 필요`}
+            {`다시 학습을 시작하면 학습률이 초기화돼요.\n이전에 학습한 내역은 사라지니 신중히 선택해주세요.`}
           </Description>
           <Button>
             <BackButton onClick={ReTakeClass}>다시 학습</BackButton>
@@ -104,7 +104,7 @@ const Title = styled.div`
   font-weight: 600;
   letter-spacing: -0.02em;
   margin-top: 2px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 
   @media (max-width: 850px) {
     font-size: 25px;
