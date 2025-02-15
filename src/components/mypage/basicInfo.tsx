@@ -6,6 +6,9 @@ import Tooltip from '../../assets/emailTooltip.svg';
 import X from '../../assets/X_red.svg';
 import InvisibleIcon from '../../assets/invisibleicon.svg';
 import VisibleIcon from '../../assets/visibleicon.svg';
+import CheckIcon from '../../assets/checkIconG.svg';
+import CheckIconB from '../../assets/checkIconB.svg';
+
 import EmailChangeModal from '../../components/modal/emailChangeModal';
 
 const Section = styled.div`
@@ -59,30 +62,40 @@ const InputWrapper = styled.div<{
   isFocused: boolean;
   isValid: boolean;
   isChecked: boolean;
+  isEmpty: boolean;
 }>`
   display: flex;
   width: 100%;
   padding: 12px;
   border-radius: 6px;
   border: 0.9px solid
-    ${({ isFocused, isValid, isChecked }) => {
-      if (isFocused) return isValid ? '#5e52ff' : '#ec2d30'; // 포커스 시 테두리
+    ${({ isFocused, isValid, isChecked, isEmpty }) => {
+      if (isFocused)
+        return isEmpty ? '#5e52ff' : isValid ? '#5e52ff' : '#ec2d30'; // 포커스 시 테두리
       if (isChecked) return isValid ? '#323538' : '#ec2d30'; // 유효성 검사 후 테두리
       return '#323538'; // 기본 테두리
     }};
-  box-shadow: ${({ isFocused, isValid }) =>
-    isFocused && isValid
+  box-shadow: ${({ isFocused, isValid, isEmpty }) =>
+    isFocused && (isValid || isEmpty)
       ? '1px 1px 1px 0px rgba(94, 82, 255, 0.30), -1px -1px 1px 0px rgba(94, 82, 255, 0.30)'
       : 'none'};
 `;
 
-const Input = styled.input<{ isValid: boolean }>`
+const Input = styled.input<{
+  isInvalid: boolean;
+  isEmpty: boolean;
+}>`
   flex: 1;
   font-size: 14px;
   font-weight: 400;
-  color: ${({ isValid }) => (isValid ? '#1f1f1f' : '#ec2d30')};
+  color: ${(props) =>
+    props.isEmpty ? '#1f1f1f' : props.isInvalid ? '#ec2d30' : '#1f1f1f'};
   border: none;
   outline: none;
+
+  &::placeholder {
+    color: #afb8c1;
+  }
 `;
 
 const ErrorContainer = styled.div`
@@ -172,6 +185,17 @@ const TooltipBox = styled.div`
   white-space: nowrap;
 `;
 
+const ValidationRow = styled.div<{ valid: boolean; isEmpty: boolean }>`
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: ${({ valid, isEmpty }) =>
+    isEmpty ? '#959CA4' : valid ? '#165BFA' : '#ec2d30'};
+  gap: 6px;
+  margin-bottom: 16px;
+  margin-top: 8px;
+`;
+
 interface BasicInfoProps {
   email: string;
   socialType: string;
@@ -180,20 +204,35 @@ interface BasicInfoProps {
 const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
   const [currentEmail, setCurrentEmail] = useState(email); // 현재 이메일 상태
   const [isEditingEmail, setIsEditingEmail] = useState(false); // 이메일 편집 여부
-  const [isEditingPassword, setIsEditingPassword] = useState(false); // 비밀번호 편집 여부
   const [originalEmail, setOriginalEmail] = useState(''); // 원래 이메일 값
   const [editedEmail, setEditedEmail] = useState(email); // 수정 중인 이메일 값
-  // const [originalPassword, setOriginalPassword] = useState(''); // 비밀번호
-  const [password, setPassword] = useState('**********'); // 처음 비밀번호 상태
-  const [showPassword, setShowPassword] = useState(false); // 비밀번호 토글
+  const [isEmailEmpty, setIsEmailEmpty] = useState(true);
+
   const [error, setError] = useState(''); // 이메일 오류 메시지
-  const [passwordError, setPasswordError] = useState(''); // 비밀번호 오류 메시지
   const [isFocused, setIsFocused] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [isValid, setIsValid] = useState(true);
-  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+
+  const [isEditingPassword, setIsEditingPassword] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  // const [passwordError, setPasswordError] = useState(''); // 비밀번호 오류 메시지
+  const [isCurrentPasswordFocused, setIsCurrentPasswordFocused] =
+    useState(false);
+  const [isNewPasswordFocused, setIsNewPasswordFocused] = useState(false);
+  const [isConfirmPasswordFocused, setIsConfirmPasswordFocused] =
+    useState(false);
+
   const [isPasswordChecked, setIsPasswordChecked] = useState(false);
-  const [isPasswordValid, setIsPasswordValid] = useState(true);
+  const [isNewPasswordInvalid, setIsNewPasswordInvalid] = useState(false);
+  const [isConfirmPasswordInvalid, setIsConfirmPasswordInvalid] =
+    useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false); // 이메일 변경 모달
 
@@ -206,17 +245,16 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
     return emailRegex.test(value);
   };
 
-  const validatePassword = (value: string) => {
-    const conditions = {
-      hasUpperCase: /[A-Z]/.test(value),
-      hasLowerCase: /[a-z]/.test(value),
-      hasSpecialChar: /[!@#$%^&*()_+]/.test(value),
-      hasNumber: /[0-9]/.test(value),
-      isLengthValid: value.length >= 8 && value.length <= 16,
-      hasNoSpaces: !/\s/.test(value),
-    };
-    return Object.values(conditions).every(Boolean);
-  };
+  const validatePassword = (value: string) => ({
+    hasUpperLowerCase: /[A-Z]/.test(value) && /[a-z]/.test(value), // 대소문자 포함
+    hasSpecialOrNumber: /[!@#$%^&*()_+0-9]/.test(value), // 특수문자 또는 숫자 포함
+    isLengthValid: value.length >= 8 && value.length <= 16, // 길이 조건
+  });
+
+  const passwordCriteria = validatePassword(newPassword);
+  const isPasswordValid = Object.values(passwordCriteria).every(Boolean);
+  const isConfirmValid = newPassword === confirmPassword;
+  // const isEmpty = newEmail === '';
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newEmail = e.target.value;
@@ -233,40 +271,12 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
     }
   };
 
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
+  /* const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewPassword(e.target.value);
     setIsPasswordChecked(false);
     setPasswordError('');
     setIsPasswordValid(true);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      const isValidEmail = validateEmail(email);
-      setIsValid(isValidEmail);
-      setIsChecked(true);
-      setError(isValidEmail ? '' : '올바른 이메일 형식이 아닙니다');
-      if (isValid) {
-        setIsFocused(false);
-      }
-    }
-  };
-
-  const handlePasswordKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      const isValidPassword = validatePassword(password);
-      setIsPasswordValid(isValidPassword);
-      setIsPasswordChecked(true);
-      setPasswordError(
-        isValidPassword
-          ? ''
-          : '비밀번호는 8~16자, 대소문자, 특수문자, 숫자가 포함되어야 합니다',
-      );
-      if (isValidPassword) {
-        setIsPasswordFocused(false);
-      }
-    }
-  };
+  }; */
 
   const sendEmailVerification = async (email: string) => {
     try {
@@ -330,7 +340,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
     setEditedEmail(originalEmail); // 이메일 변경 즉시 반영
   }, [originalEmail]);
 
-  const handleSavePassword = () => {
+  /* const handleSavePassword = () => {
     if (validatePassword(password)) {
       // setOriginalPassword(password); // 변경된 비밀번호 저장
       setIsEditingPassword(false);
@@ -339,17 +349,17 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
         '비밀번호는 8~16자, 대소문자, 특수문자, 숫자가 포함되어야 합니다',
       );
     }
-  };
+  }; */
 
   const handleCancelEmail = () => {
     setEditedEmail(currentEmail);
     setIsEditingEmail(false);
   };
 
-  const handleCancelPassword = () => {
-    setPassword('**********');
+  /* const handleCancelPassword = () => {
+    setEditedPassword('**********');
     setIsEditingPassword(false);
-  };
+  }; */
 
   return (
     <Section>
@@ -373,6 +383,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
               isFocused={isFocused}
               isValid={isValid}
               isChecked={isChecked}
+              isEmpty={isEmailEmpty}
             >
               <Input
                 type="email"
@@ -381,8 +392,8 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
                 onChange={handleInputChange}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
-                onKeyDown={handleKeyDown}
-                isValid={isValid}
+                isInvalid={!isValid}
+                isEmpty={isEmailEmpty}
               />
             </InputWrapper>
             {!isValid && (
@@ -427,45 +438,134 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
           {isEditingPassword ? (
             <InputContainer>
               <InputWrapper
-                isFocused={isPasswordFocused}
+                isFocused={isCurrentPasswordFocused}
                 isValid={isPasswordValid}
                 isChecked={isPasswordChecked}
+                isEmpty={currentPassword === ''}
               >
                 <Input
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="비밀번호를 입력하세요"
-                  value={password}
-                  onChange={handlePasswordChange}
-                  onFocus={() => setIsPasswordFocused(true)}
-                  onBlur={() => setIsPasswordFocused(false)}
-                  onKeyDown={handlePasswordKeyDown}
-                  isValid={isPasswordValid}
+                  type={showCurrentPassword ? 'text' : 'password'}
+                  placeholder="현재 비밀번호"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  onFocus={() => setIsCurrentPasswordFocused(true)}
+                  onBlur={() => setIsCurrentPasswordFocused(false)}
+                  isInvalid={!isPasswordValid}
+                  isEmpty={currentPassword === ''}
                 />
                 <Image
-                  src={showPassword ? VisibleIcon : InvisibleIcon}
+                  src={showCurrentPassword ? VisibleIcon : InvisibleIcon}
                   alt="toggle visibility"
-                  onClick={() => setShowPassword(!showPassword)}
+                  onClick={() => setShowCurrentPassword(!showCurrentPassword)}
                   width={20}
                   height={20}
                   style={{ cursor: 'pointer', marginLeft: '10px' }}
                 />
               </InputWrapper>
-              {passwordError && (
-                <ErrorContainer>
-                  <Image src={X} alt="Error icon" width={16} height={16} />
-                  <span>{passwordError}</span>
-                </ErrorContainer>
-              )}
+              <ValidationRow valid={true} isEmpty={true}>
+                <Image src={CheckIcon} alt="valid" width={16} height={16} />
+                <span>확인을 위해 현재 비밀번호를 다시 입력해 주세요.</span>
+              </ValidationRow>
+
+              <InputWrapper
+                isFocused={isNewPasswordFocused}
+                isValid={isPasswordValid}
+                isChecked={isPasswordChecked}
+                isEmpty={newPassword === ''}
+              >
+                <Input
+                  type={showNewPassword ? 'text' : 'password'}
+                  placeholder="새 비밀번호"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  onFocus={() => setIsNewPasswordFocused(true)}
+                  onBlur={() => setIsNewPasswordFocused(false)}
+                  isInvalid={isNewPasswordInvalid}
+                  isEmpty={newPassword === ''}
+                />
+                <Image
+                  src={showNewPassword ? VisibleIcon : InvisibleIcon}
+                  alt="toggle visibility"
+                  onClick={() => setShowNewPassword(!showNewPassword)}
+                  width={20}
+                  height={20}
+                  style={{ cursor: 'pointer', marginLeft: '10px' }}
+                />
+              </InputWrapper>
+              {Object.entries(passwordCriteria).map(([key, valid]) => (
+                <ValidationRow
+                  key={key}
+                  valid={valid}
+                  isEmpty={newPassword === ''}
+                >
+                  <Image
+                    src={
+                      newPassword === '' ? CheckIcon : valid ? CheckIconB : X
+                    }
+                    alt={valid ? 'valid' : 'invalid'}
+                    width={16}
+                    height={16}
+                  />
+                  <span>
+                    {key === 'hasUpperLowerCase' && '대소문자 포함'}
+                    {key === 'hasSpecialOrNumber' && '특수문자/숫자 포함'}
+                    {key === 'isLengthValid' && '8자 이상 16자 이하'}
+                  </span>
+                </ValidationRow>
+              ))}
+
+              <InputWrapper
+                isFocused={isConfirmPasswordFocused}
+                isValid={isConfirmValid}
+                isChecked={isPasswordChecked}
+                isEmpty={confirmPassword === ''}
+              >
+                <Input
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  placeholder="새 비밀번호 확인"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  onFocus={() => setIsConfirmPasswordFocused(true)}
+                  onBlur={() => setIsConfirmPasswordFocused(false)}
+                  isInvalid={isConfirmPasswordInvalid}
+                  isEmpty={confirmPassword === ''}
+                />
+                <Image
+                  src={showConfirmPassword ? VisibleIcon : InvisibleIcon}
+                  alt="toggle visibility"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  width={20}
+                  height={20}
+                  style={{ cursor: 'pointer', marginLeft: '10px' }}
+                />
+              </InputWrapper>
+              <ValidationRow
+                valid={isConfirmValid}
+                isEmpty={confirmPassword === ''}
+              >
+                <Image
+                  src={
+                    confirmPassword === ''
+                      ? CheckIcon
+                      : isConfirmValid
+                        ? CheckIconB
+                        : X
+                  }
+                  alt={isConfirmValid ? 'valid' : 'invalid'}
+                  width={16}
+                  height={16}
+                />
+                <span>비밀번호가 일치해야 합니다</span>
+              </ValidationRow>
+
               <ButtonContainer>
-                <Button onClick={handleCancelPassword}>취소</Button>
-                <Button primary onClick={handleSavePassword}>
-                  저장
-                </Button>
+                <Button /*onClick={handleCancelPassword}*/>취소</Button>
+                <Button /*primary onClick={handleSavePassword}*/>저장</Button>
               </ButtonContainer>
             </InputContainer>
           ) : (
             <>
-              <Value>{password}</Value>
+              <Value>{currentPassword}</Value>
               {!isEditingEmail && (
                 <SetButton onClick={() => setIsEditingPassword(true)}>
                   설정

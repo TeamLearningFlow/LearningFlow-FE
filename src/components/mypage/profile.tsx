@@ -13,7 +13,6 @@ interface UserData {
   email: string;
   job: string;
   interestFields: string[];
-  birthDay: string;
   preferType: string;
   profileImgUrl: string;
   bannerImgUrl: string;
