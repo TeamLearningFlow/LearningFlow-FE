@@ -14,43 +14,43 @@ const Label = styled.label`
 const InputWrapper = styled.div<{
   isValid: boolean;
   isFocused: boolean;
-  isChecked: boolean;
+  isError: boolean;
+  isEmpty: boolean;
 }>`
   display: flex;
   width: 100%;
   height: 50px;
   position: relative;
   align-items: center;
-
-  border: 0.696px solid
-    ${(props) => {
-      if (props.isFocused) {
-        // 포커스 시 유효한 이메일이면 보라색, 아니면 빨간색 테두리
-        return props.isValid ? '#5E52FF' : '#ec2d30';
-      }
-      if (props.isChecked) {
-        // 유효성 검사 후 포커스가 없으면 테두리 색을 #181818로 설정
-        return props.isValid ? '#181818' : '#ec2d30';
-      }
-      // 포커스도 없고 유효성 검사 전이면 기본 색상
-      return '#323538';
-    }};
   border-radius: 6.962px;
-  background-color: ${(props) => {
-    if (props.isChecked) {
-      // 유효성 검사가 실행되었을 때
-      return props.isValid ? '#F5F5FF' : '#FFFFFF';
-    } else {
-      // 유효성 검사가 실행되지 않은 초기 상태
-      return '#FFFFFF';
-    }
-  }};
-  box-shadow: ${(props) => {
-    if (props.isFocused && props.isValid) {
-      return '2px 2px 2px 0px rgba(94, 82, 255, 0.30), -2px -2px 2px 0px rgba(94, 82, 255, 0.30)';
-    }
-    return 'none';
-  }};
+
+  border: 0.696px solid #323538;
+  border-color: ${(props) =>
+    props.isError
+      ? '#ec2d30' // 오류 시 빨간 테두리
+      : props.isEmpty
+        ? props.isFocused
+          ? '#5e52ff' // 입력이 없을 때 포커스 시 보라색 테두리
+          : '#323538' // 기본 테두리
+        : props.isValid
+          ? '#323538' // 유효할 때 기본 테두리
+          : props.isFocused
+            ? '#5e52ff' // 포커스 시 보라색 테두리
+            : '#323538'}; // 기본 테두리
+
+  background-color: ${(props) =>
+    props.isValid && !props.isEmpty ? '#f5f5ff' : '#fff'};
+
+  box-shadow: ${(props) =>
+    props.isEmpty
+      ? props.isFocused
+        ? '2px 2px 2px 0px rgba(94, 82, 255, 0.30), -2px -2px 2px 0px rgba(94, 82, 255, 0.30)'
+        : 'none'
+      : props.isValid || props.isError
+        ? 'none'
+        : props.isFocused
+          ? '2px 2px 2px 0px rgba(94, 82, 255, 0.30), -2px -2px 2px 0px rgba(94, 82, 255, 0.30)'
+          : 'none'};
 
   overflow: hidden;
   padding: 12px;
@@ -63,9 +63,7 @@ const InputWrapper = styled.div<{
 `;
 
 const Input = styled.input<{
-  isValid: boolean;
-  isFocused: boolean;
-  isChecked: boolean;
+  isError: boolean;
 }>`
   flex: 1;
   border: none;
@@ -77,16 +75,8 @@ const Input = styled.input<{
   text-overflow: ellipsis;
   white-space: nowrap;
 
-  color: ${({ isValid }) => (isValid ? '#1f1f1f' : '#ec2d30')};
-  background-color: ${(props) => {
-    if (props.isChecked) {
-      // 유효성 검사가 실행되었을 때
-      return props.isValid ? '#F5F5FF' : 'transparent';
-    } else {
-      // 유효성 검사가 실행되지 않은 초기 상태
-      return 'transparent';
-    }
-  }};
+  color: ${(props) => (props.isError ? '#ec2d30' : '#1f1f1f')};
+  background: transparent;
 
   &::placeholder {
     color: #afb8c1;
@@ -114,19 +104,26 @@ const EmailErrorMsg = styled.span`
 `;
 
 const InputEmail: React.FC = () => {
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  // const [errorMessage, setErrorMessage] = useState<string>('');
   const [isFocused, setIsFocused] = useState<boolean>(false);
   // const [isChecked, setIsChecked] = useState<boolean>(false); // 유효성 검사 실행 여부 상태
 
   const context = useContext(LoginContext);
   if (!context) throw new Error('LoginContext를 찾을 수 없습니다.');
 
-  const { email, isValidEmail, isEmailChecked } = context.state;
+  const { email, isValidEmail } = context.state;
   const { setEmail, setIsValidEmail, setIsEmailChecked } = context.actions;
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-    setIsEmailChecked(false); // 입력 중에는 유효성 검사 결과 초기화
+    const newEmail = e.target.value;
+    setEmail(newEmail);
+    setIsEmailChecked(false);
+
+    const isValid = validateEmail(newEmail);
+    setIsValidEmail(isValid);
+    if (isValid) {
+      setIsEmailChecked(true);
+    }
   };
 
   const validateEmail = (email: string): boolean => {
@@ -136,47 +133,33 @@ const InputEmail: React.FC = () => {
     return emailRegex.test(email);
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      const isValid = validateEmail(email);
-      setIsValidEmail(isValid);
-      setIsEmailChecked(true); // 유효성 검사 실행 여부를 true로 설정
-      setErrorMessage(isValid ? '' : '이메일 형식이 올바르지 않습니다');
-      if (isValid) {
-        setIsFocused(false); // 유효성 검사 성공 시 포커스 해제
-      }
-    }
-  };
+  const isError = email !== '' && !isValidEmail;
+  const isEmpty = email === '';
 
   return (
     <div>
       <Label htmlFor="email">이메일</Label>
       <InputWrapper
+        isFocused={isFocused}
         isValid={isValidEmail}
-        isFocused={isFocused} /*|| email !== ''*/
-        onBlur={() => setIsFocused(false)}
-        isChecked={isEmailChecked}
+        isError={isError}
+        isEmpty={isEmpty}
       >
         <Input
           type="email"
           placeholder="이메일 주소를 적어주세요"
           value={email}
           onFocus={() => setIsFocused(true)}
-          onChange={handleEmailChange}
-          onKeyDown={handleKeyPress}
-          isValid={isValidEmail}
-          isFocused={isFocused}
           onBlur={() => setIsFocused(false)}
-          isChecked={isEmailChecked}
+          onChange={handleEmailChange}
+          isError={isError}
         />
       </InputWrapper>
-      {!isValidEmail && (
-        <>
-          <ErrorContainer>
-            <XImg src={X} alt="X" />
-            <EmailErrorMsg>{errorMessage}</EmailErrorMsg>
-          </ErrorContainer>
-        </>
+      {isError && (
+        <ErrorContainer>
+          <XImg src={X} alt="X" />
+          <EmailErrorMsg>이메일 형식이 올바르지 않습니다</EmailErrorMsg>
+        </ErrorContainer>
       )}
     </div>
   );

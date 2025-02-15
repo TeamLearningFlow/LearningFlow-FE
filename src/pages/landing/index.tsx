@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import Page1 from './page1';
@@ -6,7 +6,8 @@ import Page2 from './page2';
 import Page3 from './page3';
 import styled from 'styled-components';
 import TopLogo from '../../components/landing/landingHeader';
-import Guest from '../../assets/Guest.svg';
+// import Guest from '../../assets/Guest.svg';
+import { LoginContext } from '../context/LoginContext';
 
 const PageIndicator = styled.div`
   display: flex;
@@ -29,10 +30,18 @@ const LandingPage: React.FC = () => {
   const [job, setJob] = useState(''); // 직업 값
   const [interestFields, setInterestFields] = useState<string[]>([]); // 카테고리 값
   const [preferType, setPreferType] = useState(''); // 선호도 값
-  const [token, setToken] = useState('');
+  const [token, setToken] = useState<string | null>(null);
 
+  const router = useRouter();
+  const context = useContext(LoginContext);
+
+  if (!context) {
+    throw new Error('LoginContext를 찾을 수 없습니다.');
+  }
+
+  // 회원가입 인증 토큰 호출
   useEffect(() => {
-    const savedToken = localStorage.getItem('token');
+    const savedToken = localStorage.getItem('emailVerificationCode');
     if (savedToken) {
       setToken(savedToken);
     } else {
@@ -40,17 +49,16 @@ const LandingPage: React.FC = () => {
     }
   }, []);
 
-  const router = useRouter();
-
   const handleComplete = async (finalPreferType: string) => {
-    const storedImgUrl = localStorage.getItem('profileImgUrl') || Guest.src; // 디폴트 이미지
+    const storedEmail = localStorage.getItem('email'); // 회원가입 시 이메일 저장
+    const storedPassword = localStorage.getItem('password'); // 회원가입 시 비밀번호 저장
 
     const requestData = {
       name: nickname,
       job,
       interestFields,
       preferType: finalPreferType,
-      imgUrl: storedImgUrl,
+      imgProfileUrl: imgUrl,
     };
 
     console.log('requestData:', requestData);
@@ -61,8 +69,9 @@ const LandingPage: React.FC = () => {
     }
 
     try {
-      const response = await axios.post(
-        `http://onboarding.p-e.kr:8080/register/complete?token=${token}`,
+      // 1. 회원가입 요청 api
+      const registerResponse = await axios.post(
+        `http://onboarding.p-e.kr:8080/register/complete?emailVerificationCode=${token}`,
         requestData,
         {
           headers: {
@@ -71,17 +80,49 @@ const LandingPage: React.FC = () => {
         },
       );
 
-      console.log('회원가입 성공:', response.data);
+      console.log('회원가입 성공:', registerResponse.data);
       alert('회원가입이 완료되었습니다.');
 
-      const userName = response.data.result.name;
+      localStorage.removeItem('profileImgUrl'); // 기존에 저장된 이미지 삭제
+
+      const userName = registerResponse.data.result.name;
       localStorage.setItem('userName', userName); // 닉네임 저장
-      console.log('저장된 닉네임:', response.data.result.name);
+      console.log('저장된 닉네임:', registerResponse.data.result.name);
 
-      localStorage.setItem('profileImgUrl', storedImgUrl);
-      console.log('저장된 이미지 URL:', storedImgUrl);
+      // localStorage.setItem('profileImgUrl', imgUrl);
+      console.log('저장된 이미지 URL:', imgUrl);
 
-      localStorage.setItem('showHomeModal', 'true'); // 모달 표시 여부 결정
+      // 자동 로그인 연결
+      const loginResponse = await axios.post(
+        'http://onboarding.p-e.kr:8080/login',
+        {
+          email: storedEmail,
+          password: storedPassword,
+          remember: true,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+
+      console.log('자동 로그인 성공:', loginResponse.data);
+
+      // 로그인 응답에서 토큰 추출
+      const loginToken = loginResponse.headers['authorization']?.split(' ')[1];
+
+      if (loginToken) {
+        localStorage.setItem('token', loginToken);
+      } else {
+        console.error('로그인 응답에 Authorization 헤더가 없습니다.');
+        alert('로그인 실패');
+        return;
+      }
+
+      // 로그인 상태 업데이트 및 회원가입 후 모달 표시 여부 저장
+      localStorage.setItem('isFromSignup', 'true');
+      context.actions.setIsLoggedIn(true);
 
       router.push('/home'); // 회원가입 완료 후 홈페이지로 이동
     } catch (error) {

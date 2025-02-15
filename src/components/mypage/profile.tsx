@@ -16,7 +16,7 @@ interface UserData {
   birthDay: string;
   preferType: string;
   profileImgUrl: string;
-  birthday?: string;
+  bannerImgUrl: string;
 }
 
 const Container = styled.div`
@@ -70,12 +70,15 @@ const DeleteAccount = styled.div`
 const Profile = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [userData, setUserData] = useState<UserData | null>(null);
+  const [socialType, setSocialType] = useState<string | null>(null); // 소셜 타입 가져오기
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         // 로컬 스토리지에서 토큰 가져오기 (로그인 시에만 접근 가능)
         const token = localStorage.getItem('token');
+        const storedSocialType = localStorage.getItem('socialType');
+        setSocialType(storedSocialType);
 
         if (!token) {
           console.error('로그인 토큰이 없습니다.');
@@ -91,7 +94,7 @@ const Profile = () => {
 
         console.log('Profile Response Data:', response.data);
 
-        setUserData(response.data.result); // 생일 정보 삭제 요청 해야함
+        setUserData(response.data.result);
       } catch (error: any) {
         if (error.response?.status === 401) {
           console.error(
@@ -118,10 +121,11 @@ const Profile = () => {
           name={userData.name}
           job={userData.job}
           profileImgUrl={userData.profileImgUrl}
+          bannerImgUrl={userData.bannerImgUrl}
           interestFields={userData.interestFields}
           preferType={userData.preferType}
         />
-        <BasicInfo email={userData.email} />
+        <BasicInfo email={userData.email} socialType={socialType ?? ""}/>
       </ProfileContainer>
       <DeleteAccount
         onMouseEnter={() => setIsHovered(true)}

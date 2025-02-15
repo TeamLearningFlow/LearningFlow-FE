@@ -1,4 +1,4 @@
-import React, { createContext, useState, ReactNode } from 'react';
+import React, { createContext, useState, useEffect, ReactNode } from 'react';
 
 // LoginContext 생성
 interface ILoginContext {
@@ -49,7 +49,21 @@ export const LoginProvider: React.FC<LoginProviderProps> = ({ children }) => {
 
   const [remember, setRemember] = useState<boolean>(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [userName, setUserName] = useState<string>(''); 
+  const [userName, setUserName] = useState<string>('');
+
+  // 회원가입 후 자동 로그인 상태 반영
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    const storedUserName = localStorage.getItem('userName');
+
+    if (storedToken) {
+      setIsLoggedIn(true);
+    }
+
+    if (storedUserName) {
+      setUserName(storedUserName);
+    }
+  }, []);
 
   const value: ILoginContext = {
     state: {

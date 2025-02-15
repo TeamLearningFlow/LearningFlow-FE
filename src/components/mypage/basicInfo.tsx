@@ -6,6 +6,7 @@ import Tooltip from '../../assets/emailTooltip.svg';
 import X from '../../assets/X_red.svg';
 import InvisibleIcon from '../../assets/invisibleicon.svg';
 import VisibleIcon from '../../assets/visibleicon.svg';
+import EmailChangeModal from '../../components/modal/emailChangeModal';
 
 const Section = styled.div`
   margin-bottom: 20px;
@@ -155,7 +156,7 @@ const TooltipWrapper = styled.div`
 
 const TooltipBox = styled.div`
   visibility: hidden;
-  width: 180px;
+  width: auto;
   background-color: #4f5357;
   color: #ffffff;
   font-size: 12px;
@@ -168,19 +169,21 @@ const TooltipBox = styled.div`
   opacity: 0;
   transition: opacity 0.3s ease;
   z-index: 10;
+  white-space: nowrap;
 `;
 
 interface BasicInfoProps {
   email: string;
+  socialType: string;
 }
 
-const BasicInfo: React.FC<BasicInfoProps> = ({ email }) => {
+const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [isEditingPassword, setIsEditingPassword] = useState(false);
   const [originalEmail, setOriginalEmail] = useState(''); // 이메일
   const [editedEmail, setEditedEmail] = useState(email);
   // const [originalPassword, setOriginalPassword] = useState(''); // 비밀번호
-  const [password, setPassword] = useState("**********");
+  const [password, setPassword] = useState('**********');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [passwordError, setPasswordError] = useState('');
@@ -190,6 +193,11 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email }) => {
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [isPasswordChecked, setIsPasswordChecked] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(true);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // console.log('소셜 타입:', socialType);
+  const isGoogleLogin = socialType === 'GOOGLE';
 
   const validateEmail = (value: string) => {
     const emailRegex =
@@ -210,10 +218,18 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email }) => {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEditedEmail(e.target.value);
-    setIsChecked(false);
-    setError('');
-    setIsValid(true);
+    const newEmail = e.target.value;
+    setEditedEmail(newEmail);
+    const isValid = validateEmail(newEmail);
+
+    setIsValid(isValid);
+    setIsChecked(true); // 실시간으로 검사 상태 업데이트
+
+    if (!isValid) {
+      setError('올바른 이메일 형식이 아닙니다');
+    } else {
+      setError('');
+    }
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -255,10 +271,18 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email }) => {
     if (validateEmail(editedEmail)) {
       setOriginalEmail(editedEmail); // 변경된 이메일 저장
       setIsEditingEmail(false);
+      setIsChecked(true);
+      setIsModalOpen(true);
     } else {
       setError('올바른 이메일 형식이 아닙니다');
       setIsValid(false);
     }
+  };
+
+  const handleConfirmEmailChange = () => {
+    setOriginalEmail(editedEmail); // 이메일 변경 적용
+    setIsEditingEmail(false);
+    setIsModalOpen(false);
   };
 
   const handleSavePassword = () => {
@@ -291,7 +315,11 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email }) => {
           이메일
           <TooltipWrapper>
             <Image src={Tooltip} alt="tooltip" width={20} height={20} />
-            <TooltipBox>이메일 변경 후, 재인증이 필요해요</TooltipBox>
+            <TooltipBox>
+              {isGoogleLogin
+                ? '구글 로그인은 이메일을 변경할 수 없어요'
+                : '이메일 변경 후, 재인증이 필요해요'}
+            </TooltipBox>
           </TooltipWrapper>
         </Label>
         {isEditingEmail ? (
@@ -304,7 +332,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email }) => {
               <Input
                 type="email"
                 placeholder="이메일 주소를 입력하세요"
-                value={email}
+                value={editedEmail}
                 onChange={handleInputChange}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
@@ -314,7 +342,13 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email }) => {
             </InputWrapper>
             {!isValid && (
               <ErrorContainer>
-                <Image src={X} alt="Error icon" width={16} height={16} />
+                <Image
+                  src={X}
+                  alt="Error icon"
+                  width={16}
+                  height={16}
+                  style={{ marginTop: '-2px' }}
+                />
                 <span>{error}</span>
               </ErrorContainer>
             )}
@@ -328,8 +362,13 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email }) => {
         ) : (
           <>
             <Value>{email}</Value>
-            {!isEditingPassword && (
-              <SetButton onClick={() => setIsEditingEmail(true)}>
+            {!isGoogleLogin && !isEditingPassword && (
+              <SetButton
+                onClick={() => {
+                  setIsEditingEmail(true);
+                  setEditedEmail(originalEmail || email);
+                }}
+              >
                 설정
               </SetButton>
             )}
@@ -337,58 +376,66 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email }) => {
         )}
       </InfoRow>
 
-      <InfoRow>
-        <Label>비밀번호</Label>
-        {isEditingPassword ? (
-          <InputContainer>
-            <InputWrapper
-              isFocused={isPasswordFocused}
-              isValid={isPasswordValid}
-              isChecked={isPasswordChecked}
-            >
-              <Input
-                type={showPassword ? 'text' : 'password'}
-                placeholder="비밀번호를 입력하세요"
-                value={password}
-                onChange={handlePasswordChange}
-                onFocus={() => setIsPasswordFocused(true)}
-                onBlur={() => setIsPasswordFocused(false)}
-                onKeyDown={handlePasswordKeyDown}
+      {!isGoogleLogin && (
+        <InfoRow>
+          <Label>비밀번호</Label>
+          {isEditingPassword ? (
+            <InputContainer>
+              <InputWrapper
+                isFocused={isPasswordFocused}
                 isValid={isPasswordValid}
-              />
-              <Image
-                src={showPassword ? VisibleIcon : InvisibleIcon}
-                alt="toggle visibility"
-                onClick={() => setShowPassword(!showPassword)}
-                width={20}
-                height={20}
-                style={{ cursor: 'pointer', marginLeft: '10px' }}
-              />
-            </InputWrapper>
-            {passwordError && (
-              <ErrorContainer>
-                <Image src={X} alt="Error icon" width={16} height={16} />
-                <span>{passwordError}</span>
-              </ErrorContainer>
-            )}
-            <ButtonContainer>
-              <Button onClick={handleCancelPassword}>취소</Button>
-              <Button primary onClick={handleSavePassword}>
-                저장
-              </Button>
-            </ButtonContainer>
-          </InputContainer>
-        ) : (
-          <>
-            <Value>{password}</Value>
-            {!isEditingEmail && (
-              <SetButton onClick={() => setIsEditingPassword(true)}>
-                설정
-              </SetButton>
-            )}
-          </>
-        )}
-      </InfoRow>
+                isChecked={isPasswordChecked}
+              >
+                <Input
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="비밀번호를 입력하세요"
+                  value={password}
+                  onChange={handlePasswordChange}
+                  onFocus={() => setIsPasswordFocused(true)}
+                  onBlur={() => setIsPasswordFocused(false)}
+                  onKeyDown={handlePasswordKeyDown}
+                  isValid={isPasswordValid}
+                />
+                <Image
+                  src={showPassword ? VisibleIcon : InvisibleIcon}
+                  alt="toggle visibility"
+                  onClick={() => setShowPassword(!showPassword)}
+                  width={20}
+                  height={20}
+                  style={{ cursor: 'pointer', marginLeft: '10px' }}
+                />
+              </InputWrapper>
+              {passwordError && (
+                <ErrorContainer>
+                  <Image src={X} alt="Error icon" width={16} height={16} />
+                  <span>{passwordError}</span>
+                </ErrorContainer>
+              )}
+              <ButtonContainer>
+                <Button onClick={handleCancelPassword}>취소</Button>
+                <Button primary onClick={handleSavePassword}>
+                  저장
+                </Button>
+              </ButtonContainer>
+            </InputContainer>
+          ) : (
+            <>
+              <Value>{password}</Value>
+              {!isEditingEmail && (
+                <SetButton onClick={() => setIsEditingPassword(true)}>
+                  설정
+                </SetButton>
+              )}
+            </>
+          )}
+        </InfoRow>
+      )}
+      {isModalOpen && (
+        <EmailChangeModal
+          email={editedEmail}
+          onConfirm={handleConfirmEmailChange}
+        />
+      )}
     </Section>
   );
 };

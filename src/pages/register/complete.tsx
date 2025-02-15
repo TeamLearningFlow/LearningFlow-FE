@@ -4,15 +4,15 @@ import axios from 'axios';
 
 const RegisterCompletePage: React.FC = () => {
   const router = useRouter();
-  const { token } = router.query; // URL에서 token 추출
+  const { emailVerificationCode } = router.query; // URL에서 token 추출
 
   useEffect(() => {
     const validateToken = async () => {
-      if (!token) return; // 토큰이 없는 경우 작업 중단
+      if (!emailVerificationCode) return; // 토큰이 없는 경우 작업 중단
 
       try {
         const response = await axios.get(
-          `http://onboarding.p-e.kr:8080/register/complete?token=${token}`,
+          `http://onboarding.p-e.kr:8080/register/complete?emailVerificationCode=${emailVerificationCode}`,
         );
 
         // 유효성 확인 후 페이지 이동
@@ -20,7 +20,10 @@ const RegisterCompletePage: React.FC = () => {
           console.log('토큰 유효');
 
           // 로컬 스토리지에 토큰 저장
-          localStorage.setItem('token', token as string);
+          localStorage.setItem(
+            'emailVerificationCode',
+            emailVerificationCode as string,
+          );
           console.log('토큰 저장 완료');
 
           router.push('/landing'); // 랜딩 페이지로 이동
@@ -35,7 +38,7 @@ const RegisterCompletePage: React.FC = () => {
     };
 
     validateToken();
-  }, [token, router]);
+  }, [emailVerificationCode, router]);
 
   return null;
 };
