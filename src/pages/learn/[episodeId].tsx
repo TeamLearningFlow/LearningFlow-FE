@@ -3,13 +3,13 @@ import { useParams } from 'react-router-dom';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import styled from 'styled-components';
-import Header from '../components/learnHeader';
-import TitleBar from '../components/learn/learnTitleBar';
-import ClassTitle from '../components/learn/learnClassTitle';
-import ClassList from '../components/learn/learnClassList';
-import Article from '../components/learn/article';
-import YoutubeArticle from '@/components/learn/article/youtubeArticle';
-import Note from '../components/learn/note';
+import Header from '../../components/learnHeader';
+import TitleBar from '../../components/learn/learnTitleBar';
+import ClassTitle from '../../components/learn/learnClassTitle';
+import ClassList from '../../components/learn/learnClassList';
+import Article from '../../components/learn/article';
+// import YoutubeArticle from '../../components/learn/article/youtubeArticle';
+import Note from '../../components/learn/note';
 import {
   SkeletonClassList_S,
   SkeletonClassTitle,

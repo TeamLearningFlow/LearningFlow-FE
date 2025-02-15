@@ -14,14 +14,13 @@ import Blog from '../../assets/platformicon/naverblog_nostroke_ic.svg';
 import Tistory from '../../assets/platformicon/tistory_nostroke_ic.svg';
 import Velog from '../../assets/platformicon/velog_nostroke_ic.svg';
 
-
-interface ClassListProps {
+interface LearnClassIndexProps {
   episodeNumber: number;
   episodeName: string;
   resourceSource: "youtube" | "naverBlog" | "tistory" | "velog";
   progress: number;
+  isCurrent: boolean;
 }
-
 
 const getPlatformIcon = (
   resourceSource: "youtube" | "naverBlog" | "tistory" | "velog",
@@ -55,7 +54,7 @@ const getPlatformIcon = (
 
 
  
-export const CompletedClass: React.FC<ClassListProps> = ({ episodeNumber, episodeName, resourceSource }) => {
+export const CompletedClass: React.FC<LearnClassIndexProps> = ({ episodeNumber, episodeName, resourceSource }) => {
   return (
     <IndexWrapper>
       <PlatformIcon>
@@ -69,7 +68,7 @@ export const CompletedClass: React.FC<ClassListProps> = ({ episodeNumber, episod
   );
 };
 
-export const CurrentClass: React.FC<ClassListProps> = ({ episodeNumber, episodeName, resourceSource }) => {
+export const CurrentClass: React.FC<LearnClassIndexProps> = ({ episodeNumber, episodeName, resourceSource }) => {
   return (
     <CurrentIndexWrapper>
       <CurrentPlatformIcon>
@@ -83,7 +82,7 @@ export const CurrentClass: React.FC<ClassListProps> = ({ episodeNumber, episodeN
   );
 };
 
-export const NextClass: React.FC<ClassListProps> = ({ episodeNumber, episodeName, resourceSource }) => {
+export const NextClass: React.FC<LearnClassIndexProps> = ({ episodeNumber, episodeName, resourceSource }) => {
   return (
     <IndexWrapper>
       <PlatformIcon>

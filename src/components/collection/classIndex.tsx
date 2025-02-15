@@ -26,10 +26,18 @@ const ClassIndex: React.FC<ClassIndexProps> = ({ classData }) => {
   const router = useRouter();
 
   const handleClick = async () => {
-    const episodeId = classData.episodeNumber
-
+    // episodeId를 임의로 설정
+    const episodeId = 54;
+  
     try {
-      const response = await axios.get(`/resources/${episodeId}/youtube`);
+      const token = localStorage.getItem("token");
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+      // episodeId에 대해 API 요청
+      const response = await axios.get(
+        `http://onboarding.p-e.kr:8080/resources/${episodeId}/youtube`,
+        { headers }
+      );
       if (response.status === 200) {
         const data = response.data;
         router.push({
@@ -41,6 +49,7 @@ const ClassIndex: React.FC<ClassIndexProps> = ({ classData }) => {
       console.error("강의 불러오기 실패:", error);
     }
   };
+  
 
   const getPlatformIcon = () => {
     switch (classData.resourceSource) {

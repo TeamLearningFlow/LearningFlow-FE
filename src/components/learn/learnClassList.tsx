@@ -43,61 +43,23 @@ const ComponentWrapper = styled.div`
   }
 `;
 
-const ClassList: React.FC = () => {
-  const Classes = [
-    {
-      episodeName: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
-      resourceSource: 'youtube',
-      episodeNumber: 1,
-      progress: 100
-    },
-    {
-      episodeName: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
-      resourceSource: 'youtube',
-      episodeNumber: 2,
-      progress: 100
-    },
-    {
-      episodeName: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
-      resourceSource: 'youtube',
-      episodeNumber: 3,
-      progress: 100
-    },
-    {
-      episodeName: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
-      resourceSource: 'youtube',
-      episodeNumber: 4,
-      progress: 100
-    },
-    {
-      episodeName: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
-      resourceSource: 'youtube',
-      episodeNumber: 5,
-      progress: 100
-    },
-    {
-      episodeName: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
-      resourceSource: 'naverBlog',
-      episodeNumber: 6,
-      progress: 100
-    },{
-      episodeName: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
-      resourceSource: 'velog',
-      episodeNumber: 7,
-      progress: 70
-    },
-    {
-      episodeName: '브랜치 포스터 "와이어프레임을 활용하는 이유"',
-      resourceSource: 'velog',
-      episodeNumber: 8,
-      progress: 0
-    },
-    
-  ];
- 
+interface ResourceData {
+  episodeName: string;
+  url: string;
+  resourceSource: string;
+  episodeNumber: number;
+  progress: number;
+}
+
+interface ClassListProps {
+  resource: ResourceData[];
+  currentEpisode: number;
+}
+
+const ClassList: React.FC<ClassListProps> = ({resource}) => {
   return (
     <ComponentWrapper>
-      {Classes.map((classItem) => {
+      {resource.map((classItem) => {
         if (classItem.progress >= 80) {
           return <CompletedClass key={classItem.episodeNumber} {...classItem} />;
         } else if (classItem.progress > 0) {
@@ -106,7 +68,7 @@ const ClassList: React.FC = () => {
           return <NextClass key={classItem.episodeNumber} {...classItem} />;
         }
       })}
-    </ComponentWrapper>
+    </ComponentWrapper> 
   );
 };
 
