@@ -181,8 +181,11 @@ const LoginPage: React.FC = () => {
         localStorage.setItem('token', token); // 토큰을 로컬 스토리지에 저장
 
         const userName = response.data.result.name;
+        const socialType = response.data.result.socialType;
+        // console.log('소셜 타입:', socialType);
+
         localStorage.setItem('userName', userName);
-        // localStorage.setItem('showHomeModal', 'true');
+        localStorage.setItem('socialType', socialType); // 마이페이지에 전달
 
         context.actions.setIsLoggedIn(true); // 로그인 시
         router.push('/home'); // 홈 페이지로 이동
