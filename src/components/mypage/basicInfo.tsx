@@ -10,6 +10,7 @@ import CheckIcon from '../../assets/checkIconG.svg';
 import CheckIconB from '../../assets/checkIconB.svg';
 
 import EmailChangeModal from '../../components/modal/emailChangeModal';
+import PasswordChangeCheckModal from '../../components/modal/passwordChangeCheckModal';
 
 const Section = styled.div`
   margin-bottom: 20px;
@@ -235,6 +236,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
     useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false); // 이메일 변경 모달
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
 
   // console.log('소셜 타입:', socialType);
   const isGoogleLogin = socialType === 'GOOGLE';
@@ -259,12 +261,15 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newEmail = e.target.value;
     setEditedEmail(newEmail); // 이메일 변경 상태 업데이트
-    const isValid = validateEmail(newEmail);
 
+    const isEmpty = newEmail.trim() === ''; // 입력값이 비었는지 확인
+    setIsEmailEmpty(isEmpty); // 상태 업데이트
+
+    const isValid = validateEmail(newEmail);
     setIsValid(isValid);
     setIsChecked(true); // 실시간으로 검사 상태 업데이트
 
-    if (!isValid) {
+    if (!isValid && !isEmpty) {
       setError('올바른 이메일 형식이 아닙니다');
     } else {
       setError('');
@@ -340,26 +345,27 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
     setEditedEmail(originalEmail); // 이메일 변경 즉시 반영
   }, [originalEmail]);
 
-  /* const handleSavePassword = () => {
-    if (validatePassword(password)) {
-      // setOriginalPassword(password); // 변경된 비밀번호 저장
-      setIsEditingPassword(false);
-    } else {
-      setPasswordError(
-        '비밀번호는 8~16자, 대소문자, 특수문자, 숫자가 포함되어야 합니다',
-      );
+  const handleSavePassword = () => {
+    if (!isPasswordValid || !isConfirmValid) {
+      return; // 비밀번호가 유효하지 않으면 저장하지 않음
     }
-  }; */
+    setIsPasswordModalOpen(true); // 모달 표시
+  };
 
   const handleCancelEmail = () => {
     setEditedEmail(currentEmail);
     setIsEditingEmail(false);
   };
 
-  /* const handleCancelPassword = () => {
-    setEditedPassword('**********');
+  const handleCancelPassword = () => {
+    setCurrentPassword('');
+    setNewPassword('');
+    setConfirmPassword('');
     setIsEditingPassword(false);
-  }; */
+    setIsPasswordChecked(false);
+    setIsNewPasswordInvalid(false);
+    setIsConfirmPasswordInvalid(false);
+  };
 
   return (
     <Section>
@@ -396,7 +402,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
                 isEmpty={isEmailEmpty}
               />
             </InputWrapper>
-            {!isValid && (
+            {!isValid && !isEmailEmpty && (
               <ErrorContainer>
                 <Image
                   src={X}
@@ -559,8 +565,10 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
               </ValidationRow>
 
               <ButtonContainer>
-                <Button /*onClick={handleCancelPassword}*/>취소</Button>
-                <Button /*primary onClick={handleSavePassword}*/>저장</Button>
+                <Button onClick={handleCancelPassword}>취소</Button>
+                <Button primary onClick={handleSavePassword}>
+                  저장
+                </Button>
               </ButtonContainer>
             </InputContainer>
           ) : (
@@ -579,6 +587,16 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ email, socialType }) => {
         <EmailChangeModal
           email={editedEmail}
           onConfirm={handleConfirmEmailChange}
+        />
+      )}
+
+      {isPasswordModalOpen && (
+        <PasswordChangeCheckModal
+          onConfirm={() => {
+            setIsPasswordModalOpen(false);
+            setIsEditingPassword(false);
+          }}
+          onClose={() => setIsPasswordModalOpen(false)}
         />
       )}
     </Section>
