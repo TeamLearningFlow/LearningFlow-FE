@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import { LearnContext } from '../context/LearnContext';
 import { useParams } from 'react-router-dom';
 import { useRouter } from 'next/router';
 import axios from 'axios';
@@ -7,8 +8,10 @@ import Header from '../../components/learnHeader';
 import TitleBar from '../../components/learn/learnTitleBar';
 import ClassTitle from '../../components/learn/learnClassTitle';
 import ClassList from '../../components/learn/learnClassList';
-import Article from '../../components/learn/article';
-// import YoutubeArticle from '../../components/learn/article/youtubeArticle';
+// import Article from '../../components/learn/article';
+import BlogArticle from '@/components/learn/articleFolder/blogArticle';
+import YoutubeArticle from '@/components/learn/articleFolder/newYoutubeArticle';
+
 import Note from '../../components/learn/note';
 import {
   SkeletonClassList_S,
@@ -83,59 +86,81 @@ interface CollectionData {
     url: string;
     resourceSource: string;
     episodeNumber: number;
-    progress: number;
+    // progress: number;
   }[];
 }
 
+const interestFieldMap: Record<string, string> = {
+  APP_DEVELOPMENT: '앱개발',
+  WEB_DEVELOPMENT: '웹개발',
+  PROGRAMMING_LANGUAGE: '컴퓨터언어',
+  DEEP_LEARNING: '딥러닝',
+  STATISTICS: '통계',
+  DATA_ANALYSIS: '데이터분석',
+  UI_UX: 'UX/UI',
+  PLANNING: '기획',
+  BUSINESS_PRODUCTIVITY: '업무생산성',
+  FOREIGN_LANGUAGE: '외국어',
+  CAREER: '취업',
+};
+
 const LearnPage: React.FC = () => {
   // const { episodeId } = useParams<{ episodeId: number }>();
+  // const { collectionId } = useParams<{ collectionId: number }>();
   const episodeId: number = 34;
+  const collectionId: number = 1;
   const [type, setType] = useState<'youtube' | 'blog' | null>(null);
   const [loading, setLoading] = useState(false);
+  const [title, setTitle] = useState<string>('');
+    const [field, setField] = useState<string>('');
   const [progress, setProgress] = useState(0);
   const [collection, setCollection] = useState<CollectionData | null>(null);
+  const context = useContext(LearnContext);
   const router = useRouter();
 
-  const dummyData:  CollectionData = {
-      interestField: 'WEB_DEVELOPMENT',
-      title: `처음 배우는 스프링 부트`,
-      resource: [
-        {
-          episodeName: '스프링 부트란?',
-          url: 'https://youtube.com/1',
-          resourceSource: 'youtube',
-          episodeNumber: 1,
-          progress: 100, //테스트용
-        },
-        {
-          episodeName: '프로젝트 설정하기',
-          url: 'https://youtube.com/2',
-          resourceSource: 'youtube',
-          episodeNumber: 2,
-          progress: 100,
-        },
-        {
-          episodeName: '첫 애플리케이션 만들기',
-          url: 'https://naver.com/3',
-          resourceSource: 'youtube',
-          episodeNumber: 3,
-          progress: 100,
-        },
-        {
-          episodeName: '첫 애플리케이션 만들기',
-          url: 'https://tistory.com/4',
-          resourceSource: 'tistory',
-          episodeNumber: 4,
-          progress: 100,
-        }
-      ],
-    };
+  const { isCompleted } = context.state;
+  const { setIsCompleted } = context.actions;
+
+  const dummyData: CollectionData = {
+    interestField: 'WEB_DEVELOPMENT',
+    title: `처음 배우는 스프링 부트`,
+    resource: [
+      {
+        episodeName: '스프링 부트란?',
+        url: 'https://youtube.com/1',
+        resourceSource: 'youtube',
+        episodeNumber: 1,
+        // progress: 100, //테스트용
+      },
+      {
+        episodeName: '프로젝트 설정하기',
+        url: 'https://youtube.com/2',
+        resourceSource: 'youtube',
+        episodeNumber: 2,
+        // progress: 100,
+      },
+      {
+        episodeName: '첫 애플리케이션 만들기',
+        url: 'https://naver.com/3',
+        resourceSource: 'youtube',
+        episodeNumber: 3,
+        // progress: 100,
+      },
+      {
+        episodeName: '첫 애플리케이션 만들기',
+        url: 'https://tistory.com/4',
+        resourceSource: 'tistory',
+        episodeNumber: 4,
+        // progress: 100,
+      },
+    ],
+  };
 
   useEffect(() => {
     const fetchCollectionData = async () => {
       try {
         const response = await axios.get(
-          `http://onboarding.p-e.kr:8080/collections/${collectionId}`
+          `http://onboarding.p-e.kr:8080/collections/${collectionId}`,
         );
         if (response.data.isSuccess) {
           setCollection(response.data.result);
@@ -154,16 +179,8 @@ const LearnPage: React.FC = () => {
     fetchCollectionData();
   }, [episodeId]);
 
-
-  // // 테스트용
-  // const testEpisodeIds = [1, 2]; // 1: 유튜브, 2 : 블로그
-  // const [currentEpisodeId, setCurrentEpisodeId] = useState<number>(
-  //   testEpisodeIds[0],
-  // );
-
   useEffect(() => {
     if (!episodeId) return;
-    // if (!currentEpisodeId) return; // 테스트
 
     const checkResourceType = async () => {
       try {
@@ -171,28 +188,34 @@ const LearnPage: React.FC = () => {
         console.log('토큰: ', token);
         const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-        const youtubeResponse = await fetch(
+        const youtubeResponse = await axios.get(
           `http://onboarding.p-e.kr:8080/resources/${episodeId}/youtube`,
           { headers },
         );
 
-        if (youtubeResponse.ok) {
+        if (youtubeResponse.data.result.resourceType === 'VIDEO') {
+          console.log(youtubeResponse);
           setType('youtube');
-          // console.log(`유튜브 테스트 : ${currentEpisodeId}`);
+          const data = await youtubeResponse.json();
+          setTitle(data.result.urlTitle);
+          setField(data.result.interestField);
         } else {
           // YouTube가 아니라면 Blog
-          const blogResponse = await fetch(
+          const blogResponse = await axios.get(
             `http://onboarding.p-e.kr:8080/resources/${episodeId}/blog`,
             { headers },
           );
 
-          if (blogResponse.ok) {
-            setType('blog');
-            // console.log(`블로그 테스트 : ${currentEpisodeId}`);
+          if(blogResponse.data.result.resourceType === 'TEXT')
+          console.log(blogResponse);
+          setType('blog');
+          const data = await blogResponse.json();
+            setTitle(data.result.urlTitle);
+            setField(data.result.interestField);
           } else {
-            console.error('유튜브로 블로그도 아닌 오류');
-            setType(null);
-          }
+          console.error('유튜브로 블로그도 아닌 오류');
+          setType(null);
+        
         }
       } catch (error) {
         console.error('Error fetching resource type:', error);
@@ -204,13 +227,16 @@ const LearnPage: React.FC = () => {
 
     checkResourceType();
   }, [episodeId]);
-  // }, [currentEpisodeId]);
 
   useEffect(() => {
     console.log(`현재 에피소드 ID: ${episodeId}`);
   }, [episodeId]);
 
-  
+  const collection = {
+    title: title,
+    interestField: interestFieldMap[field],
+  };
+
   return (
     <PageWrapper>
       <Header />
@@ -231,22 +257,33 @@ const LearnPage: React.FC = () => {
       ) : (
         <BodyWrapper>
           <TopWrapper>
-            {collection && <Article episodeId={episodeId} onProgressChange={setProgress}/>}
-            {/* <Article episodeId={episodeId} /> */}
-            {/* // (type === 'youtube' ? (
-              //   <YoutubeArticle episodeId={episodeId} />
-              // ) : (
-              //   // <YoutubeArticle episodeId={currentEpisodeId} />
-              //   <BlogArticle episodeId={episodeId} />
-              //   // <BlogArticle episodeId={currentEpisodeId} />
-              // ))} */}
-            <ClassTitle episodeId={episodeId}/>
+            {collection && 
+              <Article episodeId={episodeId} isCompleted={isCompleted}/>
+            }
+            {/* {collection &&
+              (type === 'youtube' ? (
+                <YoutubeArticle
+                  episodeId={episodeId}
+                  isCompleted={isCompleted}
+                />
+              ) : (
+                <BlogArticle
+                  episodeId={episodeId}
+                  isCompleted={isCompleted}
+                />
+              ))} */}
+            <ClassTitle episodeId={episodeId} isCompleted={isCompleted} />
           </TopWrapper>
           <MidWrapper>
             <Note episodeId={episodeId} />
           </MidWrapper>
           <BottomWrapper>
-            {collection && <ClassList resource={collection.resource} currentEpisode={episodeId} />}
+            {/* {collection && (
+            <ClassList
+              resource={collection.resource}
+              currentEpisode={episodeId}
+            />
+            )} */}
           </BottomWrapper>
         </BodyWrapper>
       )}

@@ -187,8 +187,7 @@ const Note: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
     }
 
     if (!isNoteEmpty) {
-      localStorage.setItem(`noteContent_${episodeId}`, noteContent);
-
+      // localStorage.setItem(`noteContent_${episodeId}`, noteContent);
       try {
         const response = await axios.post(
           `http://onboarding.p-e.kr:8080/resources/${episodeId}/memo`,

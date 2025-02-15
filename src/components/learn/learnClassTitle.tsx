@@ -1,8 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { LearnContext } from '../../pages/context/LearnContext';
 import axios from 'axios';
 import styled from 'styled-components';
 import Image from 'next/image';
-import { FaCheck } from "react-icons/fa6";
+import { FaCheck } from 'react-icons/fa6';
 import EffectUp from '../../assets/buttonEffectUp.svg';
 import EffectDown from '../../assets/buttonEffectDown.svg';
 import LearnModal from '../modal/learnModal';
@@ -43,7 +44,10 @@ const TitleBox = styled.div`
   }
 `;
 
-const ButtonWrapper = styled.button<{ isClicked: boolean, isCompleted: boolean }>`
+const ButtonWrapper = styled.button<{
+  isClicked: boolean;
+  isCompleted: boolean;
+}>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -53,19 +57,16 @@ const ButtonWrapper = styled.button<{ isClicked: boolean, isCompleted: boolean }
     props.isCompleted
       ? 'rgba(118, 118, 128, 0.12)' // 회색 (완료 후 상태)
       : props.isClicked
-      ? 'rgba(255, 118, 2, 1)' // 주황색 (클릭 직후)
-      : 'rgba(94, 82, 255, 1)'}; // 기본 색상
+        ? 'rgba(255, 118, 2, 1)' // 주황색 (클릭 직후)
+        : 'rgba(94, 82, 255, 1)'}; // 기본 색상
   border-radius: 24.7px;
   border: none;
   font-size: 14px;
-  color: ${(props) =>
-    props.isCompleted
-      ? 'rgba(79, 83, 87, 1)'
-      : 'white'};
+  color: ${(props) => (props.isCompleted ? 'rgba(79, 83, 87, 1)' : 'white')};
   gap: 2px;
   cursor: pointer;
-  transition: ${(props) => (props.isClicked ? 'none' : 'background-color 1s ease, color 1s ease')};
-
+  transition: ${(props) =>
+    props.isClicked ? 'none' : 'background-color 1s ease, color 1s ease'};
 
   @media (max-width: 850px) {
     width: 95px;
@@ -100,7 +101,10 @@ const IconBox = styled.div`
   }
 `;
 
-const EffectUpWrapper = styled.div<{ isClicked: boolean, isCompleted: boolean }>`
+const EffectUpWrapper = styled.div<{
+  isClicked: boolean;
+  isCompleted: boolean;
+}>`
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -126,7 +130,10 @@ const EffectUpWrapper = styled.div<{ isClicked: boolean, isCompleted: boolean }>
   }
 `;
 
-const EffectDownWrapper = styled.div<{ isClicked: boolean, isCompleted: boolean }>`
+const EffectDownWrapper = styled.div<{
+  isClicked: boolean;
+  isCompleted: boolean;
+}>`
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -158,7 +165,7 @@ const ButtonLetter = styled.div`
 
 interface ClassTitleProps {
   title?: string;
-  episodeId: number; 
+  episodeId: number;
 }
 
 const ClassTitle: React.FC<ClassTitleProps> = ({
@@ -166,52 +173,72 @@ const ClassTitle: React.FC<ClassTitleProps> = ({
   episodeId,
 }) => {
   const [isClicked, setIsClicked] = useState(false);
-  const [isCompleted, setIsCompleted] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [progress, setProgress] = useState(0);
+  const context = useContext(LearnContext);
+  const { isCompleted } = context.state;
+  const { setIsCompleted } = context.actions;
 
   const handleClick = async () => {
     if (isCompleted) return;
     setIsClicked(true);
-  
+
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
-      
+
       const response = await axios.post(
-        `http://onboarding.p-e.kr:8080/resources/${episodeId}/update-complete`, 
-        {},
-        { headers }
+        `http://onboarding.p-e.kr:8080/resources/${episodeId}/update-complete`,
+        { progress: 0 },
+        { headers, 'Content-Type': 'application/json' },
       );
-  
+
       if (response.status === 200 && response.data?.result?.isComplete) {
         setIsCompleted(true);
         setProgress(100);
-        console.log("학습 완료 처리 성공:", response.data);
+        console.log('학습 완료 처리 성공:', response.data);
       }
     } catch (error) {
-      console.error("수강 상태 변경 실패:", error);
+      console.error('수강 상태 변경 실패:', error);
     } finally {
       setIsClicked(false);
-      {/* setTimeout(() => {
+      {
+        /* setTimeout(() => {
         setIsClicked(false);
-      }, 1000); */}
+      }, 1000); */
+      }
     }
   };
-  
-  {/* useEffect(() => {
-    if (isClicked) {
-      handleClick();  // isClicked가 true로 변경될 때마다 API 호출
-    }
-  }, [isClicked]); */}
 
+  useEffect(() => {
+    if (isClicked) {
+      handleClick(); // isClicked가 true로 변경될 때마다 API 호출
+    }
+  }, [isClicked]);
 
   useEffect(() => {
     console.log(`변경된 진도율(완료): ${progress}%`);
-  }, [progress]); 
+  }, [progress]);
+
+  useEffect(() => {
+    setIsCompleted(isCompleted);
+  }, [isCompleted]);
+
+  useEffect(() => {
+    if (isCompleted) {
+      setIsClicked(true);
+
+      const timer = setTimeout(() => {
+        setIsClicked(false);
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isCompleted]);
 
   const handleShowModal = () => {
-    if (isCompleted) { // 버튼 회색일 때만 모달을 보여줌
+    if (isCompleted) {
+      // 버튼 회색일 때만 모달을 보여줌
       setIsModalVisible(true);
     }
   };
@@ -230,7 +257,7 @@ const ClassTitle: React.FC<ClassTitleProps> = ({
 
   const handleRetakeClass = () => {
     setProgress(0);
-    setIsCompleted(false);  // isCompleted 상태 초기화 (버튼 보라색으로 돌아감)
+    setIsCompleted(false); // isCompleted 상태 초기화 (버튼 보라색으로 돌아감)
     setIsModalVisible(false);
   };
 
@@ -238,10 +265,10 @@ const ClassTitle: React.FC<ClassTitleProps> = ({
     <TitleWrapper>
       <TitleBox>{title}</TitleBox>
       <EffectUpWrapper isClicked={isClicked} isCompleted={isCompleted}>
-        <Image src={EffectUp} alt='Button Effect Up'/>
+        <Image src={EffectUp} alt="Button Effect Up" />
       </EffectUpWrapper>
       <EffectDownWrapper isClicked={isClicked} isCompleted={isCompleted}>
-        <Image src={EffectDown} alt='Button Effect Down'/>
+        <Image src={EffectDown} alt="Button Effect Down" />
       </EffectDownWrapper>
       <ButtonWrapper
         isClicked={isClicked}
@@ -249,12 +276,18 @@ const ClassTitle: React.FC<ClassTitleProps> = ({
         onClick={handleButtonClick}
       >
         <IconBox>
-          <FaCheck size="15px"/>
+          <FaCheck size="15px" />
         </IconBox>
         <ButtonLetter>수강완료</ButtonLetter>
       </ButtonWrapper>
 
-      {isModalVisible && <LearnModal onClose={handleCloseModal} episodeId={episodeId} onRetakeClass={handleRetakeClass}/>}
+      {isModalVisible && (
+        <LearnModal
+          onClose={handleCloseModal}
+          episodeId={episodeId}
+          onRetakeClass={handleRetakeClass}
+        />
+      )}
     </TitleWrapper>
   );
 };

@@ -1,7 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-const YoutubeArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
+const YoutubeArticle: React.FC<{
+  episodeId?: number;
+  onProgressChange: (progress: number) => void;
+}> = ({ episodeId, onProgressChange }) => {
   const [progress, setProgress] = useState<number>(0);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const playerRef = useRef<any>(null); // YouTube Player 인스턴스 저장
@@ -56,7 +59,7 @@ const YoutubeArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
     }
   };
 
-  // 진도율 주기적으로 추적 (1초마다)
+  // 진도율 추적
   const startTrackingProgress = () => {
     stopTrackingProgress(); // 기존 인터벌 클리어
 
@@ -67,6 +70,7 @@ const YoutubeArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
         if (duration > 0) {
           const progressValue = Math.round((currentTime / duration) * 100);
           setProgress(progressValue);
+          onProgressChange(progressValue);
           console.log(`진도율 업데이트: ${progressValue}%`);
         }
       }

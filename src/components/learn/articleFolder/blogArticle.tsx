@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
+import { LearnContext } from '../../../pages/context/LearnContext';
 import axios from 'axios';
 import styled from 'styled-components';
 
@@ -231,7 +232,9 @@ const StyledImg = styled.img`
 // export default Article;
 
 // png 사용
-const BlogArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
+const BlogArticle: React.FC<{
+  episodeId?: number;
+}> = ({ episodeId }) => {
   const isTestMode = false; // 테스트용
   const [contentUrl, setContentUrl] = useState<string | null>('');
   const [progress, setProgress] = useState<number>(0);
@@ -239,6 +242,10 @@ const BlogArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
   const imgRef = useRef<HTMLImageElement>(null); // 이미지 참조
   const articleWrapperRef = useRef<HTMLDivElement>(null); // ArticleWrapper 참조
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const context = useContext(LearnContext);
+
+  const { isCompleted } = context.state;
+  const { setIsCompleted } = context.actions;
 
   useEffect(() => {
     if (!episodeId) {
@@ -246,14 +253,21 @@ const BlogArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
       return;
     }
 
+    // 로컬 스토리지에서 이전 진도율 불러오기
+    const savedProgress = localStorage.getItem(`progress_${episodeId}`);
+    if (savedProgress) {
+      setProgress(Number(savedProgress));
+      console.log('이전 수강 위치: ', Number(savedProgress));
+    }
+
     const fetchContent = async () => {
       try {
         const token = localStorage.getItem('token');
-        // if (!token) {
-        //   alert('로그인이 필요합니다.');
-        //   console.log('토큰이 없습니다.');
-        //   return;
-        // }
+        if (!token) {
+          alert('로그인이 필요합니다.');
+          console.log('토큰이 없습니다.');
+          return;
+        }
         console.log('토큰: ', token);
         console.log('episodeId:', episodeId);
 
@@ -271,15 +285,10 @@ const BlogArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
           {
             headers: {
               Authorization: `Bearer ${token}`,
-              // 'Content-Type': 'application/json',
             },
           },
         );
         console.log('blogResponse:', blogResponse);
-
-        // if (blogResponse.status === 200) {
-        //   // const data = blogResponse.data;
-        //   // console.log(data);
 
         if (blogResponse.status !== 200) {
           console.error('블로그 API 응답 오류:', blogResponse);
@@ -292,24 +301,12 @@ const BlogArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
           {
             headers: {
               Authorization: `Bearer ${token}`,
-              // 'Content-Type': 'application/json',
             },
-            // responseType: 'blob', // Blob으로 응답 받음
           },
         );
 
         console.log('contentResponse:', contentResponse);
-        // console.log('contentResponse.status:', contentResponse.status);
-        // console.log('contentResponse:', contentResponse.data);
-        // console.log('Blob 크기:', contentResponse.data.size);
 
-        // if (contentResponse.status === 200) {
-        //   // blob을 URL로 변환
-        //   const imageUrl = URL.createObjectURL(contentResponse.data);
-        //   setContentUrl(imageUrl);
-        // } else {
-        //   console.error('콘텐츠 API 응답 오류:', contentResponse);
-        // }
         if (contentResponse.status === 200 && contentResponse.data) {
           setContentUrl(contentResponse.data.result);
         } else {
@@ -335,7 +332,6 @@ const BlogArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
     try {
       await axios.post(
         `http://onboarding.p-e.kr:8080/resources/${episodeId}/save-progress`,
-        // { resourceType: 'TEXT', progress: scrolled },
         { resourceType: 'TEXT', progress: 0 },
         {
           headers: {
@@ -344,6 +340,7 @@ const BlogArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
           },
         },
       );
+      localStorage.setItem(`progress_${episodeId}`, String(scrolled));
     } catch (error) {
       console.error('진도 저장 오류:', error);
     }
@@ -369,6 +366,7 @@ const BlogArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
       if (response.status === 200) {
         console.log('수강 완료 상태 업데이트:', response.data);
         setLearningCompleted(true);
+        setIsCompleted(true);
       }
     } catch (error) {
       console.error('수강 완료 업데이트 오류:', error);
@@ -376,17 +374,12 @@ const BlogArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
   };
 
   const handleScroll = () => {
-    // if (!imgRef.current) return;
     if (!articleWrapperRef.current) return;
 
     try {
       // 이미지의 보이는 영역과 전체 높이를 사용하여 진도율 계산
-      // const { scrollTop, clientHeight, scrollHeight } = imgRef.current;
       const { scrollTop, clientHeight, scrollHeight } =
         articleWrapperRef.current;
-
-      // scrollHeight가 clientHeight와 같거나 0일 경우 NaN이 되지 않도록 처리
-      // if (scrollHeight === clientHeight || scrollHeight === 0) return;
 
       // 현재 스크롤된 부분의 비율을 계산
       const scrolled = Math.round(
@@ -396,10 +389,10 @@ const BlogArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
       if (scrolled !== progress) {
         setProgress(scrolled); // 진도율 업데이트
         saveProgress(scrolled);
-        console.log('scrollTop: ', scrollTop);
-        console.log('clientHeight: ', clientHeight);
-        console.log('scrollHeight: ', scrollHeight);
-        console.log(`진도율: ${scrolled}%`);
+        // console.log('scrollTop: ', scrollTop);
+        // console.log('clientHeight: ', clientHeight);
+        // console.log('scrollHeight: ', scrollHeight);
+        // console.log(`진도율: ${scrolled}%`);
 
         // debounce로 서버 저장을 지연시킴
         if (debounceTimer.current) {
@@ -409,11 +402,12 @@ const BlogArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
         debounceTimer.current = setTimeout(() => {
           saveProgress(scrolled);
           console.log(`진도율: ${scrolled}%`);
-        }, 500);
+        }, 1000);
 
         // 진도율이 80% 이상일 경우 학습 완료 처리
         if (scrolled >= 80 && !learningCompleted) {
           console.log('학습완료');
+          setIsCompleted(true);
           updateCompletionStatus();
         }
       }
@@ -433,9 +427,9 @@ const BlogArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
   }, [contentUrl, progress, learningCompleted, episodeId]);
 
   // 이미지 존재확인
-  useEffect(() => {
-    console.log('imgRef:', imgRef.current);
-  }, [contentUrl]);
+  // useEffect(() => {
+  //   console.log('imgRef:', imgRef.current);
+  // }, [contentUrl]);
 
   return (
     <>
