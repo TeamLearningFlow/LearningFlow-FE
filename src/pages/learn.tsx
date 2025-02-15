@@ -74,11 +74,13 @@ const BottomWrapper = styled.div`
   }
 `;
 
+
 const LearnPage: React.FC = () => {
   // const { episodeId } = useParams<{ episodeId: number }>();
   const episodeId: number = 34;
   const [type, setType] = useState<'youtube' | 'blog' | null>(null);
   const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
   const router = useRouter();
 
   // // 테스트용
@@ -161,7 +163,7 @@ const LearnPage: React.FC = () => {
       ) : (
         <BodyWrapper>
           <TopWrapper>
-            {collection && <Article episodeId={episodeId} />}
+            {collection && <Article episodeId={episodeId} onProgressChange={setProgress}/>}
             {/* <Article episodeId={episodeId} /> */}
             {/* // (type === 'youtube' ? (
               //   <YoutubeArticle episodeId={episodeId} />
@@ -170,7 +172,7 @@ const LearnPage: React.FC = () => {
               //   <BlogArticle episodeId={episodeId} />
               //   // <BlogArticle episodeId={currentEpisodeId} />
               // ))} */}
-            <ClassTitle />
+            <ClassTitle episodeId={episodeId}/>
           </TopWrapper>
           <MidWrapper>
             <Note episodeId={episodeId} />

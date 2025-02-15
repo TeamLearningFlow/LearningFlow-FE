@@ -1,11 +1,46 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
+
 
 interface LearnModalProps {
     onClose: () => void;
+    episodeId: number;
+    onRetakeClass: () => void;
   }
+    
 
-const LearnModal: React.FC<LearnModalProps> = ({ onClose }) => {
+const LearnModal: React.FC<LearnModalProps> = ({ onClose, episodeId,onRetakeClass }) => {
+
+  const [isClicked, setIsClicked] = useState(false);
+  const [progress, setProgress] = useState(0);
+  
+    const ReTakeClass = async () => {
+      setIsClicked(true);
+      try {
+        const token = localStorage.getItem("token");
+        const headers = token ? { Authorization: `Bearer ${token}` } : {};
+        
+        const response = await axios.post(
+          `http://onboarding.p-e.kr:8080/resources/${episodeId}/update-complete`, 
+          {},
+          { headers }
+        );
+    
+        if (response.status === 200 && response.data?.result?.isComplete) {
+          setProgress(0);
+          console.log("다시 학습 처리 성공:", response.data);
+          console.log(`변경된 진도율(초기화): ${progress}%`);
+          onRetakeClass();
+          onClose();
+        }
+      } catch (error) {
+        console.error("수강 상태 변경 실패:", error);
+      } finally {
+        setIsClicked(false);
+      }
+    };
+    
   return (
     <>
       <ModalWrapper>
@@ -15,7 +50,7 @@ const LearnModal: React.FC<LearnModalProps> = ({ onClose }) => {
             {`다시 학습하면 학습률이 초기화 돼요.\nUX 라이팅 필요`}
           </Description>
           <Button>
-            <BackButton>다시 학습</BackButton>
+            <BackButton onClick={ReTakeClass}>다시 학습</BackButton>
             <ForwardButton onClick={onClose}>학습 완료</ForwardButton>
           </Button>
         </ModalBox>

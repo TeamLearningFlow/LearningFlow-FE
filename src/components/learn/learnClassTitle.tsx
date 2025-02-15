@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { FaCheck } from "react-icons/fa6";
@@ -157,22 +158,55 @@ const ButtonLetter = styled.div`
 
 interface ClassTitleProps {
   title?: string;
+  episodeId: number; 
 }
 
 const ClassTitle: React.FC<ClassTitleProps> = ({
   title = "기획자라면 알고 있어야 할 '웹사이트 유형'",
+  episodeId,
 }) => {
   const [isClicked, setIsClicked] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [progress, setProgress] = useState(0);
 
-  const handleClick = () => {
+  const handleClick = async () => {
     setIsClicked(true);
-    setTimeout(() => {
-      setIsClicked(false);
-      setIsCompleted(true);
-    }, 1000);
+  
+    try {
+      const token = localStorage.getItem("token");
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      
+      const response = await axios.post(
+        `http://onboarding.p-e.kr:8080/resources/${episodeId}/update-complete`, 
+        {},
+        { headers }
+      );
+  
+      if (response.status === 200 && response.data?.result?.isComplete) {
+        setIsCompleted(true);
+        setProgress(100);
+        console.log("학습 완료 처리 성공:", response.data);
+      }
+    } catch (error) {
+      console.error("수강 상태 변경 실패:", error);
+    } finally {
+      setTimeout(() => {
+        setIsClicked(false);
+      }, 1000);
+    }
   };
+  
+  useEffect(() => {
+    if (isClicked) {
+      handleClick();  // isClicked가 true로 변경될 때마다 API 호출
+    }
+  }, [isClicked]);
+
+
+  useEffect(() => {
+    console.log(`변경된 진도율(완료): ${progress}%`);
+  }, [progress]); 
 
   const handleShowModal = () => {
     if (isCompleted) { // 버튼 회색일 때만 모달을 보여줌
@@ -184,6 +218,19 @@ const ClassTitle: React.FC<ClassTitleProps> = ({
     setIsModalVisible(false);
   };
 
+  const handleButtonClick = () => {
+    if (isCompleted) {
+      handleShowModal(); // isCompleted가 true일 때만 모달을 열도록
+    } else {
+      handleClick(); // isCompleted가 false일 때는 handleClick 실행
+    }
+  };
+
+  const handleRetakeClass = () => {
+    setProgress(0);  // 진도율 초기화
+    setIsCompleted(false);  // isCompleted 상태 초기화 (보라색으로 돌아감)
+    setIsModalVisible(false);  // 모달 닫기
+  };
 
   return (
     <TitleWrapper>
@@ -197,13 +244,7 @@ const ClassTitle: React.FC<ClassTitleProps> = ({
       <ButtonWrapper
         isClicked={isClicked}
         isCompleted={isCompleted}
-        onClick={() => {
-          if (isCompleted) {
-            handleShowModal(); // isCompleted가 true일 때만 모달을 열도록
-          } else {
-            handleClick(); // isCompleted가 false일 때는 handleClick 실행
-          }
-        }}
+        onClick={handleButtonClick}
       >
         <IconBox>
           <FaCheck size="15px"/>
@@ -211,7 +252,7 @@ const ClassTitle: React.FC<ClassTitleProps> = ({
         <ButtonLetter>수강완료</ButtonLetter>
       </ButtonWrapper>
 
-      {isModalVisible && <LearnModal onClose={handleCloseModal} />}
+      {isModalVisible && <LearnModal onClose={handleCloseModal} episodeId={episodeId} onRetakeClass={handleRetakeClass}/>}
     </TitleWrapper>
   );
 };
