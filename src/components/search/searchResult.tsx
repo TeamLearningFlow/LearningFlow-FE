@@ -6,12 +6,13 @@ import NoResult from './noResult';
 
 export type SearchResult = {
   collectionId: number;
+  imageUrl: string;
   interestField: string;
   keywords: string[];
   title: string;
   creator: string;
   difficulties: number[];
-  runtime: string; // number로 할 수도 있음
+  runtime: number;
   amount: number;
   textCount: number;
   videoCount: number;

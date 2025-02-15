@@ -530,6 +530,225 @@ const PlatformIcon = (source: string) => {
   }
 };
 
+const PlatformSet = ({ data }: { data: SearchResult }) => {
+  const platformSources = [
+    ...new Set(data.resource.map((episode) => episode?.resourceSource)),
+  ];
+
+  const areArraysEqual = (arr1: string[], arr2: string[]) => {
+    return (
+      arr1.length === arr2.length &&
+      new Set(arr1).size === new Set([...arr1, ...arr2]).size
+    );
+  };
+
+  if (
+    areArraysEqual(platformSources, [
+      'youtube',
+      'tistory',
+      'naverBlog',
+      'velog',
+    ])
+  ) {
+    return (
+      <ThumbnailWrapper>
+        <Thumbnail left={0} zIndex={3}>
+          <Image src={YoutubeIcon} alt="youtube" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={18} zIndex={2}>
+          <Image src={TistoryIcon} alt="tistory" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={35} zIndex={1}>
+          <Image src={NaverblogIcon} alt="naverblog" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={53} zIndex={0}>
+          <Image src={VelogIcon} alt="velog" width={26} height={26} />
+        </Thumbnail>
+      </ThumbnailWrapper>
+    );
+  }
+  if (areArraysEqual(platformSources, ['youtube', 'tistory', 'naverBlog'])) {
+    return (
+      <ThumbnailWrapper>
+        <Thumbnail left={0} zIndex={3}>
+          <Image src={YoutubeIcon} alt="youtube" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={18} zIndex={2}>
+          <Image src={TistoryIcon} alt="tistory" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={35} zIndex={1}>
+          <Image src={NaverblogIcon} alt="naverblog" width={26} height={26} />
+        </Thumbnail>
+      </ThumbnailWrapper>
+    );
+  }
+  if (areArraysEqual(platformSources, ['youtube', 'tistory', 'velog'])) {
+    return (
+      <ThumbnailWrapper>
+        <Thumbnail left={0} zIndex={3}>
+          <Image src={YoutubeIcon} alt="youtube" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={18} zIndex={2}>
+          <Image src={TistoryIcon} alt="tistory" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={35} zIndex={1}>
+          <Image src={VelogIcon} alt="velog" width={26} height={26} />
+        </Thumbnail>
+      </ThumbnailWrapper>
+    );
+  }
+  if (areArraysEqual(platformSources, ['youtube', 'naverBlog', 'velog'])) {
+    return (
+      <ThumbnailWrapper>
+        <Thumbnail left={0} zIndex={3}>
+          <Image src={YoutubeIcon} alt="youtube" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={18} zIndex={2}>
+          <Image src={NaverblogIcon} alt="naverblog" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={35} zIndex={1}>
+          <Image src={VelogIcon} alt="velog" width={26} height={26} />
+        </Thumbnail>
+      </ThumbnailWrapper>
+    );
+  }
+  if (areArraysEqual(platformSources, ['tistory', 'naverBlog', 'velog'])) {
+    return (
+      <ThumbnailWrapper>
+        <Thumbnail left={0} zIndex={3}>
+          <Image src={TistoryIcon} alt="tistory" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={18} zIndex={2}>
+          <Image src={NaverblogIcon} alt="naverblog" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={35} zIndex={1}>
+          <Image src={VelogIcon} alt="velog" width={26} height={26} />
+        </Thumbnail>
+      </ThumbnailWrapper>
+    );
+  }
+  if (areArraysEqual(platformSources, ['youtube', 'tistory'])) {
+    return (
+      <ThumbnailWrapper>
+        <Thumbnail left={0} zIndex={3}>
+          <Image src={YoutubeIcon} alt="youtube" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={18} zIndex={2}>
+          <Image src={TistoryIcon} alt="tistory" width={26} height={26} />
+        </Thumbnail>
+      </ThumbnailWrapper>
+    );
+  }
+  if (areArraysEqual(platformSources, ['youtube', 'naverBlog'])) {
+    return (
+      <ThumbnailWrapper>
+        <Thumbnail left={0} zIndex={3}>
+          <Image src={YoutubeIcon} alt="youtube" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={18} zIndex={2}>
+          <Image src={NaverblogIcon} alt="naverblog" width={26} height={26} />
+        </Thumbnail>
+      </ThumbnailWrapper>
+    );
+  }
+  if (areArraysEqual(platformSources, ['youtube', 'velog'])) {
+    return (
+      <ThumbnailWrapper>
+        <Thumbnail left={0} zIndex={3}>
+          <Image src={YoutubeIcon} alt="youtube" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={18} zIndex={2}>
+          <Image src={VelogIcon} alt="velog" width={26} height={26} />
+        </Thumbnail>
+      </ThumbnailWrapper>
+    );
+  }
+  if (areArraysEqual(platformSources, ['tistory', 'naverBlog'])) {
+    return (
+      <ThumbnailWrapper>
+        <Thumbnail left={0} zIndex={3}>
+          <Image src={TistoryIcon} alt="tistory" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={18} zIndex={2}>
+          <Image src={NaverblogIcon} alt="naverblog" width={26} height={26} />
+        </Thumbnail>
+      </ThumbnailWrapper>
+    );
+  }
+  if (areArraysEqual(platformSources, ['tistory', 'velog'])) {
+    return (
+      <ThumbnailWrapper>
+        <Thumbnail left={0} zIndex={3}>
+          <Image src={TistoryIcon} alt="tistory" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={18} zIndex={2}>
+          <Image src={VelogIcon} alt="velog" width={26} height={26} />
+        </Thumbnail>
+      </ThumbnailWrapper>
+    );
+  }
+  if (areArraysEqual(platformSources, ['naverBlog', 'velog'])) {
+    return (
+      <ThumbnailWrapper>
+        <Thumbnail left={0} zIndex={3}>
+          <Image src={NaverblogIcon} alt="naverblog" width={26} height={26} />
+        </Thumbnail>
+        <Thumbnail left={18} zIndex={2}>
+          <Image src={VelogIcon} alt="velog" width={26} height={26} />
+        </Thumbnail>
+      </ThumbnailWrapper>
+    );
+  }
+  if (areArraysEqual(platformSources, ['tistory'])) {
+    return (
+      <ThumbnailWrapper>
+        <Thumbnail left={0} zIndex={3}>
+          <Image src={TistoryIcon} alt="velog" width={26} height={26} />
+        </Thumbnail>
+      </ThumbnailWrapper>
+    );
+  }
+  if (areArraysEqual(platformSources, ['naverBlog'])) {
+    return (
+      <ThumbnailWrapper>
+        <Thumbnail left={0} zIndex={3}>
+          <Image src={NaverblogIcon} alt="naverblog" width={26} height={26} />
+        </Thumbnail>
+      </ThumbnailWrapper>
+    );
+  }
+  if (areArraysEqual(platformSources, ['velog'])) {
+    return (
+      <ThumbnailWrapper>
+        <Thumbnail left={0} zIndex={3}>
+          <Image src={VelogIcon} alt="velog" width={26} height={26} />
+        </Thumbnail>
+      </ThumbnailWrapper>
+    );
+  }
+  if (areArraysEqual(platformSources, ['youtube'])) {
+    return (
+      <ThumbnailWrapper>
+        <Thumbnail left={0} zIndex={3}>
+          <Image src={YoutubeIcon} alt="youtube" width={26} height={26} />
+        </Thumbnail>
+      </ThumbnailWrapper>
+    );
+  }
+};
+
+const CollectionAmount = ({ data }: { data: SearchResult }) => {
+  console.log('data 확인:', data);
+  return (
+    <CollectionDetail>
+      {data.textCount !== 0 && <Detail>아티클</Detail>}
+      {data.textCount !== 0 && <Number>{data.textCount}</Number>}
+      {data.videoCount !== 0 && <Detail marginLeft={'5px'}>영상</Detail>}
+      {data.videoCount !== 0 && <Number>{data.videoCount}</Number>}
+    </CollectionDetail>
+  );
+};
+
 const HoverCollection = ({
   data,
   status,
@@ -567,12 +786,7 @@ const HoverCollection = ({
               </svg>
               <Image src={Circle} alt="circle" />
             </LineWrapper>
-            <CollectionDetail>
-              <Detail>아티클</Detail>
-              <Number>{data.textCount}</Number>
-              <Detail marginLeft={'5px'}>영상</Detail>
-              <Number>{data.videoCount}</Number>
-            </CollectionDetail>
+            <CollectionAmount data={data} />
           </CollectionHeader>
 
           <CollectionWrapper>
@@ -618,28 +832,7 @@ const HoverCollection = ({
         <>
           <Image src={HoverBackground} alt="hover background" />
           <CollectionHeader>
-            <ThumbnailWrapper>
-              <Thumbnail left={0} zIndex={3}>
-                <Image src={YoutubeIcon} alt="youtube" width={26} height={26} />
-              </Thumbnail>
-              <Thumbnail left={18} zIndex={2}>
-                <Image src={VelogIcon} alt="velog" width={26} height={26} />
-              </Thumbnail>
-              <Thumbnail left={35} zIndex={1}>
-                <Image src={TistoryIcon} alt="tistory" width={26} height={26} />
-              </Thumbnail>
-              <Thumbnail left={53} zIndex={0}>
-                <Image
-                  src={NaverblogIcon}
-                  alt="naverblog"
-                  width={26}
-                  height={26}
-                />
-              </Thumbnail>
-            </ThumbnailWrapper>
-            <Detail style={{ position: 'absolute', left: '83px' }}>
-              +{data.amount}
-            </Detail>
+            <PlatformSet data={data} />
             <LineWrapper>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -657,12 +850,7 @@ const HoverCollection = ({
               </svg>
               <Image src={Circle} alt="circle" />
             </LineWrapper>
-            <CollectionDetail>
-              <Detail>아티클</Detail>
-              <Number>{data.textCount}</Number>
-              <Detail marginLeft={'5px'}>영상</Detail>
-              <Number>{data.videoCount}</Number>
-            </CollectionDetail>
+            <CollectionAmount data={data} />
           </CollectionHeader>
           <CollectionWrapper>
             {data.resource.slice(0, 3).map((item, index) => (
@@ -780,6 +968,7 @@ const BoardingPass = ({
   showHoverCollection?: boolean;
 }) => {
   const router = useRouter();
+
   return (
     <Container onClick={() => router.push(`/collection/${data.collectionId}`)}>
       <Image src={BoardingPassContainer} alt="boarding pass" />
