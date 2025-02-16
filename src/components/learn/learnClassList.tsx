@@ -65,7 +65,7 @@ const ClassList: React.FC<ClassListProps> = ({resource, collectionData}) => {
     <ComponentWrapper>
       {resource.map((classItem) => {
         if (classItem.progress >= 80) {
-          return <CompletedClass key={classItem.episodeNumber} {...classItem} collectionData={collectionData} />;
+          return <CompletedClass key={classItem.episodeNumber} resourceItem={classItem} collectionData={collectionData} />;
         } else if (classItem.progress > 0) {
           return <CurrentClass key={classItem.episodeNumber} {...classItem} collectionData={collectionData} />;
         } else {

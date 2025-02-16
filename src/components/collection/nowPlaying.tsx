@@ -46,10 +46,11 @@ const NowPlaying: React.FC<ClassIndexProps> = ({ classData,collection }) => {
     if (response.status === 200) {
       const data = response.data;
       console.log("API 응답 데이터:", data);
+      const episodeDataWithName = { ...data, episodeName: classData.episodeName };
       router.push({
         pathname: `/learn/${episodeId}`,
         query: {
-          episodeData: JSON.stringify(data),
+          episodeData: JSON.stringify(episodeDataWithName),
           collectionData: JSON.stringify(collection),
         },
       });
