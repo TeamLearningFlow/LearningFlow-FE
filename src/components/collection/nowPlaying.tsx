@@ -14,36 +14,49 @@ import YoutubeActiveIcon from '../../assets/platformicon/youtube_active_ic.svg';
 import BlogActiveIcon from '../../assets/platformicon/naverblog_active_ic.svg';
 import VelogActiveIcon from '../../assets/platformicon/velog_active_ic.svg';
 import TistoryActiveIcon from '../../assets/platformicon/tistory_active_ic.svg';
+import { CollectionData } from '@/pages/collection/[collectionId]';
 
 interface ClassIndexProps {
-  classData: {
-    episodeName: string;
-    url: string;
-    resourceSource: "youtube" | "naverBlog" | "tistory" | "velog";
-    episodeNumber: number;
-  };
+  classData: CollectionData['resource'][0];
+  collection: CollectionData;
 }
 
-const NowPlaying: React.FC<ClassIndexProps> = ({ classData }) => {
+const NowPlaying: React.FC<ClassIndexProps> = ({ classData,collection }) => {
   const router = useRouter();
   const [isHovered, setIsHovered] = useState(false);
 
   const handleClick = async () => {
-    const episodeId = classData.episodeNumber
+    const episodeId = classData.episodeId;
+  
+  try {
+    const token = localStorage.getItem("token");
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    
+    // resourceSource에 따라 API 경로 설정
+    const resourceType = classData.resourceSource === "youtube" ? "youtube" : "blog";
+    const apiUrl = `http://onboarding.p-e.kr:8080/resources/${episodeId}/${resourceType}`;
 
-    try {
-      const response = await axios.get(`/resources/${episodeId}/youtube`);
-      if (response.status === 200) {
-        const data = response.data;
-        router.push({
-          pathname: `/learn/${episodeId}`, // LearnPage로 이동
-          query: { data: JSON.stringify(data) }, // 응답 데이터를 쿼리로 전달
-        });
-      }
-    } catch (error) {
-      console.error("강의 불러오기 실패:", error);
+    // API 요청
+    const response = await axios.get(apiUrl, { headers });
+
+    if (response.status === 200) {
+      const data = response.data;
+      console.log('API 응답 데이터:', data);
+      router.push({
+        pathname: `/learn/${episodeId}`, // 수강페이지로 이동
+        query: { 
+          episodeData: JSON.stringify(data),
+          collectionData: JSON.stringify(collection)
+         }, // 응답 데이터를 쿼리로 전달
+
+      });
+
     }
-  };
+  } catch (error) {
+    console.error("강의 불러오기 실패:", error);
+  }
+};
+
 
   const getPlatformIcon = () => {
     const activeIcons = {

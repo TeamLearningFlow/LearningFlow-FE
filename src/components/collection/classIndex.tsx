@@ -10,22 +10,18 @@ import CheckedYoutube from '../../assets/platformicon/youtube_checked_ic.svg';
 import CheckedBlog from '../../assets/platformicon/naver blog_checked_ic.svg';
 import CheckedTistory from '../../assets/platformicon/tistory_checked_ic.svg';
 import CheckedVelog from '../../assets/platformicon/velog_checked_ic.svg';
-
+import { CollectionData } from '@/pages/collection/[collectionId]';
 
 interface ClassIndexProps {
-  classData: {
-    episodeName: string;
-    url: string;
-    resourceSource: string;
-    episodeNumber: number;
-  };
+  classData: CollectionData['resource'][0];
+  collection: CollectionData;
 }
 
 
 const ClassIndex: React.FC<ClassIndexProps> = ({ classData }) => {
   const router = useRouter();
 
-  const handleClick = async () => {
+ {/* const handleClick = async () => {
     // episodeId를 임의로 설정
     const episodeId = 54;
   
@@ -49,7 +45,35 @@ const ClassIndex: React.FC<ClassIndexProps> = ({ classData }) => {
       console.error("강의 불러오기 실패:", error);
     }
   };
+  */} 
+
+ 
+  const handleClick = async () => {
+    const episodeId = classData.episodeId;
   
+  try {
+    const token = localStorage.getItem("token");
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    
+    // resourceSource에 따라 API 경로 설정
+    const resourceType = classData.resourceSource === "youtube" ? "youtube" : "blog";
+    const apiUrl = `http://onboarding.p-e.kr:8080/resources/${episodeId}/${resourceType}`;
+
+    // API 요청
+    const response = await axios.get(apiUrl, { headers });
+
+    if (response.status === 200) {
+      const data = response.data;
+      router.push({
+        pathname: `/learn/${episodeId}`, // 수강페이지로 이동
+        query: { data: JSON.stringify(data) }, // 응답 데이터를 쿼리로 전달
+      });
+    }
+  } catch (error) {
+    console.error("강의 불러오기 실패:", error);
+  }
+};
+
 
   const getPlatformIcon = () => {
     switch (classData.resourceSource) {

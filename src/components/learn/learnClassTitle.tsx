@@ -7,6 +7,7 @@ import { FaCheck } from 'react-icons/fa6';
 import EffectUp from '../../assets/buttonEffectUp.svg';
 import EffectDown from '../../assets/buttonEffectDown.svg';
 import LearnModal from '../modal/learnModal';
+import { CollectionData } from '@/pages/collection/[collectionId]';
 
 const TitleWrapper = styled.div`
   display: flex;
@@ -164,20 +165,21 @@ const ButtonLetter = styled.div`
 `;
 
 interface ClassTitleProps {
-  title?: string;
   episodeId: number;
+  episodeData: { episodeName: string };
+  isCompleted: boolean;
 }
 
-const ClassTitle: React.FC<ClassTitleProps> = ({
-  title = "기획자라면 알고 있어야 할 '웹사이트 유형'",
-  episodeId,
-}) => {
+const ClassTitle: React.FC<ClassTitleProps> = ({ episodeId, episodeData }) => {
   const [isClicked, setIsClicked] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [progress, setProgress] = useState(0);
   const context = useContext(LearnContext);
   const { isCompleted } = context.state;
   const { setIsCompleted } = context.actions;
+
+  // 해당 episode가 있을 경우 episodeName을 사용
+  const episodeName = episodeData.episodeName;
 
   const handleClick = async () => {
     if (isCompleted) return;
@@ -263,7 +265,7 @@ const ClassTitle: React.FC<ClassTitleProps> = ({
 
   return (
     <TitleWrapper>
-      <TitleBox>{title}</TitleBox>
+      <TitleBox>{episodeName}</TitleBox>
       <EffectUpWrapper isClicked={isClicked} isCompleted={isCompleted}>
         <Image src={EffectUp} alt="Button Effect Up" />
       </EffectUpWrapper>

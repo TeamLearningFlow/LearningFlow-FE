@@ -9,35 +9,43 @@ import Blog from '../../assets/platformicon/naverblog_ic.svg';
 import Tistory from '../../assets/platformicon/tistory_ic.svg';
 import Velog from '../../assets/platformicon/velog_ic.svg';
 import DefaultRadio from '../../assets/defaultRadio.svg';
+import { CollectionData } from '@/pages/collection/[collectionId]';
 
 interface ClassIndexProps {
-  classData: {
-    episodeName: string;
-    url: string;
-    resourceSource: string;
-    episodeNumber: number;
-  };
+  classData: CollectionData['resource'][0];
+  collection: CollectionData;
 }
+
 
 const NextClassIndex: React.FC<ClassIndexProps> = ({ classData }) =>  {
   const router = useRouter();
   
   const handleClick = async () => {
-    const episodeId = classData.episodeNumber
+    const episodeId = classData.episodeId;
+  
+  try {
+    const token = localStorage.getItem("token");
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    
+    // resourceSource에 따라 API 경로 설정
+    const resourceType = classData.resourceSource === "youtube" ? "youtube" : "blog";
+    const apiUrl = `http://onboarding.p-e.kr:8080/resources/${episodeId}/${resourceType}`;
 
-    try {
-      const response = await axios.get(`/resources/${episodeId}/youtube`);
-      if (response.status === 200) {
-        const data = response.data;
-        router.push({
-          pathname: `/learn/${episodeId}`, // LearnPage로 이동
-          query: { data: JSON.stringify(data) }, // 응답 데이터를 쿼리로 전달
-        });
-      }
-    } catch (error) {
-      console.error("강의 불러오기 실패:", error);
+    // API 요청
+    const response = await axios.get(apiUrl, { headers });
+
+    if (response.status === 200) {
+      const data = response.data;
+      router.push({
+        pathname: `/learn/${episodeId}`, // 수강페이지로 이동
+        query: { data: JSON.stringify(data) }, // 응답 데이터를 쿼리로 전달
+      });
     }
-  };
+  } catch (error) {
+    console.error("강의 불러오기 실패:", error);
+  }
+};
+
 
   const getPlatformIcon = () => {
     console.log("4회차 resourceSource:", classData.resourceSource);

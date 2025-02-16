@@ -40,6 +40,7 @@ export interface CollectionData {
   textCount: number;
   videoCount: number;
   resource: {
+    episodeId: number,
     episodeName: string;
     url: string;
     resourceSource: string;
@@ -76,6 +77,7 @@ export default function CollectionPage() {
     videoCount: 2,
     resource: [
       {
+        episodeId: 1,
         episodeName: '스프링 부트란?',
         url: 'https://youtube.com/1',
         resourceSource: 'youtube',
@@ -83,6 +85,7 @@ export default function CollectionPage() {
         progress: 100, //테스트용
       },
       {
+        episodeId: 2,
         episodeName: '프로젝트 설정하기',
         url: 'https://youtube.com/2',
         resourceSource: 'youtube',
@@ -90,6 +93,7 @@ export default function CollectionPage() {
         progress: 100,
       },
       {
+        episodeId: 3,
         episodeName: '첫 애플리케이션 만들기',
         url: 'https://naver.com/3',
         resourceSource: 'youtube',
@@ -97,6 +101,7 @@ export default function CollectionPage() {
         progress: 100,
       },
       {
+        episodeId: 4,
         episodeName: '첫 애플리케이션 만들기',
         url: 'https://tistory.com/4',
         resourceSource: 'tistory',
@@ -176,7 +181,7 @@ export default function CollectionPage() {
           {collection && <CollectionInfo data={collection} />}
           <ContentWrapper>
             {collection && (
-              <CollectionList classes={collection.resource} />
+              <CollectionList collection={collection} />
             )}
           </ContentWrapper>
         </>
