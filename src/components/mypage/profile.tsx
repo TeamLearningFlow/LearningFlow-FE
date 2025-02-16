@@ -9,6 +9,9 @@ import Footer from '../../components/homeFooter';
 import NextIcon from '../../assets/nextIcon.svg';
 import NextIconHover from '../../assets/nextIconHover.svg';
 
+import GoogleDeleteModal from '../../components/modal/googleDeleteModal';
+import LocalDeleteModal from '../../components/modal/localDeleteModal';
+
 interface UserData {
   name: string;
   email: string;
@@ -72,6 +75,9 @@ const Profile = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [socialType, setSocialType] = useState<string | null>(null); // 소셜 타입 가져오기
 
+  const [isGoogleDeleteModalOpen, setIsGoogleDeleteModalOpen] = useState(false);
+  const [isLocalDeleteModalOpen, setIsLocalDeleteModalOpen] = useState(false);
+
   const router = useRouter();
   const { passwordResetCode } = router.query;
   const [isEditingPassword, setIsEditingPassword] = useState(false);
@@ -85,7 +91,7 @@ const Profile = () => {
         setSocialType(storedSocialType);
 
         if (!token) {
-          console.error('로그인 토큰이 없습니다.');
+          console.error('로그인이 필요한 서비스입니다.');
           return;
         }
 
@@ -150,6 +156,22 @@ const Profile = () => {
     verifyResetCode();
   }, [passwordResetCode, router]);
 
+  const handleDeleteAccount = () => {
+    if (socialType === 'GOOGLE') {
+      setIsGoogleDeleteModalOpen(true);
+    } else if (socialType === 'LOCAL') {
+      setIsLocalDeleteModalOpen(true);
+    }
+  };
+
+  const closeGoogleDeleteModal = () => {
+    setIsGoogleDeleteModalOpen(false);
+  };
+
+  const closeLocalDeleteModal = () => {
+    setIsLocalDeleteModalOpen(false);
+  };
+
   if (!userData) {
     return <p>정보 없음</p>;
   }
@@ -174,10 +196,19 @@ const Profile = () => {
       <DeleteAccount
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
+        onClick={handleDeleteAccount}
       >
         계정 탈퇴
         <Image src={isHovered ? NextIconHover : NextIcon} alt="nexticon" />
       </DeleteAccount>
+
+      {isGoogleDeleteModalOpen && (
+        <GoogleDeleteModal onClose={closeGoogleDeleteModal} />
+      )}
+      {isLocalDeleteModalOpen && (
+        <LocalDeleteModal onClose={closeLocalDeleteModal} />
+      )}
+
       <Footer />
     </Container>
   );
