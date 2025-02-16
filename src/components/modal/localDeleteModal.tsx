@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
-// import { useRouter } from 'next/router';
+import axios from 'axios';
+import { useRouter } from 'next/router';
+import { LoginContext } from '../../pages/context/LoginContext';
 
 import Image from 'next/image';
 import X from '../../assets/X_red.svg';
@@ -195,6 +197,47 @@ const LocalDeleteModal: React.FC<LocalDeleteModalProps> = ({ onClose }) => {
   const passwordCriteria = validatePassword(password);
   const isPasswordValid = Object.values(passwordCriteria).every(Boolean);
 
+  const router = useRouter();
+  const context = useContext(LoginContext);
+
+  if (!context) throw new Error('LoginContext를 찾을 수 없습니다.');
+
+  const { setIsLoggedIn } = context.actions;
+
+  const handleWithdraw = async () => {
+    try {
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        alert('로그인이 필요한 서비스입니다.');
+        router.push('/login');
+        return;
+      }
+
+      const response = await axios.delete(
+        'http://onboarding.p-e.kr:8080/user/withdraw',
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          data: { password }, // 비밀번호 포함해서 요청
+        },
+      );
+
+      console.log('Response:', response.data);
+
+      if (response.data.isSuccess) {
+        localStorage.removeItem('token'); // 토큰 삭제
+        setIsLoggedIn(false);
+        alert('회원 탈퇴가 완료되었습니다.');
+
+        router.push('/home'); // 홈 페이지로 이동
+      } else {
+        alert('비밀번호가 일치하지 않습니다.');
+      }
+    } catch (error) {
+      console.error('회원 탈퇴 실패:', error);
+    }
+  };
+
   return (
     <ModalOverlay>
       <ModalContainer>
@@ -255,7 +298,9 @@ const LocalDeleteModal: React.FC<LocalDeleteModalProps> = ({ onClose }) => {
 
         <ButtonContainer>
           <CancelButton onClick={onClose}>취소</CancelButton>
-          <WithdrawButton disabled={!isPasswordValid}>탈퇴하기</WithdrawButton>
+          <WithdrawButton disabled={!isPasswordValid} onClick={handleWithdraw}>
+            탈퇴하기
+          </WithdrawButton>
         </ButtonContainer>
       </ModalContainer>
     </ModalOverlay>
