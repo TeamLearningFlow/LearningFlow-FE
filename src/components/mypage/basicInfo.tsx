@@ -166,7 +166,7 @@ const TooltipWrapper = styled.div`
 
   img {
     position: relative;
-    top: 3px;
+    top: 4px;
   }
 `;
 
@@ -531,7 +531,12 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
                 value={editedEmail}
                 onChange={handleInputChange}
                 onFocus={() => setIsFocused(true)}
-                onBlur={() => setIsFocused(false)}
+                onBlur={() => {
+                  if (isEmailEmpty) {
+                    setIsChecked(false);
+                  }
+                  setIsFocused(false);
+                }}
                 isInvalid={!isValid}
                 isEmpty={isEmailEmpty}
               />
