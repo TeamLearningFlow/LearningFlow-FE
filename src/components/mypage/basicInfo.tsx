@@ -194,7 +194,7 @@ const ValidationRow = styled.div<{ valid: boolean; isEmpty: boolean }>`
   font-size: 14px;
   color: ${({ valid, isEmpty }) =>
     isEmpty ? '#959CA4' : valid ? '#165BFA' : '#ec2d30'};
-  gap: 6px;
+  gap: 4px;
   margin-bottom: 16px;
   margin-top: 8px;
 `;
@@ -593,7 +593,8 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
                   }}
                   onFocus={() => setIsCurrentPasswordFocused(true)}
                   onBlur={() => {
-                    if (!isCurrentPasswordValid) return;
+                    if (!isCurrentPasswordValid && currentPassword !== '')
+                      return;
                     setIsCurrentPasswordFocused(false);
                   }}
                   isInvalid={!isCurrentPasswordValid}
@@ -623,8 +624,13 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
                   alt={isCurrentPasswordValid ? 'valid' : 'invalid'}
                   width={16}
                   height={16}
+                  style={{ marginTop: '-2px' }}
                 />
-                <span>확인을 위해 현재 비밀번호를 다시 입력해 주세요.</span>
+                <span>
+                  {isCurrentPasswordValid || currentPassword === ''
+                    ? '확인을 위해 현재 비밀번호를 다시 입력해 주세요'
+                    : '비밀번호가 일치하지 않습니다'}
+                </span>
               </ValidationRow>
 
               <InputWrapper
@@ -646,7 +652,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
                   }}
                   onFocus={() => setIsNewPasswordFocused(true)}
                   onBlur={() => {
-                    if (!isPasswordValid) return;
+                    if (!isPasswordValid && newPassword !== '') return;
                     setIsNewPasswordFocused(false);
                   }}
                   isInvalid={isNewPasswordInvalid}
@@ -674,6 +680,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
                     alt={valid ? 'valid' : 'invalid'}
                     width={16}
                     height={16}
+                    style={{ marginTop: '-2px' }}
                   />
                   <span>
                     {key === 'hasUpperLowerCase' && '대소문자 포함'}
@@ -700,7 +707,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
                   }}
                   onFocus={() => setIsConfirmPasswordFocused(true)}
                   onBlur={() => {
-                    if (!isConfirmValid) return;
+                    if (!isConfirmValid && confirmPassword !== '') return;
                     setIsConfirmPasswordFocused(false);
                   }}
                   isInvalid={isConfirmPasswordInvalid}
@@ -730,8 +737,13 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
                   alt={isConfirmValid ? 'valid' : 'invalid'}
                   width={16}
                   height={16}
+                  style={{ marginTop: '-2px' }}
                 />
-                <span>비밀번호가 일치해야 합니다</span>
+                <span>
+                  {isConfirmValid || confirmPassword === ''
+                    ? '확인을 위해 새 비밀번호를 다시 입력해 주세요'
+                    : '비밀번호가 일치하지 않습니다'}
+                </span>
               </ValidationRow>
 
               <ButtonContainer>
