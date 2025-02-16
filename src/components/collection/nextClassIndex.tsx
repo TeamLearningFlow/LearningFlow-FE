@@ -17,7 +17,7 @@ interface ClassIndexProps {
 }
 
 
-const NextClassIndex: React.FC<ClassIndexProps> = ({ classData }) =>  {
+const NextClassIndex: React.FC<ClassIndexProps> = ({ classData, collection }) =>  {
   const router = useRouter();
   
   const handleClick = async () => {
@@ -36,16 +36,21 @@ const NextClassIndex: React.FC<ClassIndexProps> = ({ classData }) =>  {
 
     if (response.status === 200) {
       const data = response.data;
+      console.log('API 응답 데이터:', data);
       router.push({
         pathname: `/learn/${episodeId}`, // 수강페이지로 이동
-        query: { data: JSON.stringify(data) }, // 응답 데이터를 쿼리로 전달
+        query: { 
+          episodeData: JSON.stringify(data),
+          collectionData: JSON.stringify(collection)
+         }, // 응답 데이터를 쿼리로 전달
+
       });
+
     }
   } catch (error) {
     console.error("강의 불러오기 실패:", error);
   }
 };
-
 
   const getPlatformIcon = () => {
     console.log("4회차 resourceSource:", classData.resourceSource);

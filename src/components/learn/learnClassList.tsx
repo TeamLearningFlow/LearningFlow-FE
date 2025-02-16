@@ -1,6 +1,7 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import styled from 'styled-components';
 import { CompletedClass, CurrentClass, NextClass } from './learnClassIndex';
+import { CollectionData } from '@/pages/collection/[collectionId]';
 
 const ComponentWrapper = styled.div`
   display: flex;
@@ -44,6 +45,7 @@ const ComponentWrapper = styled.div`
 `;
 
 interface ResourceData {
+  episodeId: string;
   episodeName: string;
   url: string;
   resourceSource: string;
@@ -54,18 +56,20 @@ interface ResourceData {
 interface ClassListProps {
   resource: ResourceData[];
   currentEpisode: number;
+  collectionData: CollectionData;
 }
 
-const ClassList: React.FC<ClassListProps> = ({resource}) => {
+const ClassList: React.FC<ClassListProps> = ({resource, collectionData}) => {
+  
   return (
     <ComponentWrapper>
       {resource.map((classItem) => {
         if (classItem.progress >= 80) {
-          return <CompletedClass key={classItem.episodeNumber} {...classItem} />;
+          return <CompletedClass key={classItem.episodeNumber} {...classItem} collectionData={collectionData} />;
         } else if (classItem.progress > 0) {
-          return <CurrentClass key={classItem.episodeNumber} {...classItem} />;
+          return <CurrentClass key={classItem.episodeNumber} {...classItem} collectionData={collectionData} />;
         } else {
-          return <NextClass key={classItem.episodeNumber} {...classItem} />;
+          return <NextClass key={classItem.episodeNumber} {...classItem} collectionData={collectionData} />;
         }
       })}
     </ComponentWrapper> 

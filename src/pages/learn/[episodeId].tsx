@@ -116,16 +116,15 @@ const LearnPage: React.FC = () => {
     const CollectionData = collectionData ? JSON.parse(collectionData as string) : null;
 
 
-    
+
     useEffect(() => {
       if (EpisodeData && EpisodeData.episodeName) {
-        console.log("강의 제목목:", EpisodeData.episodeName);  // EpisodeName이 정상적으로 로드되는지 확인
+        console.log("강의 제목:", EpisodeData.episodeName);  // EpisodeName이 정상적으로 로드되는지 확인
       } else {
         console.log("EpisodeData 또는 episodeName이 없어요.");
       }
     }, [EpisodeData]);
-  
-
+    
 
     const { isCompleted } = context.state;
     const { setIsCompleted } = context.actions;
@@ -179,7 +178,7 @@ const LearnPage: React.FC = () => {
     useEffect(() => {
       console.log(`현재 에피소드 ID: ${episodeIdNumber}`);
     }, [episodeIdNumber]);
-  
+
     return (
       <PageWrapper>
         <Header />
@@ -226,6 +225,7 @@ const LearnPage: React.FC = () => {
                 <ClassList
                   resource={CollectionData.resource}
                   currentEpisode={episodeIdNumber}
+                  collectionData={CollectionData}
                 />
               )}
             </BottomWrapper>

@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import axios from 'axios';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import Image from 'next/image';
 import CheckedYoutube from '../../assets/platformicon/youtube_checked_ic.svg';
@@ -14,13 +16,33 @@ import Blog from '../../assets/platformicon/naverblog_nostroke_ic.svg';
 import Tistory from '../../assets/platformicon/tistory_nostroke_ic.svg';
 import Velog from '../../assets/platformicon/velog_nostroke_ic.svg';
 
-interface LearnClassIndexProps {
-  episodeNumber: number;
-  episodeName: string;
-  resourceSource: "youtube" | "naverBlog" | "tistory" | "velog";
-  progress: number;
-  isCurrent: boolean;
+
+interface ResourceData {
+  episodeId: string; // 강의의 고유 ID
+  episodeName: string; // 강의 이름
+  url: string; // 강의 URL
+  resourceSource: "youtube" | "naverBlog" | "tistory" | "velog"; // 리소스 출처
+  episodeNumber: number; // 회차 번호
+  // progress: number;
 }
+
+interface CollectionData {
+  amount: number; // 전체 강의 수
+  collectionId: number; // 컬렉션 고유 ID
+  completedDate: string | null; // 완료 날짜
+  creator: string; // 강의 제작자
+  difficulties: number[]; // 강의 난이도
+  imageUrl: string; // 이미지 URL
+  interestField: string; // 관심 분야
+  keywords: string[]; // 키워드 목록
+  learningStatus: "BEFORE" | "IN_PROGRESS" | "COMPLETED"; // 학습 상태
+  liked: boolean; // 좋아요 여부
+  likesCount: number; // 좋아요 수
+  progressRatePercentage: number | null; // 전체 강의 진행률
+  progressRatio: number | null; // 전체 진행 비율
+  resource: ResourceData[]; // 강의 목록 (각 강의에 대한 정보)
+}
+
 
 const getPlatformIcon = (
   resourceSource: "youtube" | "naverBlog" | "tistory" | "velog",
@@ -53,38 +75,134 @@ const getPlatformIcon = (
 };
 
 
+
  
-export const CompletedClass: React.FC<LearnClassIndexProps> = ({ episodeNumber, episodeName, resourceSource }) => {
+export const CompletedClass: React.FC<{ resourceItem: ResourceData; collectionData: CollectionData }> = ({ resourceItem, collectionData }) => {
+  useEffect(() => {
+    console.log("Received resource data:", resourceItem);
+    console.log("Received collectionData:", collectionData);
+  }, [resourceItem, collectionData]);
+  
+  const router = useRouter();
+  const handleClick = async (episodeId: string, resourceSource: "youtube" | "naverBlog" | "tistory" | "velog") => { 
+    try {
+      const token = localStorage.getItem("token");
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+  
+      // resourceSource에 따라 API 경로 설정
+      const resourceType = resourceSource === "youtube" ? "youtube" : "blog";
+      const apiUrl = `http://onboarding.p-e.kr:8080/resources/${episodeId}/${resourceType}`;
+  
+      // API 요청
+      const response = await axios.get(apiUrl, { headers });
+  
+      if (response.status === 200) {
+        const data = response.data;
+        router.push({
+          pathname: `/learn/${episodeId}`, // 수강페이지로 이동
+          query: { 
+            data: JSON.stringify(data),
+            collectionData: JSON.stringify(collectionData)
+           }, // 응답 데이터를 쿼리로 전달
+        });
+      }
+    } catch (error) {
+      console.error("강의 불러오기 실패:", error);
+    }
+  };
+
   return (
-    <IndexWrapper>
+    <IndexWrapper onClick={() => handleClick(resourceItem.episodeId, resourceItem.resourceSource)}>
       <PlatformIcon>
-        <Image src={getPlatformIcon(resourceSource, "checked")} alt="platform-icon" fill style={{ objectFit: "contain" }} />
+        <Image src={getPlatformIcon(resourceItem.resourceSource, "checked")} alt="platform-icon" fill style={{ objectFit: "contain" }} />
       </PlatformIcon>
       <IndexContainer>
-        <OrderBox>{episodeNumber}회차</OrderBox>
-        <TitleBox>{episodeName}</TitleBox>
+        <OrderBox>{resourceItem.episodeNumber}회차</OrderBox>
+        <TitleBox>{resourceItem.episodeName}</TitleBox>
       </IndexContainer>
     </IndexWrapper>
   );
 };
 
-export const CurrentClass: React.FC<LearnClassIndexProps> = ({ episodeNumber, episodeName, resourceSource }) => {
+export const CurrentClass: React.FC<{ resourceItem: ResourceData; collectionData: CollectionData }> = ({ resourceItem, collectionData }) => {
+  useEffect(() => {
+    console.log("Received resource data:", resourceItem);
+    console.log("Received collectionData:", collectionData);
+  }, [resourceItem, collectionData]);
+  
+  const router = useRouter();
+  const handleClick = async (episodeId: string, resourceSource: "youtube" | "naverBlog" | "tistory" | "velog") => { 
+    try {
+      const token = localStorage.getItem("token");
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+  
+      // resourceSource에 따라 API 경로 설정
+      const resourceType = resourceSource === "youtube" ? "youtube" : "blog";
+      const apiUrl = `http://onboarding.p-e.kr:8080/resources/${episodeId}/${resourceType}`;
+  
+      // API 요청
+      const response = await axios.get(apiUrl, { headers });
+  
+      if (response.status === 200) {
+        const data = response.data;
+        router.push({
+          pathname: `/learn/${episodeId}`, // 수강페이지로 이동
+          query: { 
+            data: JSON.stringify(data),
+            collectionData: JSON.stringify(collectionData)
+           }, // 응답 데이터를 쿼리로 전달
+        });
+      }
+    } catch (error) {
+      console.error("강의 불러오기 실패:", error);
+    }
+  };
+
   return (
-    <CurrentIndexWrapper>
+    <CurrentIndexWrapper onClick={() => handleClick(resourceItem.episodeId, resourceItem.resourceSource)}>
       <CurrentPlatformIcon>
-        <Image src={getPlatformIcon(resourceSource, "active")} alt="platform-icon" fill style={{ objectFit: "contain" }} />
+        <Image src={getPlatformIcon(resourceItem.resourceSource, "checked")} alt="platform-icon" fill style={{ objectFit: "contain" }} />
       </CurrentPlatformIcon>
       <IndexContainer>
-        <CurrentOrderBox>{episodeNumber}회차</CurrentOrderBox>
-        <TitleBox>{episodeName}</TitleBox>
+        <CurrentOrderBox>{resourceItem.episodeNumber}회차</CurrentOrderBox>
+        <TitleBox>{resourceItem.episodeName}</TitleBox>
       </IndexContainer>
     </CurrentIndexWrapper>
   );
 };
 
-export const NextClass: React.FC<LearnClassIndexProps> = ({ episodeNumber, episodeName, resourceSource }) => {
+export const NextClass: React.FC<ClassIndexProps> = ({ episodeId, episodeName, episodeNumber, resourceSource, collectionData }) => {
+  const router = useRouter();
+  const handleClick = async (episodeId: string, resourceSource: "youtube" | "naverBlog" | "tistory" | "velog") => {
+    console.log("클릭한 에피소드 번호:", episodeId); 
+    try {
+      const token = localStorage.getItem("token");
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+  
+      // resourceSource에 따라 API 경로 설정
+      const resourceType = resourceSource === "youtube" ? "youtube" : "blog";
+      const apiUrl = `http://onboarding.p-e.kr:8080/resources/${episodeId}/${resourceType}`;
+  
+      // API 요청
+      const response = await axios.get(apiUrl, { headers });
+  
+      if (response.status === 200) {
+        const data = response.data;
+        router.push({
+          pathname: `/learn/${episodeId}`, // 수강페이지로 이동
+          query: { 
+            data: JSON.stringify(data),
+            collectionData: JSON.stringify(collectionData)
+           }, // 응답 데이터를 쿼리로 전달
+        });
+      }
+    } catch (error) {
+      console.error("강의 불러오기 실패:", error);
+    }
+  };
+
   return (
-    <IndexWrapper>
+    <IndexWrapper onClick={() => handleClick(episodeId, resourceSource)}>
       <PlatformIcon>
         <Image src={getPlatformIcon(resourceSource, "default")} alt="platform-icon" fill style={{ objectFit: "contain" }} />
       </PlatformIcon>

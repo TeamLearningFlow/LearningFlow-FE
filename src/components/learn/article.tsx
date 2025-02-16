@@ -9,7 +9,7 @@ const YoutubeArticle: React.FC<{
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const playerRef = useRef<any>(null); // YouTube Player 인스턴스 저장
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const isTestMode = true;
+  const isTestMode = false;
 
   // 유튜브 iframe 로드 후 API 연동
   useEffect(() => {
