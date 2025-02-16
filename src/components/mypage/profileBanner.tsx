@@ -3,7 +3,7 @@ import Link from 'next/link';
 import styled from 'styled-components';
 import Image from 'next/image';
 import ProfileEditIcon from '../../assets/profileEditIcon.svg';
-import user from '../../assets/userphoto.svg';
+import user from '../../assets/Guest.svg';
 
 const Container = styled.div`
   width: 1200px;
@@ -28,11 +28,12 @@ const Container = styled.div`
   }
 `;
 
-const Banner = styled.div`
+const Banner = styled.div<{ imgUrl: string }>`
   width: 1200px;
   height: 200px;
   border-radius: 32px 32px 0px 0px;
-  background: linear-gradient(90deg, #5e52ff 0%, #383199 100%);
+  background: ${({ imgUrl }) =>
+    imgUrl.startsWith('linear-gradient') ? imgUrl : `url(${imgUrl})`};
 
   /* 반응형 설정 */
   @media (max-width: 1024px) {
@@ -69,13 +70,14 @@ const ProfileImage = styled.div`
 `;
 
 const UserImage = styled(Image)`
-  width: 160px;
-  height: 160px;
+  width: 156px;
+  height: 156px;
+  border-radius: 160px;
 
   /* 반응형 설정 */
   @media (max-width: 480px) {
-    width: 130px; /* 폰 화면 */
-    height: 130px;
+    width: 126px; /* 폰 화면 */
+    height: 126px;
   }
 `;
 
@@ -158,7 +160,7 @@ const GrayLabel = styled.span`
 
   /* 반응형 설정 */
   @media (max-width: 480px) {
-    font-size: 16px; /* 폰 화면 */
+    font-size: 14px; /* 폰 화면 */
   }
 `;
 
@@ -166,6 +168,7 @@ const Job = styled(GrayLabel)`
   display: flex;
   align-items: end;
 `;
+
 const Email = styled(GrayLabel)``;
 
 const EditButton = styled.div`
@@ -183,20 +186,34 @@ const EditButton = styled.div`
   cursor: pointer;
 `;
 
-const ProfileBanner = () => {
+interface UserInfo {
+  name: string;
+  email: string;
+  job: string;
+  profileImgUrl: string | null;
+  bannerImgUrl: string;
+}
+
+const ProfileBanner: React.FC<{ userInfo: UserInfo }> = ({ userInfo }) => {
   return (
     <Container>
-      <Banner />
+      <Banner imgUrl={userInfo.bannerImgUrl} />
       <ProfileImage>
-        <UserImage src={user} alt="user" />
+        <UserImage
+          src={userInfo.profileImgUrl || user}
+          alt="user"
+          width={160}
+          height={160}
+          style={{ objectFit: 'cover' }}
+        />
       </ProfileImage>
       <ProfileWrapper>
         <Profile>
           <PersonalInfo>
-            <Nickname>푸글</Nickname>
-            <Job>대학생</Job>
+            <Nickname>{userInfo.name}</Nickname>
+            <Job>{userInfo.job}</Job>
           </PersonalInfo>
-          <Email>onboarding@gmail.com</Email>
+          <Email>{userInfo.email}</Email>
         </Profile>
         <Link href="/mypage/profile" passHref>
           <EditButton>

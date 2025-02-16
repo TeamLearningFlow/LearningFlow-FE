@@ -1,44 +1,65 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import Header from '@/components/header';
-import CategoryList from '@/components/search/categoryList';
-import BoardingPass from '@/components/search/boardingPass';
-import Filters from '@/components/search/filters';
-import Pagination from '@/components/search/pagination';
-import BoardingPassList from '@/components/search/boardingPassList';
-
 import ProfileBanner from '@/components/mypage/profileBanner';
 import Tab from '@/components/mypage/mypageTabMenu';
 import Footer from '@/components/homeFooter';
 
-const MyPage = () => {
-  const [searchActive, setSearchActive] = useState(false); // 검색창 활성화 상태
+const DEFAULT_BANNER = 'linear-gradient(90deg, #5e52ff 0%, #383199 100%)';
 
-  // 헤더 상태 업데이트 전달
-  const handleSearchStateChange = (active: boolean) => {
-    setSearchActive(active);
-  };
+const MyPage = () => {
+  const [userInfo, setUserInfo] = useState({
+    name: '',
+    email: '',
+    job: '',
+    profileImgUrl: null,
+    bannerImgUrl: DEFAULT_BANNER,
+  });
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          throw new Error('로그인이 필요한 서비스입니다.');
+        }
+
+        const response = await axios.get(
+          'http://onboarding.p-e.kr:8080/user/mypage',
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        console.log('Response:', response.data);
+
+        if (response.data.isSuccess && response.data.result) {
+          setUserInfo({
+            name: response.data.result.userPreviewDTO.name,
+            email: response.data.result.userPreviewDTO.email,
+            job: response.data.result.userPreviewDTO.job,
+            profileImgUrl: response.data.result.userPreviewDTO.profileImgUrl || null,
+            bannerImgUrl:
+              response.data.result.userPreviewDTO.bannerImgUrl ||
+              DEFAULT_BANNER,
+          });
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   return (
     <>
-      <Header onSearchStateChange={handleSearchStateChange} />
-      {searchActive ? (
-        <div>
-          <CategoryList />
-          <Filters />
-          <BoardingPassList>
-            {Array.from({ length: 8 }).map((_, index) => (
-              <BoardingPass key={index} showHoverCollection={true} />
-            ))}
-          </BoardingPassList>
-          <Pagination />
-        </div>
-      ) : (
-        <>
-          <ProfileBanner />
-          <Tab />
-          <Footer />
-        </>
-      )}
+      <Header />
+      <ProfileBanner userInfo={userInfo} />
+      <Tab />
+      <Footer />
     </>
   );
 };
