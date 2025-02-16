@@ -137,7 +137,7 @@ const HomeCollection: React.FC<{
           </HeaderText>
         </CollectionHeader>
         <CollectionList>
-          {collections.map((item, index) => (
+          {collections?.map((item, index) => (
             <BoardingPass key={index} data={item} showHoverCollection={true} />
           ))}
         </CollectionList>

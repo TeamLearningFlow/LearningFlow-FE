@@ -373,15 +373,15 @@ const RecentCollection = ({
           <ContentDescription>
             <LearningRate>
               <TitleLabel>
-                &lt;{collectionInfo.title}&gt; 컬렉션 학습률
+                &lt;{collectionInfo?.title}&gt; 컬렉션 학습률
               </TitleLabel>
               <ProgressWrapper>
                 <ProgressBarFull>
                   <ProgressBar
-                    percent={collectionInfo.progressRatePercentage}
+                    percent={collectionInfo?.progressRatePercentage}
                   />
                 </ProgressBarFull>
-                <ProgressRate>{collectionInfo.progressRatio}</ProgressRate>
+                <ProgressRate>{collectionInfo?.progressRatio}</ProgressRate>
                 <ProgressLabel>조금 더 힘을 내요!</ProgressLabel>
               </ProgressWrapper>
             </LearningRate>

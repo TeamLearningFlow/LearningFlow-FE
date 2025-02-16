@@ -233,9 +233,9 @@ const BoardingPassBottom = ({
 
   const setDifficultyLabel = () => {
     const equals = (a: number[], b: number[]) =>
-      a.length === b.length && a.every((v, i) => v === b[i]);
+      a?.length === b.length && a.every((v, i) => v === b[i]);
 
-    const level = collectionInfo.difficulties.sort();
+    const level = collectionInfo?.difficulties.sort();
 
     if (equals(level, [1])) {
       setDepartureLabel('입문자');
@@ -280,7 +280,7 @@ const BoardingPassBottom = ({
         <Level>{departureLabel}</Level>
       </Departure>
       <ColumnFlexDiv>
-        <Step>{collectionInfo.runtime} 시간</Step>
+        <Step>{collectionInfo?.runtime} 시간</Step>
         <PlaneWrapper>
           <PlaneLine></PlaneLine>
           <Image src={Plane} alt="plane" style={{ margin: '0 5px' }} />
@@ -306,14 +306,14 @@ const RecentBoardingPass = ({
       <BoardingPassImage src={CollectionImage} alt="collection image" />
       <Body>
         <TagWrapper>
-          <Category interestField={collectionInfo.interestField}>
-            {interestFieldMap[collectionInfo.interestField]}
+          <Category interestField={collectionInfo?.interestField}>
+            {interestFieldMap[collectionInfo?.interestField]}
           </Category>
-          <Keyword>{collectionInfo.keywords[0]}</Keyword>
-          <Keyword>{collectionInfo.keywords[1]}</Keyword>
+          <Keyword>{collectionInfo?.keywords[0]}</Keyword>
+          <Keyword>{collectionInfo?.keywords[1]}</Keyword>
         </TagWrapper>
-        <Title>{collectionInfo.title}</Title>
-        <Author>{collectionInfo.creator}</Author>
+        <Title>{collectionInfo?.title}</Title>
+        <Author>{collectionInfo?.creator}</Author>
       </Body>
       <BoardingPassBottom collectionInfo={collectionInfo} />
     </Container>
