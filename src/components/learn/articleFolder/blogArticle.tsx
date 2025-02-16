@@ -426,11 +426,6 @@ const BlogArticle: React.FC<{
     console.log({ episodeId });
   }, [contentUrl, progress, learningCompleted, episodeId]);
 
-  // 이미지 존재확인
-  // useEffect(() => {
-  //   console.log('imgRef:', imgRef.current);
-  // }, [contentUrl]);
-
   return (
     <>
       <ArticleWrapper ref={articleWrapperRef} onScroll={handleScroll}>

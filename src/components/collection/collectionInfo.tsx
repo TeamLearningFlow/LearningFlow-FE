@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useParams } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import Image from 'next/image';
@@ -60,8 +60,40 @@ const interestFieldMap: Record<string, string> = {
   CAREER: '취업',
 };
 
+const imageSources = [
+  { src: YoutubeIcon, alt: 'youtube', show: false },
+  { src: TistoryIcon, alt: 'tistory', show: false },
+  { src: NaverblogIcon, alt: 'blog', show: true },
+  { src: VelogIcon, alt: 'velog', show: true },
+];
+
 const CollectionInfo: React.FC<CollectionInfoProps> = ({ data }) => {
-  const [isBookMarked, setIsBookMarked] = useState<boolean>(false);
+  // const collecetionId = useParams();
+  const collectionId = 4;
+  const [isHovered, setIsHovered] = useState(false);
+  // const [isBookMarked, setIsBookMarked] = useState<boolean>(false);
+
+  // resourceSource 값들을 배열로 추출
+  const resourceSources = data.resource.map((item) => item.resourceSource);
+
+  // 조건에 따라 show 값 업데이트
+  const updatedImages = imageSources.map((image) => {
+    if (image.alt === 'youtube') {
+      return { ...image, show: resourceSources.includes('youtube') };
+    }
+    if (image.alt === 'velog') {
+      return { ...image, show: resourceSources.includes('velog') };
+    }
+    if (image.alt === 'tistory') {
+      return { ...image, show: resourceSources.includes('tistory') };
+    }
+    if (image.alt === 'blog') {
+      return { ...image, show: resourceSources.includes('naverBlog') };
+    }
+    return image;
+  });
+
+  const availableImages = updatedImages.filter((image) => image.show); // show==true 이미지들만 필터링
 
   const handleBookMarked = async () => {
     const token = localStorage.getItem('token');
@@ -72,10 +104,8 @@ const CollectionInfo: React.FC<CollectionInfoProps> = ({ data }) => {
     } else {
       try {
         const response = await axios.post(
-          `http://onboarding.p-e.kr:8080//collections/{collectionId}/likes`,
-          {
-            isBookMarked: !isBookMarked,
-          },
+          `http://onboarding.p-e.kr:8080/collections/${collectionId}/likes`,
+          {},
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -85,8 +115,10 @@ const CollectionInfo: React.FC<CollectionInfoProps> = ({ data }) => {
         );
 
         if (response.status === 200) {
-          setIsBookMarked(!isBookMarked);
-          console.log('북마크 상태 변경: ', !isBookMarked);
+          // setIsBookMarked(!isBookMarked);
+          // console.log('북마크 상태 변경: ', !isBookMarked);
+          data.bookmarked = !data.bookmarked;
+          console.log('북마크 상태 변경: ', data.bookmarked);
         }
       } catch (err: any) {
         console.log('Error: ', err.response?.data || err.message);
@@ -109,11 +141,28 @@ const CollectionInfo: React.FC<CollectionInfoProps> = ({ data }) => {
     ));
   };
 
+  useEffect(() => {
+    console.log('collectionId: ', collectionId);
+  }, [collectionId]);
+
   return (
     <CollectionInfoWrapper>
       <CollectionTicket>
-        <CollectionLeftIMGBox>
+        <CollectionLeftIMGBox
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
           <CollectionLeftIMG src={tmpIMG} alt="컬렉션 이미지" height={252} />
+          <HoverColletionLeftIMG isHovered={isHovered}></HoverColletionLeftIMG>
+          <BookMarkedBox onClick={handleBookMarked}>
+            <BookMarkedIMG
+              src={data.bookmarked ? yesBookMarked : noBookMarked}
+              alt={data.bookmarked ? '북마크됨' : '북마크 안 됨'}
+              isHovered={isHovered}
+              width={30}
+              height={30}
+            />
+          </BookMarkedBox>
         </CollectionLeftIMGBox>
         <CollectionRightIMGBox>
           <CollectionRightIMG
@@ -127,28 +176,30 @@ const CollectionInfo: React.FC<CollectionInfoProps> = ({ data }) => {
             <Interest interestField={data.interestField}>
               {interestFieldMap[data.interestField]}
             </Interest>
-            <Keyword>{data.keywords[0]}</Keyword>
-            <Keyword>{data.keywords[1]}</Keyword>
+            {data.keywords[0] && <Keyword>{data.keywords[0]}</Keyword>}
+            {data.keywords[1] && <Keyword>{data.keywords[1]}</Keyword>}
+            {data.keywords[2] && <Keyword>{data.keywords[2]}</Keyword>}
+            {data.keywords[3] && <Keyword>{data.keywords[3]}</Keyword>}
+            {data.keywords[4] && <Keyword>{data.keywords[4]}</Keyword>}
           </KeywordBox>
-          <BookMarkedBox onClick={handleBookMarked}>
-            <BookMarkedIMG
-              src={isBookMarked ? yesBookMarked : noBookMarked}
-              alt={isBookMarked ? '북마크됨' : '북마크 안 됨'}
-              width={30}
-              height={30}
-            />
-          </BookMarkedBox>
           <TypeImgBox>
             <TypeImgList>
-              <TypeImg src={YoutubeIcon} alt="youtube" index={0} />
+              {availableImages.map((image, index) => (
+                <TypeImg
+                  key={index}
+                  src={image.src}
+                  alt={image.alt}
+                  index={index}
+                  totalImages={availableImages.length}
+                  width={35}
+                  height={35}
+                />
+              ))}
+              {/* <TypeImg src={YoutubeIcon} alt="youtube" index={0} />
               <TypeImg src={TistoryIcon} alt="tistory" index={1} />
               <TypeImg src={NaverblogIcon} alt="blog" index={2} />
-              <TypeImg src={VelogIcon} alt="velog" index={3} />
+              <TypeImg src={VelogIcon} alt="velog" index={3} /> */}
             </TypeImgList>
-            {/* <TypeImgEtc>+</TypeImgEtc> */}
-            {/* <TypeImgEtcNum>4</TypeImgEtcNum> */}
-            {/* <TypeImgLetterBoxWrapper> */}
-            {/* <TypeImgLetterBox> */}
             <LineNDot>
               <TypeImgToArticleLine src={line} alt="------" width={50} />
               <TypeImgToArticleDot src={dot} alt="O" />
@@ -159,8 +210,6 @@ const CollectionInfo: React.FC<CollectionInfoProps> = ({ data }) => {
               <VideoLetter>영상</VideoLetter>
               <VideoNumber>{data.videoCount}</VideoNumber>
             </ArticleNVideo>
-            {/* </TypeImgLetterBox> */}
-            {/* </TypeImgLetterBoxWrapper> */}
           </TypeImgBox>
           <Title>{renderTitleWithLineBreaks(data.title)}</Title>
           <Author>{data.creator}</Author>
@@ -247,6 +296,57 @@ const CollectionLeftIMG = styled(Image)`
   }
 `;
 
+const HoverColletionLeftIMG = styled.div<{ isHovered: boolean }>`
+  dsiplay: flex;
+  position: absolute;
+  width: 29.02%;
+  height: 99.1%;
+  border-radius: 20px;
+
+  background-color: ${({ isHovered }) =>
+    isHovered ? 'rgba(0, 0, 0, 0.6)' : 'rgba(0,0,0,0)'};
+  z-index: 100;
+`;
+
+const BookMarkedBox = styled.div`
+  // position: absolute;
+
+  margin-left: -3.5vw;
+  margin-top: 17px;
+
+  z-index: 2000;
+
+  @media (max-width: 1160px) {
+    margin-left: -4vw;
+  }
+
+  @media (max-width: 960px) {
+    margin-left: -5vw;
+  }
+
+  @media (max-width: 560px) {
+    // margin-left:
+  }
+`;
+
+const BookMarkedIMG = styled(Image)<{ isHovered: boolean }>`
+  cursor: pointer;
+  z-index: 2000;
+
+  opacity: ${(props) => (props.isHovered ? 1 : 0)};
+  visibility: ${(props) => (props.isHovered ? 'visible' : 'hidden')};
+
+  @media (max-width: 960px) {
+    width: 30px;
+    height: 30px;
+  }
+
+  @media (max-width: 560px) {
+    // width:
+    // height:
+  }
+`;
+
 const CollectionRightIMGBox = styled.div`
   display: flex;
   flex: 1;
@@ -298,34 +398,6 @@ const KeywordBox = styled.div`
     margin-left: 7px;
   }
 `;
-
-// const Interest = styled.span`
-//   width: 150px;
-//   display: inline;
-//   padding: 7.339px 18.349px;
-//   margin-right: 10px;
-
-//   border-radius: 6px;
-//   background-color: rgba(245, 245, 255, 1);
-//   color: rgba(94, 82, 255, 1);
-//   font-size: 14px;
-//   font-weight: 600;
-//   line-height: 23.996px;
-
-//   @media (max-width: 850px) {
-//     width: 120px;
-//     font-size: 8px;
-//     padding: 3px 8px;
-//     margin-right: 5px;
-//   }
-
-//   @media (max-width: 560px) {
-//     width: 80px;
-//     font-size: 5px;
-//     padding: 2px 5px;
-//     margin-right: 3px;
-//   }
-// `;
 
 const Interest = styled.div<{ interestField: string }>`
   width: 150px;
@@ -438,17 +510,6 @@ const Keyword = styled.span`
   }
 `;
 
-const BookMarkedBox = styled.div`
-  position: absolute;
-
-  // margin-left: 750px;
-  margin-left: 52vw;
-`;
-
-const BookMarkedIMG = styled(Image)`
-  cursor: pointer;
-`;
-
 const Title = styled.div`
   position: absolute;
   font-size: 23px;
@@ -531,16 +592,15 @@ const TypeImgList = styled.div`
   align-items: center;
 `;
 
-const TypeImg = styled(Image)<{ index: number }>`
+const TypeImg = styled(Image)<{ index: number; totalImages: number }>`
   position: absolute;
-  left: ${({ index }) =>
-    index * 25}px; /* 이미지의 기본 위치 조정 (겹침 효과) */
-  border-radius: 50%;
-  z-index: ${({ index }) =>
-    100 - index}; /* 첫 번째 이미지가 가장 위로 오도록 설정 */
+  left: ${({ index }) => index * 25}px; /* 이미지의 기본 위치 조정 (겹침 효과)
 
-  width: 38.185px;
-  height: 38.185px;
+  border-radius: 50%;
+  z-index: ${({ index }) => 100 - index};
+
+  // width: 25.185px;
+  // height: 25.185px;
 
   // margin-left: 30vw;
 
@@ -557,44 +617,6 @@ const TypeImg = styled(Image)<{ index: number }>`
 
     left: ${({ index }) => index * 5}px;
   }
-`;
-
-// const TypeImgEtc = styled.span`
-//   position: absolute;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-
-//   font-size: 10.367px;
-//   height: 40px;
-//   margin-left: 123px;
-//   color: #4f5357;
-// `;
-
-// const TypeImgEtcNum = styled.span`
-//   position: absolute;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-
-//   font-size: 10.367px;
-//   height: 40px;
-//   margin-left: 130px;
-//   color: #4f5357;
-// `;
-
-const TypeImgLetterBox = styled.div`
-  display: flex;
-  align-items: center;
-  position: absolute;
-
-  width: 250px;
-  height: 40px;
-  // margin-left: 140px;
-  margin-left: 6vw;
-
-  font-size: 10.367px;
-  font-weight: 400;
 `;
 
 const LineNDot = styled.div`
