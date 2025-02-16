@@ -194,7 +194,7 @@ const ValidationRow = styled.div<{ valid: boolean; isEmpty: boolean }>`
   font-size: 14px;
   color: ${({ valid, isEmpty }) =>
     isEmpty ? '#959CA4' : valid ? '#165BFA' : '#ec2d30'};
-  gap: 6px;
+  gap: 4px;
   margin-bottom: 16px;
   margin-top: 8px;
 `;
@@ -230,14 +230,17 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // const [passwordError, setPasswordError] = useState(''); // 비밀번호 오류 메시지
   const [isCurrentPasswordFocused, setIsCurrentPasswordFocused] =
     useState(false);
   const [isNewPasswordFocused, setIsNewPasswordFocused] = useState(false);
   const [isConfirmPasswordFocused, setIsConfirmPasswordFocused] =
     useState(false);
 
+  const [isCurrentPasswordValid, setIsCurrentPasswordValid] = useState(false);
   const [isPasswordChecked, setIsPasswordChecked] = useState(false);
+  const [isNewPasswordChecked, setIsNewPasswordChecked] = useState(false);
+  const [isConfirmPasswordChecked, setIsConfirmPasswordChecked] =
+    useState(false);
   const [isNewPasswordInvalid, setIsNewPasswordInvalid] = useState(false);
   const [isConfirmPasswordInvalid, setIsConfirmPasswordInvalid] =
     useState(false);
@@ -265,6 +268,12 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
     hasSpecialOrNumber: /[!@#$%^&*()_+0-9]/.test(value), // 특수문자 또는 숫자 포함
     isLengthValid: value.length >= 8 && value.length <= 16, // 길이 조건
   });
+
+  const validateCurrentPassword = (value: string) => {
+    const criteria = validatePassword(value);
+    const isValid = Object.values(criteria).every(Boolean);
+    setIsCurrentPasswordValid(isValid);
+  };
 
   const passwordCriteria = validatePassword(newPassword);
   const isPasswordValid = Object.values(passwordCriteria).every(Boolean);
@@ -321,6 +330,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
       }
     } catch (error) {
       console.error('이메일 인증 요청 실패:', error);
+      alert(error);
       return false;
     }
   };
@@ -485,6 +495,8 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
     setConfirmPassword('');
     setIsEditing(false);
     setIsPasswordChecked(false);
+    setIsNewPasswordChecked(false);
+    setIsConfirmPasswordChecked(false);
     setIsNewPasswordInvalid(false);
     setIsConfirmPasswordInvalid(false);
   };
@@ -567,7 +579,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
             <InputContainer>
               <InputWrapper
                 isFocused={isCurrentPasswordFocused}
-                isValid={isPasswordValid}
+                isValid={isCurrentPasswordValid}
                 isChecked={isPasswordChecked}
                 isEmpty={currentPassword === ''}
               >
@@ -575,10 +587,17 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
                   type={showCurrentPassword ? 'text' : 'password'}
                   placeholder="현재 비밀번호"
                   value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  onChange={(e) => {
+                    setCurrentPassword(e.target.value);
+                    validateCurrentPassword(e.target.value);
+                  }}
                   onFocus={() => setIsCurrentPasswordFocused(true)}
-                  onBlur={() => setIsCurrentPasswordFocused(false)}
-                  isInvalid={!isPasswordValid}
+                  onBlur={() => {
+                    if (!isCurrentPasswordValid && currentPassword !== '')
+                      return;
+                    setIsCurrentPasswordFocused(false);
+                  }}
+                  isInvalid={!isCurrentPasswordValid}
                   isEmpty={currentPassword === ''}
                 />
                 <Image
@@ -590,24 +609,52 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
                   style={{ cursor: 'pointer', marginLeft: '10px' }}
                 />
               </InputWrapper>
-              <ValidationRow valid={true} isEmpty={true}>
-                <Image src={CheckIcon} alt="valid" width={16} height={16} />
-                <span>확인을 위해 현재 비밀번호를 다시 입력해 주세요.</span>
+              <ValidationRow
+                valid={isCurrentPasswordValid}
+                isEmpty={currentPassword === ''}
+              >
+                <Image
+                  src={
+                    currentPassword === ''
+                      ? CheckIcon
+                      : isCurrentPasswordValid
+                        ? CheckIconB
+                        : X
+                  }
+                  alt={isCurrentPasswordValid ? 'valid' : 'invalid'}
+                  width={16}
+                  height={16}
+                  style={{ marginTop: '-2px' }}
+                />
+                <span>
+                  {isCurrentPasswordValid || currentPassword === ''
+                    ? '확인을 위해 현재 비밀번호를 다시 입력해 주세요'
+                    : '비밀번호가 일치하지 않습니다'}
+                </span>
               </ValidationRow>
 
               <InputWrapper
                 isFocused={isNewPasswordFocused}
                 isValid={isPasswordValid}
-                isChecked={isPasswordChecked}
+                isChecked={isNewPasswordChecked}
                 isEmpty={newPassword === ''}
               >
                 <Input
                   type={showNewPassword ? 'text' : 'password'}
                   placeholder="새 비밀번호"
                   value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
+                  onChange={(e) => {
+                    setNewPassword(e.target.value);
+                    setIsNewPasswordChecked(true);
+                    const criteria = validatePassword(e.target.value);
+                    const isValid = Object.values(criteria).every(Boolean);
+                    setIsNewPasswordInvalid(!isValid);
+                  }}
                   onFocus={() => setIsNewPasswordFocused(true)}
-                  onBlur={() => setIsNewPasswordFocused(false)}
+                  onBlur={() => {
+                    if (!isPasswordValid && newPassword !== '') return;
+                    setIsNewPasswordFocused(false);
+                  }}
                   isInvalid={isNewPasswordInvalid}
                   isEmpty={newPassword === ''}
                 />
@@ -633,6 +680,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
                     alt={valid ? 'valid' : 'invalid'}
                     width={16}
                     height={16}
+                    style={{ marginTop: '-2px' }}
                   />
                   <span>
                     {key === 'hasUpperLowerCase' && '대소문자 포함'}
@@ -645,16 +693,23 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
               <InputWrapper
                 isFocused={isConfirmPasswordFocused}
                 isValid={isConfirmValid}
-                isChecked={isPasswordChecked}
+                isChecked={isConfirmPasswordChecked}
                 isEmpty={confirmPassword === ''}
               >
                 <Input
                   type={showConfirmPassword ? 'text' : 'password'}
                   placeholder="새 비밀번호 확인"
                   value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  onChange={(e) => {
+                    setConfirmPassword(e.target.value);
+                    setIsConfirmPasswordChecked(true);
+                    setIsConfirmPasswordInvalid(e.target.value !== newPassword);
+                  }}
                   onFocus={() => setIsConfirmPasswordFocused(true)}
-                  onBlur={() => setIsConfirmPasswordFocused(false)}
+                  onBlur={() => {
+                    if (!isConfirmValid && confirmPassword !== '') return;
+                    setIsConfirmPasswordFocused(false);
+                  }}
                   isInvalid={isConfirmPasswordInvalid}
                   isEmpty={confirmPassword === ''}
                 />
@@ -682,8 +737,13 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
                   alt={isConfirmValid ? 'valid' : 'invalid'}
                   width={16}
                   height={16}
+                  style={{ marginTop: '-2px' }}
                 />
-                <span>비밀번호가 일치해야 합니다</span>
+                <span>
+                  {isConfirmValid || confirmPassword === ''
+                    ? '확인을 위해 새 비밀번호를 다시 입력해 주세요'
+                    : '비밀번호가 일치하지 않습니다'}
+                </span>
               </ValidationRow>
 
               <ButtonContainer>

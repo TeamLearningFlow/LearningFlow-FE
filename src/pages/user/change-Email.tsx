@@ -10,9 +10,20 @@ const VerifyEmail: React.FC = () => {
     const validateToken = async () => {
       if (!emailResetCode) return; // 토큰이 없는 경우 작업 중단
 
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        alert('로그인이 필요한 서비스입니다.');
+        router.push('/login');
+        return;
+      }
+
       try {
         const response = await axios.get(
           `http://onboarding.p-e.kr:8080/user/change-email?emailResetCode=${emailResetCode}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
         );
 
         // 유효성 확인 후 페이지 이동

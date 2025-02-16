@@ -525,7 +525,7 @@ const PlatformIcon = (source: string) => {
 
 const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
   const platformSources = [
-    ...new Set(data.resource.map((episode) => episode?.resourceSource)),
+    ...new Set(data?.resource.map((episode) => episode?.resourceSource)),
   ];
 
   const areArraysEqual = (arr1: string[], arr2: string[]) => {
@@ -733,10 +733,10 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
 const CollectionAmount = ({ data }: { data: RecommendedCollection }) => {
   return (
     <CollectionDetail>
-      {data.textCount !== 0 && <Detail>아티클</Detail>}
-      {data.textCount !== 0 && <Number>{data.textCount}</Number>}
-      {data.videoCount !== 0 && <Detail marginLeft={'5px'}>영상</Detail>}
-      {data.videoCount !== 0 && <Number>{data.videoCount}</Number>}
+      {data?.textCount !== 0 && <Detail>아티클</Detail>}
+      {data?.textCount !== 0 && <Number>{data?.textCount}</Number>}
+      {data?.videoCount !== 0 && <Detail marginLeft={'5px'}>영상</Detail>}
+      {data?.videoCount !== 0 && <Number>{data?.videoCount}</Number>}
     </CollectionDetail>
   );
 };
@@ -855,7 +855,7 @@ const HoverCollection = ({
           </CollectionHeader>
 
           <CollectionWrapper>
-            {data.resource.slice(0, 3).map((item, index) => (
+            {data?.resource.slice(0, 3).map((item, index) => (
               <ContentWrapper key={index}>
                 {PlatformIcon(item?.resourceSource)}
                 <Content>
@@ -886,9 +886,9 @@ const BoardingPassBottom = ({
 
   const setDifficultyLabel = () => {
     const equals = (a: number[], b: number[]) =>
-      a.length === b.length && a.every((v, i) => v === b[i]);
+      a?.length === b.length && a.every((v, i) => v === b[i]);
 
-    const level = data.difficulties.sort();
+    const level = data?.difficulties.sort();
 
     if (equals(level, [1])) {
       setDepartureLabel('입문자');
@@ -945,7 +945,7 @@ const BoardingPassBottom = ({
             <Level>{departureLabel}</Level>
           </ColumnFlexDiv>
           <ColumnFlexDiv>
-            <Step>{data.runtime} 시간</Step>
+            <Step>{data?.runtime} 시간</Step>
             <PlaneWrapper>
               <PlaneLine></PlaneLine>
               <Image src={Plane} alt="plane" style={{ margin: '0 5px' }} />
@@ -979,14 +979,14 @@ const BoardingPass = ({
       <StatusTag status=""></StatusTag>
       <Body>
         <TagWrapper>
-          <Category interestField={data.interestField}>
-            {interestFieldMap[data.interestField]}
+          <Category interestField={data?.interestField}>
+            {interestFieldMap[data?.interestField]}
           </Category>
-          <Keyword>{data.keywords[0]}</Keyword>
-          <Keyword>{data.keywords[1]}</Keyword>
+          <Keyword>{data?.keywords[0]}</Keyword>
+          <Keyword>{data?.keywords[1]}</Keyword>
         </TagWrapper>
-        <Title>{data.title}</Title>
-        <Author>{data.creator}</Author>
+        <Title>{data?.title}</Title>
+        <Author>{data?.creator}</Author>
       </Body>
       <BoardingPassBottom data={data} status="" />
       {showHoverCollection && <HoverCollection data={data} status="" />}

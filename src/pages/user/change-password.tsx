@@ -44,7 +44,7 @@ const ChangePasswordRedirect = () => {
     verifyResetCode();
   }, [passwordResetCode, router]);
 
-  return null; // UI가 필요 없으므로 렌더링 X
+  return null;
 };
 
 export default ChangePasswordRedirect;
