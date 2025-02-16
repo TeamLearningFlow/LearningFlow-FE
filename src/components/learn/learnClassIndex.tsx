@@ -77,12 +77,13 @@ const getPlatformIcon = (
 
 
  
-export const CompletedClass: React.FC<{ resourceItem: ResourceData; collectionData: CollectionData }> = ({ resourceItem, collectionData }) => {
-  useEffect(() => {
-    console.log("Received resource data:", resourceItem);
-    console.log("Received collectionData:", collectionData);
-  }, [resourceItem, collectionData]);
-  
+export const CompletedClass: React.FC<ResourceData & { collectionData: CollectionData }> = ({
+  episodeId,
+  episodeName,
+  resourceSource,
+  episodeNumber,
+  collectionData,
+}) => {
   const router = useRouter();
   const handleClick = async (episodeId: string, resourceSource: "youtube" | "naverBlog" | "tistory" | "velog") => { 
     try {
@@ -101,7 +102,7 @@ export const CompletedClass: React.FC<{ resourceItem: ResourceData; collectionDa
         router.push({
           pathname: `/learn/${episodeId}`, // 수강페이지로 이동
           query: { 
-            data: JSON.stringify(data),
+            episodeData: JSON.stringify(data),
             collectionData: JSON.stringify(collectionData)
            }, // 응답 데이터를 쿼리로 전달
         });
@@ -112,24 +113,25 @@ export const CompletedClass: React.FC<{ resourceItem: ResourceData; collectionDa
   };
 
   return (
-    <IndexWrapper onClick={() => handleClick(resourceItem.episodeId, resourceItem.resourceSource)}>
+    <IndexWrapper onClick={() => handleClick(episodeId, resourceSource)}>
       <PlatformIcon>
-        <Image src={getPlatformIcon(resourceItem.resourceSource, "checked")} alt="platform-icon" fill style={{ objectFit: "contain" }} />
+        <Image src={getPlatformIcon(resourceSource, "checked")} alt="platform-icon" fill style={{ objectFit: "contain" }} />
       </PlatformIcon>
       <IndexContainer>
-        <OrderBox>{resourceItem.episodeNumber}회차</OrderBox>
-        <TitleBox>{resourceItem.episodeName}</TitleBox>
+        <OrderBox>{episodeNumber}회차</OrderBox>
+        <TitleBox>{episodeName}</TitleBox>
       </IndexContainer>
     </IndexWrapper>
   );
 };
 
-export const CurrentClass: React.FC<{ resourceItem: ResourceData; collectionData: CollectionData }> = ({ resourceItem, collectionData }) => {
-  useEffect(() => {
-    console.log("Received resource data:", resourceItem);
-    console.log("Received collectionData:", collectionData);
-  }, [resourceItem, collectionData]);
-  
+export const CurrentClass: React.FC<ResourceData & { collectionData: CollectionData }> = ({
+  episodeId,
+  episodeName,
+  resourceSource,
+  episodeNumber,
+  collectionData,
+}) => {
   const router = useRouter();
   const handleClick = async (episodeId: string, resourceSource: "youtube" | "naverBlog" | "tistory" | "velog") => { 
     try {
@@ -148,7 +150,7 @@ export const CurrentClass: React.FC<{ resourceItem: ResourceData; collectionData
         router.push({
           pathname: `/learn/${episodeId}`, // 수강페이지로 이동
           query: { 
-            data: JSON.stringify(data),
+            episodeData: JSON.stringify(data),
             collectionData: JSON.stringify(collectionData)
            }, // 응답 데이터를 쿼리로 전달
         });
@@ -159,47 +161,53 @@ export const CurrentClass: React.FC<{ resourceItem: ResourceData; collectionData
   };
 
   return (
-    <CurrentIndexWrapper onClick={() => handleClick(resourceItem.episodeId, resourceItem.resourceSource)}>
+    <CurrentIndexWrapper onClick={() => handleClick(episodeId, resourceSource)}>
       <CurrentPlatformIcon>
-        <Image src={getPlatformIcon(resourceItem.resourceSource, "active")} alt="platform-icon" fill style={{ objectFit: "contain" }} />
+        <Image src={getPlatformIcon(resourceSource, "active")} alt="platform-icon" fill style={{ objectFit: "contain" }} />
       </CurrentPlatformIcon>
       <IndexContainer>
-        <CurrentOrderBox>{resourceItem.episodeNumber}회차</CurrentOrderBox>
-        <TitleBox>{resourceItem.episodeName}</TitleBox>
+        <CurrentOrderBox>{episodeNumber}회차</CurrentOrderBox>
+        <TitleBox>{episodeName}</TitleBox>
       </IndexContainer>
     </CurrentIndexWrapper>
   );
 };
 
-export const NextClass: React.FC<ClassIndexProps> = ({ episodeId, episodeName, episodeNumber, resourceSource, collectionData }) => {
+export const NextClass: React.FC<ResourceData & { collectionData: CollectionData }> = ({
+  episodeId,
+  episodeName,
+  resourceSource,
+  episodeNumber,
+  collectionData,
+}) => {
   const router = useRouter();
-  const handleClick = async (episodeId: string, resourceSource: "youtube" | "naverBlog" | "tistory" | "velog") => {
-    console.log("클릭한 에피소드 번호:", episodeId); 
+  const handleClick = async (episodeId: string, resourceSource: "youtube" | "naverBlog" | "tistory" | "velog") => { 
     try {
       const token = localStorage.getItem("token");
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
-  
-      // resourceSource에 따라 API 경로 설정
+
       const resourceType = resourceSource === "youtube" ? "youtube" : "blog";
       const apiUrl = `http://onboarding.p-e.kr:8080/resources/${episodeId}/${resourceType}`;
-  
-      // API 요청
+
       const response = await axios.get(apiUrl, { headers });
-  
+
       if (response.status === 200) {
         const data = response.data;
+
+        // resourceItem 대신 episodeName 사용
         router.push({
-          pathname: `/learn/${episodeId}`, // 수강페이지로 이동
+          pathname: `/learn/${episodeId}`, 
           query: { 
-            data: JSON.stringify(data),
+            episodeData: JSON.stringify({ ...data, episodeName }), // 수정된 부분
             collectionData: JSON.stringify(collectionData)
-           }, // 응답 데이터를 쿼리로 전달
+          },
         });
       }
     } catch (error) {
       console.error("강의 불러오기 실패:", error);
     }
   };
+
 
   return (
     <IndexWrapper onClick={() => handleClick(episodeId, resourceSource)}>
