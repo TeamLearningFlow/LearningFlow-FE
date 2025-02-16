@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import Prev from '../../assets/Previous.svg';
 import Next from '../../assets/Next.svg';
+import EmptyLearned from '../../components/mypage/emptyLearned';
 
 const NoOverflowDiv = styled.div`
   white-space: nowrap;
@@ -26,7 +27,7 @@ const CollectionImage = styled.div`
   width: 100%;
   border-radius: 16px 16px 0px 0px;
   // background: url(<path-to-image>) lightgray 50% / cover no-repeat;
-  background-color: lightgray; // 임의 지정
+  background: 'lightgray'; // 임의 지정
 `;
 
 const CollectionTitle = styled(NoOverflowDiv)`
@@ -53,12 +54,14 @@ const ContentWrapper = styled.div`
   margin: 0 20px 8px 20px;
 `;
 
-const ThumbNail = styled.div`
+const ThumbNail = styled.div<{ imgUrl: string }>`
   width: 30px;
   height: 30px;
   border-radius: 100px;
   border: 1.579px solid #5e52ff;
-  background: #cfffe5;
+  background: ${({ imgUrl }) => (imgUrl ? `url(${imgUrl})` : '#cfffe5')};
+  background-size: cover;
+  background-position: center;
 `;
 
 const Content = styled.div`
@@ -109,9 +112,9 @@ const ProgressBarFull = styled.div`
   border-radius: 2px;
 `;
 
-const ProgressBar = styled.div`
+const ProgressBar = styled.div<{ width: string }>`
   height: 100%;
-  width: 20%;
+  width: ${({ width }) => width || '0%'};
   background-color: #5e52ff;
   border-radius: 2px;
 `;
@@ -210,31 +213,44 @@ const CollectionList = styled.div`
   }
 `;
 
-const CollectionItem = () => {
+interface EpisodeData {
+  resourceId: number;
+  collectionId: number;
+  collectionTitle: string;
+  resourceSource: string;
+  episodeNumber: number;
+  episodeName: string;
+  progressRatio: string;
+  currentProgress: number;
+  totalProgress: number;
+}
+
+const CollectionItem: React.FC<{ episode: EpisodeData }> = ({ episode }) => {
   return (
     <Container>
       <CollectionImage />
-      <CollectionTitle>
-        컬렉션의제목은컬렉션의제목은컬렉션의제목은
-      </CollectionTitle>
+      <CollectionTitle>{episode.collectionTitle}</CollectionTitle>
       <ContentWrapper>
-        <ThumbNail />
+        <ThumbNail imgUrl={episode.resourceSource || ''} />
         <Content>
-          <ContentNumber>4 회차</ContentNumber>
-          <ContentTitle>브런치 포스터 -와이어프레임을 활용하는 법</ContentTitle>
+          <ContentNumber>{episode.episodeNumber} 회차</ContentNumber>
+          <ContentTitle>{episode.episodeName}</ContentTitle>
         </Content>
       </ContentWrapper>
       <ProgressWrapper>
         <ProgressBarFull>
-          <ProgressBar />
+          <ProgressBar width={episode.progressRatio} />
         </ProgressBarFull>
-        <ProgressRate>4 / 20회차 (20%)</ProgressRate>
+        <ProgressRate>
+          {episode.currentProgress} / {episode.totalProgress}회차 (
+          {episode.progressRatio})
+        </ProgressRate>
       </ProgressWrapper>
     </Container>
   );
 };
 
-const NotCompleted = () => {
+const NotCompleted: React.FC<{ episodes: EpisodeData[] }> = ({ episodes }) => {
   const [itemsShown, setItemsShown] = useState<number>(4);
 
   useEffect(() => {
@@ -255,6 +271,15 @@ const NotCompleted = () => {
     return () => window.removeEventListener('resize', updateItemsShown);
   }, []);
 
+  const validEpisodes = episodes.filter(
+    (episode) =>
+      episode.episodeNumber >= 1 &&
+      episode.episodeNumber <= 20 &&
+      [7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].includes(
+        episode.collectionId,
+      ),
+  );
+
   return (
     <NotCompletedWrapper>
       <TitleWrapper>
@@ -265,9 +290,15 @@ const NotCompleted = () => {
         </PageButton>
       </TitleWrapper>
       <CollectionList>
-        {Array.from({ length: itemsShown }).map((_, index) => (
-          <CollectionItem key={index} />
-        ))}
+        {validEpisodes.length > 0 ? (
+          validEpisodes
+            .slice(0, itemsShown)
+            .map((episode) => (
+              <CollectionItem key={episode.resourceId} episode={episode} />
+            ))
+        ) : (
+          <EmptyLearned />
+        )}
       </CollectionList>
     </NotCompletedWrapper>
   );

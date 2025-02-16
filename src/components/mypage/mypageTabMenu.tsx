@@ -113,7 +113,21 @@ const TabContent = styled.div<{ shown: boolean }>`
   }
 `;
 
-const Tab = () => {
+interface EpisodeData {
+  resourceId: number;
+  collectionId: number;
+  collectionTitle: string;
+  resourceSource: string;
+  episodeNumber: number;
+  episodeName: string;
+  progressRatio: string;
+  currentProgress: number;
+  totalProgress: number;
+}
+
+const Tab: React.FC<{ recentlyWatched: EpisodeData[] }> = ({
+  recentlyWatched,
+}) => {
   const router = useRouter();
   const { tab } = router.query; // 쿼리에서 tab 값 가져오기
   const [isSelected, setIsSelected] = useState(true);
@@ -156,7 +170,7 @@ const Tab = () => {
       </TabMenu>
       <TabContents>
         <TabContent shown={isSelected}>
-          <NotCompleted />
+          <NotCompleted episodes={recentlyWatched} />
           <Completed />
         </TabContent>
         <TabContent shown={!isSelected}>

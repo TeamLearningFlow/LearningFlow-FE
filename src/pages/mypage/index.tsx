@@ -7,6 +7,18 @@ import Footer from '@/components/homeFooter';
 
 const DEFAULT_BANNER = 'linear-gradient(90deg, #5e52ff 0%, #383199 100%)';
 
+interface EpisodeData {
+  resourceId: number;
+  collectionId: number;
+  collectionTitle: string;
+  resourceSource: string;
+  episodeNumber: number;
+  episodeName: string;
+  progressRatio: string;
+  currentProgress: number;
+  totalProgress: number;
+}
+
 const MyPage = () => {
   const [userInfo, setUserInfo] = useState({
     name: '',
@@ -15,6 +27,8 @@ const MyPage = () => {
     profileImgUrl: null,
     bannerImgUrl: DEFAULT_BANNER,
   });
+
+  const [recentlyWatched, setRecentlyWatched] = useState<EpisodeData[]>([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -40,11 +54,16 @@ const MyPage = () => {
             name: response.data.result.userPreviewDTO.name,
             email: response.data.result.userPreviewDTO.email,
             job: response.data.result.userPreviewDTO.job,
-            profileImgUrl: response.data.result.userPreviewDTO.profileImgUrl || null,
+            profileImgUrl:
+              response.data.result.userPreviewDTO.profileImgUrl || null,
             bannerImgUrl:
               response.data.result.userPreviewDTO.bannerImgUrl ||
               DEFAULT_BANNER,
           });
+
+          setRecentlyWatched(
+            response.data.result.recentlyWatchedEpisodeList || [],
+          );
         }
       } catch (error) {
         console.error(error);
@@ -58,7 +77,7 @@ const MyPage = () => {
     <>
       <Header />
       <ProfileBanner userInfo={userInfo} />
-      <Tab />
+      <Tab recentlyWatched={recentlyWatched} />
       <Footer />
     </>
   );
