@@ -161,7 +161,7 @@ export const CurrentClass: React.FC<{ resourceItem: ResourceData; collectionData
   return (
     <CurrentIndexWrapper onClick={() => handleClick(resourceItem.episodeId, resourceItem.resourceSource)}>
       <CurrentPlatformIcon>
-        <Image src={getPlatformIcon(resourceItem.resourceSource, "checked")} alt="platform-icon" fill style={{ objectFit: "contain" }} />
+        <Image src={getPlatformIcon(resourceItem.resourceSource, "active")} alt="platform-icon" fill style={{ objectFit: "contain" }} />
       </CurrentPlatformIcon>
       <IndexContainer>
         <CurrentOrderBox>{resourceItem.episodeNumber}회차</CurrentOrderBox>

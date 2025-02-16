@@ -67,7 +67,7 @@ export default function CollectionPage() {
   const dummyData:  CollectionData = {
     id: 1,
     interestField: 'WEB_DEVELOPMENT',
-    title: `처음 배우는\n스프링 부트 스프링 부트`,
+    title: `처음 배우는\n스프링 부트`,
     creator: '김개발',
     keywords: ['스프링부트', '웹개발'],
     difficulties: [1, 2],

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import { useRouter } from "next/router";
 import axios from "axios";
+import LoginAuthModal from '../modal/loginModal';
 import CurrentPlayButton from '../../assets/currentPlayButton.svg';
 import HoverPlayButton from '../../assets/hoverPlayButton.svg';
 import ActiveRadio from '../../assets/activeRadio.svg';
@@ -16,6 +17,7 @@ import VelogActiveIcon from '../../assets/platformicon/velog_active_ic.svg';
 import TistoryActiveIcon from '../../assets/platformicon/tistory_active_ic.svg';
 import { CollectionData } from '@/pages/collection/[collectionId]';
 
+
 interface ClassIndexProps {
   classData: CollectionData['resource'][0];
   collection: CollectionData;
@@ -24,6 +26,8 @@ interface ClassIndexProps {
 const NowPlaying: React.FC<ClassIndexProps> = ({ classData,collection }) => {
   const router = useRouter();
   const [isHovered, setIsHovered] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
 
   const handleClick = async () => {
     const episodeId = classData.episodeId;
@@ -41,22 +45,23 @@ const NowPlaying: React.FC<ClassIndexProps> = ({ classData,collection }) => {
 
     if (response.status === 200) {
       const data = response.data;
-      console.log('API 응답 데이터:', data);
+      console.log("API 응답 데이터:", data);
       router.push({
-        pathname: `/learn/${episodeId}`, // 수강페이지로 이동
-        query: { 
+        pathname: `/learn/${episodeId}`,
+        query: {
           episodeData: JSON.stringify(data),
-          collectionData: JSON.stringify(collection)
-         }, // 응답 데이터를 쿼리로 전달
-
+          collectionData: JSON.stringify(collection),
+        },
       });
-
     }
-  } catch (error) {
-    console.error("강의 불러오기 실패:", error);
+  } catch (error: any) {
+    if (error.response?.status === 401) {
+      setIsLoginModalOpen(true); // 로그인 모달 열기
+    } else {
+      console.error("강의 불러오기 실패:", error);
+    }
   }
 };
-
 
   const getPlatformIcon = () => {
     const activeIcons = {
@@ -80,38 +85,46 @@ const NowPlaying: React.FC<ClassIndexProps> = ({ classData,collection }) => {
   };
 
   return (
-    <ComponentWrapper>
-      <RadioWrapper>
-        <IndexIcon>
-          <Image
-            src={ActiveRadio}
-            alt="Active-icon"
-            fill
-            style={{ objectFit: 'contain' }}
-          />
-        </IndexIcon>
-      </RadioWrapper>
-      <IndexWrapper
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        <PlatformIcon>
-          {getPlatformIcon()}
-        </PlatformIcon>
-        <IndexContainer>
-          <OrderBox>{classData.episodeNumber}회차</OrderBox>
-          <TitleBox>{classData.episodeName}</TitleBox>
-        </IndexContainer>
-        <ButtonWrapper onClick={handleClick}>
-          <Image
-            src={isHovered ? HoverPlayButton : CurrentPlayButton}
-            alt="Current Play Button"
-            fill
-            style={{ objectFit: 'contain' }}
-          />
-        </ButtonWrapper>
-      </IndexWrapper>
-    </ComponentWrapper>
+    <>
+      <ComponentWrapper>
+        <RadioWrapper>
+          <IndexIcon>
+            <Image
+              src={ActiveRadio}
+              alt="Active-icon"
+              fill
+              style={{ objectFit: 'contain' }}
+            />
+          </IndexIcon>
+        </RadioWrapper>
+        <IndexWrapper
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          <PlatformIcon>{getPlatformIcon()}</PlatformIcon>
+          <IndexContainer>
+            <OrderBox>{classData.episodeNumber}회차</OrderBox>
+            <TitleBox>{classData.episodeName}</TitleBox>
+          </IndexContainer>
+          <ButtonWrapper onClick={handleClick}>
+            <Image
+              src={isHovered ? HoverPlayButton : CurrentPlayButton}
+              alt="Current Play Button"
+              fill
+              style={{ objectFit: 'contain' }}
+            />
+          </ButtonWrapper>
+        </IndexWrapper>
+      </ComponentWrapper>
+
+      {/* 로그인 모달 */}
+      {isLoginModalOpen && (
+        <LoginAuthModal
+          onClose={() => setIsLoginModalOpen(false)}
+          onContinue={() => router.push('/login')}
+        />
+      )}
+    </>
   );
 };
 
