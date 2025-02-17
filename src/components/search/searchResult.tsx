@@ -16,6 +16,7 @@ export type SearchResult = {
   amount: number;
   textCount: number;
   videoCount: number;
+  resourceSourceTypes: string[];
   resource: {
     episodeNumber: number;
     episodeName: string;

@@ -380,11 +380,12 @@ const Detail = styled.span<{ marginLeft?: string }>`
   letter-spacing: -0.16px;
 `;
 
-const LineWrapper = styled.span<{ status?: string }>`
+const LineWrapper = styled.span<{ status?: string; left?: string }>`
   display: flex;
   align-items: center;
   position: absolute;
-  left: ${(props) => (props.status === '학습완료' ? '65px' : '109.6px')};
+  left: ${(props) =>
+    props.status === '학습완료' ? '65px' : props.left || '96px'};
 `;
 
 const CollectionDetail = styled(RowFlexSpan)`
@@ -531,10 +532,6 @@ const PlatformIcon = (source: string) => {
 };
 
 const PlatformSet = ({ data }: { data: SearchResult }) => {
-  const platformSources = [
-    ...new Set(data.resource.map((episode) => episode?.resourceSource)),
-  ];
-
   const areArraysEqual = (arr1: string[], arr2: string[]) => {
     return (
       arr1.length === arr2.length &&
@@ -543,7 +540,7 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
   };
 
   if (
-    areArraysEqual(platformSources, [
+    areArraysEqual(data.resourceSourceTypes, [
       'youtube',
       'tistory',
       'naverBlog',
@@ -567,7 +564,13 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['youtube', 'tistory', 'naverBlog'])) {
+  if (
+    areArraysEqual(data.resourceSourceTypes, [
+      'youtube',
+      'tistory',
+      'naverBlog',
+    ])
+  ) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -582,7 +585,9 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['youtube', 'tistory', 'velog'])) {
+  if (
+    areArraysEqual(data.resourceSourceTypes, ['youtube', 'tistory', 'velog'])
+  ) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -597,7 +602,9 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['youtube', 'naverBlog', 'velog'])) {
+  if (
+    areArraysEqual(data.resourceSourceTypes, ['youtube', 'naverBlog', 'velog'])
+  ) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -612,7 +619,9 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['tistory', 'naverBlog', 'velog'])) {
+  if (
+    areArraysEqual(data.resourceSourceTypes, ['tistory', 'naverBlog', 'velog'])
+  ) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -627,7 +636,7 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['youtube', 'tistory'])) {
+  if (areArraysEqual(data.resourceSourceTypes, ['youtube', 'tistory'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -639,7 +648,7 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['youtube', 'naverBlog'])) {
+  if (areArraysEqual(data.resourceSourceTypes, ['youtube', 'naverBlog'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -651,7 +660,7 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['youtube', 'velog'])) {
+  if (areArraysEqual(data.resourceSourceTypes, ['youtube', 'velog'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -663,7 +672,7 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['tistory', 'naverBlog'])) {
+  if (areArraysEqual(data.resourceSourceTypes, ['tistory', 'naverBlog'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -675,7 +684,7 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['tistory', 'velog'])) {
+  if (areArraysEqual(data.resourceSourceTypes, ['tistory', 'velog'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -687,7 +696,7 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['naverBlog', 'velog'])) {
+  if (areArraysEqual(data.resourceSourceTypes, ['naverBlog', 'velog'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -699,7 +708,7 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['tistory'])) {
+  if (areArraysEqual(data.resourceSourceTypes, ['tistory'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -708,7 +717,7 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['naverBlog'])) {
+  if (areArraysEqual(data.resourceSourceTypes, ['naverBlog'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -717,7 +726,7 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['velog'])) {
+  if (areArraysEqual(data.resourceSourceTypes, ['velog'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -726,7 +735,7 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['youtube'])) {
+  if (areArraysEqual(data.resourceSourceTypes, ['youtube'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -738,7 +747,6 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
 };
 
 const CollectionAmount = ({ data }: { data: SearchResult }) => {
-  console.log('data 확인:', data);
   return (
     <CollectionDetail>
       {data.textCount !== 0 && <Detail>아티클</Detail>}
@@ -747,6 +755,149 @@ const CollectionAmount = ({ data }: { data: SearchResult }) => {
       {data.videoCount !== 0 && <Number>{data.videoCount}</Number>}
     </CollectionDetail>
   );
+};
+
+const DashedLine = ({ width, path }: { width?: number; path?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={width}
+    height="2"
+    viewBox={`0 0 ${width} 2`}
+    fill="none"
+  >
+    <path
+      d={path}
+      stroke="#FAFAFC"
+      strokeWidth="740061"
+      strokeDasharray="1.61 1.61"
+    />
+  </svg>
+);
+
+const HeaderLine = ({
+  data,
+  status,
+}: {
+  data: SearchResult;
+  status: string;
+}) => {
+  const areArraysEqual = (arr1: string[], arr2: string[]) => {
+    return (
+      arr1.length === arr2.length &&
+      new Set(arr1).size === new Set([...arr1, ...arr2]).size
+    );
+  };
+
+  if (status === '학습완료') {
+    return (
+      <LineWrapper status="학습완료">
+        <DashedLine width={95} path="M0 1H95" />
+        <Image src={Circle} alt="circle" />
+      </LineWrapper>
+    );
+  } else {
+    if (
+      areArraysEqual(data.resourceSourceTypes, [
+        'youtube',
+        'tistory',
+        'naverBlog',
+        'velog',
+      ])
+    ) {
+      return (
+        <LineWrapper status="" left={'96px'}>
+          <DashedLine width={62} path="M0 1H62" />
+          <Image src={Circle} alt="circle" />
+        </LineWrapper>
+      );
+    }
+    if (
+      areArraysEqual(data.resourceSourceTypes, [
+        'youtube',
+        'tistory',
+        'naverBlog',
+      ]) ||
+      areArraysEqual(data.resourceSourceTypes, [
+        'youtube',
+        'tistory',
+        'velog',
+      ]) ||
+      areArraysEqual(data.resourceSourceTypes, [
+        'youtube',
+        'naverBlog',
+        'velog',
+      ])
+    ) {
+      return (
+        <LineWrapper status="" left={'78px'}>
+          <DashedLine width={74} path="M0 1H74" />
+          <Image src={Circle} alt="circle" />
+        </LineWrapper>
+      );
+    }
+
+    if (
+      areArraysEqual(data.resourceSourceTypes, [
+        'tistory',
+        'naverBlog',
+        'velog',
+      ])
+    ) {
+      return (
+        <LineWrapper status="" left={'78px'}>
+          <DashedLine width={111} path="M0 1H111" />
+          <Image src={Circle} alt="circle" />
+        </LineWrapper>
+      );
+    }
+    if (
+      areArraysEqual(data.resourceSourceTypes, ['youtube', 'tistory']) ||
+      areArraysEqual(data.resourceSourceTypes, ['youtube', 'naverBlog']) ||
+      areArraysEqual(data.resourceSourceTypes, ['youtube', 'velog'])
+    ) {
+      return (
+        <LineWrapper status="" left={'60px'}>
+          <DashedLine width={98} path="M0 1H98" />
+          <Image src={Circle} alt="circle" />
+        </LineWrapper>
+      );
+    }
+
+    if (
+      areArraysEqual(data.resourceSourceTypes, ['tistory', 'naverBlog']) ||
+      areArraysEqual(data.resourceSourceTypes, ['tistory', 'velog']) ||
+      areArraysEqual(data.resourceSourceTypes, ['naverBlog', 'velog'])
+    ) {
+      return (
+        <LineWrapper status="" left={'60px'}>
+          <DashedLine width={129} path="M0 1H129" />
+          <Image src={Circle} alt="circle" />
+        </LineWrapper>
+      );
+    }
+
+    if (
+      areArraysEqual(data.resourceSourceTypes, ['tistory']) ||
+      areArraysEqual(data.resourceSourceTypes, ['naverBlog']) ||
+      areArraysEqual(data.resourceSourceTypes, ['velog'])
+    ) {
+      return (
+        <LineWrapper status="" left={'42px'}>
+          <DashedLine width={147} path="M0 1H147" />
+          <Image src={Circle} alt="circle" />
+        </LineWrapper>
+      );
+    }
+
+    if (areArraysEqual(data.resourceSourceTypes, ['youtube'])) {
+      return (
+        <LineWrapper status="" left={'42px'}>
+          <DashedLine width={154} path="M0 1H154" />
+          <Image src={Circle} alt="circle" />
+        </LineWrapper>
+      );
+    }
+  }
 };
 
 const HoverCollection = ({
@@ -769,23 +920,7 @@ const HoverCollection = ({
           <Image src={HoverBackground} alt="hover background" />
           <CollectionHeader>
             <Number status="학습완료">총 {data.amount}회차</Number>
-            <LineWrapper status="학습완료">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="95"
-                height="2"
-                viewBox="0 0 95 2"
-                fill="none"
-              >
-                <path
-                  d="M0 1H95"
-                  stroke="#FAFAFC"
-                  strokeWidth="0.740061"
-                  strokeDasharray="1.61 1.61"
-                />
-              </svg>
-              <Image src={Circle} alt="circle" />
-            </LineWrapper>
+            <HeaderLine data={data} status="학습완료" />
             <CollectionAmount data={data} />
           </CollectionHeader>
 
@@ -833,23 +968,7 @@ const HoverCollection = ({
           <Image src={HoverBackground} alt="hover background" />
           <CollectionHeader>
             <PlatformSet data={data} />
-            <LineWrapper>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="49"
-                height="2"
-                viewBox="0 0 49 2"
-                fill="none"
-              >
-                <path
-                  d="M0.597656 1H48.7016"
-                  stroke="#FAFAFC"
-                  strokeWidth="0.740061"
-                  strokeDasharray="1.61 1.61"
-                />
-              </svg>
-              <Image src={Circle} alt="circle" />
-            </LineWrapper>
+            <HeaderLine data={data} status="" />
             <CollectionAmount data={data} />
           </CollectionHeader>
           <CollectionWrapper>
