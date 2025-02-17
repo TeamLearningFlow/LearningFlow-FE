@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import styled, { keyframes } from 'styled-components';
 import axios from 'axios';
@@ -56,6 +56,16 @@ const Dot = styled.div<{ delay: string }>`
 `;
 
 const LoadingBar = () => {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return null;
+  }
+
   return (
     <LoaderContainer>
       {Array.from({ length: 6 }).map((_, index) => (
@@ -66,7 +76,12 @@ const LoadingBar = () => {
 };
 
 const GoogleRedirectionPage = () => {
+  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
     const fetchAdditionalInfo = async () => {
@@ -115,6 +130,10 @@ const GoogleRedirectionPage = () => {
 
     fetchAdditionalInfo();
   }, []);
+
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <Container>

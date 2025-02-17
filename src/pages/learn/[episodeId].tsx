@@ -94,6 +94,7 @@ const interestFieldMap: Record<string, string> = {
 };
 
 const LearnPage: React.FC = () => {
+  const [isClient, setIsClient] = useState(false);
   // const { episodeId } = useParams<{ episodeId: number }>();
   // const { collectionId } = useParams<{ collectionId: number }>();
   // const [collectionData, setCollectionData] = useState<CollectionData | null>(null);
@@ -125,6 +126,10 @@ const LearnPage: React.FC = () => {
 
   const { isCompleted } = context.state;
   // const { setIsCompleted } = context.actions;
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // ESLint 오류 방지용
   useEffect(() => {
@@ -184,6 +189,10 @@ const LearnPage: React.FC = () => {
   useEffect(() => {
     console.log(`현재 에피소드 ID: ${episodeIdNumber}`);
   }, [episodeIdNumber]);
+
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <PageWrapper>

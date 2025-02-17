@@ -7,9 +7,8 @@ import Footer from '../components/homeFooter';
 import styled from 'styled-components';
 import Header from '../components/header';
 import Banner from '../components/home/homeBanner';
-import HomeCollection, {
-  // RecommendedCollection,
-} from '../components/home/homeCollection';
+import HomeCollection from // RecommendedCollection,
+'../components/home/homeCollection';
 import RecentCollection, {
   RecentLearning,
 } from '../components/home/recentCollection';
@@ -32,6 +31,7 @@ const Main = styled.div`
 `;
 
 const HomePage = () => {
+  const [isClient, setIsClient] = useState(false); // 클라이언트 환경 여부 결정
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [recentLearning, setRecentLearning] = useState<RecentLearning | null>(
     null,
@@ -42,6 +42,7 @@ const HomePage = () => {
   const [nickname, setNickname] = useState('');
 
   useEffect(() => {
+    setIsClient(true);
     // 닉네임 연동
     const storedNickname = localStorage.getItem('userName');
 
@@ -86,6 +87,10 @@ const HomePage = () => {
       setIsLoggedIn(false);
     }
   }, []);
+
+  if (!isClient) {
+    return null; // 클라이언트 환경에서만 렌더링
+  }
 
   return (
     <div>

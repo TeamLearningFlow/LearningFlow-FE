@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const PageWrapper = styled.div`
@@ -84,10 +84,19 @@ const ContractTitle = styled.div`
 `;
 
 const Contracts: React.FC = () => {
+  const [isClient, setIsClient] = useState(false);
   {
     /* const handleBackToRegister = () => {
     router.push('/register');
   }; */
+  }
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return null;
   }
 
   return (

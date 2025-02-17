@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
 import styled from 'styled-components';
@@ -123,7 +123,13 @@ const RegisterPage: React.FC = () => {
   const [isPasswordCheckValid, setIsPasswordCheckValid] = useState(false);
   const [showEmailAuth, setShowEmailAuth] = useState(false);
 
+  const [isClient, setIsClient] = useState(false);
+
   const isFormValid = isEmailValid && isPasswordValid && isPasswordCheckValid;
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const handlePasswordChange = (newPassword: string) => {
     setPassword(newPassword);
@@ -183,6 +189,10 @@ const RegisterPage: React.FC = () => {
       }
     }
   };
+
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <>

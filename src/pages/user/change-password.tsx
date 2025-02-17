@@ -1,10 +1,15 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 
 const ChangePasswordRedirect = () => {
+  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
   const { passwordResetCode } = router.query;
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
     if (!passwordResetCode) return;
@@ -43,6 +48,10 @@ const ChangePasswordRedirect = () => {
 
     verifyResetCode();
   }, [passwordResetCode, router]);
+
+  if (!isClient) {
+    return null;
+  }
 
   return null;
 };

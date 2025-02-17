@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import styled from 'styled-components';
 import LeftIcon from '/public/leftIcon.svg';
@@ -175,7 +175,12 @@ const Page2: React.FC<{
   onPrev: () => void;
   onNext: (interestFields: string[]) => void;
 }> = ({ nickname, onPrev, onNext }) => {
+  const [isClient, setIsClient] = useState(false);
   const [activeCategories, setActiveCategories] = useState<number[]>([]); // 활성화된 카테고리 ID 추적
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const categories = [
     {
@@ -269,6 +274,10 @@ const Page2: React.FC<{
 
   const isNextButtonActive = activeCategories.length > 0; // 다음 버튼 활성화 조건
 
+  if (!isClient) {
+    return null;
+  }
+  
   return (
     <Content>
       <Title>{nickname}님의 관심 분야를 알려주세요</Title>

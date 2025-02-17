@@ -25,10 +25,15 @@ const SearchPage: React.FC = () => {
   }; */
 
   const router = useRouter();
+  const [isClient, setIsClient] = useState(false);
   const { query } = router;
   const [searchResult, setSearchResult] = useState<[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
     // query에 page가 없으면 기본값 1로 설정
@@ -114,6 +119,10 @@ const SearchPage: React.FC = () => {
     queryKey: ['searchResults'], // 캐싱 키
     queryFn: fetchSearchResults,
   });
+
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <SearchWrapper>

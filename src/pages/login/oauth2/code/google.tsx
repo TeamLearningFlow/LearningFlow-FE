@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import logovertical from '/public/logo_vertical.svg';
@@ -68,11 +68,17 @@ const LoadingBar = () => {
 };
 
 const GoogleRedirectionPage = () => {
+  const [isClient, setIsClient] = useState(false); // 클라이언트 환경 여부 결정
+
   const router = useRouter();
 
   const CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
   const SECRET_KEY = process.env.NEXT_PUBLIC_GOOGLE_SECRET_KEY;
   const REDIRECT_URI = process.env.NEXT_PUBLIC_REDIRECT_URI;
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -106,6 +112,10 @@ const GoogleRedirectionPage = () => {
       console.error('Error:', error);
     }
   };
+
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <Container>

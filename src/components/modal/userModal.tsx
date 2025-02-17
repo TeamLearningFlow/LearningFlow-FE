@@ -466,7 +466,7 @@ const userModal: React.FC = () => {
         console.log('Response:', response.data);
         localStorage.removeItem('token'); // 로컬 스토리지 토큰 초기화
         context.actions.setIsLoggedIn(false);
-        router.push('/home'); // 홈 페이지로 이동
+        router.push('/'); // 홈 페이지로 이동
       }
     } catch (error) {
       console.error('로그아웃 실패:', error);

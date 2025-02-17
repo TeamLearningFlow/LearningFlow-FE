@@ -21,6 +21,8 @@ interface EpisodeData {
 }
 
 const MyPage = () => {
+  const [isClient, setIsClient] = useState(false);
+
   const [userInfo, setUserInfo] = useState({
     name: '',
     email: '',
@@ -33,6 +35,10 @@ const MyPage = () => {
   const [completedCollections, setCompletedCollections] = useState<
     CompletedCollectionData[]
   >([]);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -81,6 +87,10 @@ const MyPage = () => {
     fetchUserData();
   }, []);
 
+  if (!isClient) {
+    return null;
+  }
+  
   return (
     <>
       <Header />

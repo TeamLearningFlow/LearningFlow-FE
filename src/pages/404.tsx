@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import errorImage from '/public/404.svg';
@@ -67,7 +67,16 @@ const Button = styled.button`
 `;
 
 const NotFound: React.FC = () => {
+  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <>
@@ -80,7 +89,7 @@ const NotFound: React.FC = () => {
             변경, 삭제되어 찾을 수 없습니다.
           </ErrorText>
         </Error>
-        <Button onClick={() => router.push('/home')}>홈으로</Button>
+        <Button onClick={() => router.push('/')}>홈으로</Button>
       </ErrorContainer>
       <Footer />
     </>

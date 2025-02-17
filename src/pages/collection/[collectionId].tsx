@@ -39,7 +39,7 @@ export interface CollectionData {
     episodeId: number;
     episodeName: string;
     url: string;
-    resourceSource: "youtube" | "naverBlog" | "tistory" | "velog";
+    resourceSource: 'youtube' | 'naverBlog' | 'tistory' | 'velog';
     episodeNumber: number;
     today: boolean;
     progress: number; // 테스트용
@@ -54,6 +54,7 @@ export interface CollectionData {
 }
 
 export default function CollectionPage() {
+  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
   const { collectionId } = router.query;
   // const collectionId = 7; // 테스트용
@@ -111,6 +112,10 @@ export default function CollectionPage() {
   // };
 
   useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
     if (!collectionId) {
       setError('Collection ID가 없습니다.');
       setLoading(false);
@@ -160,6 +165,10 @@ export default function CollectionPage() {
   useEffect(() => {
     console.log('현재 에러 상태:', error);
   }, [error]);
+
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <PageWrapper>

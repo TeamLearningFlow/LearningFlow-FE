@@ -24,6 +24,7 @@ const Indicator = styled.div<{ active: boolean }>`
 `;
 
 const LandingPage: React.FC = () => {
+  const [isClient, setIsClient] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [imgUrl, setImgProfileUrl] = useState<string | null>(null); // 프로필 url 값
   const [nickname, setNickname] = useState(''); // 닉네임 값
@@ -38,6 +39,10 @@ const LandingPage: React.FC = () => {
   if (!context) {
     throw new Error('LoginContext를 찾을 수 없습니다.');
   }
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // 회원가입 인증 토큰 호출
   useEffect(() => {
@@ -130,6 +135,10 @@ const LandingPage: React.FC = () => {
       alert('회원가입에 실패했습니다. 다시 시도해주세요.');
     }
   };
+
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <>

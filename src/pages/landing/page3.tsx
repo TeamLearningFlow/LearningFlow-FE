@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import styled from 'styled-components';
 import LeftIcon from '/public/leftIcon.svg';
@@ -138,7 +138,12 @@ const Page3: React.FC<{
   onPrev: () => void;
   onNext: (preferType: string) => void;
 }> = ({ nickname, onPrev, onNext }) => {
+  const [isClient, setIsClient] = useState(false);
   const [sliderValue, setSliderValue] = useState(50);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const getTooltipText = (value: number) => {
     if (value < 40) return '텍스트가 좋아요';
@@ -161,6 +166,10 @@ const Page3: React.FC<{
     const preferType = getPreferType(sliderValue);
     onNext(preferType); // 부모에게 선호도 값 전달
   };
+
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <Content>

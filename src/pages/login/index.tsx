@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import axios from 'axios';
@@ -149,6 +149,8 @@ const FormGroup = styled.div`
 `;
 
 const LoginPage: React.FC = () => {
+  const [isClient, setIsClient] = useState(false); // 클라이언트 환경 여부 결정
+
   const router = useRouter();
   const context = useContext(LoginContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -160,6 +162,10 @@ const LoginPage: React.FC = () => {
   // const { setRemember } = context.actions;
 
   const isButtonValid = isEmailChecked === true && isPasswordChecked === true;
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const handleLogin = async () => {
     try {
@@ -204,6 +210,10 @@ const LoginPage: React.FC = () => {
       setIsModalOpen(true); // 로그인 실패 시 모달 띄우기
     }
   };
+
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <>

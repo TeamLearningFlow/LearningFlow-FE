@@ -206,6 +206,12 @@ const Page1: React.FC<{
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
       if (
@@ -303,6 +309,10 @@ const Page1: React.FC<{
 
   const isNextButtonActive = isNicknameValid === true && job !== '';
 
+  if (!isClient) {
+    return null;
+  }
+  
   return (
     <>
       <Content>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import DarkTopLogo from '../../components/topLogo_dark';
 import Image from 'next/image';
@@ -7,8 +7,13 @@ import EmailAuthModal from '../../components/modal/emailAuthModal';
 import RegisterPage from './index';
 
 const EmailAuthPage: React.FC = () => {
+  const [isClient, setIsClient] = useState(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showAuth, setShowAuth] = useState(true);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const handleModalOpen = () => {
     setShowModal(true);
@@ -21,7 +26,11 @@ const EmailAuthPage: React.FC = () => {
   const handleAuthClose = () => {
     setShowAuth(false); // 이메일 인증 페이지 숨김
   };
-
+  
+  if (!isClient) {
+    return null;
+  }
+  
   return (
     <>
       {showAuth ? (

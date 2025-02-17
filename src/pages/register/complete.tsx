@@ -1,10 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 
 const RegisterCompletePage: React.FC = () => {
   const router = useRouter();
   const { emailVerificationCode } = router.query; // URL에서 token 추출
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
     const validateToken = async () => {
@@ -39,6 +44,10 @@ const RegisterCompletePage: React.FC = () => {
 
     validateToken();
   }, [emailVerificationCode, router]);
+
+  if (!isClient) {
+    return null;
+  }
 
   return null;
 };
