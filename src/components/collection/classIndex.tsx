@@ -4,12 +4,12 @@ import axios from "axios";
 import styled from 'styled-components';
 import Image from 'next/image';
 import PlayButton from '/public/playButton.svg';
-import CompletedIndexIcon from '/public/assets/completedRadio.svg';
-import EndIndexIcon from '/public/assets/defaultRadio.svg';
-import CheckedYoutube from '/public/assets/platformicon/youtube_checked_ic.svg';
-import CheckedBlog from '/public/assets/platformicon/naver blog_checked_ic.svg';
-import CheckedTistory from '/public/assets/platformicon/tistory_checked_ic.svg';
-import CheckedVelog from '/public/assets/platformicon/velog_checked_ic.svg';
+import CompletedIndexIcon from '/public/completedRadio.svg';
+import EndIndexIcon from '/public/defaultRadio.svg';
+import CheckedYoutube from '/public/platformicon/youtube_checked_ic.svg';
+import CheckedBlog from '/public/platformicon/naver blog_checked_ic.svg';
+import CheckedTistory from '/public/platformicon/tistory_checked_ic.svg';
+import CheckedVelog from '/public/platformicon/velog_checked_ic.svg';
 import { CollectionData } from '@/pages/collection/[collectionId]';
 
 interface ClassIndexProps {
