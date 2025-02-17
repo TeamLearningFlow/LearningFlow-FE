@@ -4,8 +4,11 @@ import Header from '../components/header';
 import Banner from '../components/home/homeBanner';
 import Footer from '../components/homeFooter';
 import HomeCollection from '../components/home/homeCollection';
-import RecentCollection from '../components/home/recentCollection';
+import RecentCollection, {
+  RecentLearning,
+} from '../components/home/recentCollection';
 import HomeModal from '../components/modal/homeModal';
+import axios from 'axios';
 
 const Wrapper = styled.div`
   display: flex;
@@ -26,6 +29,12 @@ const HomeLogin: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [nickname, setNickname] = useState('');
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [recentLearning, setRecentLearning] = useState<RecentLearning | null>(
+    null,
+  );
+  const [recommendedCollections, setRecommendedCollections] = useState<[]>([]);
+
   useEffect(() => {
     // 닉네임 연동
     const storedNickname = localStorage.getItem('userName');
@@ -41,6 +50,44 @@ const HomeLogin: React.FC = () => {
     }
   }, []);
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    console.log('token: ', token);
+
+    if (token) {
+      const fetchHomeData = async () => {
+        try {
+          const response = await axios.get(`https://onboarding.p-e.kr`, {
+            headers: { Authorization: `Bearer ${token}` },
+            withCredentials: true,
+          });
+          const data = await response.data.result;
+          console.log('home data WITH token: ', data);
+          setRecentLearning(data.recentLearning);
+          setRecommendedCollections(data.recommendedCollections);
+        } catch (error) {
+          console.error('Home data fetch 오류:', error);
+        }
+      };
+      fetchHomeData();
+      setIsLoggedIn(true);
+    } else {
+      const fetchHomeData = async () => {
+        try {
+          const response = await axios.get(`https://onboarding.p-e.kr`);
+          const data = await response.data.result;
+          console.log('home data WITHOUT token: ', data);
+          setRecommendedCollections(data.recommendedCollections);
+        } catch (error) {
+          console.error('Home data fetch 오류:', error);
+        }
+      };
+      console.log('토큰이 없습니다.');
+      fetchHomeData();
+      setIsLoggedIn(false);
+    }
+  }, []);
+
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
@@ -49,12 +96,15 @@ const HomeLogin: React.FC = () => {
     <>
       <Header />
       <Banner />
-      <RecentCollection />
-      <HomeCollection nickname={nickname} />
+      {recentLearning ? (
+        <RecentCollection collectionInfo={recentLearning} />
+      ) : null}
+      <HomeCollection
+        nickname={nickname}
+        collections={recommendedCollections}
+      />
       <Wrapper>
-        {isModalOpen && (
-          <HomeModal onClose={handleCloseModal} />
-        )}
+        {isModalOpen && <HomeModal onClose={handleCloseModal} />}
         {!isModalOpen && <Main></Main>}
       </Wrapper>
       <Footer />

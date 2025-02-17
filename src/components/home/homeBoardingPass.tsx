@@ -527,10 +527,6 @@ const PlatformIcon = (source: string) => {
 };
 
 const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
-  const platformSources = [
-    ...new Set(data?.resource.map((episode) => episode?.resourceSource)),
-  ];
-
   const areArraysEqual = (arr1: string[], arr2: string[]) => {
     return (
       arr1.length === arr2.length &&
@@ -539,7 +535,7 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
   };
 
   if (
-    areArraysEqual(platformSources, [
+    areArraysEqual(data?.resourceSourceTypes, [
       'youtube',
       'tistory',
       'naverBlog',
@@ -563,7 +559,13 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['youtube', 'tistory', 'naverBlog'])) {
+  if (
+    areArraysEqual(data?.resourceSourceTypes, [
+      'youtube',
+      'tistory',
+      'naverBlog',
+    ])
+  ) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -578,7 +580,9 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['youtube', 'tistory', 'velog'])) {
+  if (
+    areArraysEqual(data?.resourceSourceTypes, ['youtube', 'tistory', 'velog'])
+  ) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -593,7 +597,9 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['youtube', 'naverBlog', 'velog'])) {
+  if (
+    areArraysEqual(data?.resourceSourceTypes, ['youtube', 'naverBlog', 'velog'])
+  ) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -608,7 +614,9 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['tistory', 'naverBlog', 'velog'])) {
+  if (
+    areArraysEqual(data?.resourceSourceTypes, ['tistory', 'naverBlog', 'velog'])
+  ) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -623,7 +631,7 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['youtube', 'tistory'])) {
+  if (areArraysEqual(data?.resourceSourceTypes, ['youtube', 'tistory'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -635,7 +643,7 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['youtube', 'naverBlog'])) {
+  if (areArraysEqual(data?.resourceSourceTypes, ['youtube', 'naverBlog'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -647,7 +655,7 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['youtube', 'velog'])) {
+  if (areArraysEqual(data?.resourceSourceTypes, ['youtube', 'velog'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -659,7 +667,7 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['tistory', 'naverBlog'])) {
+  if (areArraysEqual(data?.resourceSourceTypes, ['tistory', 'naverBlog'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -671,7 +679,7 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['tistory', 'velog'])) {
+  if (areArraysEqual(data?.resourceSourceTypes, ['tistory', 'velog'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -683,7 +691,7 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['naverBlog', 'velog'])) {
+  if (areArraysEqual(data?.resourceSourceTypes, ['naverBlog', 'velog'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -695,7 +703,7 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['tistory'])) {
+  if (areArraysEqual(data?.resourceSourceTypes, ['tistory'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -704,7 +712,7 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['naverBlog'])) {
+  if (areArraysEqual(data?.resourceSourceTypes, ['naverBlog'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -713,7 +721,7 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['velog'])) {
+  if (areArraysEqual(data?.resourceSourceTypes, ['velog'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -722,7 +730,7 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['youtube'])) {
+  if (areArraysEqual(data?.resourceSourceTypes, ['youtube'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -992,7 +1000,7 @@ const BoardingPass = ({
   showHoverCollection?: boolean;
 }) => {
   const router = useRouter();
-  console.log('BoardingPass 데이터 ', data);
+  // console.log('BoardingPass 데이터 ', data);
 
   return (
     <Container onClick={() => router.push(`/collection/${data.collectionId}`)}>
