@@ -152,19 +152,11 @@ const Bottom = styled(RowFlexDiv)`
   border-radius: 0px 0px 16px 16px;
   background: #f5f5ff;
   height: 53px;
-  padding: 10px 15px;
+  padding: 10px 20px;
   position: absolute;
   top: 281px;
   left: 1px;
   gap: 10px;
-`;
-
-const Departure = styled(ColumnFlexDiv)`
-  margin-right: 10px;
-`;
-
-const Arrival = styled(ColumnFlexDiv)`
-  margin-left: 10px;
 `;
 
 const DepartureArrival = styled.span`
@@ -298,10 +290,10 @@ const BoardingPassBottom = ({
 
   return (
     <Bottom>
-      <Departure>
+      <ColumnFlexDiv>
         <DepartureArrival>Departure</DepartureArrival>
         <Level>{departureLabel}</Level>
-      </Departure>
+      </ColumnFlexDiv>
       <RuntimeWrapper>
         <Step>{collectionInfo?.runtime} 시간</Step>
         <PlaneWrapper>
@@ -310,10 +302,10 @@ const BoardingPassBottom = ({
           <PlaneLine width={lineWidth} />
         </PlaneWrapper>
       </RuntimeWrapper>
-      <Arrival>
+      <ColumnFlexDiv>
         <DepartureArrival>Arrival</DepartureArrival>
         <Level>{arrivalLabel}</Level>
-      </Arrival>
+      </ColumnFlexDiv>
     </Bottom>
   );
 };
