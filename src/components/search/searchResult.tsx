@@ -23,6 +23,13 @@ export type SearchResult = {
     resourceSource: string;
     url: string;
   }[];
+  likesCount: number;
+  progressRatePercentage: number;
+  progressRatio: string;
+  learningStatus: string;
+  startDate: string;
+  completedDate: string;
+  liked: boolean;
 };
 
 const SearchResult = ({

@@ -87,8 +87,14 @@ const SearchPage: React.FC = () => {
         }).filter(([_, value]) => value), // 빈 값('') 또는 undefined는 필터링
       );
 
+      const token = localStorage.getItem('token');
+
+      // 요청 헤더 설정 (token이 있으면 Authorization 추가)
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
       const response = await axios.get(`http://onboarding.p-e.kr:8080/search`, {
         params,
+        headers, // 조건부 헤더 추가
       });
       const data = await response.data.result;
       setSearchResult(data.searchResults);
@@ -101,7 +107,14 @@ const SearchPage: React.FC = () => {
 
   const fetchAllResults = async () => {
     try {
-      const response = await axios.get(`http://onboarding.p-e.kr:8080/search`);
+      const token = localStorage.getItem('token');
+
+      // 요청 헤더 설정 (token이 있으면 Authorization 추가)
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+      const response = await axios.get(`http://onboarding.p-e.kr:8080/search`, {
+        headers, // 조건부 헤더 추가
+      });
       const data = await response.data.result;
       setSearchResult(data.searchResults);
     } catch (error) {
