@@ -62,8 +62,8 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-    console.log('token: ', token);
+    const token = localStorage.getItem('token');
+    // console.log('token: ', token);
 
     if (token) {
       const fetchHomeData = async () => {
