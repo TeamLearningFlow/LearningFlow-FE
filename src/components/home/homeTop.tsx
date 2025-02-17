@@ -5,7 +5,6 @@ import Image from 'next/image';
 import LogoGraphic from '/public/logoMark.svg';
 import Airplane from '/public/homeAirplane.svg';
 import Window from '/public/window.svg';
-// import WindowIn from '../public/windowIn.gif';
 import Search from '/public/searchicon.svg';
 
 const TopWrapper = styled.div`
@@ -287,7 +286,7 @@ const WindowImage = styled(Image)`
   z-index: 2;
 `;
 
-const WindowInGif = styled.img`
+/* const WindowInGif = styled.img`
   position: absolute;
   width: 100%;
   height: 100%;
@@ -311,7 +310,7 @@ const WindowInGif = styled.img`
     margin-left: -35%;
     clip-path: inset(0% 13% 0% 23% round 180px);
   }
-`;
+`; */
 
 const LogoMarkWrapper = styled.div`
   position: absolute;
@@ -428,10 +427,10 @@ const HomeTop: React.FC = () => {
           <Image src={Airplane} alt="airplane" />
         </AirplaneWrapper>
         <WindowWrapper>
-          <WindowInGif
-            src="/windowIn.gif"
+          {/* <WindowInGif
+            src="/windowIn-v2.gif"
             alt="window-in"
-          />
+          /> */}
           <WindowImage
             src={Window}
             alt="window"
