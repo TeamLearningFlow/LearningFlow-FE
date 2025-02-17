@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import prevpage from '../../assets/prevPage.svg';
-import prevpage_disabled from '../../assets/prevpage_disabled.svg';
+import prevpage_disabled from '../../assets/prevPage_disabled.svg';
 import nextpage from '../../assets/nextPage.svg';
 import nextpage_disabled from '../../assets/nextPage_disabled.svg';
 import { useRouter } from 'next/router';
