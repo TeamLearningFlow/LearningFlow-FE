@@ -53,8 +53,8 @@ export interface CollectionData {
 
 export default function CollectionPage() {
   const router = useRouter();
-  // const { collectionId } = router.query;
-  const collectionId = 7; // 테스트용
+  const { collectionId } = router.query;
+  // const collectionId = 7; // 테스트용
   const [collection, setCollection] = useState<CollectionData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

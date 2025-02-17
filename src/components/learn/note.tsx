@@ -143,16 +143,19 @@ const Note: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
 
   // 로컬 스토리지에서 저장된 노트를 불러오는 함수
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      setNoteContent(''); // 로그인 X -> 노트 저장 X
-    } else {
-      if (episodeId) {
-        const savedNote = localStorage.getItem(`noteContent_${episodeId}`);
-        if (savedNote) {
-          setNoteContent(savedNote);
-          setIsNoteEmpty(savedNote === '');
-        }
+    // const token = localStorage.getItem('token');
+    // if (!token) {
+    //   setNoteContent(''); // 로그인 X -> 노트 저장 X
+    //   setIsNoteEmpty(true);
+    // }
+    if (episodeId) {
+      const savedNote = localStorage.getItem(`noteContent_${episodeId}`);
+      if (savedNote) {
+        setNoteContent(savedNote);
+        setIsNoteEmpty(savedNote.trim() === '');
+      } else {
+        setNoteContent('');
+        setIsNoteEmpty(true);
       }
     }
   }, [episodeId]);

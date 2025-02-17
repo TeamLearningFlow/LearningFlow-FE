@@ -77,8 +77,7 @@ const BottomWrapper = styled.div`
   @media (max-width: 560px) {
     padding: 0 10px;
   }
-`; 
-
+`;
 
 const interestFieldMap: Record<string, string> = {
   APP_DEVELOPMENT: '앱개발',
@@ -94,146 +93,153 @@ const interestFieldMap: Record<string, string> = {
   CAREER: '취업',
 };
 
-
 const LearnPage: React.FC = () => {
-    // const { episodeId } = useParams<{ episodeId: number }>();
-    // const { collectionId } = useParams<{ collectionId: number }>();
-    // const [collectionData, setCollectionData] = useState<CollectionData | null>(null);
-    const [type, setType] = useState<'youtube' | 'blog' | null>(null);
-    const [loading, setLoading] = useState(false);
-    const [title, setTitle] = useState<string>('');
-    const [field, setField] = useState<string>('');
-    const [progress, setProgress] = useState(0);
-    const [youtubeContent, setYoutubeContent] = useState<string>('');
-    const context = useContext(LearnContext);
-    
-  
-    const router = useRouter();
-    const { episodeId, episodeData, collectionData } = router.query;
-  
-    // episodeId를 string 타입에서 숫자 타입으로 변환
-    const episodeIdNumber = Array.isArray(episodeId) ? Number(episodeId[0]) : Number(episodeId);
-   
-    // episodeData와 collectionData를 JSON 파싱해서 사용할 준비
-    const EpisodeData = episodeData ? JSON.parse(episodeData as string) : null;
-    const CollectionData = collectionData ? JSON.parse(collectionData as string) : null;
-    
+  // const { episodeId } = useParams<{ episodeId: number }>();
+  // const { collectionId } = useParams<{ collectionId: number }>();
+  // const [collectionData, setCollectionData] = useState<CollectionData | null>(null);
+  const [type, setType] = useState<'youtube' | 'blog' | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [title, setTitle] = useState<string>('');
+  const [field, setField] = useState<string>('');
+  const [progress, setProgress] = useState(0);
+  const [youtubeContent, setYoutubeContent] = useState<string>('');
+  const context = useContext(LearnContext);
 
-    const { isCompleted } = context.state;
-    const { setIsCompleted } = context.actions;
-  
-    // resource type을 확인하는 비동기 함수
-    const checkResourceType = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const headers = token ? { Authorization: `Bearer ${token}` } : {};
-  
-        const youtubeResponse = await axios.get(
-          `http://onboarding.p-e.kr:8080/resources/${episodeId}/youtube`,
-          { headers }
-        );
-  
-        if (youtubeResponse.data.result.resourceType === 'VIDEO') {
-          console.log("유튜브입니다.");          
-          setType('youtube');
-          setTitle(youtubeResponse.data.result.urlTitle);
-          setField(youtubeResponse.data.result.interestField);
-          setYoutubeContent(youtubeResponse.data.result.episodeContents);
-          return; // YouTube가 확인되었으면 종료
-        }
-  
-        // YouTube가 아니면 Blog 조회
-        const blogResponse = await axios.get(
-          `http://onboarding.p-e.kr:8080/resources/${episodeId}/blog`,
-          { headers }
-        );
-  
-        if (blogResponse.data.result.resourceType === 'TEXT') {
-          console.log("블로그입니다.");
-          setType('blog');
-          setTitle(blogResponse.data.result.urlTitle);
-          setField(blogResponse.data.result.interestField);
-        } else {
-          console.error('유튜브도 블로그도 아닌 오류');
-          setType(null);
-        }
-      } catch (error) {
-        console.error('Error fetching resource type:', error);
+  const router = useRouter();
+  const { episodeId, episodeData, collectionData } = router.query;
+
+  // episodeId를 string 타입에서 숫자 타입으로 변환
+  const episodeIdNumber = Array.isArray(episodeId)
+    ? Number(episodeId[0])
+    : Number(episodeId);
+
+  // episodeData와 collectionData를 JSON 파싱해서 사용할 준비
+  const EpisodeData = episodeData ? JSON.parse(episodeData as string) : null;
+  const CollectionData = collectionData
+    ? JSON.parse(collectionData as string)
+    : null;
+
+  const { isCompleted } = context.state;
+  const { setIsCompleted } = context.actions;
+
+  // resource type을 확인하는 비동기 함수
+  const checkResourceType = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+      const youtubeResponse = await axios.get(
+        `http://onboarding.p-e.kr:8080/resources/${episodeId}/youtube`,
+        { headers },
+      );
+
+      if (youtubeResponse.data.result.resourceType === 'VIDEO') {
+        console.log('유튜브입니다.');
+        setType('youtube');
+        setTitle(youtubeResponse.data.result.urlTitle);
+        setField(youtubeResponse.data.result.interestField);
+        setYoutubeContent(youtubeResponse.data.result.episodeContents);
+        return; // YouTube가 확인되었으면 종료
+      }
+
+      // YouTube가 아니면 Blog 조회
+      const blogResponse = await axios.get(
+        `http://onboarding.p-e.kr:8080/resources/${episodeId}/blog`,
+        { headers },
+      );
+
+      if (blogResponse.data.result.resourceType === 'TEXT') {
+        console.log('블로그입니다.');
+        setType('blog');
+        setTitle(blogResponse.data.result.urlTitle);
+        setField(blogResponse.data.result.interestField);
+      } else {
+        console.error('유튜브도 블로그도 아닌 오류');
         setType(null);
-      } finally {
-        setLoading(false);
       }
-    };
-  
-    useEffect(() => {
-      if (episodeId) {
-        checkResourceType();
-      }
-    }, [episodeId]);
-  
-    useEffect(() => {
-      console.log(`현재 에피소드 ID: ${episodeIdNumber}`);
-    }, [episodeIdNumber]);
+    } catch (error) {
+      console.error('Error fetching resource type:', error);
+      setType(null);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    return (
-      <PageWrapper>
-        <Header />
-        {CollectionData && CollectionData.title && CollectionData.interestField && (
+  useEffect(() => {
+    if (episodeId) {
+      checkResourceType();
+    }
+  }, [episodeId]);
+
+  useEffect(() => {
+    console.log(`현재 에피소드 ID: ${episodeIdNumber}`);
+  }, [episodeIdNumber]);
+
+  return (
+    <PageWrapper>
+      <Header />
+      {CollectionData &&
+        CollectionData.title &&
+        CollectionData.interestField && (
           <TitleBar
             data={{
               title: CollectionData.title,
-              interestField: interestFieldMap[CollectionData.interestField]
+              interestField: interestFieldMap[CollectionData.interestField],
             }}
           />
         )}
-        {loading ? (
-          <BodyWrapper>
-            <TopWrapper>
-              <SkeletonArticle />
-              <SkeletonClassTitle />
-            </TopWrapper>
-            <MidWrapper>
-              <Note />
-            </MidWrapper>
-            <BottomWrapper>
-              <SkeletonClassList_S />
-            </BottomWrapper>
-          </BodyWrapper>
-        ) : (
-          <BodyWrapper>
-            <TopWrapper>
-            {CollectionData && episodeId && (
-              type === 'youtube' ? (
+      {loading ? (
+        <BodyWrapper>
+          <TopWrapper>
+            <SkeletonArticle />
+            <SkeletonClassTitle />
+          </TopWrapper>
+          <MidWrapper>
+            <Note />
+          </MidWrapper>
+          <BottomWrapper>
+            <SkeletonClassList_S />
+          </BottomWrapper>
+        </BodyWrapper>
+      ) : (
+        <BodyWrapper>
+          <TopWrapper>
+            {CollectionData &&
+              episodeId &&
+              (type === 'youtube' ? (
                 <Article videoId={youtubeContent} isCompleted={isCompleted} />
               ) : (
-                <BlogArticle episodeId={episodeIdNumber} isCompleted={isCompleted} />
-              )
-            )}
-              {CollectionData && EpisodeData && episodeId && (
-                <ClassTitle
+                <BlogArticle
                   episodeId={episodeIdNumber}
-                  episodeData={EpisodeData}
                   isCompleted={isCompleted}
                 />
-              )}
-            </TopWrapper>
-            <MidWrapper>
+              ))}
+            {CollectionData && EpisodeData && episodeId && (
+              <ClassTitle
+                episodeId={episodeIdNumber}
+                episodeData={EpisodeData}
+                isCompleted={isCompleted}
+              />
+            )}
+          </TopWrapper>
+          <MidWrapper>
+            {CollectionData && episodeId && (
               <Note episodeId={episodeIdNumber} />
-            </MidWrapper>
-            <BottomWrapper>
-              {CollectionData && (
-                <ClassList
-                  resource={CollectionData.resource}
-                  currentEpisode={episodeIdNumber}
-                  collectionData={CollectionData}
-                />
-              )}
-            </BottomWrapper>
-          </BodyWrapper>
-        )}
-      </PageWrapper>
-    );
-  };
-  
-  export default LearnPage;
-  
+            )}
+          </MidWrapper>
+          <BottomWrapper>
+            {CollectionData && (
+              <ClassList
+                resource={CollectionData.resource}
+                currentEpisode={episodeIdNumber}
+                collectionData={CollectionData}
+              />
+            )}
+          </BottomWrapper>
+        </BodyWrapper>
+      )}
+    </PageWrapper>
+  );
+};
+
+export default LearnPage;
