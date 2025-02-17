@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import NotCompleted from './notCompleted';
 import Completed from '../mypage/completed';
 import Liked from './liked';
+import { CompletedCollectionData } from '@/types/types';
 
 const Container = styled.div`
   display: flex;
@@ -125,9 +126,12 @@ interface EpisodeData {
   totalProgress: number;
 }
 
-const Tab: React.FC<{ recentlyWatched: EpisodeData[] }> = ({
-  recentlyWatched,
-}) => {
+interface TabProps {
+  recentlyWatched: EpisodeData[];
+  completedCollections: CompletedCollectionData[];
+}
+
+const Tab: React.FC<TabProps> = ({ recentlyWatched, completedCollections }) => {
   const router = useRouter();
   const { tab } = router.query; // 쿼리에서 tab 값 가져오기
   const [isSelected, setIsSelected] = useState(true);
@@ -171,7 +175,7 @@ const Tab: React.FC<{ recentlyWatched: EpisodeData[] }> = ({
       <TabContents>
         <TabContent shown={isSelected}>
           <NotCompleted episodes={recentlyWatched} />
-          <Completed />
+          <Completed completedCollections={completedCollections} />
         </TabContent>
         <TabContent shown={!isSelected}>
           <Liked />

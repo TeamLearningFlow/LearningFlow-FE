@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { CompletedCollectionData } from '@/types/types';
+
 import BoardingPassContainer from '../../assets/S_Background.svg';
 import CollectionImage from '../../assets/boardingpassS.svg';
 import BookmarkIcon from '../../assets/bookmark.svg';
+import BookmarkFilledIcon from '../../assets/bookmarkFilled.svg';
 import HoverBackgroundTop from '../../assets/hover-backgroundTopS.svg';
 import HoverBackground from '../../assets/hover-background.svg';
 import Plane from '../../assets/plane.svg';
@@ -104,10 +108,79 @@ const Tag = styled.span`
   line-height: 15px; /* 150% */
 `;
 
-const Category = styled(Tag)`
-  background-color: #f5f5ff;
-  color: #5e52ff;
+const Category = styled(Tag)<{ interestField: string }>`
+  background-color: ${({ interestField }) => {
+    switch (interestField) {
+      case 'APP_DEVELOPMENT':
+        return '#E5F6FE';
+      case 'WEB_DEVELOPMENT':
+        return '#EAF2FE';
+      case 'PROGRAMMING_LANGUAGE':
+        return '#DEFAFF';
+      case 'DEEP_LEARNING':
+        return '#FEECEC';
+      case 'STATISTICS':
+        return '#FDE8F0';
+      case 'DATA_ANALYSIS':
+        return '#FEEEE5';
+      case 'UI_UX':
+        return '#F5F5FF';
+      case 'PLANNING':
+        return '#FFF5D6';
+      case 'BUSINESS_PRODUCTIVITY':
+        return '#E3FFF7';
+      case 'FOREIGN_LANGUAGE':
+        return '#F9EDFF';
+      case 'CAREER':
+        return '#F2FFF6';
+      default:
+        return 'gray';
+    }
+  }};
+
+  color: ${({ interestField }) => {
+    switch (interestField) {
+      case 'APP_DEVELOPMENT':
+        return '#00AEFF';
+      case 'WEB_DEVELOPMENT':
+        return '#0066FF';
+      case 'PROGRAMMING_LANGUAGE':
+        return '#00BDDE';
+      case 'DEEP_LEARNING':
+        return '#FF4242';
+      case 'STATISTICS':
+        return '#F04588';
+      case 'DATA_ANALYSIS':
+        return '#FF5E00';
+      case 'UI_UX':
+        return '#5E52FF';
+      case 'PLANNING':
+        return '#FFAA00';
+      case 'BUSINESS_PRODUCTIVITY':
+        return '#12C79A';
+      case 'FOREIGN_LANGUAGE':
+        return '#CB59FF';
+      case 'CAREER':
+        return '#00BF40';
+      default:
+        return 'gray';
+    }
+  }};
 `;
+
+const interestFieldMap: Record<string, string> = {
+  APP_DEVELOPMENT: '앱개발',
+  WEB_DEVELOPMENT: '웹개발',
+  PROGRAMMING_LANGUAGE: '컴퓨터언어',
+  DEEP_LEARNING: '딥러닝',
+  STATISTICS: '통계',
+  DATA_ANALYSIS: '데이터분석',
+  UI_UX: 'UX/UI',
+  PLANNING: '기획',
+  BUSINESS_PRODUCTIVITY: '업무생산성',
+  FOREIGN_LANGUAGE: '외국어',
+  CAREER: '취업',
+};
 
 const Keyword = styled(Tag)`
   background-color: #f5f5f5;
@@ -328,7 +401,11 @@ const CompletedStampIcon = styled.div`
   margin-top: -15px;
 `;
 
-const HoverCollection = () => (
+const HoverCollection = ({
+  collection,
+}: {
+  collection: CompletedCollectionData;
+}) => (
   <HoverWrapper>
     <HoverBackgroundTopWrapper>
       <Image
@@ -343,20 +420,27 @@ const HoverCollection = () => (
         }}
       />
       <BoardingPassImage
-        src={CollectionImage}
+        src={collection.imageUrl || CollectionImage}
         alt="collection image"
         style={{
           left: '0',
         }}
       />
       <Bookmark>
-        <Image src={BookmarkIcon} alt="bookmark" width={36} height={36} />
+        <Image
+          src={collection.liked ? BookmarkFilledIcon : BookmarkIcon}
+          alt="bookmark"
+          width={36}
+          height={36}
+        />
       </Bookmark>
     </HoverBackgroundTopWrapper>
     <Image src={HoverBackground} alt="hover background" />
     <CollectionHeader>
-      <Number status="학습완료">총 8회차</Number>
-      <LineWrapper status="학습완료">
+      <Number status={collection.learningStatus}>
+        총 {collection.amount}회차
+      </Number>
+      <LineWrapper status={collection.learningStatus}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="95"
@@ -375,15 +459,15 @@ const HoverCollection = () => (
       </LineWrapper>
       <CollectionDetail>
         <Detail>아티클</Detail>
-        <Number>2</Number>
+        <Number>{collection.textCount}</Number>
         <Detail marginLeft={'5px'}>영상</Detail>
-        <Number>6</Number>
+        <Number>{collection.videoCount}</Number>
       </CollectionDetail>
     </CollectionHeader>
 
     <CollectionWrapper>
       <ContentWrapper>
-        <Content status="학습완료">
+        <Content status={collection.learningStatus}>
           <TextWrapper>
             <Image src={Calendar} alt="calendarIcon" width={14} height={14} />
             <Label
@@ -401,7 +485,7 @@ const HoverCollection = () => (
             lineHeight="18px"
             letterSpacing="-0.24px"
           >
-            2025.XX.XX ~ 2025.XX.XX
+            {collection.startDate} ~ {collection.completedDate}
           </Label>
         </Content>
       </ContentWrapper>
@@ -417,15 +501,51 @@ const HoverCollection = () => (
   </HoverWrapper>
 );
 
-const BoardingPassBottom = () => {
+const BoardingPassBottom = ({
+  collection,
+}: {
+  collection: CompletedCollectionData;
+}) => {
+  const [departureLabel, setDepartureLabel] = useState<string>('');
+  const [arrivalLabel, setArrivalLabel] = useState<string>('');
+
+  // 난이도 변환 함수
+  useEffect(() => {
+    const setDifficultyLabel = () => {
+      const level = [...collection.difficulties].sort();
+
+      if (JSON.stringify(level) === JSON.stringify([1])) {
+        setDepartureLabel('입문자');
+        setArrivalLabel('초급자');
+      } else if (JSON.stringify(level) === JSON.stringify([2])) {
+        setDepartureLabel('초급자');
+        setArrivalLabel('중급자');
+      } else if (JSON.stringify(level) === JSON.stringify([3])) {
+        setDepartureLabel('중급자');
+        setArrivalLabel('마스터');
+      } else if (JSON.stringify(level) === JSON.stringify([1, 2])) {
+        setDepartureLabel('입문·초급자');
+        setArrivalLabel('중급자');
+      } else if (JSON.stringify(level) === JSON.stringify([2, 3])) {
+        setDepartureLabel('초급·중급자');
+        setArrivalLabel('마스터');
+      } else if (JSON.stringify(level) === JSON.stringify([1, 2, 3])) {
+        setDepartureLabel('입문·초급·중급자');
+        setArrivalLabel('마스터');
+      }
+    };
+
+    setDifficultyLabel();
+  }, [collection.difficulties]);
+
   return (
     <Bottom>
       <Departure>
         <DepartureArrival>Departure</DepartureArrival>
-        <Level>입문자</Level>
+        <Level>{departureLabel}</Level>
       </Departure>
       <ColumnFlexDiv>
-        <Step>n 시간</Step>
+        <Step>{collection.runtime} 시간</Step>
         <PlaneWrapper>
           <PlaneLine></PlaneLine>
           <Image src={Plane} alt="plane" style={{ margin: '0 5px' }} />
@@ -434,7 +554,7 @@ const BoardingPassBottom = () => {
       </ColumnFlexDiv>
       <Arrival>
         <DepartureArrival>Arrival</DepartureArrival>
-        <Level>초급자</Level>
+        <Level>{arrivalLabel}</Level>
       </Arrival>
     </Bottom>
   );
@@ -442,27 +562,41 @@ const BoardingPassBottom = () => {
 
 const CompletedCollection = ({
   showHoverCollection,
+  collection,
 }: {
   showHoverCollection?: boolean;
+  collection: CompletedCollectionData;
 }) => {
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push(`/collections/${collection.collectionId}`);
+  };
+
   return (
-    <Container>
+    <Container onClick={handleClick}>
       <FlipCard isFlipped={showHoverCollection ?? false}>
         <FrontFace>
           <Image src={BoardingPassContainer} alt="boardingpass" />
-          <BoardingPassImage src={CollectionImage} alt="collectionimage" />
+          <BoardingPassImage
+            src={collection.imageUrl || CollectionImage}
+            alt="collectionimage"
+            width={282}
+            height={158}
+          />
           <Body>
             <TagWrapper>
-              <Category>관심분야</Category>
-              <Keyword>키워드1</Keyword>
-              <Keyword>키워드2</Keyword>
+              <Category interestField={collection.interestField}>
+                {interestFieldMap[collection.interestField]}
+              </Category>
+              {collection.keywords.slice(0, 2).map((keyword, index) => (
+                <Keyword key={index}>{keyword}</Keyword>
+              ))}
             </TagWrapper>
-            <Title>
-              컬렉션의 <br></br>제목을 입력해주세요
-            </Title>
-            <Author>컬렉션 제작자명</Author>
+            <Title>{collection.title}</Title>
+            <Author>{collection.creator}</Author>
           </Body>
-          <BoardingPassBottom />
+          <BoardingPassBottom collection={collection} />
           <Image
             src={CompletedFront}
             alt="completedfront"
@@ -488,7 +622,7 @@ const CompletedCollection = ({
         </FrontFace>
 
         <BackFace>
-          <HoverCollection />
+          <HoverCollection collection={collection} />
         </BackFace>
       </FlipCard>
     </Container>

@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 
-import guestIMG from '../../assets/Guest.svg';
+import Guest from '../../assets/Guest.svg';
 import bookIMG from '../../assets/Book.svg';
 import likeIMG from '../../assets/Like.svg';
 import settingsIMG from '../../assets/Settings.svg';
@@ -423,10 +423,8 @@ interface userData {
   email: string;
   job: string;
   interestFields: string[];
-  birthDay: string;
   preferType: string;
   profileImgUrl: string;
-  birthday?: string;
 }
 
 const jobMap: { [key: string]: string } = {
@@ -514,7 +512,7 @@ const userModal: React.FC = () => {
           <InfoTop>
             <InfoTopLeft>
               <GuestIMG
-                src={userData.profileImgUrl}
+                src={userData.profileImgUrl || Guest}
                 alt="userIMG"
                 width={40}
                 height={40}

@@ -4,6 +4,8 @@ import Image from 'next/image';
 import Prev from '../../assets/Previous.svg';
 import Next from '../../assets/Next.svg';
 import CompletedBoardingPass from './completedCollection';
+import EmptyCompleted from '../../components/mypage/emptyCompleted';
+import { CompletedCollectionData } from '@/types/types';
 
 const CompletedWrapper = styled.div`
   width: 1200px;
@@ -85,9 +87,15 @@ const CollectionList = styled.div`
   }
 `;
 
-const Completed = () => {
+interface CompletedProps {
+  completedCollections: CompletedCollectionData[];
+}
+
+const Completed: React.FC<CompletedProps> = ({ completedCollections }) => {
   const [itemsShown, setItemsShown] = useState<number>(4);
-  const [hoverStates, setHoverStates] = useState<boolean[]>(Array(4).fill(false));
+  const [hoverStates, setHoverStates] = useState<boolean[]>(
+    Array(4).fill(false),
+  );
 
   useEffect(() => {
     const updateItemsShown = () => {
@@ -130,15 +138,22 @@ const Completed = () => {
         </PageButton>
       </TitleWrapper>
       <CollectionList>
-        {Array.from({ length: itemsShown }).map((_, index) => (
-          <div
-            key={index}
-            onMouseEnter={() => handleMouseEnter(index)}
-            onMouseLeave={() => handleMouseLeave(index)}
-          >
-            <CompletedBoardingPass showHoverCollection={hoverStates[index]} />
-          </div>
-        ))}
+        {completedCollections.length > 0 ? (
+          completedCollections.slice(0, itemsShown).map((collection, index) => (
+            <div
+              key={collection.collectionId}
+              onMouseEnter={() => handleMouseEnter(index)}
+              onMouseLeave={() => handleMouseLeave(index)}
+            >
+              <CompletedBoardingPass
+                collection={collection}
+                showHoverCollection={hoverStates[index]}
+              />
+            </div>
+          ))
+        ) : (
+          <EmptyCompleted />
+        )}
       </CollectionList>
     </CompletedWrapper>
   );

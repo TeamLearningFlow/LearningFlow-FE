@@ -4,6 +4,7 @@ import Header from '@/components/header';
 import ProfileBanner from '@/components/mypage/profileBanner';
 import Tab from '@/components/mypage/mypageTabMenu';
 import Footer from '@/components/homeFooter';
+import { CompletedCollectionData } from '@/types/types';
 
 const DEFAULT_BANNER = 'linear-gradient(90deg, #5e52ff 0%, #383199 100%)';
 
@@ -29,6 +30,9 @@ const MyPage = () => {
   });
 
   const [recentlyWatched, setRecentlyWatched] = useState<EpisodeData[]>([]);
+  const [completedCollections, setCompletedCollections] = useState<
+    CompletedCollectionData[]
+  >([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -64,6 +68,10 @@ const MyPage = () => {
           setRecentlyWatched(
             response.data.result.recentlyWatchedEpisodeList || [],
           );
+
+          setCompletedCollections(
+            response.data.result.completedCollectionList || [],
+          );
         }
       } catch (error) {
         console.error(error);
@@ -77,7 +85,10 @@ const MyPage = () => {
     <>
       <Header />
       <ProfileBanner userInfo={userInfo} />
-      <Tab recentlyWatched={recentlyWatched} />
+      <Tab
+        recentlyWatched={recentlyWatched}
+        completedCollections={completedCollections}
+      />
       <Footer />
     </>
   );
