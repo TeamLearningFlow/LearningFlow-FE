@@ -237,10 +237,10 @@ const BlogArticle: React.FC<{
 }> = ({ episodeId }) => {
   const isTestMode = false; // 테스트용
   const [contentUrl, setContentUrl] = useState<string | null>('');
-  const [progress, setProgress] = useState<number>(0);
-  const [learningCompleted, setLearningCompleted] = useState<boolean>(false);
   const imgRef = useRef<HTMLImageElement>(null); // 이미지 참조
   const articleWrapperRef = useRef<HTMLDivElement>(null); // ArticleWrapper 참조
+  const [progress, setProgress] = useState<number>(0);
+  const [learningCompleted, setLearningCompleted] = useState<boolean>(false);
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const context = useContext(LearnContext);
 
@@ -258,6 +258,9 @@ const BlogArticle: React.FC<{
     if (savedProgress) {
       setProgress(Number(savedProgress));
       console.log('이전 수강 위치: ', Number(savedProgress));
+    } else {
+      setProgress(0);
+      console.log('처음 수강');
     }
 
     const fetchContent = async () => {
@@ -271,13 +274,13 @@ const BlogArticle: React.FC<{
         console.log('토큰: ', token);
         console.log('episodeId:', episodeId);
 
-        if (isTestMode) {
-          console.warn('테스트 모드 활성화 - Mock 데이터 사용');
-          setContentUrl(
-            `https://learningflow.s3.amazonaws.com/blog_screenshots/f11112d7206890ce2f859b9872f06c7f.png`,
-          );
-          return;
-        }
+        // if (isTestMode) {
+        //   console.warn('테스트 모드 활성화 - Mock 데이터 사용');
+        //   setContentUrl(
+        //     `https://learningflow.s3.amazonaws.com/blog_screenshots/f11112d7206890ce2f859b9872f06c7f.png`,
+        //   );
+        //   return;
+        // }
 
         // 블로그 API 호출
         const blogResponse = await axios.get(
@@ -312,7 +315,6 @@ const BlogArticle: React.FC<{
         } else {
           console.error('콘텐츠 API 응답 오류:', contentResponse);
         }
-        // }
       } catch (error) {
         console.error(
           '콘텐츠 로딩 오류:',
@@ -441,7 +443,7 @@ const BlogArticle: React.FC<{
             </ImgBox>
           </>
         ) : (
-          <p>로딩 중..</p>
+          <></>
         )}
       </ArticleWrapper>
     </>

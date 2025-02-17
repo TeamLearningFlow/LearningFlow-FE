@@ -40,7 +40,7 @@ export interface CollectionData {
   textCount: number;
   videoCount: number;
   resource: {
-    episodeId: number,
+    episodeId: number;
     episodeName: string;
     url: string;
     resourceSource: string;
@@ -54,6 +54,7 @@ export interface CollectionData {
 export default function CollectionPage() {
   const router = useRouter();
   const { collectionId } = router.query;
+  // const collectionId = 7; // 테스트용
   const [collection, setCollection] = useState<CollectionData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -64,54 +65,54 @@ export default function CollectionPage() {
     setSearchActive(active);
   };
 
-  const dummyData:  CollectionData = {
-    id: 1,
-    interestField: 'WEB_DEVELOPMENT',
-    title: `처음 배우는\n스프링 부트`,
-    creator: '김개발',
-    keywords: ['스프링부트', '웹개발'],
-    difficulties: [1, 2],
-    amount: 3,
-    runtime: 1,
-    textCount: 1,
-    videoCount: 2,
-    resource: [
-      {
-        episodeId: 1,
-        episodeName: '스프링 부트란?',
-        url: 'https://youtube.com/1',
-        resourceSource: 'youtube',
-        episodeNumber: 1,
-        progress: 100, //테스트용
-      },
-      {
-        episodeId: 2,
-        episodeName: '프로젝트 설정하기',
-        url: 'https://youtube.com/2',
-        resourceSource: 'youtube',
-        episodeNumber: 2,
-        progress: 100,
-      },
-      {
-        episodeId: 3,
-        episodeName: '첫 애플리케이션 만들기',
-        url: 'https://naver.com/3',
-        resourceSource: 'youtube',
-        episodeNumber: 3,
-        progress: 100,
-      },
-      {
-        episodeId: 4,
-        episodeName: '첫 애플리케이션 만들기',
-        url: 'https://tistory.com/4',
-        resourceSource: 'tistory',
-        episodeNumber: 4,
-        progress: 100,
-      }
-    ],
-    bookmarkCount: 1,
-    bookmarked: false,
-  };
+  // const dummyData:  CollectionData = {
+  //   id: 1,
+  //   interestField: 'WEB_DEVELOPMENT',
+  //   title: `처음 배우는\n스프링 부트`,
+  //   creator: '김개발',
+  //   keywords: ['스프링부트', '웹개발'],
+  //   difficulties: [1, 2],
+  //   amount: 3,
+  //   runtime: 1,
+  //   textCount: 1,
+  //   videoCount: 2,
+  //   resource: [
+  //     {
+  //       episodeId: 1,
+  //       episodeName: '스프링 부트란?',
+  //       url: 'https://youtube.com/1',
+  //       resourceSource: 'youtube',
+  //       episodeNumber: 1,
+  //       progress: 100, //테스트용
+  //     },
+  //     {
+  //       episodeId: 2,
+  //       episodeName: '프로젝트 설정하기',
+  //       url: 'https://youtube.com/2',
+  //       resourceSource: 'youtube',
+  //       episodeNumber: 2,
+  //       progress: 100,
+  //     },
+  //     {
+  //       episodeId: 3,
+  //       episodeName: '첫 애플리케이션 만들기',
+  //       url: 'https://naver.com/3',
+  //       resourceSource: 'youtube',
+  //       episodeNumber: 3,
+  //       progress: 100,
+  //     },
+  //     {
+  //       episodeId: 4,
+  //       episodeName: '첫 애플리케이션 만들기',
+  //       url: 'https://tistory.com/4',
+  //       resourceSource: 'tistory',
+  //       episodeNumber: 4,
+  //       progress: 100,
+  //     }
+  //   ],
+  //   bookmarkCount: 1,
+  //   bookmarked: false,
+  // };
 
   useEffect(() => {
     if (!collectionId) {
@@ -132,7 +133,7 @@ export default function CollectionPage() {
           setCollection(response.data.result);
           console.log('데이터 로드 성공:', response.data.result);
         } else {
-          setCollection(dummyData);
+          // setCollection(dummyData);
           console.log('데이터 로드 실패: 더미 데이터를 사용합니다.');
         }
       } catch (err: any) {
@@ -140,7 +141,7 @@ export default function CollectionPage() {
 
         if (err.response && err.response.status === 404) {
           console.log('404 에러: 해당 컬렉션을 찾을 수 없습니다.');
-          setCollection(dummyData);
+          // setCollection(dummyData);
         } else {
           console.log('서버 오류로 데이터를 불러올 수 없습니다.');
           setCollection(null);
@@ -178,11 +179,11 @@ export default function CollectionPage() {
         </div>
       ) : (
         <>
-          {collection && <CollectionInfo data={collection} />}
+          {collection && (
+            <CollectionInfo data={collection} collectionId={collectionId} />
+          )}
           <ContentWrapper>
-            {collection && (
-              <CollectionList collection={collection} />
-            )}
+            {collection && <CollectionList collection={collection} />}
           </ContentWrapper>
         </>
       )}

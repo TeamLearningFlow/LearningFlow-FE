@@ -77,8 +77,7 @@ const BottomWrapper = styled.div`
   @media (max-width: 560px) {
     padding: 0 10px;
   }
-`; 
-
+`;
 
 const interestFieldMap: Record<string, string> = {
   APP_DEVELOPMENT: '앱개발',
@@ -96,35 +95,47 @@ const interestFieldMap: Record<string, string> = {
 
 
 const LearnPage: React.FC = () => {
-  // const { episodeId } = useParams<{ episodeId: number }>();
-  // const { collectionId } = useParams<{ collectionId: number }>();
-  // const [collectionData, setCollectionData] = useState<CollectionData | null>(null);
   const [type, setType] = useState<'youtube' | 'blog' | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState<string>('');
   const [field, setField] = useState<string>('');
-  const [progress, setProgress] = useState(0);
   const [youtubeContent, setYoutubeContent] = useState<string>('');
   const context = useContext(LearnContext);
-
   const router = useRouter();
   const { episodeId, episodeData, collectionData } = router.query;
 
-  // episodeId를 string 타입에서 숫자 타입으로 변환
-  const episodeIdNumber = Array.isArray(episodeId)
-    ? Number(episodeId[0])
-    : Number(episodeId);
+  // episodeId를 숫자로 변환
+  const episodeIdNumber = Array.isArray(episodeId) ? Number(episodeId[0]) : Number(episodeId);
 
-  // episodeData와 collectionData를 JSON 파싱해서 사용할 준비
-  const EpisodeData = episodeData ? JSON.parse(episodeData as string) : null;
-  const CollectionData = collectionData
-    ? JSON.parse(collectionData as string)
-    : null;
+  // query로 전달받은 JSON 문자열을 파싱 (존재할 경우)
+  const parsedEpisodeData = episodeData ? JSON.parse(episodeData as string) : null;
+  const parsedCollectionData = collectionData ? JSON.parse(collectionData as string) : null;
 
-  const { isCompleted } = context.state;
-  const { setIsCompleted } = context.actions;
+  // episodeData가 존재하면 파싱된 데이터를 기반으로 상태 업데이트
+  useEffect(() => {
+    if (episodeData) {
+      try {
+        const parsedData = JSON.parse(episodeData as string);
+        if (parsedData.result.resourceType === 'VIDEO') {
+          setType('youtube');
+          setTitle(parsedData.result.urlTitle);
+          setField(parsedData.result.interestField);
+          setYoutubeContent(parsedData.result.episodeContents);
+        } else if (parsedData.result.resourceType === 'TEXT') {
+          setType('blog');
+          setTitle(parsedData.result.urlTitle);
+          setField(parsedData.result.interestField);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error('episodeData 파싱 실패:', error);
+      }
+    } else if (episodeId) {
+      // episodeData가 없으면 백엔드에서 데이터를 가져옴
+      checkResourceType();
+    }
+  }, [episodeData, episodeId]);
 
-  // resource type을 확인하는 비동기 함수
   const checkResourceType = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -141,10 +152,10 @@ const LearnPage: React.FC = () => {
         setTitle(youtubeResponse.data.result.urlTitle);
         setField(youtubeResponse.data.result.interestField);
         setYoutubeContent(youtubeResponse.data.result.episodeContents);
-        return; // YouTube가 확인되었으면 종료
+        setLoading(false);
+        return;
       }
 
-      // YouTube가 아니면 Blog 조회
       const blogResponse = await axios.get(
         `http://onboarding.p-e.kr:8080/resources/${episodeId}/blog`,
         { headers },
@@ -168,25 +179,19 @@ const LearnPage: React.FC = () => {
   };
 
   useEffect(() => {
-    if (episodeId) {
-      checkResourceType();
-    }
-  }, [episodeId]);
-
-  useEffect(() => {
     console.log(`현재 에피소드 ID: ${episodeIdNumber}`);
   }, [episodeIdNumber]);
 
   return (
     <PageWrapper>
       <Header />
-      {CollectionData &&
-        CollectionData.title &&
-        CollectionData.interestField && (
+      {parsedCollectionData &&
+        parsedCollectionData.title &&
+        parsedCollectionData.interestField && (
           <TitleBar
             data={{
-              title: CollectionData.title,
-              interestField: interestFieldMap[CollectionData.interestField],
+              title: parsedCollectionData.title,
+              interestField: interestFieldMap[parsedCollectionData.interestField],
             }}
           />
         )}
@@ -206,44 +211,40 @@ const LearnPage: React.FC = () => {
       ) : (
         <BodyWrapper>
           <TopWrapper>
-            {CollectionData && episodeId && (
+            {parsedCollectionData && episodeId && (
               <>
                 {type === 'youtube' ? (
-                  <>
-                    {console.log('LearnPage youtubeContent:', youtubeContent)}
-                    <Article
-                      key={Array.isArray(episodeId) ? episodeId[0] : episodeId}
-                      videoId={youtubeContent}
-                      isCompleted={isCompleted}
-                    />
-                  </>
+                  <Article
+                    videoId={youtubeContent}
+                    isCompleted={context.state.isCompleted}
+                  />
                 ) : (
                   <BlogArticle
-                    key={Array.isArray(episodeId) ? episodeId[0] : episodeId}
                     episodeId={episodeIdNumber}
-                    isCompleted={isCompleted}
+                    isCompleted={context.state.isCompleted}
+                  />
+                )}
+                {parsedEpisodeData && (
+                  <ClassTitle
+                    episodeId={episodeIdNumber}
+                    episodeData={parsedEpisodeData}
+                    isCompleted={context.state.isCompleted}
                   />
                 )}
               </>
             )}
-
-            {CollectionData && EpisodeData && episodeId && (
-              <ClassTitle
-                episodeId={episodeIdNumber}
-                episodeData={EpisodeData}
-                isCompleted={isCompleted}
-              />
-            )}
           </TopWrapper>
           <MidWrapper>
-            <Note episodeId={episodeIdNumber} />
+            {parsedCollectionData && episodeId && (
+              <Note episodeId={episodeIdNumber} />
+            )}
           </MidWrapper>
           <BottomWrapper>
-            {CollectionData && (
+            {parsedCollectionData && (
               <ClassList
-                resource={CollectionData.resource}
+                resource={parsedCollectionData.resource}
                 currentEpisode={episodeIdNumber}
-                collectionData={CollectionData}
+                collectionData={parsedCollectionData}
               />
             )}
           </BottomWrapper>
@@ -254,4 +255,3 @@ const LearnPage: React.FC = () => {
 };
 
 export default LearnPage;
-  

@@ -10,7 +10,7 @@ import BookmarkIcon from '../../assets/bookmark.svg';
 import BookmarkFilledIcon from '../../assets/bookmarkFilled.svg';
 import HoverBackgroundTop from '../../assets/hover-backgroundTopS.svg';
 import HoverBackground from '../../assets/hover-background.svg';
-import Plane from '../../assets/plane.svg';
+import Plane from '../../assets/plane_S.svg';
 import Circle from '../../assets/circle.svg';
 import Calendar from '../../assets/calendarIcon.svg';
 

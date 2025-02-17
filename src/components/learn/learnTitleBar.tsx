@@ -87,13 +87,13 @@ interface TitleBarProps {
 const TitleBar: React.FC<TitleBarProps> = ({ data }) => {
   return (
     <TitleWrapper>
-      <LineIconWrapper>{/* <LineIcon /> */}|</LineIconWrapper>
+      <LineIconWrapper>|</LineIconWrapper>
       <TitleBox>
-        {data.title} <TitleDot>·</TitleDot>
-        {data.interestField}
+        {data.title} <TitleDot>·</TitleDot> {data.interestField}
       </TitleBox>
     </TitleWrapper>
   );
 };
+
 
 export default TitleBar;

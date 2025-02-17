@@ -13,6 +13,7 @@ import YoutubeIcon from '../../assets/platformicon/youtube_nostroke_ic.svg';
 import line from '../../assets/Line.svg';
 import dot from '../../assets/dot.svg';
 import plane from '../../assets/Airplane.svg';
+import { CgPathCrop } from 'react-icons/cg';
 
 interface CollectionData {
   id: number;
@@ -35,15 +36,9 @@ interface CollectionData {
   bookmarked: boolean;
 }
 
-const difficultyMap: { [key: number]: string } = {
-  1: '입문자',
-  2: '초급자',
-  3: '중급자',
-  4: '실무',
-};
-
 interface CollectionInfoProps {
   data: CollectionData;
+  collectionId: number;
 }
 
 const interestFieldMap: Record<string, string> = {
@@ -63,15 +58,18 @@ const interestFieldMap: Record<string, string> = {
 const imageSources = [
   { src: YoutubeIcon, alt: 'youtube', show: false },
   { src: TistoryIcon, alt: 'tistory', show: false },
-  { src: NaverblogIcon, alt: 'blog', show: true },
-  { src: VelogIcon, alt: 'velog', show: true },
+  { src: NaverblogIcon, alt: 'blog', show: false },
+  { src: VelogIcon, alt: 'velog', show: false },
 ];
 
-const CollectionInfo: React.FC<CollectionInfoProps> = ({ data }) => {
-  // const collecetionId = useParams();
-  const collectionId = 4;
+const CollectionInfo: React.FC<CollectionInfoProps> = ({
+  data,
+  collectionId,
+}) => {
   const [isHovered, setIsHovered] = useState(false);
-  // const [isBookMarked, setIsBookMarked] = useState<boolean>(false);
+  const [isBookMarked, setIsBookMarked] = useState<boolean>(false);
+  const [departureLabel, setDepartureLabel] = useState('');
+  const [arrivalLabel, setArrivalLabel] = useState('');
 
   // resourceSource 값들을 배열로 추출
   const resourceSources = data.resource.map((item) => item.resourceSource);
@@ -95,41 +93,137 @@ const CollectionInfo: React.FC<CollectionInfoProps> = ({ data }) => {
 
   const availableImages = updatedImages.filter((image) => image.show); // show==true 이미지들만 필터링
 
+  const fetchBookmarkStatus = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+
+      const response = await axios.get(
+        `http://onboarding.p-e.kr:8080/collections/${collectionId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Refresh-Token': `${token}`,
+          },
+        },
+      );
+
+      if (response.status === 200) {
+        const bookmarkedStatus = response.data?.result?.bookmarked ?? false;
+        setIsBookMarked(bookmarkedStatus); // 서버 값 반영 + undefined 방지
+        localStorage.setItem(
+          `bookmark_${collectionId}`,
+          JSON.stringify(bookmarkedStatus), // 서버에서 받은 값 반영
+        );
+      }
+    } catch (err: any) {
+      console.error(
+        '북마크 상태 가져오기 오류:',
+        err.response?.data || err.message,
+      );
+    }
+  };
+
   const handleBookMarked = async () => {
     const token = localStorage.getItem('token');
     if (!token) {
       alert('로그인이 필요합니다.');
       console.log('토큰이 없습니다.');
       return;
-    } else {
-      try {
-        const response = await axios.post(
-          `http://onboarding.p-e.kr:8080/collections/${collectionId}/likes`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              'Refresh-Token': `${token}`, // 확인
-            },
-          },
-        );
+    }
 
-        if (response.status === 200) {
-          // setIsBookMarked(!isBookMarked);
-          // console.log('북마크 상태 변경: ', !isBookMarked);
-          data.bookmarked = !data.bookmarked;
-          console.log('북마크 상태 변경: ', data.bookmarked);
-        }
-      } catch (err: any) {
+    try {
+      const response = await axios.post(
+        `http://onboarding.p-e.kr:8080/collections/${collectionId}/likes`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Refresh-Token': `${token}`,
+          },
+        },
+      );
+
+      console.log('북마크 상태 응답:', response.data);
+
+      if (response.status === 200) {
+        // 상태 업데이트 전에 반영될 값을 localStorage에 저장
+        const newBookmarkStatus = !isBookMarked;
+        setIsBookMarked(newBookmarkStatus);
+        console.log('isBookMarked: ', newBookmarkStatus); // 최신 상태
+        localStorage.setItem(
+          `bookmark_${collectionId}`,
+          JSON.stringify(newBookmarkStatus), // 반영된 상태로 저장
+        );
+      }
+    } catch (err: any) {
+      if (err.response?.status === 401) {
+        alert('로그인이 필요합니다.');
+        console.log('로그인 필요');
+      } else {
         console.log('Error: ', err.response?.data || err.message);
         if (err.response?.data?.message) {
           console.log('Error Message:', err.response.data.message);
         } else {
-          console.log('북마크 등록 중 오류 발생');
+          console.log('북마크 오류 발생');
         }
       }
     }
   };
+
+  // 컴포넌트가 마운트될 때 북마크 상태 로컬 스토리지에서 불러오기
+  useEffect(() => {
+    const storedBookmarkStatus = localStorage.getItem(
+      `bookmark_${collectionId}`,
+    );
+    if (storedBookmarkStatus) {
+      setIsBookMarked(JSON.parse(storedBookmarkStatus));
+    } else {
+      fetchBookmarkStatus(); // 서버에서 가져오기 (최초 로딩 시)
+    }
+  }, []);
+
+  const setDifficultyLabel = () => {
+    const equals = (a: number[], b: number[]) =>
+      a.length === b.length && a.every((v, i) => v === b[i]);
+
+    const level = data.difficulties.sort();
+
+    if (equals(level, [1])) {
+      setDepartureLabel('입문자');
+      setArrivalLabel('초급자');
+      return;
+    }
+    if (equals(level, [2])) {
+      setDepartureLabel('초급자');
+      setArrivalLabel('중급자');
+      return;
+    }
+    if (equals(level, [3])) {
+      setDepartureLabel('중급자');
+      setArrivalLabel('마스터');
+      return;
+    }
+    if (equals(level, [1, 2])) {
+      setDepartureLabel('입문·초급자');
+      setArrivalLabel('중급자');
+      return;
+    }
+    if (equals(level, [2, 3])) {
+      setDepartureLabel('초급·중급자');
+      setArrivalLabel('마스터');
+      return;
+    }
+    if (equals(level, [1, 2, 3])) {
+      setDepartureLabel('입문·초급·중급자');
+      setArrivalLabel('마스터');
+      return;
+    }
+  };
+
+  useEffect(() => {
+    setDifficultyLabel();
+  }, []);
 
   // 줄바꿈을 <br /> 태그로 변환하는 함수
   const renderTitleWithLineBreaks = (title: string) => {
@@ -156,8 +250,8 @@ const CollectionInfo: React.FC<CollectionInfoProps> = ({ data }) => {
           <HoverColletionLeftIMG isHovered={isHovered}></HoverColletionLeftIMG>
           <BookMarkedBox onClick={handleBookMarked}>
             <BookMarkedIMG
-              src={data.bookmarked ? yesBookMarked : noBookMarked}
-              alt={data.bookmarked ? '북마크됨' : '북마크 안 됨'}
+              src={isBookMarked ? yesBookMarked : noBookMarked}
+              alt={isBookMarked ? '북마크됨' : '북마크 안 됨'}
               isHovered={isHovered}
               width={30}
               height={30}
@@ -217,9 +311,7 @@ const CollectionInfo: React.FC<CollectionInfoProps> = ({ data }) => {
         <Departure>
           <DepartureLeft>
             <DepartureLetter>Departure</DepartureLetter>
-            <DepartureLevel>
-              {difficultyMap[data.difficulties?.[0]] || '알 수 없음'}
-            </DepartureLevel>
+            <DepartureLevel>{departureLabel || '알 수 없음'}</DepartureLevel>
           </DepartureLeft>
           <DepartureCenter>
             <DepartureToArrivalLetter>
@@ -231,9 +323,7 @@ const CollectionInfo: React.FC<CollectionInfoProps> = ({ data }) => {
           </DepartureCenter>
           <DepartureRight>
             <ArrivalLetter>Arrival</ArrivalLetter>
-            <ArrivalLevel>
-              {difficultyMap[data.difficulties?.[1]] || '알 수 없음'}
-            </ArrivalLevel>
+            <ArrivalLevel>{arrivalLabel || '알 수 없음'}</ArrivalLevel>
           </DepartureRight>
         </Departure>
       </CollectionTicket>
