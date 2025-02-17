@@ -18,6 +18,7 @@ import {
   SkeletonClassTitle,
   SkeletonArticle,
 } from '@/components/skeleton/skeleton_learnComponents';
+import BlogArticle from '@/components/learn/articleFolder/blogArticle';
 
 const PageWrapper = styled.div``;
 
@@ -103,7 +104,9 @@ const LearnPage: React.FC = () => {
     const [title, setTitle] = useState<string>('');
     const [field, setField] = useState<string>('');
     const [progress, setProgress] = useState(0);
+    const [youtubeContent, setYoutubeContent] = useState<string>('');
     const context = useContext(LearnContext);
+    
   
     const router = useRouter();
     const { episodeId, episodeData, collectionData } = router.query;
@@ -114,16 +117,6 @@ const LearnPage: React.FC = () => {
     // episodeData와 collectionData를 JSON 파싱해서 사용할 준비
     const EpisodeData = episodeData ? JSON.parse(episodeData as string) : null;
     const CollectionData = collectionData ? JSON.parse(collectionData as string) : null;
-
-
-
-    useEffect(() => {
-      if (EpisodeData && EpisodeData.episodeName) {
-        console.log("강의 제목:", EpisodeData.episodeName);  // EpisodeName이 정상적으로 로드되는지 확인
-      } else {
-        console.log("EpisodeData 또는 episodeName이 없어요.");
-      }
-    }, [EpisodeData]);
     
 
     const { isCompleted } = context.state;
@@ -141,9 +134,11 @@ const LearnPage: React.FC = () => {
         );
   
         if (youtubeResponse.data.result.resourceType === 'VIDEO') {
+          console.log("유튜브입니다.");          
           setType('youtube');
           setTitle(youtubeResponse.data.result.urlTitle);
           setField(youtubeResponse.data.result.interestField);
+          setYoutubeContent(youtubeResponse.data.result.episodeContents);
           return; // YouTube가 확인되었으면 종료
         }
   
@@ -154,6 +149,7 @@ const LearnPage: React.FC = () => {
         );
   
         if (blogResponse.data.result.resourceType === 'TEXT') {
+          console.log("블로그입니다.");
           setType('blog');
           setTitle(blogResponse.data.result.urlTitle);
           setField(blogResponse.data.result.interestField);
@@ -206,9 +202,13 @@ const LearnPage: React.FC = () => {
         ) : (
           <BodyWrapper>
             <TopWrapper>
-              {CollectionData && episodeId && (
-                <Article episodeId={episodeIdNumber} isCompleted={isCompleted} />
-              )}
+            {CollectionData && episodeId && (
+              type === 'youtube' ? (
+                <Article videoId={youtubeContent} isCompleted={isCompleted} />
+              ) : (
+                <BlogArticle episodeId={episodeIdNumber} isCompleted={isCompleted} />
+              )
+            )}
               {CollectionData && EpisodeData && episodeId && (
                 <ClassTitle
                   episodeId={episodeIdNumber}

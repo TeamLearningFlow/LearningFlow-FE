@@ -1,23 +1,37 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+ 
 
-const YoutubeArticle: React.FC<{
-  episodeId?: number;
-  onProgressChange: (progress: number) => void;
-}> = ({ episodeId, onProgressChange }) => {
+interface YoutubeArticleProps {
+  videoId?: string;
+  onProgressChange?: (progress: number) => void;
+}
+
+
+const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
+  videoId,
+  onProgressChange = () => {},
+}) => {
   const [progress, setProgress] = useState<number>(0);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const playerRef = useRef<any>(null); // YouTube Player 인스턴스 저장
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const isTestMode = false;
 
+  // YouTube IFrame API 클린업 처리
+  useEffect(() => {
+    return () => {
+      stopTrackingProgress();
+    };
+  }, []);
+
   // 유튜브 iframe 로드 후 API 연동
   useEffect(() => {
-    if (!episodeId) return;
+    if (!videoId) return;
 
     const contentUrl = isTestMode
       ? 'https://www.youtube-nocookie.com/embed/LclObYwGj90?enablejsapi=1'
-      : `https://www.youtube.com/embed/${episodeId}?enablejsapi=1`;
+      : `${videoId}?enablejsapi=1`;
 
     if (iframeRef.current) {
       iframeRef.current.src = contentUrl;
@@ -36,7 +50,7 @@ const YoutubeArticle: React.FC<{
     window.onYouTubeIframeAPIReady = () => {
       initializePlayer();
     };
-  }, [episodeId]);
+  }, [videoId]);
 
   // YouTube Player 초기화
   const initializePlayer = () => {
