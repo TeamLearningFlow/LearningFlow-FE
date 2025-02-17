@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import BoardingPassContainer from '../../assets/S_Background.svg';
 import CollectionImage from '../../assets/boardingpassS.svg';
-import Plane from '../../assets/plane.svg';
+import Plane from '../../assets/plane_S.svg';
 import { RecentLearning } from './recentCollection';
 
 const ColumnFlexDiv = styled.div`
@@ -188,6 +188,10 @@ const Level = styled.span`
   white-space: nowrap;
 `;
 
+const RuntimeWrapper = styled(ColumnFlexDiv)`
+  gap: 2.95px;
+`;
+
 const Step = styled.span`
   color: #5e52ff;
   text-align: center;
@@ -203,8 +207,8 @@ const PlaneWrapper = styled(RowFlexSpan)`
   align-items: center;
 `;
 
-const PlaneLine = styled.span`
-  width: 45px;
+const PlaneLine = styled.span<{ width: number }>`
+  width: ${(props) => props.width}px;
   height: 0.25px;
   background: #5e52ff;
 `;
@@ -230,13 +234,14 @@ const BoardingPassBottom = ({
 }) => {
   const [departureLabel, setDepartureLabel] = useState('');
   const [arrivalLabel, setArrivalLabel] = useState('');
+  const [lineWidth, setLineWidth] = useState(0);
+
+  const equals = (a: number[], b: number[]) =>
+    a?.length === b.length && a.every((v, i) => v === b[i]);
+
+  const level = collectionInfo?.difficulties.sort();
 
   const setDifficultyLabel = () => {
-    const equals = (a: number[], b: number[]) =>
-      a?.length === b.length && a.every((v, i) => v === b[i]);
-
-    const level = collectionInfo?.difficulties.sort();
-
     if (equals(level, [1])) {
       setDepartureLabel('입문자');
       setArrivalLabel('초급자');
@@ -269,8 +274,26 @@ const BoardingPassBottom = ({
     }
   };
 
+  const setPlaneLineWidth = () => {
+    if (equals(level, [1]) || equals(level, [2]) || equals(level, [3])) {
+      setLineWidth(61);
+      return;
+    }
+
+    if (equals(level, [1, 2]) || equals(level, [2, 3])) {
+      setLineWidth(52.5);
+      return;
+    }
+
+    if (equals(level, [1, 2, 3])) {
+      setLineWidth(37.5);
+      return;
+    }
+  };
+
   useEffect(() => {
     setDifficultyLabel();
+    setPlaneLineWidth();
   }, []);
 
   return (
@@ -279,14 +302,14 @@ const BoardingPassBottom = ({
         <DepartureArrival>Departure</DepartureArrival>
         <Level>{departureLabel}</Level>
       </Departure>
-      <ColumnFlexDiv>
+      <RuntimeWrapper>
         <Step>{collectionInfo?.runtime} 시간</Step>
         <PlaneWrapper>
-          <PlaneLine></PlaneLine>
+          <PlaneLine width={lineWidth} />
           <Image src={Plane} alt="plane" style={{ margin: '0 5px' }} />
-          <PlaneLine></PlaneLine>
+          <PlaneLine width={lineWidth} />
         </PlaneWrapper>
-      </ColumnFlexDiv>
+      </RuntimeWrapper>
       <Arrival>
         <DepartureArrival>Arrival</DepartureArrival>
         <Level>{arrivalLabel}</Level>
