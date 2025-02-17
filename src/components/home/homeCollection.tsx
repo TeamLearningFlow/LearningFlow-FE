@@ -106,7 +106,11 @@ export type RecommendedCollection = {
   runtime: number;
   textCount: number;
   videoCount: number;
+  resourceSourceTypes: string[];
   resource: {
+    completed: boolean;
+    today: boolean;
+    episodeId: number;
     episodeNumber: number;
     episodeName: string;
     resourceSource: string;
