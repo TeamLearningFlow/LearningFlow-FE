@@ -6,7 +6,7 @@ import LogoGraphic from '../../assets/logoMark.svg';
 import Airplane from '../../assets/homeAirplane.svg';
 import Window from '../../assets/window.svg';
 import WindowIn from '../../assets/windowIn.gif';
-import Search from '../../assets/searchIcon.svg';
+import Search from '../../assets/searchicon.svg';
 
 const TopWrapper = styled.div`
   display: flex;

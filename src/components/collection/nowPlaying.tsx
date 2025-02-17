@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import { useRouter } from "next/router";
-import axios from "axios";
+import { useRouter } from 'next/router';
+import axios from 'axios';
 import LoginAuthModal from '../modal/loginModal';
 import CurrentPlayButton from '../../assets/currentPlayButton.svg';
 import HoverPlayButton from '../../assets/hoverPlayButton.svg';
@@ -17,52 +17,63 @@ import VelogActiveIcon from '../../assets/platformicon/velog_active_ic.svg';
 import TistoryActiveIcon from '../../assets/platformicon/tistory_active_ic.svg';
 import { CollectionData } from '@/pages/collection/[collectionId]';
 
-
 interface ClassIndexProps {
   classData: CollectionData['resource'][0];
   collection: CollectionData;
 }
 
-const NowPlaying: React.FC<ClassIndexProps> = ({ classData,collection }) => {
+const NowPlaying: React.FC<ClassIndexProps> = ({ classData, collection }) => {
   const router = useRouter();
   const [isHovered, setIsHovered] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
-
   const handleClick = async () => {
     const episodeId = classData.episodeId;
-  
-  try {
-    const token = localStorage.getItem("token");
-    const headers = token ? { Authorization: `Bearer ${token}` } : {};
-    
-    // resourceSource에 따라 API 경로 설정
-    const resourceType = classData.resourceSource === "youtube" ? "youtube" : "blog";
-    const apiUrl = `http://onboarding.p-e.kr:8080/resources/${episodeId}/${resourceType}`;
 
-    // API 요청
-    const response = await axios.get(apiUrl, { headers });
+    try {
+      const token = localStorage.getItem('token');
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-    if (response.status === 200) {
-      const data = response.data;
-      console.log("API 응답 데이터:", data);
-      const episodeDataWithName = { ...data, episodeName: classData.episodeName };
-      router.push({
-        pathname: `/learn/${episodeId}`,
-        query: {
-          episodeData: JSON.stringify(episodeDataWithName),
-          collectionData: JSON.stringify(collection),
-        },
-      });
+      // resourceSource에 따라 API 경로 설정
+      const resourceType =
+        classData.resourceSource === 'youtube' ? 'youtube' : 'blog';
+      const apiUrl = `http://onboarding.p-e.kr:8080/resources/${episodeId}/${resourceType}`;
+
+      // API 요청
+      const response = await axios.get(apiUrl, { headers });
+
+      if (response.status === 200) {
+        const data = response.data;
+        console.log('API 응답 데이터:', data);
+        const episodeDataWithName = {
+          ...data,
+          episodeName: classData.episodeName,
+        };
+        router.push({
+          pathname: `/learn/${episodeId}`,
+          query: {
+            episodeData: JSON.stringify(episodeDataWithName),
+            collectionData: JSON.stringify(collection),
+          },
+        });
+      }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          setIsLoginModalOpen(true);
+        } else {
+          console.error(
+            '강의 불러오기 실패:',
+            error.response?.data || error.message,
+          );
+        }
+      } else if (error instanceof Error) {
+        console.error('강의 불러오기 실패:', error.message);
+      } else {
+        console.error('알 수 없는 오류 발생:', error);
+      }
     }
-  } catch (error: any) {
-    if (error.response?.status === 401) {
-      setIsLoginModalOpen(true); // 로그인 모달 열기
-    } else {
-      console.error("강의 불러오기 실패:", error);
-    }
-  }
-};
+  };
 
   const getPlatformIcon = () => {
     const activeIcons = {
@@ -79,10 +90,12 @@ const NowPlaying: React.FC<ClassIndexProps> = ({ classData,collection }) => {
       velog: VelogHoverIcon,
     };
 
-    const platform = classData.resourceSource;
+    const platform = classData.resourceSource as keyof typeof activeIcons;
     const icon = isHovered ? hoverIcons[platform] : activeIcons[platform];
-    
-    return icon ? <Image src={icon} alt={platform} fill style={{ objectFit: "contain" }} /> : null;
+
+    return icon ? (
+      <Image src={icon} alt={platform} fill style={{ objectFit: 'contain' }} />
+    ) : null;
   };
 
   return (
@@ -131,7 +144,6 @@ const NowPlaying: React.FC<ClassIndexProps> = ({ classData,collection }) => {
 
 export default NowPlaying;
 
-
 const ComponentWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -169,14 +181,13 @@ const IndexIcon = styled.div`
   }
 `;
 
-
 const RadioWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   width: 60px;
   min-height: 100px;
-  
+
   @media (max-width: 850px) {
     min-height: 70px;
   }

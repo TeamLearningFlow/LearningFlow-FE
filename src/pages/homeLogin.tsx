@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Header from '../components/header';
 import Banner from '../components/home/homeBanner';
 import Footer from '../components/homeFooter';
-import HomeCollection from '../components/home/homeCollection';
-import RecentCollection from '../components/home/recentCollection';
-import HomeModal from '../components/modal/homeModal';
+// import HomeCollection from '../components/home/homeCollection';
+// import RecentCollection from '../components/home/recentCollection';
+// import HomeModal from '../components/modal/homeModal';
 
 const Wrapper = styled.div`
   display: flex;
@@ -17,14 +17,16 @@ const Wrapper = styled.div`
   background-color: #ffffff;
 `;
 
-const Main = styled.div`
+/* const Main = styled.div`
   text-align: center;
   padding: 20px;
-`;
+`; */
 
 const HomeLogin: React.FC = () => {
+  /* 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [nickname, setNickname] = useState('');
+  // const [nickname, setNickname] = useState('');
+  // const [collections, setCollections] = useState<RecommendedCollection[]>([]);
 
   useEffect(() => {
     // 닉네임 연동
@@ -32,10 +34,10 @@ const HomeLogin: React.FC = () => {
 
     if (storedNickname) {
       setNickname(storedNickname);
-    }
+    } */
 
-    // 회원가입 후 모달 표시 여부 확인
-    if (localStorage.getItem('isFromSignup') === 'true') {
+  // 회원가입 후 모달 표시 여부 확인
+  /* if (localStorage.getItem('isFromSignup') === 'true') {
       setIsModalOpen(true); // 모달 열기
       localStorage.removeItem('isFromSignup'); // 플래그 제거
     }
@@ -43,19 +45,17 @@ const HomeLogin: React.FC = () => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-  };
+  }; */
 
   return (
     <>
       <Header />
       <Banner />
-      <RecentCollection />
-      <HomeCollection nickname={nickname} />
+      {/* <RecentCollection />
+      <HomeCollection nickname={nickname}/> */}
       <Wrapper>
-        {isModalOpen && (
-          <HomeModal onClose={handleCloseModal} />
-        )}
-        {!isModalOpen && <Main></Main>}
+        {/* {isModalOpen && <HomeModal onClose={handleCloseModal} />}
+        {!isModalOpen && <Main></Main>} */}
       </Wrapper>
       <Footer />
     </>

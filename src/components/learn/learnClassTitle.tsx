@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { LearnContext } from '../../pages/context/LearnContext';
+import { LearnContext } from '../context/LearnContext';
 import axios from 'axios';
 import styled from 'styled-components';
 import Image from 'next/image';
@@ -7,7 +7,7 @@ import { FaCheck } from 'react-icons/fa6';
 import EffectUp from '../../assets/buttonEffectUp.svg';
 import EffectDown from '../../assets/buttonEffectDown.svg';
 import LearnModal from '../modal/learnModal';
-import { CollectionData } from '@/pages/collection/[collectionId]';
+// import { CollectionData } from '@/pages/collection/[collectionId]';
 
 const TitleWrapper = styled.div`
   display: flex;
@@ -175,6 +175,9 @@ const ClassTitle: React.FC<ClassTitleProps> = ({ episodeId, episodeData }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [progress, setProgress] = useState(0);
   const context = useContext(LearnContext);
+
+  if (!context) throw new Error('LearnContext를 찾을 수 없습니다.');
+
   const { isCompleted } = context.state;
   const { setIsCompleted } = context.actions;
 
@@ -187,12 +190,15 @@ const ClassTitle: React.FC<ClassTitleProps> = ({ episodeId, episodeData }) => {
 
     try {
       const token = localStorage.getItem('token');
-      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      const headers = {
+        Authorization: token ? `Bearer ${token}` : '',
+        'Content-Type': 'application/json',
+      };
 
       const response = await axios.post(
         `http://onboarding.p-e.kr:8080/resources/${episodeId}/update-complete`,
         { progress: 0 },
-        { headers, 'Content-Type': 'application/json' },
+        { headers },
       );
 
       if (response.status === 200 && response.data?.result?.isComplete) {

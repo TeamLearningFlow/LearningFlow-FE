@@ -1,7 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const emailAuthModal: React.FC = ({ onClose, onContinue }) => {
+interface EmailAuthModalProps {
+  onClose: () => void;
+  onContinue: () => void;
+}
+
+const emailAuthModal: React.FC<EmailAuthModalProps> = ({
+  onClose,
+  onContinue,
+}) => {
   return (
     <>
       <ModalWrapper>

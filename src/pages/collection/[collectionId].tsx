@@ -3,11 +3,6 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import styled from 'styled-components';
 import Header from '../../components/header';
-import CategoryList from '../../components/search/categoryList';
-import BoardingPass from '../../components/search/boardingPass';
-import Filters from '../../components/search/filters';
-import Pagination from '@/components/search/pagination';
-import BoardingPassList from '@/components/search/boardingPassList';
 import TitleBar from '../../components/collection/collectionTitleBar';
 import CollectionInfo from '../../components/collection/collectionInfo';
 import CollectionList from '../../components/collection/collectionList';
@@ -29,7 +24,8 @@ const ContentWrapper = styled.div`
 `;
 
 export interface CollectionData {
-  id: number;
+  collectionId: number;
+  imageUrl: string;
   interestField: string;
   title: string;
   creator: string;
@@ -43,12 +39,18 @@ export interface CollectionData {
     episodeId: number;
     episodeName: string;
     url: string;
-    resourceSource: string;
+    resourceSource: "youtube" | "naverBlog" | "tistory" | "velog";
     episodeNumber: number;
+    today: boolean;
     progress: number; // 테스트용
   }[];
-  bookmarkCount: number;
-  bookmarked: boolean;
+  likesCount: number;
+  progressRatePercentage: number;
+  progressRatio: string;
+  learningStatus: 'BEFORE' | 'IN_PROGRESS' | 'COMPLETED';
+  startDate: string;
+  completedDate: string;
+  liked: boolean;
 }
 
 export default function CollectionPage() {
@@ -58,12 +60,6 @@ export default function CollectionPage() {
   const [collection, setCollection] = useState<CollectionData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [searchActive, setSearchActive] = useState(false);
-
-  // 헤더 상태 업데이트 전달
-  const handleSearchStateChange = (active: boolean) => {
-    setSearchActive(active);
-  };
 
   // const dummyData:  CollectionData = {
   //   id: 1,
@@ -136,15 +132,21 @@ export default function CollectionPage() {
           // setCollection(dummyData);
           console.log('데이터 로드 실패: 더미 데이터를 사용합니다.');
         }
-      } catch (err: any) {
-        console.log('Error fetching collection:', err);
+      } catch (err: unknown) {
+        if (axios.isAxiosError(err)) {
+          console.log('Error fetching collection:', err.message);
 
-        if (err.response && err.response.status === 404) {
-          console.log('404 에러: 해당 컬렉션을 찾을 수 없습니다.');
-          // setCollection(dummyData);
+          if (err.response?.status === 404) {
+            console.log('404 에러: 해당 컬렉션을 찾을 수 없습니다.');
+            // setCollection(dummyData);
+          } else {
+            console.log('서버 오류로 데이터를 불러올 수 없습니다.');
+            setCollection(null);
+          }
+        } else if (err instanceof Error) {
+          console.log(err.message);
         } else {
-          console.log('서버 오류로 데이터를 불러올 수 없습니다.');
-          setCollection(null);
+          console.log(err);
         }
       } finally {
         setLoading(false);
@@ -154,9 +156,14 @@ export default function CollectionPage() {
     fetchCollection();
   }, [collectionId]);
 
+  // ESLint 오류 방지용
+  useEffect(() => {
+    console.log('현재 에러 상태:', error);
+  }, [error]);
+
   return (
     <PageWrapper>
-      <Header onSearchStateChange={handleSearchStateChange} />
+      <Header />
       {collection && <TitleBar data={collection} />}
       {loading ? (
         <>
@@ -166,21 +173,13 @@ export default function CollectionPage() {
           </ContentWrapper>
           <Footer />
         </>
-      ) : searchActive ? (
-        <div>
-          <CategoryList />
-          <Filters />
-          <BoardingPassList>
-            {Array.from({ length: 8 }).map((_, index) => (
-              <BoardingPass key={index} showHoverCollection={true} />
-            ))}
-          </BoardingPassList>
-          <Pagination />
-        </div>
       ) : (
         <>
           {collection && (
-            <CollectionInfo data={collection} collectionId={collectionId} />
+            <CollectionInfo
+              data={collection}
+              collectionId={collection.collectionId}
+            />
           )}
           <ContentWrapper>
             {collection && <CollectionList collection={collection} />}

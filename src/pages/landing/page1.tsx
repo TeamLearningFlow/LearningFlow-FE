@@ -181,7 +181,7 @@ const Page1: React.FC<{
   onNext: (data: {
     nickname: string;
     job: string;
-    imgUrl: string | null;
+    imgProfileUrl: string | null;
   }) => void;
 }> = ({ onNext }) => {
   const [isHovered, setIsHovered] = useState(false); // 편집 아이콘 hover
@@ -190,7 +190,7 @@ const Page1: React.FC<{
   const [isNicknameValid, setIsNicknameValid] = useState<boolean | null>(null);
   const [job, setJob] = useState('');
   const [isJobDropdownOpen, setIsJobDropdownOpen] = useState(false);
-  const [imgUrl, setImgUrl] = useState<string | null>(null); // null 값일 때 디폴트
+  const [imgProfileUrl, setImgProfileUrl] = useState<string | null>(null); // null 값일 때 디폴트
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // 부모에게 전달 할 string 정의
@@ -291,7 +291,7 @@ const Page1: React.FC<{
       if (response.data?.result) {
         const uploadedImageUrl = response.data.result;
         console.log('이미지 URL:', uploadedImageUrl);
-        setImgUrl(uploadedImageUrl); // 상태 업데이트
+        setImgProfileUrl(uploadedImageUrl); // 상태 업데이트
         localStorage.setItem('profileImgUrl', uploadedImageUrl); // 로컬 스토리지 업데이트
       } else {
         console.error('이미지 URL을 찾을 수 없습니다.');
@@ -308,7 +308,7 @@ const Page1: React.FC<{
       <Content>
         <Title>닉네임과 직업을 설정해주세요</Title>
         <ProfileContainer>
-          <UploadedImage src={imgUrl || Guest.src} alt="profileImage" />
+          <UploadedImage src={imgProfileUrl || Guest.src} alt="profileImage" />
 
           <PencilButton
             onMouseEnter={() => setIsHovered(true)} // 마우스가 올려졌을 때
@@ -393,7 +393,7 @@ const Page1: React.FC<{
             active={isNextButtonActive}
             onClick={() => {
               if (isNextButtonActive) {
-                onNext({ nickname, job, imgUrl }); // 부모 컴포넌트로 직업 값 전달
+                onNext({ nickname, job, imgProfileUrl }); // 부모 컴포넌트로 직업 값 전달
               }
             }}
           >

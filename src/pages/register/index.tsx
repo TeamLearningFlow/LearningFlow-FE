@@ -167,12 +167,19 @@ const RegisterPage: React.FC = () => {
         localStorage.setItem('password', password);
         console.log('이메일 인증 페이지로 이동');
       }
-    } catch (err: any) {
-      console.log('Error:', err.response?.data || err.message);
-      if (err.response?.data?.message) {
-        console.log('Error Message:', err.response.data.message);
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        console.log('Error:', err.response?.data || err.message);
+
+        if (err.response?.data?.message) {
+          console.log('Error Message:', err.response.data.message);
+        } else {
+          console.log('회원가입 중 오류 발생');
+        }
+      } else if (err instanceof Error) {
+        console.log('Error:', err.message);
       } else {
-        console.log('회원가입 중 오류 발생');
+        console.log(err);
       }
     }
   };

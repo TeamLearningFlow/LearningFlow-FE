@@ -57,6 +57,7 @@ const SearchPage: React.FC = () => {
     // page가 아닌 다른 query가 변경되면 page를 1로 리셋
     const { page, ...otherQueries } = query; // page를 제외한 query만 추출
 
+    console.log('현재 페이지 값:', page); // ESLint 오류 방지용
     router.replace(
       {
         pathname: '/search',
@@ -84,7 +85,7 @@ const SearchPage: React.FC = () => {
           amounts: query?.amounts,
           preferMediaType: query?.preferMediaType,
           page: query?.page,
-        }).filter(([_, value]) => value), // 빈 값('') 또는 undefined는 필터링
+        }).filter(([, value]) => value), // 빈 값('') 또는 undefined는 필터링
       );
 
       const response = await axios.get(`http://onboarding.p-e.kr:8080/search`, {

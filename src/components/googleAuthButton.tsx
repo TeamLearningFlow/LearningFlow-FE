@@ -62,6 +62,11 @@ const GoogleAuthButton = ({ text }: { text: string }) => {
       'width=600,height=800',
     );
 
+    if (!popup) {
+      console.error('팝업을 열 수 없습니다.');
+      return;
+    }
+
     window.addEventListener('message', (event) => {
       if (event.origin !== 'http://onboarding.p-e.kr:8080') {
         return;

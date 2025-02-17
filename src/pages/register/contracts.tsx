@@ -19,7 +19,7 @@ const PageContainer = styled.div`
 
   @media (max-width: 850px) {
     padding: 100px 100px;
-  } 
+  }
 
   @media (max-width: 560px) {
     padding: 55px 40px;
@@ -83,8 +83,6 @@ const ContractTitle = styled.div`
   }
 `;
 
-
-
 const Contracts: React.FC = () => {
   {
     /* const handleBackToRegister = () => {
@@ -100,16 +98,14 @@ const Contracts: React.FC = () => {
           <ContractContainer>
             <ContractTitle>제1조(목적)</ContractTitle>
             <Textwrapper>
-              이 약관은 [Onboarding] (이하 "플랫폼")에서 제공하는 모든 서비스의
-              이용과 관련하여 플랫폼과 사용자 간의 권리, 의무, 책임사항을
-              규정합니다.
+              이 약관은 [Onboarding] (이하 &quot;플랫폼&quot;)에서 제공하는 모든
+              서비스의 이용과 관련하여 플랫폼과 사용자 간의 권리, 의무,
+              책임사항을 규정합니다.
             </Textwrapper>
           </ContractContainer>
 
           <ContractContainer>
-            <ContractTitle>
-              제2조(약관의 효력 및 변경)
-            </ContractTitle>
+            <ContractTitle>제2조(약관의 효력 및 변경)</ContractTitle>
             <Textwrapper>
               1. 본 약관은 플랫폼에 게시함으로써 효력이 발생합니다.
               <br />
@@ -121,9 +117,7 @@ const Contracts: React.FC = () => {
           </ContractContainer>
 
           <ContractContainer>
-            <ContractTitle>
-              제3조(이용계약의 체결)
-            </ContractTitle>
+            <ContractTitle>제3조(이용계약의 체결)</ContractTitle>
             <Textwrapper>
               1. 사용자는 플랫폼이 정한 절차에 따라 회원가입을 신청하고,
               플랫폼이 이를 승인함으로써 계약이 체결됩니다.
@@ -134,9 +128,7 @@ const Contracts: React.FC = () => {
           </ContractContainer>
 
           <ContractContainer>
-            <ContractTitle>
-              제4조(서비스의 제공 및 변경)
-            </ContractTitle>
+            <ContractTitle>제4조(서비스의 제공 및 변경)</ContractTitle>
             <Textwrapper>
               1. 플랫폼은 아래와 같은 서비스를 제공합니다:
               <br />
@@ -151,9 +143,7 @@ const Contracts: React.FC = () => {
           </ContractContainer>
 
           <ContractContainer>
-            <ContractTitle>
-              제5조(사용자의 의무)
-            </ContractTitle>
+            <ContractTitle>제5조(사용자의 의무)</ContractTitle>
             <Textwrapper>
               1. 사용자는 플랫폼 내에서 다음 행위를 하지 않아야 합니다:
               <br />
@@ -169,18 +159,14 @@ const Contracts: React.FC = () => {
           </ContractContainer>
 
           <ContractContainer>
-            <ContractTitle>
-              제6조(개인정보 보호)
-            </ContractTitle>
+            <ContractTitle>제6조(개인정보 보호)</ContractTitle>
             <Textwrapper>
               사용자의 개인정보는 [개인정보처리방침]에 따라 보호됩니다.
             </Textwrapper>
           </ContractContainer>
 
           <ContractContainer>
-            <ContractTitle>
-              제7조(책임 제한)
-            </ContractTitle>
+            <ContractTitle>제7조(책임 제한)</ContractTitle>
             <Textwrapper>
               플랫폼은 다음에 대해 책임을 지지 않습니다.
               <br />
@@ -193,9 +179,7 @@ const Contracts: React.FC = () => {
           </ContractContainer>
 
           <ContractContainer>
-            <ContractTitle>
-              제8조(분쟁 해결)
-            </ContractTitle>
+            <ContractTitle>제8조(분쟁 해결)</ContractTitle>
             <Textwrapper>
               본 약관과 관련하여 분쟁이 발생할 경우 [소재지]의 관할 법원을 전속
               관할로 합니다.

@@ -10,7 +10,7 @@ import GoogleAuthButton from '../../components/googleAuthButton';
 import AuthButton from '../../components/login/authButton';
 import TopLogo from '../../components/topLogo_header';
 import NoLoginModal from '../../components/modal/noLoginModal';
-import { LoginContext } from '../context/LoginContext';
+import { LoginContext } from '../../components/context/LoginContext';
 
 const PageContainer = styled.div`
   display: flex;
@@ -188,13 +188,19 @@ const LoginPage: React.FC = () => {
         localStorage.setItem('socialType', socialType); // 마이페이지에 전달
 
         context.actions.setIsLoggedIn(true); // 로그인 시
-        router.push('/home'); // 홈 페이지로 이동
+        router.push('/homePage'); // 홈 페이지로 이동
       } else {
         console.error('로그인 응답에 Authorization 헤더가 없습니다.');
         setIsModalOpen(true);
       }
-    } catch (err: any) {
-      console.log('Error:', err.response?.data || err.message);
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        console.log('Error:', err.response?.data || err.message);
+      } else if (err instanceof Error) {
+        console.log('Error:', err.message);
+      } else {
+        console.log(err);
+      }
       setIsModalOpen(true); // 로그인 실패 시 모달 띄우기
     }
   };

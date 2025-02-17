@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+// import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 
@@ -139,7 +139,7 @@ const SaveButton = styled.div<{ isValid: boolean }>`
 const Note: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
   const [noteContent, setNoteContent] = useState<string>('');
   const [isNoteEmpty, setIsNoteEmpty] = useState<boolean>(true);
-  const [loading, setLoading] = useState<boolean>(true);
+  // const [loading, setLoading] = useState<boolean>(true);
 
   // 로컬 스토리지에서 저장된 노트를 불러오는 함수
   useEffect(() => {
@@ -213,12 +213,19 @@ const Note: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
           console.log(noteContent);
           alert('노트가 저장되었습니다');
         }
-      } catch (err: any) {
-        console.log('Error:', err.response?.data || err.message);
-        if (err.response?.data?.message) {
-          console.log('Error Message:', err.response.data.message);
+      } catch (err: unknown) {
+        if (axios.isAxiosError(err)) {
+          console.log('Error:', err.response?.data || err.message);
+
+          if (err.response?.data?.message) {
+            console.log('Error Message:', err.response.data.message);
+          } else {
+            console.log('메모 작성 중 오류 발생');
+          }
+        } else if (err instanceof Error) {
+          console.log('예상치 못한 오류:', err.message);
         } else {
-          console.log('메모 작성 중 오류 발생');
+          console.log('알 수 없는 오류 발생:', err);
         }
       }
     }

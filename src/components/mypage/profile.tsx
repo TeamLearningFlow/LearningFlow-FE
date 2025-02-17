@@ -105,14 +105,23 @@ const Profile = () => {
         console.log('Profile Response Data:', response.data);
 
         setUserData(response.data.result);
-      } catch (error: any) {
-        if (error.response?.status === 401) {
-          console.error(
-            '토큰이 만료되었거나 잘못되었습니다. 다시 로그인해주세요.',
-          );
-          localStorage.removeItem('token'); // 만료된 토큰 삭제
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          if (error.response?.status === 401) {
+            console.error(
+              '토큰이 만료되었거나 잘못되었습니다. 다시 로그인해주세요.',
+            );
+            localStorage.removeItem('token'); // 만료된 토큰 삭제
+          } else {
+            console.error(
+              '사용자 정보 가져오기 실패:',
+              error.response?.data || error.message,
+            );
+          }
+        } else if (error instanceof Error) {
+          console.error(error.message);
         } else {
-          console.error('사용자 정보 가져오기 실패:', error);
+          console.error(error);
         }
       }
     };

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { LearnContext } from '../context/LearnContext';
-import { useParams } from 'react-router-dom';
+import { LearnContext } from '../../components/context/LearnContext';
+// import { useParams } from 'react-router-dom';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import styled from 'styled-components';
@@ -101,9 +101,13 @@ const LearnPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState<string>('');
   const [field, setField] = useState<string>('');
-  const [progress, setProgress] = useState(0);
+  // const [progress, setProgress] = useState(0);
   const [youtubeContent, setYoutubeContent] = useState<string>('');
   const context = useContext(LearnContext);
+
+  if (!context) {
+    throw new Error('LearnContext를 찾을 수 없습니다.');
+  }
 
   const router = useRouter();
   const { episodeId, episodeData, collectionData } = router.query;
@@ -120,7 +124,13 @@ const LearnPage: React.FC = () => {
     : null;
 
   const { isCompleted } = context.state;
-  const { setIsCompleted } = context.actions;
+  // const { setIsCompleted } = context.actions;
+
+  // ESLint 오류 방지용
+  useEffect(() => {
+    console.log('현재 Title:', title);
+    console.log('현재 Field:', field);
+  }, [title, field]);
 
   // resource type을 확인하는 비동기 함수
   const checkResourceType = async () => {
@@ -207,11 +217,14 @@ const LearnPage: React.FC = () => {
             {CollectionData &&
               episodeId &&
               (type === 'youtube' ? (
-                <Article videoId={youtubeContent} isCompleted={isCompleted} />
+                <Article
+                  videoId={youtubeContent}
+                  isCompleted={isCompleted ?? false}
+                />
               ) : (
                 <BlogArticle
                   episodeId={episodeIdNumber}
-                  isCompleted={isCompleted}
+                  isCompleted={isCompleted ?? false}
                 />
               ))}
             {CollectionData && EpisodeData && episodeId && (

@@ -170,7 +170,7 @@ const Page3: React.FC<{
       </SubTitle>
       <SliderWrapper>
         <TooltipContainer position={(sliderValue / 100) * 100}>
-          <Tooltip>{getTooltipText(sliderValue)}</Tooltip>
+          <Tooltip position={sliderValue}>{getTooltipText(sliderValue)}</Tooltip>
           <Image
             src={Polygon}
             alt="polygon"

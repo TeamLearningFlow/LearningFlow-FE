@@ -144,7 +144,7 @@ const PreferSlider: React.FC<PreferSliderProps> = ({ value, onChange }) => {
   return (
     <SliderWrapper>
       <TooltipContainer position={(sliderValue / 100) * 100}>
-        <Tooltip>{getTooltipText(sliderValue)}</Tooltip>
+        <Tooltip position={sliderValue}>{getTooltipText(sliderValue)}</Tooltip>
         <Image
           src={Polygon}
           alt="polygon"

@@ -78,7 +78,7 @@ const ProfileUser = styled.div`
 const Header: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
-  const profileIconRef = useRef<HTMLDivElement>(null);
+  const profileIconRef = useRef<HTMLImageElement | null>(null);
 
   // 사용자 아이콘 클릭 시 모달 토글
   const toggleModal = () => {
@@ -112,7 +112,7 @@ const Header: React.FC = () => {
   return (
     <HeaderWrapper>
       <LogoWrapper>
-        <Link href="/home" passHref>
+        <Link href="/homePage" passHref>
           <LogoImage src={LogoDark} alt="header logo" width={175} height={25} />
         </Link>
       </LogoWrapper>

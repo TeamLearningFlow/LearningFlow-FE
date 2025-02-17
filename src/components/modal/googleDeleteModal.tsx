@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { LoginContext } from '../../pages/context/LoginContext';
+import { LoginContext } from '../context/LoginContext';
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -131,7 +131,7 @@ const GoogleDeleteModal: React.FC<GoogleDeleteModalProps> = ({ onClose }) => {
         setIsLoggedIn(false);
         alert('회원 탈퇴가 완료되었습니다.');
 
-        router.push('/home'); // 홈 페이지로 이동
+        router.push('/homePage'); // 홈 페이지로 이동
       } else {
         alert('비밀번호가 일치하지 않습니다.');
       }

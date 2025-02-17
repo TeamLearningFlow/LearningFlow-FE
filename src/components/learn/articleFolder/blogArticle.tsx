@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import { LearnContext } from '../../../pages/context/LearnContext';
+import { LearnContext } from '../../context/LearnContext';
 import axios from 'axios';
 import styled from 'styled-components';
 
@@ -234,8 +234,9 @@ const StyledImg = styled.img`
 // png 사용
 const BlogArticle: React.FC<{
   episodeId?: number;
+  isCompleted?: boolean;
 }> = ({ episodeId }) => {
-  const isTestMode = false; // 테스트용
+  // const isTestMode = false; // 테스트용
   const [contentUrl, setContentUrl] = useState<string | null>('');
   const imgRef = useRef<HTMLImageElement>(null); // 이미지 참조
   const articleWrapperRef = useRef<HTMLDivElement>(null); // ArticleWrapper 참조
@@ -244,8 +245,8 @@ const BlogArticle: React.FC<{
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const context = useContext(LearnContext);
 
-  const { isCompleted } = context.state;
-  const { setIsCompleted } = context.actions;
+  // const { isCompleted } = context.state;
+  // const { setIsCompleted } = context.actions;
 
   useEffect(() => {
     if (!episodeId) {
@@ -315,11 +316,17 @@ const BlogArticle: React.FC<{
         } else {
           console.error('콘텐츠 API 응답 오류:', contentResponse);
         }
-      } catch (error) {
-        console.error(
-          '콘텐츠 로딩 오류:',
-          error.response ? error.response : error,
-        );
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          console.error(
+            'API 요청 오류:',
+            error.response?.data || error.message,
+          );
+        } else if (error instanceof Error) {
+          console.error('알 수 없는 오류 발생:', error.message);
+        } else {
+          console.warn('예상치 못한 오류 발생:', error);
+        }
       }
     };
 
@@ -368,7 +375,7 @@ const BlogArticle: React.FC<{
       if (response.status === 200) {
         console.log('수강 완료 상태 업데이트:', response.data);
         setLearningCompleted(true);
-        setIsCompleted(true);
+        context?.actions?.setIsCompleted(true);
       }
     } catch (error) {
       console.error('수강 완료 업데이트 오류:', error);
@@ -409,11 +416,11 @@ const BlogArticle: React.FC<{
         // 진도율이 80% 이상일 경우 학습 완료 처리
         if (scrolled >= 80 && !learningCompleted) {
           console.log('학습완료');
-          setIsCompleted(true);
+          context?.actions?.setIsCompleted(true);
           updateCompletionStatus();
         }
       }
-    } catch (err) {
+    } catch {
       console.warn(
         '스크롤 이벤트 접근 불가 (CORS 정책으로 인해 차단될 가능성 있음)',
       );

@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { CompletedClass, CurrentClass, NextClass } from './learnClassIndex';
 import { CollectionData } from '@/pages/collection/[collectionId]';
@@ -45,11 +45,12 @@ const ComponentWrapper = styled.div`
 `;
 
 interface ResourceData {
-  episodeId: string;
+  episodeId: number;
   episodeName: string;
   url: string;
-  resourceSource: string;
+  resourceSource: 'youtube' | 'naverBlog' | 'tistory' | 'velog'; // 리소스 출처
   episodeNumber: number;
+  today: boolean;
   progress: number;
 }
 
@@ -59,20 +60,37 @@ interface ClassListProps {
   collectionData: CollectionData;
 }
 
-const ClassList: React.FC<ClassListProps> = ({resource, collectionData}) => {
-  
+const ClassList: React.FC<ClassListProps> = ({ resource, collectionData }) => {
   return (
     <ComponentWrapper>
       {resource.map((classItem) => {
         if (classItem.progress >= 80) {
-          return <CompletedClass key={classItem.episodeNumber} resourceItem={classItem} collectionData={collectionData} />;
+          return (
+            <CompletedClass
+              key={classItem.episodeNumber}
+              {...classItem} // 수정 필요할 수도 있음 (일단 오류 방지)
+              collectionData={collectionData}
+            />
+          );
         } else if (classItem.progress > 0) {
-          return <CurrentClass key={classItem.episodeNumber} {...classItem} collectionData={collectionData} />;
+          return (
+            <CurrentClass
+              key={classItem.episodeNumber}
+              {...classItem}
+              collectionData={collectionData}
+            />
+          );
         } else {
-          return <NextClass key={classItem.episodeNumber} {...classItem} collectionData={collectionData} />;
+          return (
+            <NextClass
+              key={classItem.episodeNumber}
+              {...classItem}
+              collectionData={collectionData}
+            />
+          );
         }
       })}
-    </ComponentWrapper> 
+    </ComponentWrapper>
   );
 };
 

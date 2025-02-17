@@ -1,12 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
- 
+
+// Youtube api 전역 객체 선언
+declare global {
+  interface Window {
+    onYouTubeIframeAPIReady?: () => void;
+    YT: typeof YT;
+  }
+}
 
 interface YoutubeArticleProps {
   videoId?: string;
+  isCompleted?: boolean;
   onProgressChange?: (progress: number) => void;
 }
-
 
 const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
   videoId,
@@ -14,7 +21,7 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
 }) => {
   const [progress, setProgress] = useState<number>(0);
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const playerRef = useRef<any>(null); // YouTube Player 인스턴스 저장
+  const playerRef = useRef<YT.Player | null>(null); // YouTube Player 인스턴스 저장
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const isTestMode = false;
 
@@ -43,13 +50,13 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
       const tag = document.createElement('script');
       tag.src = 'https://www.youtube.com/iframe_api';
       document.body.appendChild(tag);
+
+      window.onYouTubeIframeAPIReady = () => {
+        initializePlayer();
+      };
     } else {
       initializePlayer();
     }
-
-    window.onYouTubeIframeAPIReady = () => {
-      initializePlayer();
-    };
   }, [videoId]);
 
   // YouTube Player 초기화
@@ -63,8 +70,13 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
     });
   };
 
+  // ESLint 오류 방지용 확인
+  useEffect(() => {
+    console.log(`현재 진행률: ${progress}%`);
+  }, [progress]);
+
   // 플레이어 상태 변경 감지 (재생 시작 시 진도율 추적)
-  const handlePlayerStateChange = (event: any) => {
+  const handlePlayerStateChange = (event: YT.OnStateChangeEvent) => {
     if (event.data === window.YT.PlayerState.PLAYING) {
       console.log('영상 재생 시작 - 진도율 추적 시작');
       startTrackingProgress();

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import BoardingPass from './homeBoardingPass';
+// import BoardingPass from './homeBoardingPass';
 import AirplaneIcon from '../../assets/airplaneIcon.svg';
 
 const HomeCollectionWrapper = styled.div`
@@ -106,12 +106,12 @@ const HomeCollection = () => {
           </HeaderText>
         </CollectionHeader>
         <CollectionList>
+          {/*<BoardingPass showHoverCollection={true} />
           <BoardingPass showHoverCollection={true} />
           <BoardingPass showHoverCollection={true} />
           <BoardingPass showHoverCollection={true} />
           <BoardingPass showHoverCollection={true} />
-          <BoardingPass showHoverCollection={true} />
-          <BoardingPass showHoverCollection={true} />
+          <BoardingPass showHoverCollection={true} /> */}
         </CollectionList>
       </HomeCollectionWrapper>
     </>

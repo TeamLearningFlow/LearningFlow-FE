@@ -7,7 +7,7 @@ import Page3 from './page3';
 import styled from 'styled-components';
 import TopLogo from '../../components/landing/landingHeader';
 // import Guest from '../../assets/Guest.svg';
-import { LoginContext } from '../context/LoginContext';
+import { LoginContext } from '../../components/context/LoginContext';
 
 const PageIndicator = styled.div`
   display: flex;
@@ -25,11 +25,11 @@ const Indicator = styled.div<{ active: boolean }>`
 
 const LandingPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [imgUrl, setImgUrl] = useState(''); // 프로필 url 값
+  const [imgUrl, setImgProfileUrl] = useState<string | null>(null); // 프로필 url 값
   const [nickname, setNickname] = useState(''); // 닉네임 값
   const [job, setJob] = useState(''); // 직업 값
   const [interestFields, setInterestFields] = useState<string[]>([]); // 카테고리 값
-  const [preferType, setPreferType] = useState(''); // 선호도 값
+  // const [preferType, setPreferType] = useState(''); // 선호도 값
   const [token, setToken] = useState<string | null>(null);
 
   const router = useRouter();
@@ -124,7 +124,7 @@ const LandingPage: React.FC = () => {
       localStorage.setItem('isFromSignup', 'true');
       context.actions.setIsLoggedIn(true);
 
-      router.push('/home'); // 회원가입 완료 후 홈페이지로 이동
+      router.push('/homePage'); // 회원가입 완료 후 홈페이지로 이동
     } catch (error) {
       console.error('회원가입 실패:', error);
       alert('회원가입에 실패했습니다. 다시 시도해주세요.');
@@ -136,10 +136,10 @@ const LandingPage: React.FC = () => {
       <TopLogo />
       {currentPage === 1 && (
         <Page1
-          onNext={({ nickname, job, imgUrl }) => {
+          onNext={({ nickname, job, imgProfileUrl }) => {
             setNickname(nickname);
             setJob(job);
-            setImgUrl(imgUrl);
+            setImgProfileUrl(imgProfileUrl);
             setCurrentPage(2);
           }}
         />
@@ -159,8 +159,7 @@ const LandingPage: React.FC = () => {
           nickname={nickname}
           onPrev={() => setCurrentPage(2)}
           onNext={(selectedPreferType) => {
-            setPreferType(selectedPreferType); // preferType 업데이트
-            handleComplete(selectedPreferType); // 최신 값 전달
+            handleComplete(selectedPreferType);
           }}
         />
       )}

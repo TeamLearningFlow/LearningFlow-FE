@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useParams } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import Image from 'next/image';
@@ -13,10 +13,10 @@ import YoutubeIcon from '../../assets/platformicon/youtube_nostroke_ic.svg';
 import line from '../../assets/Line.svg';
 import dot from '../../assets/dot.svg';
 import plane from '../../assets/Airplane.svg';
-import { CgPathCrop } from 'react-icons/cg';
+// import { CgPathCrop } from 'react-icons/cg';
 
 interface CollectionData {
-  id: number;
+  collectionId: number;
   interestField: string;
   title: string;
   creator: string;
@@ -27,13 +27,21 @@ interface CollectionData {
   textCount: number;
   videoCount: number;
   resource: {
+    episodeId: number;
     episodeName: string;
     url: string;
     resourceSource: string;
     episodeNumber: number;
+    today: boolean;
+    progress: number; // 테스트용
   }[];
-  bookmarkCount: number;
-  bookmarked: boolean;
+  likesCount: number;
+  progressRatePercentage: number;
+  progressRatio: string;
+  learningStatus: 'BEFORE' | 'IN_PROGRESS' | 'COMPLETED';
+  startDate: string;
+  completedDate: string;
+  liked: boolean;
 }
 
 interface CollectionInfoProps {
@@ -116,11 +124,12 @@ const CollectionInfo: React.FC<CollectionInfoProps> = ({
           JSON.stringify(bookmarkedStatus), // 서버에서 받은 값 반영
         );
       }
-    } catch (err: any) {
-      console.error(
-        '북마크 상태 가져오기 오류:',
-        err.response?.data || err.message,
-      );
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error('북마크 상태 가져오기 오류:', err.message);
+      } else {
+        console.error('북마크 상태 가져오기 오류:', err);
+      }
     }
   };
 
@@ -156,17 +165,23 @@ const CollectionInfo: React.FC<CollectionInfoProps> = ({
           JSON.stringify(newBookmarkStatus), // 반영된 상태로 저장
         );
       }
-    } catch (err: any) {
-      if (err.response?.status === 401) {
-        alert('로그인이 필요합니다.');
-        console.log('로그인 필요');
-      } else {
-        console.log('Error: ', err.response?.data || err.message);
-        if (err.response?.data?.message) {
-          console.log('Error Message:', err.response.data.message);
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        if (err.response?.status === 401) {
+          alert('로그인이 필요합니다.');
+          console.log('로그인 필요');
         } else {
-          console.log('북마크 오류 발생');
+          console.log('Error: ', err.response?.data || err.message);
+          if (err.response?.data?.message) {
+            console.log('Error Message:', err.response.data.message);
+          } else {
+            console.log('북마크 오류 발생');
+          }
         }
+      } else if (err instanceof Error) {
+        console.log('Error:', err.message);
+      } else {
+        console.log('알 수 없는 오류 발생:', err);
       }
     }
   };

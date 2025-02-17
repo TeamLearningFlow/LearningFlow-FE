@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
@@ -18,7 +18,7 @@ import Velog from '../../assets/platformicon/velog_nostroke_ic.svg';
 
 
 interface ResourceData {
-  episodeId: string; // 강의의 고유 ID
+  episodeId: number; // 강의의 고유 ID
   episodeName: string; // 강의 이름
   url: string; // 강의 URL
   resourceSource: "youtube" | "naverBlog" | "tistory" | "velog"; // 리소스 출처
@@ -39,7 +39,7 @@ interface CollectionData {
   liked: boolean; // 좋아요 여부
   likesCount: number; // 좋아요 수
   progressRatePercentage: number | null; // 전체 강의 진행률
-  progressRatio: number | null; // 전체 진행 비율
+  progressRatio: string | null; // 전체 진행 비율
   resource: ResourceData[]; // 강의 목록 (각 강의에 대한 정보)
 }
 
@@ -75,8 +75,6 @@ const getPlatformIcon = (
 };
 
 
-
- 
 export const CompletedClass: React.FC<ResourceData & { collectionData: CollectionData }> = ({
   episodeId,
   episodeName,
@@ -85,7 +83,7 @@ export const CompletedClass: React.FC<ResourceData & { collectionData: Collectio
   collectionData,
 }) => {
   const router = useRouter();
-  const handleClick = async (episodeId: string, resourceSource: "youtube" | "naverBlog" | "tistory" | "velog") => { 
+  const handleClick = async (episodeId: number, resourceSource: "youtube" | "naverBlog" | "tistory" | "velog") => { 
     try {
       const token = localStorage.getItem("token");
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
@@ -133,7 +131,7 @@ export const CurrentClass: React.FC<ResourceData & { collectionData: CollectionD
   collectionData,
 }) => {
   const router = useRouter();
-  const handleClick = async (episodeId: string, resourceSource: "youtube" | "naverBlog" | "tistory" | "velog") => { 
+  const handleClick = async (episodeId: number, resourceSource: "youtube" | "naverBlog" | "tistory" | "velog") => { 
     try {
       const token = localStorage.getItem("token");
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
@@ -181,7 +179,7 @@ export const NextClass: React.FC<ResourceData & { collectionData: CollectionData
   collectionData,
 }) => {
   const router = useRouter();
-  const handleClick = async (episodeId: string, resourceSource: "youtube" | "naverBlog" | "tistory" | "velog") => { 
+  const handleClick = async (episodeId: number, resourceSource: "youtube" | "naverBlog" | "tistory" | "velog") => { 
     try {
       const token = localStorage.getItem("token");
       const headers = token ? { Authorization: `Bearer ${token}` } : {};

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { LoginContext } from '../../pages/context/LoginContext';
+import { LoginContext } from '../context/LoginContext';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -491,17 +491,27 @@ const userModal: React.FC = () => {
         });
 
         setUserData(response.data.result);
-      } catch (err: any) {
-        if (err.response?.status === 401) {
-          console.error(
-            '토큰이 만료되었거나 잘못되었습니다. 다시 로그인해주세요.',
-          );
-          localStorage.removeItem('token');
+      } catch (err: unknown) {
+        if (axios.isAxiosError(err)) {
+          if (err.response?.status === 401) {
+            console.error(
+              '토큰이 만료되었거나 잘못되었습니다. 다시 로그인해주세요.',
+            );
+            localStorage.removeItem('token');
+          } else {
+            console.error(
+              '사용자 정보 가져오기 실패:',
+              err.response?.data || err.message,
+            );
+          }
+        } else if (err instanceof Error) {
+          console.error(err.message);
         } else {
-          console.error('사용자 정보 가져오기 실패: ', err);
+          console.error(err);
         }
       }
     };
+
     fetchUserData();
   }, []);
 

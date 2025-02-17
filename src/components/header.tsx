@@ -126,7 +126,7 @@ const ProfileUser = styled.div`
 const Header: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
-  const profileIconRef = useRef<HTMLDivElement>(null);
+  const profileIconRef = useRef<HTMLImageElement | null>(null);
 
   const router = useRouter();
 
@@ -167,7 +167,7 @@ const Header: React.FC = () => {
   return (
     <HeaderWrapper>
       <LogoWrapper>
-        <Link href="/home" passHref>
+        <Link href="/homePage" passHref>
           <Image src={LogoDark} alt="header logo" width={130} height={20} />
         </Link>
       </LogoWrapper>

@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
-import { LoginContext } from '../../pages/context/LoginContext';
+import { LoginContext } from '../context/LoginContext';
 import Image from 'next/image';
 import invisibleicon from '../../assets/invisibleicon.svg';
 import visibleicon from '../../assets/visibleicon.svg';

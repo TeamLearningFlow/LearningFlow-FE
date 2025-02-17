@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
-import { LoginContext } from '../../pages/context/LoginContext';
+import { LoginContext } from '../context/LoginContext';
 import Image from 'next/image';
 import X from '../../assets/X_red.svg';
 

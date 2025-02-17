@@ -81,14 +81,14 @@ const Help: React.FC = () => {
             <Textwrapper>
               Q: 회원가입은 어떻게 하나요?
               <br />
-              A: [홈페이지] 상단의 "회원가입" 버튼을 클릭한 후, 필수 정보를
-              입력하고 "등록" 버튼을 누르면 가입이 완료됩니다.
+              A: [홈페이지] 상단의 &quot;회원가입&quot; 버튼을 클릭한 후, 필수
+              정보를 입력하고 &quot;등록&quot; 버튼을 누르면 가입이 완료됩니다.
               <br />
               <br />
               Q: 회원가입 시에 등록한 정보를 변경하고 싶은데 어떻게 하나요?
               <br />
-              A: [마이페이지]의 "프로필 수정" 버튼을 눌러 정보를 변경할 수
-              있습니다.
+              A: [마이페이지]의 &quot;프로필 수정&quot; 버튼을 눌러 정보를
+              변경할 수 있습니다.
             </Textwrapper>
           </ContractContainer>
 
@@ -97,8 +97,8 @@ const Help: React.FC = () => {
             <Textwrapper>
               Q: 강의를 시작하려면 어떻게 해야 하나요?
               <br />
-              A: 로그인 후, "탐색 페이지"에서 원하는 강의를 검색하고 컬렉션을
-              클릭한 후 재생 버튼을 누르면 강의가 시작됩니다.
+              A: 로그인 후, &quot;탐색 페이지&quot;에서 원하는 강의를 검색하고
+              컬렉션을 클릭한 후 재생 버튼을 누르면 강의가 시작됩니다.
               <br />
               <br />
               Q: 진도율은 어디에서 확인할 수 있나요?
@@ -109,24 +109,29 @@ const Help: React.FC = () => {
               <br />
               Q: 수강 완료 버튼은 무엇인가요?
               <br />
-A: 강제로 해당 회차의 콘텐츠를 **진도율 100%**로 설정할 수 있는 버튼입니다. 오류가 발생했거나 이미 시청한 콘텐츠라면 "수강 완료" 버튼을 클릭하세요!
+              A: 강제로 해당 회차의 콘텐츠를 **진도율 100%**로 설정할 수 있는
+              버튼입니다. 오류가 발생했거나 이미 시청한 콘텐츠라면 &quot;수강
+              완료&quot; 버튼을 클릭하세요!
             </Textwrapper>
           </ContractContainer>
 
           <ContractContainer>
             <ContractTitle>3. 기술 지원</ContractTitle>
             <Textwrapper>
-            Q: 강의가 재생되지 않아요.
-            <br />
-            A: 다음 해결 방법을 시도해 보세요.
+              Q: 강의가 재생되지 않아요.
               <br />
-              <span style={{ paddingRight: '5px' }}></span> 1. 인터넷 연결 상태 확인
+              A: 다음 해결 방법을 시도해 보세요.
+              <br />
+              <span style={{ paddingRight: '5px' }}></span> 1. 인터넷 연결 상태
+              확인
               <br />
               <span style={{ paddingRight: '5px' }}></span> 2. 브라우저 재시작
               <br />
-              <span style={{ paddingRight: '5px' }}></span> 3. 브라우저 최신 버전 업데이트
+              <span style={{ paddingRight: '5px' }}></span> 3. 브라우저 최신
+              버전 업데이트
               <br />
-              <span style={{ paddingRight: '5px' }}></span> 4. 다른 브라우저에서 실행
+              <span style={{ paddingRight: '5px' }}></span> 4. 다른 브라우저에서
+              실행
             </Textwrapper>
           </ContractContainer>
         </PageContainer>

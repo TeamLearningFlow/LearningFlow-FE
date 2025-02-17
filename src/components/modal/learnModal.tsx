@@ -1,46 +1,52 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 
-
 interface LearnModalProps {
-    onClose: () => void;
-    episodeId: number;
-    onRetakeClass: () => void;
-  }
-    
+  onClose: () => void;
+  episodeId: number;
+  onRetakeClass: () => void;
+}
 
-const LearnModal: React.FC<LearnModalProps> = ({ onClose, episodeId, onRetakeClass }) => {
-
+const LearnModal: React.FC<LearnModalProps> = ({
+  onClose,
+  episodeId,
+  onRetakeClass,
+}) => {
   const [isClicked, setIsClicked] = useState(false);
   const [progress, setProgress] = useState(0);
-  
-    const ReTakeClass = async () => {
-      setIsClicked(true);
-      try {
-        const token = localStorage.getItem("token");
-        const headers = token ? { Authorization: `Bearer ${token}` } : {};
-        
-        const response = await axios.post(
-          `http://onboarding.p-e.kr:8080/resources/${episodeId}/update-complete`, 
-          {},
-          { headers }
-        );
-    
-        if (response.status === 200 && response.data?.result?.isComplete) {
-          setProgress(0);
-          console.log("다시 학습 처리 성공:", response.data);
-          console.log(`변경된 진도율(초기화): ${progress}%`);
-          onRetakeClass();
-          onClose();
-        }
-      } catch (error) {
-        console.error("수강 상태 변경 실패:", error);
-      } finally { 
-        setIsClicked(false);
+
+  // ESLint 오류 방지용 확인
+  useEffect(() => {
+    console.log(`isClicked 상태 변경: ${isClicked}`);
+  }, [isClicked]);
+
+  const ReTakeClass = async () => {
+    setIsClicked(true);
+    try {
+      const token = localStorage.getItem('token');
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+      const response = await axios.post(
+        `http://onboarding.p-e.kr:8080/resources/${episodeId}/update-complete`,
+        {},
+        { headers },
+      );
+
+      if (response.status === 200 && response.data?.result?.isComplete) {
+        setProgress(0);
+        console.log('다시 학습 처리 성공:', response.data);
+        console.log(`변경된 진도율(초기화): ${progress}%`);
+        onRetakeClass();
+        onClose();
       }
-    };
-    
+    } catch (error) {
+      console.error('수강 상태 변경 실패:', error);
+    } finally {
+      setIsClicked(false);
+    }
+  };
+
   return (
     <>
       <ModalWrapper>

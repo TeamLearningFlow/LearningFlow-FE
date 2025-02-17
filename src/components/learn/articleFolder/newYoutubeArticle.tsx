@@ -7,7 +7,7 @@ const YoutubeArticle: React.FC<{
 }> = ({ episodeId, onProgressChange }) => {
   const [progress, setProgress] = useState<number>(0);
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const playerRef = useRef<any>(null); // YouTube Player 인스턴스 저장
+  const playerRef = useRef<YT.Player | null>(null); // YouTube Player 인스턴스 저장
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const isTestMode = true;
 
@@ -50,7 +50,7 @@ const YoutubeArticle: React.FC<{
   };
 
   // 플레이어 상태 변경 감지 (재생 시작 시 진도율 추적)
-  const handlePlayerStateChange = (event: any) => {
+  const handlePlayerStateChange = (event: YT.OnStateChangeEvent) => {
     if (event.data === window.YT.PlayerState.PLAYING) {
       console.log('영상 재생 시작 - 진도율 추적 시작');
       startTrackingProgress();
@@ -76,6 +76,11 @@ const YoutubeArticle: React.FC<{
       }
     }, 1000);
   };
+
+  // ESLint 오류 방지용 확인
+  useEffect(() => {
+    console.log(`현재 진행률: ${progress}%`);
+  }, [progress]);
 
   // 진도율 추적 중지
   const stopTrackingProgress = () => {

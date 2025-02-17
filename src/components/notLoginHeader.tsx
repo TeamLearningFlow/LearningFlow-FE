@@ -133,7 +133,7 @@ const NotLoginHeader: React.FC = () => {
   return (
     <HeaderWrapper>
       <LogoWrapper>
-        <Link href="/home" passHref>
+        <Link href="/homePage" passHref>
           <Image src={LogoDark} alt="header logo" width={130} height={20} />
         </Link>
       </LogoWrapper>

@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import {
   difficultyOptions,
   amountOptions,
-  mediaOptions,
+  // mediaOptions,
 } from './filterOptions';
 
 const TagContainer = styled.div`

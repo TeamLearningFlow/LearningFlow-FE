@@ -2,8 +2,8 @@ import React from 'react';
 import type { AppProps } from 'next/app';
 import Head from 'next/head'; // 뷰포트 설정
 import { createGlobalStyle } from 'styled-components';
-import { LoginProvider } from '../pages/context/LoginContext';
-import { LearnProvider } from '../pages/context/LearnContext';
+import { LoginProvider } from '../components/context/LoginContext';
+import { LearnProvider } from '../components/context/LearnContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient();
