@@ -429,6 +429,7 @@ const HomeTop: React.FC = () => {
         </AirplaneWrapper>
         <WindowWrapper>
           <WindowInGif
+            as="img"
             src="/windowIn.gif"
             alt="window-in"
             width={400}
