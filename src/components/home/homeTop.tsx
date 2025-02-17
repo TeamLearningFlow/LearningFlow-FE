@@ -427,7 +427,7 @@ const HomeTop: React.FC = () => {
           <Image src={Airplane} alt="airplane" />
         </AirplaneWrapper>
         <WindowWrapper>
-          <WindowInGif src="/video.gif" alt="video" />
+          <WindowInGif src="/video.gif" alt="video" width="400" height="500" />
           <WindowImage
             src={Window}
             alt="window"
