@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import Tooltip from '/public/emailTooltip.svg';
 import X from '/public/X_red.svg';
-import InvisibleIcon from '/publics/invisibleicon.svg';
+import InvisibleIcon from '/public/invisibleicon.svg';
 import VisibleIcon from '/public/visibleicon.svg';
 import CheckIcon from '/public/checkIconG.svg';
 import CheckIconB from '/public/checkIconB.svg';

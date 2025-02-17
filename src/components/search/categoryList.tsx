@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 
-import AllIcon from '../../assets/categoryIcon/allIcon.svg';
+import AllIcon from '/public/categoryIcon/allIcon.svg';
 import AppIcon from '/public/categoryIcon/appIcon.svg';
 import WebIcon from '/public/categoryIcon/webIcon.svg';
 import ComputerIcon from '/public/categoryIcon/computerIcon.svg';
@@ -15,7 +15,7 @@ import WorkIcon from '/public/categoryIcon/workIcon.svg';
 import LanguageIcon from '/public/categoryIcon/languageIcon.svg';
 import JobIcon from '/public/categoryIcon/jobIcon.svg';
 
-import AllIconW from '../../assets/categoryIcon/allIcon_w.svg';
+import AllIconW from '/public/categoryIcon/allIcon_w.svg';
 import AppIconW from '/public/categoryIcon/appIcon_w.svg';
 import WebIconW from '/public/categoryIcon/webIcon_w.svg';
 import ComputerIconW from '/public/categoryIcon/computerIcon_w.svg';

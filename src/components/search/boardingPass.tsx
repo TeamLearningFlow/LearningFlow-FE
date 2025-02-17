@@ -19,7 +19,7 @@ import NaverblogLine from '/public/platformicon/naverblog_ic.svg';
 import YoutubeLine from '/public/platformicon/youtube_ic.svg';
 import OnStudying from '/public/onstudying.svg';
 import CompletedStamp from '/public/completedStamp.svg';
-import TistoryLine from '../../assets/platformicon/tistory_ic.svg';
+import TistoryLine from '/public/platformicon/tistory_ic.svg';
 import { SearchResult } from './searchResult';
 import { useRouter } from 'next/router';
 

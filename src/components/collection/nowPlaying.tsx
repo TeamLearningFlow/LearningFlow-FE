@@ -7,7 +7,7 @@ import LoginAuthModal from '../modal/loginModal';
 import CurrentPlayButton from '/public/currentPlayButton.svg';
 import HoverPlayButton from '/public/hoverPlayButton.svg';
 import ActiveRadio from '/public/activeRadio.svg';
-import YoutubeHoverIcon from '/publics/platformicon/youtube_ic.svg';
+import YoutubeHoverIcon from '/public/platformicon/youtube_ic.svg';
 import BlogHoverIcon from '/public/platformicon/naverblog_ic.svg';
 import VelogHoverIcon from '/public/platformicon/velog_ic.svg';
 import TistoryHoverIcon from '/public/platformicon/tistory_ic.svg';
