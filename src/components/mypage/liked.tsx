@@ -136,8 +136,6 @@ const Liked = () => {
           },
         );
 
-        console.log('Response:', response.data);
-
         if (response.data.isSuccess && response.data.result) {
           setLiked(response.data.result.searchResults || []);
         }

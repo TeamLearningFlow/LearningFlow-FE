@@ -4,6 +4,7 @@ import Image from 'next/image';
 import BoardingPassContainer from '../../assets/S_Background.svg';
 import CollectionImage from '../../assets/boardingpassS.svg';
 import BookmarkIcon from '../../assets/bookmark.svg';
+import BookmarkFilledIcon from '../../assets/bookmarkFilled.svg';
 import HoverBackgroundTop from '../../assets/hover-backgroundTopS.svg';
 import HoverBackground from '../../assets/hover-background.svg';
 import Plane from '../../assets/plane_S.svg';
@@ -22,6 +23,7 @@ import OnStudying from '../../assets/onstudying.svg';
 import CompletedStamp from '../../assets/completedStamp.svg';
 import { useRouter } from 'next/router';
 import { LikedCollectionData } from './liked';
+import axios from 'axios';
 
 const ColumnFlexDiv = styled.div`
   display: flex;
@@ -87,13 +89,15 @@ const StatusTag = styled.span<{ status?: string }>`
   }
 `;
 
-const Bookmark = styled.div`
+const Bookmark = styled.button`
   position: absolute;
   top: 15px;
   right: 15px;
   cursor: pointer;
   width: 35px;
   height: 35px;
+  background: transparent;
+  border: none;
 `;
 
 const Body = styled.div`
@@ -103,6 +107,7 @@ const Body = styled.div`
   position: absolute;
   top: 158.303px;
   left: 2px;
+  cursor: pointer;
 `;
 
 const TagWrapper = styled(RowFlexSpan)`
@@ -218,6 +223,7 @@ const Bottom = styled(RowFlexDiv)`
   top: 281px;
   left: 1px;
   gap: 10px;
+  cursor: pointer;
 `;
 
 const DepartureArrival = styled.span`
@@ -329,6 +335,7 @@ const HoverWrapper = styled.div`
   position: absolute;
   top: 159.2px;
   left: 1px;
+  cursor: pointer;
   background: transparent;
   opacity: 0;
   transition: all 0.3s; // 몇 초로 할지 설정
@@ -343,6 +350,7 @@ const HoverBackgroundTopWrapper = styled.div`
   top: -158px;
   width: 100%;
   height: 158px;
+  cursor: default;
 `;
 
 const CollectionHeader = styled(RowFlexDiv)`
@@ -901,6 +909,61 @@ const HeaderLine = ({
   }
 };
 
+const BookmarkButton = ({
+  collection,
+}: {
+  collection: LikedCollectionData;
+}) => {
+  const [isBookmarked, setIsBookmarked] = useState(collection.liked);
+  const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
+
+  const handleBookmark = async (e: React.MouseEvent) => {
+    // 클릭 이벤트 전파 차단 (북마크 버튼에서만 동작)
+    e.stopPropagation();
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('로그인이 필요합니다!'); // 모달로 변경 필요
+      router.push('/login');
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await axios.post(
+        `http://onboarding.p-e.kr:8080/collections/${collection.collectionId}/likes`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (response.data.isSuccess) {
+        setIsBookmarked(!isBookmarked);
+      }
+    } catch (error) {
+      console.error('북마크 처리 중 오류가 발생했습니다: ', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Bookmark onClick={handleBookmark} disabled={loading} data-bookmark="true">
+      {isBookmarked ? (
+        <Image src={BookmarkFilledIcon} alt="bookmark" width={36} height={36} />
+      ) : (
+        <Image src={BookmarkIcon} alt="bookmark" width={36} height={36} />
+      )}
+    </Bookmark>
+  );
+};
+
 const HoverCollection = ({
   data,
   status,
@@ -912,9 +975,7 @@ const HoverCollection = ({
     <HoverWrapper>
       <HoverBackgroundTopWrapper>
         <Image src={HoverBackgroundTop} alt="hoverbackgroundtop" />
-        <Bookmark>
-          <Image src={BookmarkIcon} alt="bookmark" width={36} height={36} />
-        </Bookmark>
+        <BookmarkButton collection={data} />
       </HoverBackgroundTopWrapper>
       {status === '학습완료' ? (
         <>
@@ -1108,8 +1169,18 @@ const LikedCollection = ({
 }) => {
   const router = useRouter();
 
+  const handleCollectionClick = (e: React.MouseEvent) => {
+    // 북마크 버튼을 클릭했을 경우, router.push 방지
+    if (e.target instanceof HTMLButtonElement && e.target.dataset.bookmark) {
+      e.stopPropagation(); // 이벤트 전파 차단
+      return;
+    }
+    // 북마크 버튼이 아닌 다른 곳 클릭 시 router.push 실행
+    router.push(`/collection/${data.collectionId}`);
+  };
+
   return (
-    <Container onClick={() => router.push(`/collection/${data.collectionId}`)}>
+    <Container onClick={handleCollectionClick}>
       <Image src={BoardingPassContainer} alt="boarding pass" />
       <BoardingPassImage src={CollectionImage} alt="collection image" />
       <StatusTag status=""></StatusTag>
