@@ -193,12 +193,13 @@ export const NextClass: React.FC<ResourceData & { collectionData: CollectionData
 
       if (response.status === 200) {
         const data = response.data;
-
+        const videoId = data.result.episodeContents;
+        console.log("내부 이동 videoId:",videoId);
         // resourceItem 대신 episodeName 사용
         router.push({
           pathname: `/learn/${episodeId}`, 
           query: { 
-            episodeData: JSON.stringify({ ...data, episodeName }), // 수정된 부분
+            episodeData: JSON.stringify({ ...data, episodeName }), 
             collectionData: JSON.stringify(collectionData)
           },
         });

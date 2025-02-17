@@ -30,8 +30,14 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
     if (!videoId) return;
 
     const contentUrl = isTestMode
-      ? 'https://www.youtube-nocookie.com/embed/LclObYwGj90?enablejsapi=1'
-      : `${videoId}?enablejsapi=1`;
+  ? 'https://www.youtube-nocookie.com/embed/LclObYwGj90?enablejsapi=1'
+  : videoId.startsWith("http")
+    ? (videoId.includes("enablejsapi=1")
+        ? videoId
+        : videoId.includes('?')
+          ? `${videoId}&enablejsapi=1`
+          : `${videoId}?enablejsapi=1`)
+    : `https://www.youtube.com/embed/${videoId}?enablejsapi=1`;
 
     if (iframeRef.current) {
       iframeRef.current.src = contentUrl;
@@ -76,9 +82,9 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
   // 진도율 추적
   const startTrackingProgress = () => {
     stopTrackingProgress(); // 기존 인터벌 클리어
-
+  
     intervalRef.current = setInterval(() => {
-      if (playerRef.current) {
+      if (playerRef.current && typeof playerRef.current.getCurrentTime === 'function') {
         const currentTime = playerRef.current.getCurrentTime();
         const duration = playerRef.current.getDuration();
         if (duration > 0) {
@@ -87,9 +93,12 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
           onProgressChange(progressValue);
           console.log(`진도율 업데이트: ${progressValue}%`);
         }
+      } else {
+        console.warn('플레이어가 아직 준비되지 않았거나 getCurrentTime이 제공되지 않습니다.');
       }
     }, 1000);
   };
+  
 
   // 진도율 추적 중지
   const stopTrackingProgress = () => {
@@ -122,7 +131,7 @@ const ArticleWrapper = styled.div`
   width: 100%;
   height: 91%;
   border-radius: 11.483px;
-  background: #b5b5b5;
+  background:rgb(181, 181, 181);
   box-shadow: 1.077px 1.435px 6.459px 0px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
 `;
