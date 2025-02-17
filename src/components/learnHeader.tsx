@@ -112,7 +112,7 @@ const Header: React.FC = () => {
   return (
     <HeaderWrapper>
       <LogoWrapper>
-        <Link href="/homePage" passHref>
+        <Link href="/" passHref>
           <LogoImage src={LogoDark} alt="header logo" width={175} height={25} />
         </Link>
       </LogoWrapper>

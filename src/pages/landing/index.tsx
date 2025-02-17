@@ -124,7 +124,7 @@ const LandingPage: React.FC = () => {
       localStorage.setItem('isFromSignup', 'true');
       context.actions.setIsLoggedIn(true);
 
-      router.push('/homePage'); // 회원가입 완료 후 홈페이지로 이동
+      router.push('/'); // 회원가입 완료 후 홈페이지로 이동
     } catch (error) {
       console.error('회원가입 실패:', error);
       alert('회원가입에 실패했습니다. 다시 시도해주세요.');

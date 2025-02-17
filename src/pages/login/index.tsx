@@ -188,7 +188,7 @@ const LoginPage: React.FC = () => {
         localStorage.setItem('socialType', socialType); // 마이페이지에 전달
 
         context.actions.setIsLoggedIn(true); // 로그인 시
-        router.push('/homePage'); // 홈 페이지로 이동
+        router.push('/'); // 홈 페이지로 이동
       } else {
         console.error('로그인 응답에 Authorization 헤더가 없습니다.');
         setIsModalOpen(true);
