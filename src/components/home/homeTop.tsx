@@ -286,7 +286,7 @@ const WindowImage = styled(Image)`
   z-index: 2;
 `;
 
-/* const WindowInGif = styled.img`
+const WindowInGif = styled.img`
   position: absolute;
   width: 100%;
   height: 100%;
@@ -310,7 +310,7 @@ const WindowImage = styled(Image)`
     margin-left: -35%;
     clip-path: inset(0% 13% 0% 23% round 180px);
   }
-`; */
+`;
 
 const LogoMarkWrapper = styled.div`
   position: absolute;
@@ -427,10 +427,7 @@ const HomeTop: React.FC = () => {
           <Image src={Airplane} alt="airplane" />
         </AirplaneWrapper>
         <WindowWrapper>
-          {/* <WindowInGif
-            src="/windowIn-v2.gif"
-            alt="window-in"
-          /> */}
+          <WindowInGif src="/video.gif" alt="video" />
           <WindowImage
             src={Window}
             alt="window"
