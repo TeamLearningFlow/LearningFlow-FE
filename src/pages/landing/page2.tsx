@@ -1,31 +1,31 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import styled from 'styled-components';
-import LeftIcon from '../../assets/leftIcon.svg';
+import LeftIcon from '/public/leftIcon.svg';
 
-import AppIcon from '../../assets/categoryIcon/appIcon.svg';
-import WebIcon from '../../assets/categoryIcon/webIcon.svg';
-import ComputerIcon from '../../assets/categoryIcon/computerIcon.svg';
-import DeepLearningIcon from '../../assets/categoryIcon/deepLearningIcon.svg';
-import StatisticsIcon from '../../assets/categoryIcon/statisticsIcon.svg';
-import DataIcon from '../../assets/categoryIcon/dataIcon.svg';
-import UXUIIcon from '../../assets/categoryIcon/uxuiIcon.svg';
-import PlanIcon from '../../assets/categoryIcon/planIcon.svg';
-import WorkIcon from '../../assets/categoryIcon/workIcon.svg';
-import LanguageIcon from '../../assets/categoryIcon/languageIcon.svg';
-import JobIcon from '../../assets/categoryIcon/jobIcon.svg';
+import AppIcon from '/public/categoryIcon/appIcon.svg';
+import WebIcon from '/public/categoryIcon/webIcon.svg';
+import ComputerIcon from '/public/categoryIcon/computerIcon.svg';
+import DeepLearningIcon from '/public/categoryIcon/deepLearningIcon.svg';
+import StatisticsIcon from '/public/categoryIcon/statisticsIcon.svg';
+import DataIcon from '/public/categoryIcon/dataIcon.svg';
+import UXUIIcon from '/public/categoryIcon/uxuiIcon.svg';
+import PlanIcon from '/public/categoryIcon/planIcon.svg';
+import WorkIcon from '/public/categoryIcon/workIcon.svg';
+import LanguageIcon from '/public/categoryIcon/languageIcon.svg';
+import JobIcon from '/public/categoryIcon/jobIcon.svg';
 
-import AppIconW from '../../assets/categoryIcon/appIcon_w.svg';
-import WebIconW from '../../assets/categoryIcon/webIcon_w.svg';
-import ComputerIconW from '../../assets/categoryIcon/computerIcon_w.svg';
-import DeepLearningIconW from '../../assets/categoryIcon/deepLearningIcon_w.svg';
-import StatisticsIconW from '../../assets/categoryIcon/statisticsIcon_w.svg';
-import DataIconW from '../../assets/categoryIcon/dataIcon_w.svg';
-import UXUIIconW from '../../assets/categoryIcon/uxuiIcon_w.svg';
-import PlanIconW from '../../assets/categoryIcon/planIcon_w.svg';
-import WorkIconW from '../../assets/categoryIcon/workIcon_w.svg';
-import LanguageIconW from '../../assets/categoryIcon/languageIcon_w.svg';
-import JobIconW from '../../assets/categoryIcon/jobIcon_w.svg';
+import AppIconW from '/public/categoryIcon/appIcon_w.svg';
+import WebIconW from '/public/categoryIcon/webIcon_w.svg';
+import ComputerIconW from '/public/categoryIcon/computerIcon_w.svg';
+import DeepLearningIconW from '/public/categoryIcon/deepLearningIcon_w.svg';
+import StatisticsIconW from '/public/categoryIcon/statisticsIcon_w.svg';
+import DataIconW from '/public/categoryIcon/dataIcon_w.svg';
+import UXUIIconW from '/public/categoryIcon/uxuiIcon_w.svg';
+import PlanIconW from '/public/categoryIcon/planIcon_w.svg';
+import WorkIconW from '/public/categoryIcon/workIcon_w.svg';
+import LanguageIconW from '/public/categoryIcon/languageIcon_w.svg';
+import JobIconW from '/public/categoryIcon/jobIcon_w.svg';
 
 const Content = styled.div`
   display: flex;

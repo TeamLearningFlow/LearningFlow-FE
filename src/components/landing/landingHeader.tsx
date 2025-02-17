@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import LogoDark from '../../assets/logo_dark.png';
+import LogoDark from '/public/logo_dark.png';
 
 const LogoContainer = styled.div`
   display: flex;

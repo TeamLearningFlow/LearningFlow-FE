@@ -3,18 +3,18 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import Image from 'next/image';
-import CheckedYoutube from '../../assets/platformicon/youtube_checked_ic.svg';
-import CheckedBlog from '../../assets/platformicon/naver blog_checked_ic.svg';
-import CheckedTistory from '../../assets/platformicon/tistory_checked_ic.svg';
-import CheckedVelog from '../../assets/platformicon/velog_checked_ic.svg';
-import YoutubeActiveIcon from '../../assets/platformicon/youtube_active_ic.svg';
-import BlogActiveIcon from '../../assets/platformicon/naverblog_active_ic.svg';
-import VelogActiveIcon from '../../assets/platformicon/velog_active_ic.svg';
-import TistoryActiveIcon from '../../assets/platformicon/tistory_active_ic.svg';
-import Youtube from '../../assets/platformicon/youtube_nostroke_ic.svg';
-import Blog from '../../assets/platformicon/naverblog_nostroke_ic.svg';
-import Tistory from '../../assets/platformicon/tistory_nostroke_ic.svg';
-import Velog from '../../assets/platformicon/velog_nostroke_ic.svg';
+import CheckedYoutube from '/public/platformicon/youtube_checked_ic.svg';
+import CheckedBlog from '/public/platformicon/naver blog_checked_ic.svg';
+import CheckedTistory from '/public/platformicon/tistory_checked_ic.svg';
+import CheckedVelog from '/public/platformicon/velog_checked_ic.svg';
+import YoutubeActiveIcon from '/public/platformicon/youtube_active_ic.svg';
+import BlogActiveIcon from '/public/platformicon/naverblog_active_ic.svg';
+import VelogActiveIcon from '/public/platformicon/velog_active_ic.svg';
+import TistoryActiveIcon from '/public/platformicon/tistory_active_ic.svg';
+import Youtube from '/public/platformicon/youtube_nostroke_ic.svg';
+import Blog from '/public/platformicon/naverblog_nostroke_ic.svg';
+import Tistory from '/public/platformicon/tistory_nostroke_ic.svg';
+import Velog from '/public/platformicon/velog_nostroke_ic.svg';
 
 
 interface ResourceData {

@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import DefaultRadio from '../../assets/defaultRadio.svg';
-import SkeletonPlayButton from '../../assets/skeletonPlayButton.svg';
+import DefaultRadio from '/public/defaultRadio.svg';
+import SkeletonPlayButton from '/public/skeletonPlayButton.svg';
 
 const ContentWrapper = styled.div`
   display: flex;

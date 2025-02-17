@@ -3,13 +3,13 @@ import axios from 'axios';
 import Image from 'next/image';
 import styled from 'styled-components';
 // import TopLogo from '../../components/landingHeader';
-import Guest from '../../assets/Guest.svg';
-import EditIcon from '../../assets/editIcon.svg';
-import EditIconHover from '../../assets/editIconhover.svg';
-import LeftIcon from '../../assets/leftIcon.svg';
-import LeftIconDisabled from '../../assets/leftIconDisabled.svg';
-import DownIcon from '../../assets/downIcon.svg';
-import UpIcon from '../../assets/upIcon.svg';
+import Guest from '/public/Guest.svg';
+import EditIcon from '/public/editIcon.svg';
+import EditIconHover from '/public/editIconhover.svg';
+import LeftIcon from '/public/leftIcon.svg';
+import LeftIconDisabled from '/public/leftIconDisabled.svg';
+import DownIcon from '/public/downIcon.svg';
+import UpIcon from '/public/upIcon.svg';
 
 const Content = styled.div`
   display: flex;

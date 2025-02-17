@@ -4,18 +4,18 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { CompletedCollectionData } from '@/types/types';
 
-import BoardingPassContainer from '../../assets/S_Background.svg';
-import CollectionImage from '../../assets/boardingpassS.svg';
-import BookmarkIcon from '../../assets/bookmark.svg';
-import BookmarkFilledIcon from '../../assets/bookmarkFilled.svg';
-import HoverBackgroundTop from '../../assets/hover-backgroundTopS.svg';
-import HoverBackground from '../../assets/hover-background.svg';
-import Plane from '../../assets/plane.svg';
-import Circle from '../../assets/circle.svg';
-import Calendar from '../../assets/calendarIcon.svg';
+import BoardingPassContainer from '/public/S_Background.svg';
+import CollectionImage from '/public/boardingpassS.svg';
+import BookmarkIcon from '/public/bookmark.svg';
+import HoverBackgroundTop from '/public/hover-backgroundTopS.svg';
+import HoverBackground from '/public/hover-background.svg';
+import Plane from '/public/plane.svg';
+import Circle from '/public/circle.svg';
+import Calendar from '/public/calendarIcon.svg';
+import BookmarkFilledIcon from '/public/bookmarkFilled.svg';
 
-import CompletedFront from '../../assets/completedFront.svg';
-import CompletedStamp from '../../assets/completedStamp.svg';
+import CompletedFront from '/public/completedFront.svg';
+import CompletedStamp from '/public/completedStamp.svg';
 
 const ColumnFlexDiv = styled.div`
   display: flex;

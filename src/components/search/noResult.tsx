@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import noResult from '../../assets/noResult.svg';
+import noResult from '/public/noResult.svg';
 
 const Container = styled.div`
   width: 100%;

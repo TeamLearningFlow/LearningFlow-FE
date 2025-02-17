@@ -2,12 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import Image from 'next/image';
-// import userProfile from '../../assets/userphoto.svg';
-import Guest from '../../assets/Guest.svg';
-import CheckIcon from '../../assets/checkIconGray.svg';
-import CheckIconB from '../../assets/checkIconB.svg';
-import DownIcon from '../../assets/downIcon.svg';
-import UpIcon from '../../assets/upIcon.svg';
+// import userProfile from '/public/userphoto.svg';
+import Guest from '/public/Guest.svg';
+import CheckIcon from '/public/checkIconGray.svg';
+import CheckIconB from '/public/checkIconB.svg';
+import DownIcon from '/public/downIcon.svg';
+import UpIcon from '/public/upIcon.svg';
 import ProfileCategoryList from '../../components/mypage/profileCategoryList';
 import PreferSlider from '../../components/mypage/preferSlider';
 

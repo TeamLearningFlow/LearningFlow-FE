@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import DarkTopLogo from '../../components/topLogo_dark';
 import Image from 'next/image';
-import PlaneIcon from '../../assets/paperplane.svg';
+import PlaneIcon from '/public/paperplane.svg';
 import EmailAuthModal from '../../components/modal/emailAuthModal';
 import RegisterPage from './index';
 

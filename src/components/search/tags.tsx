@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import CloseIcon from '../../assets/close.svg';
+import CloseIcon from '/public/close.svg';
 import { useRouter } from 'next/router';
 import {
   difficultyOptions,

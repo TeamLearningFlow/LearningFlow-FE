@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import invisibleicon from '../../assets/invisibleicon.svg';
-import visibleicon from '../../assets/visibleicon.svg';
-import X from '../../assets/X_red.svg';
+import invisibleicon from '/public/invisibleicon.svg';
+import visibleicon from '/public/visibleicon.svg';
+import X from '/public/X_red.svg';
 
 const InputWrapper = styled.div<{
   isFocused: boolean;

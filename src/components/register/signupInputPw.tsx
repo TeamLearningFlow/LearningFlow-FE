@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import invisibleicon from '../../assets/invisibleicon.svg';
-import visibleicon from '../../assets/visibleicon.svg';
+import invisibleicon from '/public/invisibleicon.svg';
+import visibleicon from '/public/visibleicon.svg';
 import { ValidationCheck } from '../register/validation';
 
 const InputWrapper = styled.div<{

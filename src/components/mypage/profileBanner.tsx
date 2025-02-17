@@ -2,8 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
 import Image from 'next/image';
-import ProfileEditIcon from '../../assets/profileEditIcon.svg';
-import user from '../../assets/Guest.svg';
+import ProfileEditIcon from '/public/profileEditIcon.svg';
+import user from '/public/Guest.svg';
 
 const Container = styled.div`
   width: 1200px;

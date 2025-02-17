@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import MessageIcon from '../../assets/messageIcon.svg';
+import MessageIcon from '/public/messageIcon.svg';
 
 const ModalOverlay = styled.div`
   position: fixed;

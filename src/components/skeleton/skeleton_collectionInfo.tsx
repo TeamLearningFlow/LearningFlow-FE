@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import collectionInfoIMG from '../../assets/Skeleton_CollectionInfoRight.svg';
-import collectionInfoImgBottom from '../../assets/Skeleton_CollectionInfoBottom.svg';
+import collectionInfoIMG from '/public/Skeleton_CollectionInfoRight.svg';
+import collectionInfoImgBottom from '/public/Skeleton_CollectionInfoBottom.svg';
 
 const Skeleton_CollectionInfoWrapper = styled.div`
   display: flex;

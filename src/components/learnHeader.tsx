@@ -2,8 +2,8 @@ import React, { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
 import Image from 'next/image';
-import LogoDark from '../assets/logo_dark.png';
-import Guest from '../assets/Guest.svg';
+import LogoDark from '/public/logo_dark.png';
+import Guest from '/public/Guest.svg';
 import UserModal from './modal/userModal';
 
 const HeaderWrapper = styled.header`

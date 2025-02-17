@@ -3,12 +3,12 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import styled from 'styled-components';
 import Image from 'next/image';
-import Tooltip from '../../assets/emailTooltip.svg';
-import X from '../../assets/X_red.svg';
-import InvisibleIcon from '../../assets/invisibleicon.svg';
-import VisibleIcon from '../../assets/visibleicon.svg';
-import CheckIcon from '../../assets/checkIconG.svg';
-import CheckIconB from '../../assets/checkIconB.svg';
+import Tooltip from '/public/emailTooltip.svg';
+import X from '/public/X_red.svg';
+import InvisibleIcon from '/publics/invisibleicon.svg';
+import VisibleIcon from '/public/visibleicon.svg';
+import CheckIcon from '/public/checkIconG.svg';
+import CheckIconB from '/public/checkIconB.svg';
 
 import EmailChangeModal from '../../components/modal/emailChangeModal';
 import PasswordChangeCheckModal from '../../components/modal/passwordChangeCheckModal';

@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import Image from 'next/image';
-import tmpIMG from '../../assets/collection-clock.png';
-import collectionInfoIMG from '../../assets/CollectionInfo.png';
-import yesBookMarked from '../../assets/yesBookMarked.svg';
-import noBookMarked from '../../assets/noBookMarked.svg';
-import NaverblogIcon from '../../assets/platformicon/naverblog_nostroke_ic.svg';
-import TistoryIcon from '../../assets/platformicon/tistory_nostroke_ic.svg';
-import VelogIcon from '../../assets/platformicon/velog_nostroke_ic.svg';
-import YoutubeIcon from '../../assets/platformicon/youtube_nostroke_ic.svg';
-import line from '../../assets/Line.svg';
-import dot from '../../assets/dot.svg';
-import plane from '../../assets/Airplane.svg';
+import tmpIMG from '/public/collection-clock.png';
+import collectionInfoIMG from '/public/CollectionInfo.png';
+import yesBookMarked from '/public/yesBookMarked.svg';
+import noBookMarked from '/public/noBookMarked.svg';
+import NaverblogIcon from '/public/platformicon/naverblog_nostroke_ic.svg';
+import TistoryIcon from '/public/platformicon/tistory_nostroke_ic.svg';
+import VelogIcon from '/public/platformicon/velog_nostroke_ic.svg';
+import YoutubeIcon from '/public/platformicon/youtube_nostroke_ic.svg';
+import line from '/public/Line.svg';
+import dot from '/public/dot.svg';
+import plane from '/public/Airplane.svg';
 // import { CgPathCrop } from 'react-icons/cg';
 
 interface CollectionData {

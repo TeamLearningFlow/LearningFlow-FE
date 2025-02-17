@@ -4,8 +4,8 @@ import axios from 'axios';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { FaCheck } from 'react-icons/fa6';
-import EffectUp from '../../assets/buttonEffectUp.svg';
-import EffectDown from '../../assets/buttonEffectDown.svg';
+import EffectUp from '/public/buttonEffectUp.svg';
+import EffectDown from '/public/buttonEffectDown.svg';
 import LearnModal from '../modal/learnModal';
 // import { CollectionData } from '@/pages/collection/[collectionId]';
 

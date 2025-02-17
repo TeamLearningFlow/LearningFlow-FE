@@ -5,11 +5,11 @@ import { useRouter } from 'next/router';
 import { LoginContext } from '../context/LoginContext';
 
 import Image from 'next/image';
-import X from '../../assets/X_red.svg';
-import InvisibleIcon from '../../assets/invisibleicon.svg';
-import VisibleIcon from '../../assets/visibleicon.svg';
-import CheckIcon from '../../assets/checkIconG.svg';
-import CheckIconB from '../../assets/checkIconB.svg';
+import X from '/public/X_red.svg';
+import InvisibleIcon from '/public/invisibleicon.svg';
+import VisibleIcon from '/public/visibleicon.svg';
+import CheckIcon from '/public/checkIconG.svg';
+import CheckIconB from '/public/checkIconB.svg';
 
 const ModalOverlay = styled.div`
   position: fixed;

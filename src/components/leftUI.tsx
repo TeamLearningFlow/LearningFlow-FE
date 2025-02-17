@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image'; /* 이미지를 가져올 때 StaticImageData 타입을 자동으로 처리 */
-import LogoGraphic from '../assets/logoMark.svg';
-import PlaneGraphic from '../assets/PlaneGraphic.svg';
-import NoteBookGraphic from '../assets/noteBook.svg';
+import LogoGraphic from '/public/logoMark.svg';
+import PlaneGraphic from '/public/PlaneGraphic.svg';
+import NoteBookGraphic from '/public/noteBook.svg';
 
 const leftUI: React.FC = () => {
   return (

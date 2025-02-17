@@ -4,17 +4,17 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import LoginAuthModal from '../modal/loginModal';
-import CurrentPlayButton from '../../assets/currentPlayButton.svg';
-import HoverPlayButton from '../../assets/hoverPlayButton.svg';
-import ActiveRadio from '../../assets/activeRadio.svg';
-import YoutubeHoverIcon from '../../assets/platformicon/youtube_ic.svg';
-import BlogHoverIcon from '../../assets/platformicon/naverblog_ic.svg';
-import VelogHoverIcon from '../../assets/platformicon/velog_ic.svg';
-import TistoryHoverIcon from '../../assets/platformicon/tistory_ic.svg';
-import YoutubeActiveIcon from '../../assets/platformicon/youtube_active_ic.svg';
-import BlogActiveIcon from '../../assets/platformicon/naverblog_active_ic.svg';
-import VelogActiveIcon from '../../assets/platformicon/velog_active_ic.svg';
-import TistoryActiveIcon from '../../assets/platformicon/tistory_active_ic.svg';
+import CurrentPlayButton from '/public/currentPlayButton.svg';
+import HoverPlayButton from '/public/hoverPlayButton.svg';
+import ActiveRadio from '/public/activeRadio.svg';
+import YoutubeHoverIcon from '/publics/platformicon/youtube_ic.svg';
+import BlogHoverIcon from '/public/platformicon/naverblog_ic.svg';
+import VelogHoverIcon from '/public/platformicon/velog_ic.svg';
+import TistoryHoverIcon from '/public/platformicon/tistory_ic.svg';
+import YoutubeActiveIcon from '/public/platformicon/youtube_active_ic.svg';
+import BlogActiveIcon from '/public/platformicon/naverblog_active_ic.svg';
+import VelogActiveIcon from '/public/platformicon/velog_active_ic.svg';
+import TistoryActiveIcon from '/public/platformicon/tistory_active_ic.svg';
 import { CollectionData } from '@/pages/collection/[collectionId]';
 
 interface ClassIndexProps {

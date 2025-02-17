@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import styled from 'styled-components';
-import LeftIcon from '../../assets/leftIcon.svg';
-import Polygon from '../../assets/polygon.svg';
+import LeftIcon from '/public/leftIcon.svg';
+import Polygon from '/public/polygon.svg';
 
 const Content = styled.div`
   display: flex;

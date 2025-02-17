@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import logovertical from '../../../../assets/logo_vertical.svg';
+import logovertical from '/public/logo_vertical.svg';
 import styled, { keyframes } from 'styled-components';
 
 const Container = styled.div`

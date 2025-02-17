@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import BannerText from '../../assets/bannerTextP.svg';
-import Logo from '../../assets/bannerLogo.svg';
-import Plane from '../../assets/paperplane.svg';
+import BannerText from '/public/bannerTextP.svg';
+import Logo from '/public/bannerLogo.svg';
+import Plane from '/public/paperplane.svg';
 
 const BannerWrapper = styled.div`
   width: 100%;

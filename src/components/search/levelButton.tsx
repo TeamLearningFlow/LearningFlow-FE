@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import ChevronDown from '../../assets/chevronDown.svg';
-import ChevronDownG from '../../assets/chevronDown_G.svg';
+import ChevronDown from '/public/chevronDown.svg';
+import ChevronDownG from '/public/chevronDown_G.svg';
 import { useRouter } from 'next/router';
 import { difficultyOptions } from './filterOptions';
 

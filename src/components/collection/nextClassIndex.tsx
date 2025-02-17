@@ -3,19 +3,18 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import { useRouter } from "next/router";
 import axios from "axios";
-import PlayButton from '../../assets/playButton.svg';
-import Youtube from '../../assets/platformicon/youtube_ic.svg';
-import Blog from '../../assets/platformicon/naverblog_ic.svg';
-import Tistory from '../../assets/platformicon/tistory_ic.svg';
-import Velog from '../../assets/platformicon/velog_ic.svg';
-import DefaultRadio from '../../assets/defaultRadio.svg';
+import PlayButton from '/public/playButton.svg';
+import Youtube from '/public/platformicon/youtube_ic.svg';
+import Blog from '/public/platformicon/naverblog_ic.svg';
+import Tistory from '/public/platformicon/tistory_ic.svg';
+import Velog from '/public/platformicon/velog_ic.svg';
+import DefaultRadio from '/public/defaultRadio.svg';
 import { CollectionData } from '@/pages/collection/[collectionId]';
 
 interface ClassIndexProps {
   classData: CollectionData['resource'][0];
   collection: CollectionData;
 }
-
 
 const NextClassIndex: React.FC<ClassIndexProps> = ({ classData, collection }) =>  {
   const router = useRouter();

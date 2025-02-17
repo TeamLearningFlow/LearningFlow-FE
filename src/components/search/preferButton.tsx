@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import Polygon from '../../assets/polygon.svg';
+import Polygon from '/public/polygon.svg';
 import { useRouter } from 'next/router';
 import { mediaOptions } from './filterOptions';
 

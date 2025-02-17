@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import googlelogo from '../assets/googleLogo.svg';
+import googlelogo from '/public/googleLogo.svg';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 

@@ -4,10 +4,10 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import Image from 'next/image';
 
-import LogoDark from '../assets/logo_dark.png';
-import Search from '../assets/searchicon.svg';
-import Guest from '../assets/Guest.svg';
-import Vector from '../assets/Vector.svg';
+import LogoDark from '/public/logo_dark.png';
+import Search from '/public/searchicon.svg';
+import Guest from '/public/Guest.svg';
+import Vector from '/public/Vector.svg';
 import UserModal from './modal/userModal';
 
 const HeaderWrapper = styled.header`

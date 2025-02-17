@@ -3,13 +3,13 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import styled from 'styled-components';
 import Image from 'next/image';
-import PlayButton from '../../assets/playButton.svg';
-import CompletedIndexIcon from '../../assets/completedRadio.svg';
-import EndIndexIcon from '../../assets/defaultRadio.svg';
-import CheckedYoutube from '../../assets/platformicon/youtube_checked_ic.svg';
-import CheckedBlog from '../../assets/platformicon/naver blog_checked_ic.svg';
-import CheckedTistory from '../../assets/platformicon/tistory_checked_ic.svg';
-import CheckedVelog from '../../assets/platformicon/velog_checked_ic.svg';
+import PlayButton from '/public/playButton.svg';
+import CompletedIndexIcon from '/public/assets/completedRadio.svg';
+import EndIndexIcon from '/public/assets/defaultRadio.svg';
+import CheckedYoutube from '/public/assets/platformicon/youtube_checked_ic.svg';
+import CheckedBlog from '/public/assets/platformicon/naver blog_checked_ic.svg';
+import CheckedTistory from '/public/assets/platformicon/tistory_checked_ic.svg';
+import CheckedVelog from '/public/assets/platformicon/velog_checked_ic.svg';
 import { CollectionData } from '@/pages/collection/[collectionId]';
 
 interface ClassIndexProps {

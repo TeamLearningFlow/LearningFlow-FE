@@ -6,8 +6,8 @@ import Image from 'next/image';
 import MyProfile from './myprofile';
 import BasicInfo from './basicInfo';
 import Footer from '../../components/homeFooter';
-import NextIcon from '../../assets/nextIcon.svg';
-import NextIconHover from '../../assets/nextIconHover.svg';
+import NextIcon from '/public/nextIcon.svg';
+import NextIconHover from '/public/nextIconHover.svg';
 
 import GoogleDeleteModal from '../../components/modal/googleDeleteModal';
 import LocalDeleteModal from '../../components/modal/localDeleteModal';

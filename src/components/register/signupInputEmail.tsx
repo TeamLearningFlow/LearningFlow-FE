@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import X from '../../assets/X_red.svg';
+import X from '/public/X_red.svg';
 // import { EmailCheckLabel } from '../register/validation';
 
 const Label = styled.label`
