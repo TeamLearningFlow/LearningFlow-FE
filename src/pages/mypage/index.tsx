@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Header from '@/components/header';
 import ProfileBanner from '@/components/mypage/profileBanner';
-import Tab from '@/components/mypage/mypageTabMenu';
+import Tab from '../../components/mypage/mypageTabMenu';
 import Footer from '@/components/homeFooter';
 import { CompletedCollectionData } from '@/types/types';
 

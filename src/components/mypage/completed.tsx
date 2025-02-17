@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import Prev from '../../assets/Previous.svg';
-import Next from '../../assets/Next.svg';
+import Prev from '../../assets/previous.svg';
+import Next from '../../assets/next.svg';
 import CompletedBoardingPass from './completedCollection';
 import EmptyCompleted from '../../components/mypage/emptyCompleted';
 import { CompletedCollectionData } from '@/types/types';
