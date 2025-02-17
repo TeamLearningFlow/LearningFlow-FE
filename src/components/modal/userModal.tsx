@@ -5,11 +5,11 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 
-import Guest from '../../assets/Guest.svg';
-import bookIMG from '../../assets/Book.svg';
-import likeIMG from '../../assets/Like.svg';
-import settingsIMG from '../../assets/Settings.svg';
-import logoutIMG from '../../assets/Logout.svg';
+import Guest from '/public/Guest.svg';
+import bookIMG from '/public/Book.svg';
+import likeIMG from '/public/Like.svg';
+import settingsIMG from '/public/Settings.svg';
+import logoutIMG from '/public/Logout.svg';
 
 const UserModalWrapper = styled.div`
   display: flex;

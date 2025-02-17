@@ -2,11 +2,11 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import Image from 'next/image';
-import LogoGraphic from '../../assets/logoMark.svg';
-import Airplane from '../../assets/homeAirplane.svg';
-import Window from '../../assets/window.svg';
+import LogoGraphic from '/public/logoMark.svg';
+import Airplane from '/public/homeAirplane.svg';
+import Window from '/public/window.svg';
 // import WindowIn from '../public/windowIn.gif';
-import Search from '../../assets/searchicon.svg';
+import Search from '/public/searchicon.svg';
 
 const TopWrapper = styled.div`
   display: flex;
@@ -428,7 +428,13 @@ const HomeTop: React.FC = () => {
           <Image src={Airplane} alt="airplane" />
         </AirplaneWrapper>
         <WindowWrapper>
-          <WindowInGif src='/windowIn.gif' alt="window-in" unoptimized />
+          <WindowInGif
+            src="/windowIn.gif"
+            alt="window-in"
+            width={400}
+            height={500}
+            unoptimized
+          />
           <WindowImage
             src={Window}
             alt="window"

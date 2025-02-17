@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import errorImage from '../assets/404.svg';
+import errorImage from '/public/404.svg';
 import { useRouter } from 'next/router';
 import Footer from '@/components/homeFooter';
 

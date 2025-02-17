@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import RecentBoardingPass from './recentBoardingPass';
 import { useRouter } from 'next/router';
-import plane from '../../assets/plane_today.svg';
-import naverblogChecked from '../../assets/platformicon/naver blog_checked_ic.svg';
-import naverblog from '../../assets/platformicon/naverblog_ic.svg';
+import plane from '/public/plane_today.svg';
+import naverblogChecked from '/public/platformicon/naver blog_checked_ic.svg';
+import naverblog from '/public/platformicon/naverblog_ic.svg';
 
 const Container = styled.div`
   display: flex;

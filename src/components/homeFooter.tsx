@@ -2,8 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import Link from 'next/link';
-import Logo from '../assets/logo_light.png';
-
+import Logo from '/public/logo_light.png';
 
 const SloganWrapper = styled.div`
   display: flex;

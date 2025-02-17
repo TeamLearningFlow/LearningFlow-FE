@@ -1,28 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import Icon from '../../assets/oversea.svg';
+import Icon from '/public/oversea.svg';
 
 import { motion } from 'framer-motion';
-import Confetti1 from '../../assets/confetti/confetti1.svg';
-import Confetti2 from '../../assets/confetti/confetti2.svg';
-import Confetti3 from '../../assets/confetti/confetti3.svg';
-import Confetti4 from '../../assets/confetti/confetti4.svg';
-import Confetti5 from '../../assets/confetti/confetti5.svg';
-import Confetti6 from '../../assets/confetti/confetti6.svg';
-import Confetti7 from '../../assets/confetti/confetti7.svg';
-import Confetti8 from '../../assets/confetti/confetti8.svg';
-import Confetti9 from '../../assets/confetti/confetti9.svg';
-// import Confetti10 from '../../assets/confetti/confetti10.svg';
-import Confetti11 from '../../assets/confetti/confetti11.svg';
-import Confetti12 from '../../assets/confetti/confetti12.svg';
-import Confetti13 from '../../assets/confetti/confetti13.svg';
-import Confetti14 from '../../assets/confetti/confetti14.svg';
-import Confetti15 from '../../assets/confetti/confetti15.svg';
-import Confetti16 from '../../assets/confetti/confetti16.svg';
-import Confetti17 from '../../assets/confetti/confetti17.svg';
-import Confetti18 from '../../assets/confetti/confetti18.svg';
-import Confetti19 from '../../assets/confetti/confetti19.svg';
+import Confetti1 from '/public/confetti/confetti1.svg';
+import Confetti2 from '/public/confetti/confetti2.svg';
+import Confetti3 from '/public/confetti/confetti3.svg';
+import Confetti4 from '/public/confetti/confetti4.svg';
+import Confetti5 from '/public/confetti/confetti5.svg';
+import Confetti6 from '/public/confetti/confetti6.svg';
+import Confetti7 from '/public/confetti/confetti7.svg';
+import Confetti8 from '/public/confetti/confetti8.svg';
+import Confetti9 from '/public/confetti/confetti9.svg';
+// import Confetti10 from '/public/confetti/confetti10.svg';
+import Confetti11 from '/public/confetti/confetti11.svg';
+import Confetti12 from '/public/confetti/confetti12.svg';
+import Confetti13 from '/public/confetti/confetti13.svg';
+import Confetti14 from '/public/confetti/confetti14.svg';
+import Confetti15 from '/public/confetti/confetti15.svg';
+import Confetti16 from '/public/confetti/confetti16.svg';
+import Confetti17 from '/public/confetti/confetti17.svg';
+import Confetti18 from '/public/confetti/confetti18.svg';
+import Confetti19 from '/public/confetti/confetti19.svg';
 
 const ModalOverlay = styled.div`
   position: fixed;

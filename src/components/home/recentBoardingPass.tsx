@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import BoardingPassContainer from '../../assets/S_Background.svg';
-import CollectionImage from '../../assets/boardingpassS.svg';
-import Plane from '../../assets/plane.svg';
+import BoardingPassContainer from '/public/S_Background.svg';
+import CollectionImage from '/public/boardingpassS.svg';
+import Plane from '/public/plane.svg';
 import { RecentLearning } from './recentCollection';
 
 const ColumnFlexDiv = styled.div`

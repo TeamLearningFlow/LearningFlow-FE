@@ -2,10 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import Slider from 'react-slick';
-import BannerText from '../../assets/bannerText.svg';
-import PrevArrowImage from '../../assets//left_arrow_ic.svg';
-import NextArrowImage from '../../assets/right_arrow_ic.svg';
-import LogoMark from '../../assets/logoMark.svg';
+import BannerText from '/public/bannerText.svg';
+import PrevArrowImage from '/public/left_arrow_ic.svg';
+import NextArrowImage from '/public/right_arrow_ic.svg';
+import LogoMark from '/public/logoMark.svg';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 

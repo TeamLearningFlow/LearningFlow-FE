@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 
-import LogoIcon from '../../assets/logoMarkS.svg';
-import Plane from '../../assets/paperplane.svg';
+import LogoIcon from '/public/logoMarkS.svg';
+import Plane from '/public/paperplane.svg';
 
-import Notebook2 from '../../assets/notebook2.svg';
-import Notebook4 from '../../assets/notebook4.svg';
-import Notebook6 from '../../assets/notebook6.svg';
+import Notebook2 from '/public/notebook2.svg';
+import Notebook4 from '/public/notebook4.svg';
+import Notebook6 from '/public/notebook6.svg';
 
 const MiddleWrapper = styled.div`
   display: flex;

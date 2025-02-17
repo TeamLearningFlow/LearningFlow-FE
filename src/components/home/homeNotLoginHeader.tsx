@@ -4,7 +4,7 @@ import Link from 'next/link';
 import styled from 'styled-components';
 import Image from 'next/image';
 
-import LogoDark from '../../assets/logo_dark.png';
+import LogoDark from '/public/logo_dark.png';
 // import Search from '../assets/searchicon.svg';
 
 const HeaderWrapper = styled.header`
