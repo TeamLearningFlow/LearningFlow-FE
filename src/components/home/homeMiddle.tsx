@@ -89,14 +89,15 @@ const StepContainer = styled.div`
   }
 `;
 
-const StepBox = styled.div`
+const StepBox = styled.div<{ isActive: boolean }>`
   position: relative;
   padding: 32px 30px;
   width: 384px;
   height: 172px;
   border-radius: 9.302px;
-  background: #fff;
-  box-shadow: 0px 3.721px 8.558px 0px #e9e7ff;
+  background: ${({ isActive }) => (isActive ? '#5e52ff' : '#fff')};
+  box-shadow: ${({ isActive }) =>
+    isActive ? 'none' : '0px 3.721px 8.558px 0px #e9e7ff'};
   transition: all 0.3s ease-in-out;
   white-space: nowrap;
   z-index: 1;
@@ -105,24 +106,13 @@ const StepBox = styled.div`
     width: 380px;
   }
 
-  &:hover {
-    background-color: #5e52ff;
-    color: #fff;
-    box-shadow: none;
-
-    h3,
-    p {
-      color: #fff;
-    }
-  }
-
   h3 {
     font-size: 24px;
     font-weight: 600;
-    line-height: 150%; /* 36px */
+    line-height: 150%;
     letter-spacing: -0.48px;
     margin-bottom: 8px;
-    color: #5e52ff;
+    color: ${({ isActive }) => (isActive ? '#fff' : '#5e52ff')};
   }
 
   p {
@@ -130,7 +120,7 @@ const StepBox = styled.div`
     font-weight: 400;
     line-height: 150%;
     letter-spacing: -0.28px;
-    color: #1f1f1f;
+    color: ${({ isActive }) => (isActive ? '#fff' : '#1f1f1f')};
   }
 `;
 
@@ -199,14 +189,14 @@ const PlaneWrapper = styled.div<{ activeStep: number | null }>`
       transform: rotate(1.135deg);
     `;
   }}
-  
+
   @media (max-width: 1024px) {
     display: none;
   }
 `;
 
 const HomeMiddle: React.FC = () => {
-  const [active, setActive] = useState<number | null>(null);
+  const [active, setActive] = useState<number>(1);
 
   return (
     <MiddleWrapper>
@@ -220,11 +210,8 @@ const HomeMiddle: React.FC = () => {
         </HeaderText>
       </HomeMiddleHeader>
 
-      <StepContainer>
-        <StepBox
-          onMouseEnter={() => setActive(1)}
-          onMouseLeave={() => setActive(null)}
-        >
+      <StepContainer onMouseLeave={() => setActive(1)}>
+        <StepBox isActive={active === 1} onMouseEnter={() => setActive(1)}>
           <h3>STEP 1.</h3>
           <p>
             필터 기능을 활용해 맞춤 컬렉션을 탐색해요!
@@ -235,10 +222,7 @@ const HomeMiddle: React.FC = () => {
           </p>
         </StepBox>
 
-        <StepBox
-          onMouseEnter={() => setActive(2)}
-          onMouseLeave={() => setActive(null)}
-        >
+        <StepBox isActive={active === 2} onMouseEnter={() => setActive(2)}>
           <h3>STEP 2.</h3>
           <p>
             다양한 사용자들이 추천하는
@@ -248,10 +232,7 @@ const HomeMiddle: React.FC = () => {
             학습 여정에 첫 발을 내딛어요!
           </p>
         </StepBox>
-        <StepBox
-          onMouseEnter={() => setActive(3)}
-          onMouseLeave={() => setActive(null)}
-        >
+        <StepBox isActive={active === 3} onMouseEnter={() => setActive(3)}>
           <h3>STEP 3.</h3>
           <p>
             학습 중인 컬렉션과 학습 완료한 컬렉션을 한눈에 확인하고,
