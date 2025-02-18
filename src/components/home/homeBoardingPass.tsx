@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import BoardingPassContainer from '/public/M_Background.svg';
 import CollectionImage from '/public/boardingpassM.svg';
-import BookmarkIcon from '/public/bookmark.svg';
+import BookmarkIcon from '/public/bookmark_M.svg';
 import BookmarkFilledIcon from '/public/bookmarkFilled.svg';
 import HoverBackgroundTop from '/public/hover-backgroundTopM.svg';
 import HoverBackground from '/public/hover-backgroundM.svg';
@@ -11,14 +11,14 @@ import Plane from '/public/plane_M.svg';
 import Circle from '/public/circle.svg';
 import Calendar from '/public/calendarIcon.svg';
 
-import NaverblogIcon from '/public/platformicon/naverblog_nostroke_ic.svg';
-import TistoryIcon from '/public/platformicon/tistory_nostroke_ic.svg';
-import VelogIcon from '/public/platformicon/velog_nostroke_ic.svg';
-import YoutubeIcon from '/public/platformicon/youtube_nostroke_ic.svg';
-import VelogLine from '/public/platformicon/velog_ic.svg';
-import NaverblogLine from '/public/platformicon/naverblog_ic.svg';
-import TistoryLine from '/public/platformicon/tistory_ic.svg';
-import YoutubeLine from '/public/platformicon/youtube_ic.svg';
+import NaverblogIcon from '/public/platformicon/naverblog_nostroke_ic_M.svg';
+import TistoryIcon from '/public/platformicon/tistory_nostroke_ic_M.svg';
+import VelogIcon from '/public/platformicon/velog_nostroke_ic_M.svg';
+import YoutubeIcon from '/public/platformicon/youtube_nostroke_ic_M.svg';
+import VelogLine from '/public/platformicon/velog_ic_M.svg';
+import NaverblogLine from '/public/platformicon/naverblog_ic_M.svg';
+import TistoryLine from '/public/platformicon/tistory_ic_M.svg';
+import YoutubeLine from '/public/platformicon/youtube_ic_M.svg';
 import OnStudying from '/public/onstudying.svg';
 import CompletedStamp from '/public/completedStamp.svg';
 import { RecommendedCollection } from './homeCollection';
@@ -93,8 +93,8 @@ const Bookmark = styled.button`
   top: 15px;
   right: 15px;
   cursor: pointer;
-  width: 35px;
-  height: 35px;
+  width: 54px;
+  height: 54px;
   background: transparent;
   border: none;
 `;
@@ -359,13 +359,13 @@ const Thumbnail = styled.div<{ left: number; zIndex: number }>`
   position: absolute;
   left: ${(props) => props.left}px;
   z-index: ${(props) => props.zIndex};
-  top: -5px;
+  // top: -5px;
 `;
 
 const ThumbnailWrapper = styled.div`
   position: relative;
-  height: 26px;
-  margin-left: 10px;
+  height: 36px;
+  // margin-left: 10px;
 `;
 
 const Detail = styled.span<{ marginLeft?: string }>`
@@ -379,11 +379,12 @@ const Detail = styled.span<{ marginLeft?: string }>`
   letter-spacing: -0.2px;
 `;
 
-const LineWrapper = styled.span<{ status?: string }>`
+const LineWrapper = styled.span<{ status?: string; left?: string }>`
   display: flex;
   align-items: center;
   position: absolute;
-  left: ${(props) => (props.status === '학습완료' ? '120px' : '130px')};
+  left: ${(props) =>
+    props.status === '학습완료' ? '65px' : props.left || '96px'};
 `;
 
 const CollectionDetail = styled(RowFlexSpan)`
@@ -507,25 +508,25 @@ const PlatformIcon = (source: string) => {
     case 'youtube':
       return (
         <ThumbnailWrapper>
-          <Image src={YoutubeLine} alt="youtubeline" width={26} height={26} />
+          <Image src={YoutubeLine} alt="youtubeline" width={36} height={36} />
         </ThumbnailWrapper>
       );
     case 'naverBlog':
       return (
         <ThumbnailWrapper>
-          <Image src={NaverblogLine} alt="blogline" width={26} height={26} />
+          <Image src={NaverblogLine} alt="blogline" width={36} height={36} />
         </ThumbnailWrapper>
       );
     case 'tistory':
       return (
         <ThumbnailWrapper>
-          <Image src={TistoryLine} alt="velogline" width={26} height={26} />
+          <Image src={TistoryLine} alt="velogline" width={36} height={36} />
         </ThumbnailWrapper>
       );
     case 'velog':
       return (
         <ThumbnailWrapper>
-          <Image src={VelogLine} alt="velogline" width={26} height={26} />
+          <Image src={VelogLine} alt="velogline" width={36} height={36} />
         </ThumbnailWrapper>
       );
     default:
@@ -552,16 +553,16 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
-          <Image src={YoutubeIcon} alt="youtube" width={26} height={26} />
+          <Image src={YoutubeIcon} alt="youtube" width={36} height={36} />
         </Thumbnail>
         <Thumbnail left={18} zIndex={2}>
-          <Image src={TistoryIcon} alt="tistory" width={26} height={26} />
+          <Image src={TistoryIcon} alt="tistory" width={36} height={36} />
         </Thumbnail>
         <Thumbnail left={35} zIndex={1}>
-          <Image src={NaverblogIcon} alt="naverblog" width={26} height={26} />
+          <Image src={NaverblogIcon} alt="naverblog" width={36} height={36} />
         </Thumbnail>
         <Thumbnail left={53} zIndex={0}>
-          <Image src={VelogIcon} alt="velog" width={26} height={26} />
+          <Image src={VelogIcon} alt="velog" width={36} height={36} />
         </Thumbnail>
       </ThumbnailWrapper>
     );
@@ -576,13 +577,13 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
-          <Image src={YoutubeIcon} alt="youtube" width={26} height={26} />
+          <Image src={YoutubeIcon} alt="youtube" width={36} height={36} />
         </Thumbnail>
         <Thumbnail left={18} zIndex={2}>
-          <Image src={TistoryIcon} alt="tistory" width={26} height={26} />
+          <Image src={TistoryIcon} alt="tistory" width={36} height={36} />
         </Thumbnail>
         <Thumbnail left={35} zIndex={1}>
-          <Image src={NaverblogIcon} alt="naverblog" width={26} height={26} />
+          <Image src={NaverblogIcon} alt="naverblog" width={36} height={36} />
         </Thumbnail>
       </ThumbnailWrapper>
     );
@@ -593,13 +594,13 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
-          <Image src={YoutubeIcon} alt="youtube" width={26} height={26} />
+          <Image src={YoutubeIcon} alt="youtube" width={36} height={36} />
         </Thumbnail>
         <Thumbnail left={18} zIndex={2}>
-          <Image src={TistoryIcon} alt="tistory" width={26} height={26} />
+          <Image src={TistoryIcon} alt="tistory" width={36} height={36} />
         </Thumbnail>
         <Thumbnail left={35} zIndex={1}>
-          <Image src={VelogIcon} alt="velog" width={26} height={26} />
+          <Image src={VelogIcon} alt="velog" width={36} height={36} />
         </Thumbnail>
       </ThumbnailWrapper>
     );
@@ -610,13 +611,13 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
-          <Image src={YoutubeIcon} alt="youtube" width={26} height={26} />
+          <Image src={YoutubeIcon} alt="youtube" width={36} height={36} />
         </Thumbnail>
         <Thumbnail left={18} zIndex={2}>
-          <Image src={NaverblogIcon} alt="naverblog" width={26} height={26} />
+          <Image src={NaverblogIcon} alt="naverblog" width={36} height={36} />
         </Thumbnail>
         <Thumbnail left={35} zIndex={1}>
-          <Image src={VelogIcon} alt="velog" width={26} height={26} />
+          <Image src={VelogIcon} alt="velog" width={36} height={36} />
         </Thumbnail>
       </ThumbnailWrapper>
     );
@@ -627,13 +628,13 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
-          <Image src={TistoryIcon} alt="tistory" width={26} height={26} />
+          <Image src={TistoryIcon} alt="tistory" width={36} height={36} />
         </Thumbnail>
         <Thumbnail left={18} zIndex={2}>
-          <Image src={NaverblogIcon} alt="naverblog" width={26} height={26} />
+          <Image src={NaverblogIcon} alt="naverblog" width={36} height={36} />
         </Thumbnail>
         <Thumbnail left={35} zIndex={1}>
-          <Image src={VelogIcon} alt="velog" width={26} height={26} />
+          <Image src={VelogIcon} alt="velog" width={36} height={36} />
         </Thumbnail>
       </ThumbnailWrapper>
     );
@@ -642,10 +643,10 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
-          <Image src={YoutubeIcon} alt="youtube" width={26} height={26} />
+          <Image src={YoutubeIcon} alt="youtube" width={36} height={36} />
         </Thumbnail>
         <Thumbnail left={18} zIndex={2}>
-          <Image src={TistoryIcon} alt="tistory" width={26} height={26} />
+          <Image src={TistoryIcon} alt="tistory" width={36} height={36} />
         </Thumbnail>
       </ThumbnailWrapper>
     );
@@ -654,10 +655,10 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
-          <Image src={YoutubeIcon} alt="youtube" width={26} height={26} />
+          <Image src={YoutubeIcon} alt="youtube" width={36} height={36} />
         </Thumbnail>
         <Thumbnail left={18} zIndex={2}>
-          <Image src={NaverblogIcon} alt="naverblog" width={26} height={26} />
+          <Image src={NaverblogIcon} alt="naverblog" width={36} height={36} />
         </Thumbnail>
       </ThumbnailWrapper>
     );
@@ -666,10 +667,10 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
-          <Image src={YoutubeIcon} alt="youtube" width={26} height={26} />
+          <Image src={YoutubeIcon} alt="youtube" width={36} height={36} />
         </Thumbnail>
         <Thumbnail left={18} zIndex={2}>
-          <Image src={VelogIcon} alt="velog" width={26} height={26} />
+          <Image src={VelogIcon} alt="velog" width={36} height={36} />
         </Thumbnail>
       </ThumbnailWrapper>
     );
@@ -678,10 +679,10 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
-          <Image src={TistoryIcon} alt="tistory" width={26} height={26} />
+          <Image src={TistoryIcon} alt="tistory" width={36} height={36} />
         </Thumbnail>
         <Thumbnail left={18} zIndex={2}>
-          <Image src={NaverblogIcon} alt="naverblog" width={26} height={26} />
+          <Image src={NaverblogIcon} alt="naverblog" width={36} height={36} />
         </Thumbnail>
       </ThumbnailWrapper>
     );
@@ -690,10 +691,10 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
-          <Image src={TistoryIcon} alt="tistory" width={26} height={26} />
+          <Image src={TistoryIcon} alt="tistory" width={36} height={36} />
         </Thumbnail>
         <Thumbnail left={18} zIndex={2}>
-          <Image src={VelogIcon} alt="velog" width={26} height={26} />
+          <Image src={VelogIcon} alt="velog" width={36} height={36} />
         </Thumbnail>
       </ThumbnailWrapper>
     );
@@ -702,10 +703,10 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
-          <Image src={NaverblogIcon} alt="naverblog" width={26} height={26} />
+          <Image src={NaverblogIcon} alt="naverblog" width={36} height={36} />
         </Thumbnail>
         <Thumbnail left={18} zIndex={2}>
-          <Image src={VelogIcon} alt="velog" width={26} height={26} />
+          <Image src={VelogIcon} alt="velog" width={36} height={36} />
         </Thumbnail>
       </ThumbnailWrapper>
     );
@@ -714,7 +715,7 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
-          <Image src={TistoryIcon} alt="velog" width={26} height={26} />
+          <Image src={TistoryIcon} alt="velog" width={36} height={36} />
         </Thumbnail>
       </ThumbnailWrapper>
     );
@@ -723,7 +724,7 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
-          <Image src={NaverblogIcon} alt="naverblog" width={26} height={26} />
+          <Image src={NaverblogIcon} alt="naverblog" width={36} height={36} />
         </Thumbnail>
       </ThumbnailWrapper>
     );
@@ -732,7 +733,7 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
-          <Image src={VelogIcon} alt="velog" width={26} height={26} />
+          <Image src={VelogIcon} alt="velog" width={36} height={36} />
         </Thumbnail>
       </ThumbnailWrapper>
     );
@@ -741,7 +742,7 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
-          <Image src={YoutubeIcon} alt="youtube" width={26} height={26} />
+          <Image src={YoutubeIcon} alt="youtube" width={36} height={36} />
         </Thumbnail>
       </ThumbnailWrapper>
     );
@@ -757,6 +758,148 @@ const CollectionAmount = ({ data }: { data: RecommendedCollection }) => {
       {data?.videoCount !== 0 && <Number>{data?.videoCount}</Number>}
     </CollectionDetail>
   );
+};
+
+const DashedLine = ({ width, path }: { width?: number; path?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={width}
+    height="2"
+    viewBox={`0 0 ${width} 2`}
+    fill="none"
+  >
+    <path
+      d={path}
+      stroke="#FAFAFC"
+      // strokeWidth="740061"
+      strokeDasharray="2.18 2.18"
+    />
+  </svg>
+);
+
+const HeaderLine = ({
+  data,
+  status,
+}: {
+  data: RecommendedCollection;
+  status: string;
+}) => {
+  const areArraysEqual = (arr1: string[], arr2: string[]) => {
+    return (
+      arr1.length === arr2.length &&
+      new Set(arr1).size === new Set([...arr1, ...arr2]).size
+    );
+  };
+
+  if (status === '학습완료') {
+    return (
+      <LineWrapper status="학습완료">
+        <DashedLine width={95} path="M0 1H95" />
+        <Image src={Circle} alt="circle" />
+      </LineWrapper>
+    );
+  } else {
+    if (
+      areArraysEqual(data.resourceSourceTypes, [
+        'youtube',
+        'tistory',
+        'naverBlog',
+        'velog',
+      ])
+    ) {
+      return (
+        <LineWrapper status="" left={'128px'}>
+          <DashedLine width={93} path="M0 1H93" />
+          <Image src={Circle} alt="circle" />
+        </LineWrapper>
+      );
+    }
+    if (
+      areArraysEqual(data.resourceSourceTypes, [
+        'youtube',
+        'tistory',
+        'naverBlog',
+      ]) ||
+      areArraysEqual(data.resourceSourceTypes, [
+        'youtube',
+        'tistory',
+        'velog',
+      ]) ||
+      areArraysEqual(data.resourceSourceTypes, [
+        'youtube',
+        'naverBlog',
+        'velog',
+      ])
+    ) {
+      return (
+        <LineWrapper status="" left={'104px'}>
+          <DashedLine width={117} path="M0 1H117" />
+          <Image src={Circle} alt="circle" />
+        </LineWrapper>
+      );
+    }
+    if (
+      areArraysEqual(data.resourceSourceTypes, [
+        'tistory',
+        'naverBlog',
+        'velog',
+      ])
+    ) {
+      return (
+        <LineWrapper status="" left={'104px'}>
+          <DashedLine width={158} path="M0 1H158" />
+          <Image src={Circle} alt="circle" />
+        </LineWrapper>
+      );
+    }
+    if (
+      areArraysEqual(data.resourceSourceTypes, ['youtube', 'tistory']) ||
+      areArraysEqual(data.resourceSourceTypes, ['youtube', 'naverBlog']) ||
+      areArraysEqual(data.resourceSourceTypes, ['youtube', 'velog'])
+    ) {
+      return (
+        <LineWrapper status="" left={'80px'}>
+          <DashedLine width={141} path="M0 1H141" />
+          <Image src={Circle} alt="circle" />
+        </LineWrapper>
+      );
+    }
+
+    if (
+      areArraysEqual(data.resourceSourceTypes, ['tistory', 'naverBlog']) ||
+      areArraysEqual(data.resourceSourceTypes, ['tistory', 'velog']) ||
+      areArraysEqual(data.resourceSourceTypes, ['naverBlog', 'velog'])
+    ) {
+      return (
+        <LineWrapper status="" left={'80px'}>
+          <DashedLine width={182} path="M0 1H182" />
+          <Image src={Circle} alt="circle" />
+        </LineWrapper>
+      );
+    }
+
+    if (
+      areArraysEqual(data.resourceSourceTypes, ['tistory']) ||
+      areArraysEqual(data.resourceSourceTypes, ['naverBlog']) ||
+      areArraysEqual(data.resourceSourceTypes, ['velog'])
+    ) {
+      return (
+        <LineWrapper status="" left={'56px'}>
+          <DashedLine width={206} path="M0 1H206" />
+          <Image src={Circle} alt="circle" />
+        </LineWrapper>
+      );
+    }
+
+    if (areArraysEqual(data.resourceSourceTypes, ['youtube'])) {
+      return (
+        <LineWrapper status="" left={'56px'}>
+          <DashedLine width={214} path="M0 1H214" />
+          <Image src={Circle} alt="circle" />
+        </LineWrapper>
+      );
+    }
+  }
 };
 
 const BookmarkButton = ({
@@ -836,23 +979,7 @@ const HoverCollection = ({
           />
           <CollectionHeader>
             <Number status="학습완료">총 {data.amount}회차</Number>
-            <LineWrapper status="학습완료">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="95"
-                height="2"
-                viewBox="0 0 95 2"
-                fill="none"
-              >
-                <path
-                  d="M0 1H95"
-                  stroke="#FAFAFC"
-                  strokeWidth="0.740061"
-                  strokeDasharray="1.61 1.61"
-                />
-              </svg>
-              <Image src={Circle} alt="circle" />
-            </LineWrapper>
+            <HeaderLine data={data} status="학습완료" />
             <CollectionAmount data={data} />
           </CollectionHeader>
 
@@ -905,23 +1032,7 @@ const HoverCollection = ({
           />
           <CollectionHeader>
             <PlatformSet data={data} />
-            {/*<Detail style={{ position: 'absolute', left: '150px' }}>+4</Detail>*/}
-            <LineWrapper>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="93"
-                height="2"
-                viewBox="0 0 93 2"
-                fill="none"
-              >
-                <path
-                  d="M0 1H93"
-                  stroke="#FAFAFC"
-                  strokeDasharray="2.18 2.18"
-                />
-              </svg>
-              <Image src={Circle} alt="circle" />
-            </LineWrapper>
+            <HeaderLine data={data} status="" />
             <CollectionAmount data={data} />
           </CollectionHeader>
 
