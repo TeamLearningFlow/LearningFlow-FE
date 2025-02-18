@@ -2,6 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import Image from 'next/image';
+import Title from '/public/homeTitle.svg';
 import LogoGraphic from '/public/logoMark.svg';
 import Airplane from '/public/homeAirplane.svg';
 import Window from '/public/window.svg';
@@ -30,33 +31,31 @@ const TopWrapper = styled.div`
   }
 `;
 
-const Title = styled.h1`
-  color: #000;
+const TitleWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
-  font-family: 'Sandoll Geobok';
-  font-feature-settings:
-    'liga' off,
-    'clig' off;
-  font-size: 66px;
-  font-weight: 700;
-  line-height: 130%; /* 93.6px */
-  letter-spacing: -1.32px;
-  margin: -259px 0 65px 0;
+  max-width: 988px;
   z-index: 1;
 
+  img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 60px;
+    margin-top: -250px;
+  }
+
   @media (max-width: 1024px) {
-    font-size: 55px;
-    margin-top: -150px;
+    max-width: 750px;
   }
 
   @media (max-width: 768px) {
-    font-size: 45px;
-    margin: -120px 0 40px 0;
+    max-width: 600px;
   }
 
   @media (max-width: 480px) {
-    font-size: 30px;
-    margin-top: -90px;
+    max-width: 400px;
   }
 `;
 
@@ -79,6 +78,7 @@ const SearchWrapper = styled.div`
 
   @media (max-width: 768px) {
     height: 50px;
+    margin-bottom: 60px;
   }
 `;
 
@@ -267,7 +267,7 @@ const WindowWrapper = styled.div`
     @media (max-width: 768px) {
       max-width: 320px;
       max-height: 400px;
-      left: 0%;
+      left: -5%;
     }
 
     @media (max-width: 480px) {
@@ -314,7 +314,7 @@ const WindowInGif = styled.img`
 
 const LogoMarkWrapper = styled.div`
   position: absolute;
-  top: 30%;
+  top: 32%;
   right: -2%;
   // transform: rotate(0deg);
   // flex-shrink: 0;
@@ -329,8 +329,8 @@ const LogoMarkWrapper = styled.div`
     }
 
     @media (max-width: 768px) {
-      width: 400px;
-      height: 300px;
+      width: 380px;
+      height: 280px;
     }
 
     @media (max-width: 480px) {
@@ -344,7 +344,7 @@ const LogoMarkWrapper = styled.div`
   }
 
   @media (max-width: 768px) {
-    right: -8%;
+    right: -10%;
   }
 
   @media (max-width: 480px) {
@@ -408,11 +408,9 @@ const HomeTop: React.FC = () => {
 
   return (
     <TopWrapper>
-      <Title>
-        Welcome Onboard!
-        <br /> Fasten your Learning
-        <br /> Journey!
-      </Title>
+      <TitleWrapper>
+        <Image src={Title} alt="title" />
+      </TitleWrapper>
 
       <SearchWrapper onClick={() => router.push('/search')}>
         <Input type="text" placeholder="찾고 싶은 컬렉션을 검색해보세요." />
