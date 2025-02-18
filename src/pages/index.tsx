@@ -113,6 +113,7 @@ const HomePage = () => {
         </>
       )}
       <HomeCollection
+        isLoggedIn={isLoggedIn}
         nickname={nickname}
         collections={recommendedCollections}
       />

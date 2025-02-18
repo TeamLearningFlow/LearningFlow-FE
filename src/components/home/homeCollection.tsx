@@ -119,9 +119,10 @@ export type RecommendedCollection = {
 };
 
 const HomeCollection: React.FC<{
+  isLoggedIn: boolean;
   nickname: string;
   collections: RecommendedCollection[];
-}> = ({ nickname, collections }) => {
+}> = ({ isLoggedIn, nickname, collections }) => {
   console.log('collections: ', collections);
   return (
     <>
@@ -136,8 +137,17 @@ const HomeCollection: React.FC<{
             />
           </IconWrapper>
           <HeaderText>
-            <h1>‘서비스 기획’ 분야를 학습하고 계신 {nickname}님!</h1>
-            <p>{nickname}님 맞춤 컬렉션을 추천해 드릴게요</p>
+            {isLoggedIn ? (
+              <>
+                <h1>오늘도 한 걸음 더 나아갈 수 있도록 준비했어요!</h1>
+                <p>{nickname}님을 위한 맞춤 컬렉션을 추천해 드릴게요</p>
+              </>
+            ) : (
+              <>
+                <h1>오늘도 한 걸음 더 나아갈 수 있도록 준비했어요!</h1>
+                <p>여러분을 위한 맞춤 컬렉션을 추천해 드릴게요</p>
+              </>
+            )}
           </HeaderText>
         </CollectionHeader>
         <CollectionList>
