@@ -43,11 +43,11 @@ const VerifyEmail: React.FC = () => {
 
           // 변경된 이메일 저장
           if (response.data.result) {
-            console.log("변경된 이메일:", response.data.result);
+            console.log('변경된 이메일:', response.data.result);
             localStorage.setItem('email', response.data.result);
           }
 
-          router.push('/mypage/profile'); // 개인 정보 페이지로 이동
+          router.replace(`/mypage/profile?emailResetCode=${emailResetCode}`); // 개인 정보 페이지로 이동
         } else {
           console.log('토큰 무효');
           router.push('/'); // 홈 페이지로 이동
