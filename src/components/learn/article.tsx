@@ -1,17 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
+import axios from 'axios';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
-// Youtube api 전역 객체 선언
-declare global {
-  interface Window {
-    onYouTubeIframeAPIReady?: () => void;
-    YT: typeof YT;
-  }
-}
 
 interface YoutubeArticleProps {
   videoId?: string;
-  isCompleted?: boolean;
   onProgressChange?: (progress: number) => void;
 }
 
@@ -21,20 +15,30 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
 }) => {
   const [progress, setProgress] = useState<number>(0);
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const playerRef = useRef<YT.Player | null>(null); // YouTube Player 인스턴스 저장
+  const playerRef = useRef<any>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const isTestMode = false;
+  const router = useRouter();
+  const { episodeId } = router.query;
 
-  // YouTube IFrame API 클린업 처리
   useEffect(() => {
     return () => {
       stopTrackingProgress();
+      if (playerRef.current && typeof playerRef.current.destroy === 'function') {
+        playerRef.current.destroy();
+      }
     };
   }, []);
 
-  // 유튜브 iframe 로드 후 API 연동
+  // videoId 변경 시 플레이어 재설정 및 iframe src 업데이트
   useEffect(() => {
     if (!videoId) return;
+
+    // 이전 플레이어 인스턴스 제거
+    if (playerRef.current && typeof playerRef.current.destroy === 'function') {
+      playerRef.current.destroy();
+      playerRef.current = null;
+    }
 
     const contentUrl = isTestMode
       ? 'https://www.youtube-nocookie.com/embed/LclObYwGj90?enablejsapi=1'
@@ -45,18 +49,22 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
       console.log('Iframe src set:', contentUrl);
     }
 
-    // YouTube IFrame API 스크립트 로드
-    if (!window.YT) {
+    // YouTube IFrame API 스크립트 로드 및 플레이어 초기화
+    if (!window.YT || !window.YT.Player) {
+      (window as any).onYouTubeIframeAPIReady = () => {
+        initializePlayer();
+      };
       const tag = document.createElement('script');
       tag.src = 'https://www.youtube.com/iframe_api';
       document.body.appendChild(tag);
-
-      window.onYouTubeIframeAPIReady = () => {
-        initializePlayer();
-      };
     } else {
-      initializePlayer();
+      setTimeout(() => {
+        initializePlayer();
+      }, 0);
     }
+
+    // videoId 변경 시 기존 인터벌 정리
+    stopTrackingProgress();
   }, [videoId]);
 
   // YouTube Player 초기화
@@ -65,32 +73,64 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
 
     playerRef.current = new window.YT.Player(iframeRef.current, {
       events: {
+        onReady: onPlayerReady,
         onStateChange: handlePlayerStateChange,
       },
     });
   };
 
-  // ESLint 오류 방지용 확인
-  useEffect(() => {
-    console.log(`현재 진행률: ${progress}%`);
-  }, [progress]);
+  const onPlayerReady = (event: any) => {
+    console.log('Player ready');
+  };
 
-  // 플레이어 상태 변경 감지 (재생 시작 시 진도율 추적)
-  const handlePlayerStateChange = (event: YT.OnStateChangeEvent) => {
+  // 플레이어 상태 변경 감지: 진도율 추적 시작
+  const handlePlayerStateChange = (event: any) => {
     if (event.data === window.YT.PlayerState.PLAYING) {
-      console.log('영상 재생 시작 - 진도율 추적 시작');
-      startTrackingProgress();
+      console.log('영상 재생 시작 - 진도율 추적 준비중');
+      // duration이 준비될 때까지 폴링
+      const pollInterval = setInterval(() => {
+        const duration = playerRef.current.getDuration();
+        console.log('영상 총 길이:', duration);
+        if (duration > 0) {
+          clearInterval(pollInterval);
+          startTrackingProgress();
+        }
+      }, 500);
     } else {
       stopTrackingProgress();
     }
   };
 
-  // 진도율 추적
-  const startTrackingProgress = () => {
-    stopTrackingProgress(); // 기존 인터벌 클리어
+  // 진도율 저장 API 호출
+  const saveProgress = async (progressValue: number) => {
+    if (!episodeId) return;
+    try {
+      const token = localStorage.getItem('token');
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      const response = await axios.post(
+        `http://onboarding.p-e.kr:8080/resources/${episodeId}/save-progress`,
+        {
+          resourceType: 'VIDEO',
+          // progress 필드에 계산된 progressValue(백분율)를 전달합니다.
+          progress: progressValue,
+        },
+        { headers }
+      );
+      console.log('진도 저장 응답:', response.data);
+    } catch (error) {
+      console.error('진도 저장 에러:', error);
+    }
+  };
 
+  // 진도율 추적 시작 (1초마다 재생 시간(초) 및 진도율(%) 업데이트)
+  const startTrackingProgress = () => {
+    stopTrackingProgress();
     intervalRef.current = setInterval(() => {
-      if (playerRef.current) {
+      if (
+        playerRef.current &&
+        typeof playerRef.current.getCurrentTime === 'function' &&
+        typeof playerRef.current.getDuration === 'function'
+      ) {
         const currentTime = playerRef.current.getCurrentTime();
         const duration = playerRef.current.getDuration();
         if (duration > 0) {
@@ -98,7 +138,11 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
           setProgress(progressValue);
           onProgressChange(progressValue);
           console.log(`진도율 업데이트: ${progressValue}%`);
+          // 계산된 progressValue를 saveProgress의 progress로 보냅니다.
+          saveProgress(progressValue);
         }
+      } else {
+        console.log('플레이어가 준비되지 않음');
       }
     }, 1000);
   };
@@ -114,18 +158,18 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
   return (
     <ArticleWrapper>
       <Iframe
+        key={videoId}
         ref={iframeRef}
         src=""
         frameBorder="0"
         allowFullScreen
-        width="560"
-        height="315"
       />
     </ArticleWrapper>
   );
 };
 
 export default YoutubeArticle;
+
 
 const ArticleWrapper = styled.div`
   display: flex;

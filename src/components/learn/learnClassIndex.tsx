@@ -1,24 +1,24 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import Image from 'next/image';
-import CheckedYoutube from '/public/platformicon/youtube_checked_ic.svg';
-import CheckedBlog from '/public/platformicon/naver blog_checked_ic.svg';
-import CheckedTistory from '/public/platformicon/tistory_checked_ic.svg';
-import CheckedVelog from '/public/platformicon/velog_checked_ic.svg';
-import YoutubeActiveIcon from '/public/platformicon/youtube_active_ic.svg';
-import BlogActiveIcon from '/public/platformicon/naverblog_active_ic.svg';
-import VelogActiveIcon from '/public/platformicon/velog_active_ic.svg';
-import TistoryActiveIcon from '/public/platformicon/tistory_active_ic.svg';
-import Youtube from '/public/platformicon/youtube_nostroke_ic.svg';
-import Blog from '/public/platformicon/naverblog_nostroke_ic.svg';
-import Tistory from '/public/platformicon/tistory_nostroke_ic.svg';
-import Velog from '/public/platformicon/velog_nostroke_ic.svg';
+import CheckedYoutube from '../../assets/platformicon/youtube_checked_ic.svg';
+import CheckedBlog from '../../assets/platformicon/naver blog_checked_ic.svg';
+import CheckedTistory from '../../assets/platformicon/tistory_checked_ic.svg';
+import CheckedVelog from '../../assets/platformicon/velog_checked_ic.svg';
+import YoutubeActiveIcon from '../../assets/platformicon/youtube_active_ic.svg';
+import BlogActiveIcon from '../../assets/platformicon/naverblog_active_ic.svg';
+import VelogActiveIcon from '../../assets/platformicon/velog_active_ic.svg';
+import TistoryActiveIcon from '../../assets/platformicon/tistory_active_ic.svg';
+import Youtube from '../../assets/platformicon/youtube_nostroke_ic.svg';
+import Blog from '../../assets/platformicon/naverblog_nostroke_ic.svg';
+import Tistory from '../../assets/platformicon/tistory_nostroke_ic.svg';
+import Velog from '../../assets/platformicon/velog_nostroke_ic.svg';
 
 
 interface ResourceData {
-  episodeId: number; // 강의의 고유 ID
+  episodeId: string; // 강의의 고유 ID
   episodeName: string; // 강의 이름
   url: string; // 강의 URL
   resourceSource: "youtube" | "naverBlog" | "tistory" | "velog"; // 리소스 출처
@@ -39,7 +39,7 @@ interface CollectionData {
   liked: boolean; // 좋아요 여부
   likesCount: number; // 좋아요 수
   progressRatePercentage: number | null; // 전체 강의 진행률
-  progressRatio: string | null; // 전체 진행 비율
+  progressRatio: number | null; // 전체 진행 비율
   resource: ResourceData[]; // 강의 목록 (각 강의에 대한 정보)
 }
 
@@ -75,6 +75,8 @@ const getPlatformIcon = (
 };
 
 
+
+ 
 export const CompletedClass: React.FC<ResourceData & { collectionData: CollectionData }> = ({
   episodeId,
   episodeName,
@@ -83,26 +85,29 @@ export const CompletedClass: React.FC<ResourceData & { collectionData: Collectio
   collectionData,
 }) => {
   const router = useRouter();
-  const handleClick = async (episodeId: number, resourceSource: "youtube" | "naverBlog" | "tistory" | "velog") => { 
+  const handleClick = async (episodeId: string, resourceSource: "youtube" | "naverBlog" | "tistory" | "velog") => { 
     try {
       const token = localStorage.getItem("token");
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
   
       // resourceSource에 따라 API 경로 설정
       const resourceType = resourceSource === "youtube" ? "youtube" : "blog";
-      const apiUrl = `https://onboarding.p-e.kr/resources/${episodeId}/${resourceType}`;
+      const apiUrl = `http://onboarding.p-e.kr:8080/resources/${episodeId}/${resourceType}`;
   
       // API 요청
       const response = await axios.get(apiUrl, { headers });
   
       if (response.status === 200) {
         const data = response.data;
+        const videoId = data.result.episodeContents;
+        console.log("내부 이동 videoId:",videoId);
+        // resourceItem 대신 episodeName 사용
         router.push({
-          pathname: `/learn/${episodeId}`, // 수강페이지로 이동
+          pathname: `/learn/${episodeId}`, 
           query: { 
-            episodeData: JSON.stringify(data),
+            episodeData: JSON.stringify({ ...data, episodeName }), 
             collectionData: JSON.stringify(collectionData)
-           }, // 응답 데이터를 쿼리로 전달
+          },
         });
       }
     } catch (error) {
@@ -131,32 +136,36 @@ export const CurrentClass: React.FC<ResourceData & { collectionData: CollectionD
   collectionData,
 }) => {
   const router = useRouter();
-  const handleClick = async (episodeId: number, resourceSource: "youtube" | "naverBlog" | "tistory" | "velog") => { 
+  const handleClick = async (episodeId: string, resourceSource: "youtube" | "naverBlog" | "tistory" | "velog") => { 
     try {
       const token = localStorage.getItem("token");
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
   
       // resourceSource에 따라 API 경로 설정
       const resourceType = resourceSource === "youtube" ? "youtube" : "blog";
-      const apiUrl = `https://onboarding.p-e.kr/resources/${episodeId}/${resourceType}`;
+      const apiUrl = `http://onboarding.p-e.kr:8080/resources/${episodeId}/${resourceType}`;
   
       // API 요청
       const response = await axios.get(apiUrl, { headers });
   
       if (response.status === 200) {
         const data = response.data;
+        const videoId = data.result.episodeContents;
+        console.log("내부 이동 videoId:",videoId);
+        // resourceItem 대신 episodeName 사용
         router.push({
-          pathname: `/learn/${episodeId}`, // 수강페이지로 이동
+          pathname: `/learn/${episodeId}`, 
           query: { 
-            episodeData: JSON.stringify(data),
+            episodeData: JSON.stringify({ ...data, episodeName }), 
             collectionData: JSON.stringify(collectionData)
-           }, // 응답 데이터를 쿼리로 전달
+          },
         });
       }
     } catch (error) {
       console.error("강의 불러오기 실패:", error);
     }
   };
+
 
   return (
     <CurrentIndexWrapper onClick={() => handleClick(episodeId, resourceSource)}>
@@ -171,6 +180,7 @@ export const CurrentClass: React.FC<ResourceData & { collectionData: CollectionD
   );
 };
 
+
 export const NextClass: React.FC<ResourceData & { collectionData: CollectionData }> = ({
   episodeId,
   episodeName,
@@ -179,24 +189,25 @@ export const NextClass: React.FC<ResourceData & { collectionData: CollectionData
   collectionData,
 }) => {
   const router = useRouter();
-  const handleClick = async (episodeId: number, resourceSource: "youtube" | "naverBlog" | "tistory" | "velog") => { 
+  const handleClick = async (episodeId: string, resourceSource: "youtube" | "naverBlog" | "tistory" | "velog") => { 
     try {
       const token = localStorage.getItem("token");
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
       const resourceType = resourceSource === "youtube" ? "youtube" : "blog";
-      const apiUrl = `https://onboarding.p-e.kr/resources/${episodeId}/${resourceType}`;
+      const apiUrl = `http://onboarding.p-e.kr:8080/resources/${episodeId}/${resourceType}`;
 
       const response = await axios.get(apiUrl, { headers });
 
       if (response.status === 200) {
         const data = response.data;
-
+        const videoId = data.result.episodeContents;
+        console.log("내부 이동 videoId:",videoId);
         // resourceItem 대신 episodeName 사용
         router.push({
           pathname: `/learn/${episodeId}`, 
           query: { 
-            episodeData: JSON.stringify({ ...data, episodeName }), // 수정된 부분
+            episodeData: JSON.stringify({ ...data, episodeName }), 
             collectionData: JSON.stringify(collectionData)
           },
         });
@@ -387,4 +398,3 @@ const TitleBox = styled.div`
     max-width: 180px;
   }
 `;
-

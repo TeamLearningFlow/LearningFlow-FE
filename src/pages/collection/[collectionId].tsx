@@ -3,6 +3,11 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import styled from 'styled-components';
 import Header from '../../components/header';
+import CategoryList from '../../components/search/categoryList';
+import BoardingPass from '../../components/search/boardingPass';
+import Filters from '../../components/search/filters';
+import Pagination from '@/components/search/pagination';
+import BoardingPassList from '@/components/search/boardingPassList';
 import TitleBar from '../../components/collection/collectionTitleBar';
 import CollectionInfo from '../../components/collection/collectionInfo';
 import CollectionList from '../../components/collection/collectionList';
@@ -24,8 +29,7 @@ const ContentWrapper = styled.div`
 `;
 
 export interface CollectionData {
-  collectionId: number;
-  imageUrl: string;
+  id: number;
   interestField: string;
   title: string;
   creator: string;
@@ -39,28 +43,27 @@ export interface CollectionData {
     episodeId: number;
     episodeName: string;
     url: string;
-    resourceSource: 'youtube' | 'naverBlog' | 'tistory' | 'velog';
+    resourceSource: string;
     episodeNumber: number;
-    today: boolean;
     progress: number; // 테스트용
   }[];
-  likesCount: number;
-  progressRatePercentage: number;
-  progressRatio: string;
-  learningStatus: 'BEFORE' | 'IN_PROGRESS' | 'COMPLETED';
-  startDate: string;
-  completedDate: string;
-  liked: boolean;
+  bookmarkCount: number;
+  bookmarked: boolean;
 }
 
 export default function CollectionPage() {
-  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
   const { collectionId } = router.query;
   // const collectionId = 7; // 테스트용
   const [collection, setCollection] = useState<CollectionData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchActive, setSearchActive] = useState(false);
+
+  // 헤더 상태 업데이트 전달
+  const handleSearchStateChange = (active: boolean) => {
+    setSearchActive(active);
+  };
 
   // const dummyData:  CollectionData = {
   //   id: 1,
@@ -112,10 +115,6 @@ export default function CollectionPage() {
   // };
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  useEffect(() => {
     if (!collectionId) {
       setError('Collection ID가 없습니다.');
       setLoading(false);
@@ -127,7 +126,7 @@ export default function CollectionPage() {
 
       try {
         const response = await axios.get(
-          `https://onboarding.p-e.kr/collections/${collectionId}`,
+          `http://onboarding.p-e.kr:8080/collections/${collectionId}`,
         );
 
         if (response.data.isSuccess) {
@@ -137,21 +136,15 @@ export default function CollectionPage() {
           // setCollection(dummyData);
           console.log('데이터 로드 실패: 더미 데이터를 사용합니다.');
         }
-      } catch (err: unknown) {
-        if (axios.isAxiosError(err)) {
-          console.log('Error fetching collection:', err.message);
+      } catch (err: any) {
+        console.log('Error fetching collection:', err);
 
-          if (err.response?.status === 404) {
-            console.log('404 에러: 해당 컬렉션을 찾을 수 없습니다.');
-            // setCollection(dummyData);
-          } else {
-            console.log('서버 오류로 데이터를 불러올 수 없습니다.');
-            setCollection(null);
-          }
-        } else if (err instanceof Error) {
-          console.log(err.message);
+        if (err.response && err.response.status === 404) {
+          console.log('404 에러: 해당 컬렉션을 찾을 수 없습니다.');
+          // setCollection(dummyData);
         } else {
-          console.log(err);
+          console.log('서버 오류로 데이터를 불러올 수 없습니다.');
+          setCollection(null);
         }
       } finally {
         setLoading(false);
@@ -161,18 +154,9 @@ export default function CollectionPage() {
     fetchCollection();
   }, [collectionId]);
 
-  // ESLint 오류 방지용
-  useEffect(() => {
-    console.log('현재 에러 상태:', error);
-  }, [error]);
-
-  if (!isClient) {
-    return null;
-  }
-
   return (
     <PageWrapper>
-      <Header />
+      <Header onSearchStateChange={handleSearchStateChange} />
       {collection && <TitleBar data={collection} />}
       {loading ? (
         <>
@@ -182,13 +166,21 @@ export default function CollectionPage() {
           </ContentWrapper>
           <Footer />
         </>
+      ) : searchActive ? (
+        <div>
+          <CategoryList />
+          <Filters />
+          <BoardingPassList>
+            {Array.from({ length: 8 }).map((_, index) => (
+              <BoardingPass key={index} showHoverCollection={true} />
+            ))}
+          </BoardingPassList>
+          <Pagination />
+        </div>
       ) : (
         <>
           {collection && (
-            <CollectionInfo
-              data={collection}
-              collectionId={collection.collectionId}
-            />
+            <CollectionInfo data={collection} collectionId={collectionId} />
           )}
           <ContentWrapper>
             {collection && <CollectionList collection={collection} />}

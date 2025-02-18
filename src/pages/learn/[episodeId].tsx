@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { LearnContext } from '../../components/context/LearnContext';
-// import { useParams } from 'react-router-dom';
+import { ProgressContext } from '../../components/context/ProgressContext';
+import { useParams } from 'react-router-dom';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import styled from 'styled-components';
@@ -93,58 +94,64 @@ const interestFieldMap: Record<string, string> = {
   CAREER: '취업',
 };
 
+
 const LearnPage: React.FC = () => {
-  const [isClient, setIsClient] = useState(false);
-  // const { episodeId } = useParams<{ episodeId: number }>();
-  // const { collectionId } = useParams<{ collectionId: number }>();
-  // const [collectionData, setCollectionData] = useState<CollectionData | null>(null);
   const [type, setType] = useState<'youtube' | 'blog' | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState<string>('');
   const [field, setField] = useState<string>('');
-  // const [progress, setProgress] = useState(0);
   const [youtubeContent, setYoutubeContent] = useState<string>('');
   const context = useContext(LearnContext);
-
-  if (!context) {
-    throw new Error('LearnContext를 찾을 수 없습니다.');
-  }
-
+  const { updateProgress } = useContext(ProgressContext);
   const router = useRouter();
   const { episodeId, episodeData, collectionData } = router.query;
 
-  // episodeId를 string 타입에서 숫자 타입으로 변환
-  const episodeIdNumber = Array.isArray(episodeId)
-    ? Number(episodeId[0])
-    : Number(episodeId);
+  // episodeId를 숫자로 변환
+  const episodeIdNumber = Array.isArray(episodeId) ? Number(episodeId[0]) : Number(episodeId);
 
-  // episodeData와 collectionData를 JSON 파싱해서 사용할 준비
-  const EpisodeData = episodeData ? JSON.parse(episodeData as string) : null;
-  const CollectionData = collectionData
-    ? JSON.parse(collectionData as string)
-    : null;
+  // query로 전달받은 JSON 문자열을 파싱 (존재할 경우)
+  const parsedEpisodeData = episodeData ? JSON.parse(episodeData as string) : null;
+  const parsedCollectionData = collectionData ? JSON.parse(collectionData as string) : null;
 
-  const { isCompleted } = context.state;
-  // const { setIsCompleted } = context.actions;
+  // episodeData가 존재하면 파싱된 데이터를 기반으로 상태 업데이트
+  useEffect(() => {
+    if (episodeData) {
+      try {
+        const parsedData = JSON.parse(episodeData as string);
+        if (parsedData.result.resourceType === 'VIDEO') {
+          setType('youtube');
+          setTitle(parsedData.result.urlTitle);
+          setField(parsedData.result.interestField);
+          setYoutubeContent(parsedData.result.episodeContents);
+        } else if (parsedData.result.resourceType === 'TEXT') {
+          setType('blog');
+          setTitle(parsedData.result.urlTitle);
+          setField(parsedData.result.interestField);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error('episodeData 파싱 실패:', error);
+      }
+    } else if (episodeId) {
+      // episodeData가 없으면 백엔드에서 데이터를 가져옴
+      checkResourceType();
+    }
+  }, [episodeData, episodeId]);
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
+    if (parsedEpisodeData) {
+      //console.log('API에서 받은 article 데이터:', parsedEpisodeData);
+      console.log('영상 진도율 (progress):', parsedEpisodeData.result.progress);
+    }
+  }, [parsedEpisodeData]);
 
-  // ESLint 오류 방지용
-  useEffect(() => {
-    console.log('현재 Title:', title);
-    console.log('현재 Field:', field);
-  }, [title, field]);
-
-  // resource type을 확인하는 비동기 함수
   const checkResourceType = async () => {
     try {
       const token = localStorage.getItem('token');
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
       const youtubeResponse = await axios.get(
-        `https://onboarding.p-e.kr/resources/${episodeId}/youtube`,
+        `http://onboarding.p-e.kr:8080/resources/${episodeId}/youtube`,
         { headers },
       );
 
@@ -154,12 +161,12 @@ const LearnPage: React.FC = () => {
         setTitle(youtubeResponse.data.result.urlTitle);
         setField(youtubeResponse.data.result.interestField);
         setYoutubeContent(youtubeResponse.data.result.episodeContents);
-        return; // YouTube가 확인되었으면 종료
+        setLoading(false);
+        return;
       }
 
-      // YouTube가 아니면 Blog 조회
       const blogResponse = await axios.get(
-        `https://onboarding.p-e.kr/resources/${episodeId}/blog`,
+        `http://onboarding.p-e.kr:8080/resources/${episodeId}/blog`,
         { headers },
       );
 
@@ -181,29 +188,19 @@ const LearnPage: React.FC = () => {
   };
 
   useEffect(() => {
-    if (episodeId) {
-      checkResourceType();
-    }
-  }, [episodeId]);
-
-  useEffect(() => {
     console.log(`현재 에피소드 ID: ${episodeIdNumber}`);
   }, [episodeIdNumber]);
-
-  if (!isClient) {
-    return null;
-  }
 
   return (
     <PageWrapper>
       <Header />
-      {CollectionData &&
-        CollectionData.title &&
-        CollectionData.interestField && (
+      {parsedCollectionData &&
+        parsedCollectionData.title &&
+        parsedCollectionData.interestField && (
           <TitleBar
             data={{
-              title: CollectionData.title,
-              interestField: interestFieldMap[CollectionData.interestField],
+              title: parsedCollectionData.title,
+              interestField: interestFieldMap[parsedCollectionData.interestField],
             }}
           />
         )}
@@ -223,38 +220,45 @@ const LearnPage: React.FC = () => {
       ) : (
         <BodyWrapper>
           <TopWrapper>
-            {CollectionData &&
-              episodeId &&
-              (type === 'youtube' ? (
-                <Article
+            {parsedCollectionData && episodeId && (
+              <>
+                {type === 'youtube' ? (
+                  <Article
                   videoId={youtubeContent}
-                  isCompleted={isCompleted ?? false}
+                  isCompleted={context.state.isCompleted}
+                  onProgressChange={(progress) => {
+                    //console.log(`LearnPage - Article에서 전달받은 진도율: ${progress}%`);
+                    updateProgress(episodeIdNumber, progress);
+                    localStorage.setItem(`progress-${episodeIdNumber}`, progress.toString());
+                  }}
                 />
-              ) : (
-                <BlogArticle
-                  episodeId={episodeIdNumber}
-                  isCompleted={isCompleted ?? false}
-                />
-              ))}
-            {CollectionData && EpisodeData && episodeId && (
-              <ClassTitle
-                episodeId={episodeIdNumber}
-                episodeData={EpisodeData}
-                isCompleted={isCompleted}
-              />
+                ) : (
+                  <BlogArticle
+                    episodeId={episodeIdNumber}
+                    isCompleted={context.state.isCompleted}
+                  />
+                )}
+                {parsedEpisodeData && (
+                  <ClassTitle
+                    episodeId={episodeIdNumber}
+                    episodeData={parsedEpisodeData}
+                    isCompleted={context.state.isCompleted}
+                  />
+                )}
+              </>
             )}
           </TopWrapper>
           <MidWrapper>
-            {CollectionData && episodeId && (
+            {parsedCollectionData && episodeId && (
               <Note episodeId={episodeIdNumber} />
             )}
           </MidWrapper>
           <BottomWrapper>
-            {CollectionData && (
+            {parsedCollectionData && (
               <ClassList
-                resource={CollectionData.resource}
+                resource={parsedCollectionData.resource}
                 currentEpisode={episodeIdNumber}
-                collectionData={CollectionData}
+                collectionData={parsedCollectionData}
               />
             )}
           </BottomWrapper>
