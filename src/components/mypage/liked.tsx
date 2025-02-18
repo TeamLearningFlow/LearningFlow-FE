@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import BoardingPass from './boardingPass';
+import LikedCollection from './likedCollection';
+import EmptyLiked from './emptyLiked';
+import axios from 'axios';
 
 const LikedWrapper = styled.div`
   width: 1200px;
-  height: 1107px;
+  // height: 1107px;
 
   /* 반응형 설정 */
   @media (max-width: 1024px) {
@@ -84,8 +86,66 @@ const CollectionList = styled.div`
   }
 `;
 
+export type LikedCollectionData = {
+  collectionId: number;
+  imageUrl: string;
+  interestField: string;
+  keywords: string[];
+  title: string;
+  creator: string;
+  difficulties: number[];
+  runtime: number;
+  amount: number;
+  textCount: number;
+  videoCount: number;
+  resourceSourceTypes: string[];
+  resource: {
+    episodeNumber: number;
+    episodeName: string;
+    resourceSource: string;
+    url: string;
+  }[];
+  likesCount: number;
+  progressRatePercentage: number;
+  progressRatio: string;
+  learningStatus: string;
+  startDate: string;
+  completedDate: string;
+  liked: boolean;
+};
+
 const Liked = () => {
   const [activeSort, setActiveSort] = useState('최신순');
+
+  const [liked, setLiked] = useState<LikedCollectionData[]>([]);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          throw new Error('로그인이 필요한 서비스입니다.');
+        }
+
+        const response = await axios.get(
+          'http://onboarding.p-e.kr:8080/user/likes?page=1',
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        if (response.data.isSuccess && response.data.result) {
+          setLiked(response.data.result.searchResults || []);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   return (
     <>
@@ -107,20 +167,19 @@ const Liked = () => {
             </Option>
           </OptionWrapper>
         </TitleWrapper>
-        <CollectionList>
-          <BoardingPass showHoverCollection={true} />
-          <BoardingPass showHoverCollection={true} />
-          <BoardingPass showHoverCollection={true} />
-          <BoardingPass showHoverCollection={true} />
-          <BoardingPass showHoverCollection={true} />
-          <BoardingPass showHoverCollection={true} />
-          <BoardingPass showHoverCollection={true} />
-          <BoardingPass showHoverCollection={true} />
-          <BoardingPass showHoverCollection={true} />
-          <BoardingPass showHoverCollection={true} />
-          <BoardingPass showHoverCollection={true} />
-          <BoardingPass showHoverCollection={true} />
-        </CollectionList>
+        {liked.length > 0 ? (
+          <CollectionList>
+            {liked.map((item, index) => (
+              <LikedCollection
+                key={index}
+                data={item}
+                showHoverCollection={true}
+              />
+            ))}
+          </CollectionList>
+        ) : (
+          <EmptyLiked />
+        )}
       </LikedWrapper>
     </>
   );

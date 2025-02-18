@@ -4,6 +4,12 @@ import Image from 'next/image';
 import Prev from '/public/previous.svg';
 import Next from '/public/next.svg';
 import EmptyLearned from '../../components/mypage/emptyLearned';
+import naverBlog from '/public/platformicon/naverblog_active_ic.svg';
+import tistory from '/public/platformicon/tistory_active_ic.svg';
+import velog from '/public/platformicon/velog_active_ic.svg';
+import youtube from '/public/platformicon/youtube_active_ic.svg';
+import circle from '/public/circle.svg';
+import { useRouter } from 'next/router';
 
 const NoOverflowDiv = styled.div`
   white-space: nowrap;
@@ -52,16 +58,6 @@ const ContentWrapper = styled.div`
   align-items: center;
   gap: 6px;
   margin: 0 20px 8px 20px;
-`;
-
-const ThumbNail = styled.div<{ imgUrl: string }>`
-  width: 30px;
-  height: 30px;
-  border-radius: 100px;
-  border: 1.579px solid #5e52ff;
-  background: ${({ imgUrl }) => (imgUrl ? `url(${imgUrl})` : '#cfffe5')};
-  background-size: cover;
-  background-position: center;
 `;
 
 const Content = styled.div`
@@ -225,13 +221,31 @@ interface EpisodeData {
   totalProgress: number;
 }
 
+const imageMap: Record<string, string> = {
+  naverBlog,
+  tistory,
+  velog,
+  youtube,
+};
+
 const CollectionItem: React.FC<{ episode: EpisodeData }> = ({ episode }) => {
+  const router = useRouter();
+
   return (
-    <Container>
+    <Container
+      onClick={() => router.push(`/collection/${episode.collectionId}`)}
+    >
       <CollectionImage />
       <CollectionTitle>{episode.collectionTitle}</CollectionTitle>
       <ContentWrapper>
-        <ThumbNail imgUrl={episode.resourceSource || ''} />
+        <Image
+          src={
+            episode.resourceSource ? imageMap[episode.resourceSource] : circle
+          }
+          alt={episode.resourceSource}
+          width={32}
+          height={32}
+        />
         <Content>
           <ContentNumber>{episode.episodeNumber} 회차</ContentNumber>
           <ContentTitle>{episode.episodeName}</ContentTitle>
@@ -241,10 +255,7 @@ const CollectionItem: React.FC<{ episode: EpisodeData }> = ({ episode }) => {
         <ProgressBarFull>
           <ProgressBar width={episode.progressRatio} />
         </ProgressBarFull>
-        <ProgressRate>
-          {episode.currentProgress} / {episode.totalProgress}회차 (
-          {episode.progressRatio})
-        </ProgressRate>
+        <ProgressRate>{episode.progressRatio}</ProgressRate>
       </ProgressWrapper>
     </Container>
   );
