@@ -4,6 +4,7 @@ import Image from 'next/image';
 import BoardingPassContainer from '/public/S_Background.svg';
 import CollectionImage from '/public/boardingpassS.svg';
 import BookmarkIcon from '/public/bookmark.svg';
+import BookmarkFilledIcon from '/public/bookmarkFilled.svg';
 import HoverBackgroundTop from '/public/hover-backgroundTopS.svg';
 import HoverBackground from '/public/hover-background.svg';
 import Plane from '/public/plane_S.svg';
@@ -16,12 +17,13 @@ import VelogIcon from '/public/platformicon/velog_nostroke_ic.svg';
 import YoutubeIcon from '/public/platformicon/youtube_nostroke_ic.svg';
 import VelogLine from '/public/platformicon/velog_ic.svg';
 import NaverblogLine from '/public/platformicon/naverblog_ic.svg';
+import TistoryLine from '/public/platformicon/tistory_ic.svg';
 import YoutubeLine from '/public/platformicon/youtube_ic.svg';
 import OnStudying from '/public/onstudying.svg';
 import CompletedStamp from '/public/completedStamp.svg';
-import TistoryLine from '/public/platformicon/tistory_ic.svg';
 import { SearchResult } from './searchResult';
 import { useRouter } from 'next/router';
+import axios from 'axios';
 
 const ColumnFlexDiv = styled.div`
   display: flex;
@@ -44,7 +46,6 @@ const Container = styled(ColumnFlexDiv)`
   position: relative;
   background: transparent;
   overflow: hidden;
-  cursor: pointer;
 `;
 
 const BoardingPassImage = styled(Image)`
@@ -87,13 +88,15 @@ const StatusTag = styled.span<{ status?: string }>`
   }
 `;
 
-const Bookmark = styled.div`
+const Bookmark = styled.button`
   position: absolute;
   top: 15px;
   right: 15px;
   cursor: pointer;
   width: 35px;
   height: 35px;
+  background: transparent;
+  border: none;
 `;
 
 const Body = styled.div`
@@ -103,6 +106,7 @@ const Body = styled.div`
   position: absolute;
   top: 158.303px;
   left: 2px;
+  cursor: pointer;
 `;
 
 const TagWrapper = styled(RowFlexSpan)`
@@ -218,6 +222,7 @@ const Bottom = styled(RowFlexDiv)`
   top: 281px;
   left: 1px;
   gap: 10px;
+  cursor: pointer;
 `;
 
 const DepartureArrival = styled.span`
@@ -241,6 +246,10 @@ const Level = styled.span`
   white-space: nowrap;
 `;
 
+const RuntimeWrapper = styled(ColumnFlexDiv)`
+  gap: 2.95px;
+`;
+
 const Step = styled.span`
   color: #5e52ff;
   text-align: center;
@@ -256,9 +265,8 @@ const PlaneWrapper = styled(RowFlexSpan)`
   align-items: center;
 `;
 
-const PlaneLine = styled.span`
-  min-width: 45px; // 값 임의 지정함
-  max-width: 61px;
+const PlaneLine = styled.span<{ width: number }>`
+  width: ${(props) => props.width}px;
   height: 0.25px;
   background: #5e52ff;
 `;
@@ -322,11 +330,10 @@ const ProgressRate = styled.span`
 
 const HoverWrapper = styled.div`
   width: 100%;
-  height: 100%;
-  // flex-shrink: 0;
   position: absolute;
   top: 159.2px;
   left: 1px;
+  cursor: pointer;
   background: transparent;
   opacity: 0;
   transition: all 0.3s; // 몇 초로 할지 설정
@@ -341,6 +348,7 @@ const HoverBackgroundTopWrapper = styled.div`
   top: -158px;
   width: 100%;
   height: 158px;
+  cursor: default;
 `;
 
 const CollectionHeader = styled(RowFlexDiv)`
@@ -352,7 +360,6 @@ const CollectionHeader = styled(RowFlexDiv)`
   height: 26px;
 `;
 
-// svg 감싸는 애로 추후 변경 필요
 const Thumbnail = styled.div<{ left: number; zIndex: number }>`
   width: 26px;
   height: 26px;
@@ -380,11 +387,12 @@ const Detail = styled.span<{ marginLeft?: string }>`
   letter-spacing: -0.16px;
 `;
 
-const LineWrapper = styled.span<{ status?: string }>`
+const LineWrapper = styled.span<{ status?: string; left?: string }>`
   display: flex;
   align-items: center;
   position: absolute;
-  left: ${(props) => (props.status === '학습완료' ? '65px' : '109.6px')};
+  left: ${(props) =>
+    props.status === '학습완료' ? '65px' : props.left || '96px'};
 `;
 
 const CollectionDetail = styled(RowFlexSpan)`
@@ -531,10 +539,6 @@ const PlatformIcon = (source: string) => {
 };
 
 const PlatformSet = ({ data }: { data: SearchResult }) => {
-  const platformSources = [
-    ...new Set(data.resource.map((episode) => episode?.resourceSource)),
-  ];
-
   const areArraysEqual = (arr1: string[], arr2: string[]) => {
     return (
       arr1.length === arr2.length &&
@@ -543,7 +547,7 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
   };
 
   if (
-    areArraysEqual(platformSources, [
+    areArraysEqual(data.resourceSourceTypes, [
       'youtube',
       'tistory',
       'naverBlog',
@@ -567,7 +571,13 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['youtube', 'tistory', 'naverBlog'])) {
+  if (
+    areArraysEqual(data.resourceSourceTypes, [
+      'youtube',
+      'tistory',
+      'naverBlog',
+    ])
+  ) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -582,7 +592,9 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['youtube', 'tistory', 'velog'])) {
+  if (
+    areArraysEqual(data.resourceSourceTypes, ['youtube', 'tistory', 'velog'])
+  ) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -597,7 +609,9 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['youtube', 'naverBlog', 'velog'])) {
+  if (
+    areArraysEqual(data.resourceSourceTypes, ['youtube', 'naverBlog', 'velog'])
+  ) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -612,7 +626,9 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['tistory', 'naverBlog', 'velog'])) {
+  if (
+    areArraysEqual(data.resourceSourceTypes, ['tistory', 'naverBlog', 'velog'])
+  ) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -627,7 +643,7 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['youtube', 'tistory'])) {
+  if (areArraysEqual(data.resourceSourceTypes, ['youtube', 'tistory'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -639,7 +655,7 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['youtube', 'naverBlog'])) {
+  if (areArraysEqual(data.resourceSourceTypes, ['youtube', 'naverBlog'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -651,7 +667,7 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['youtube', 'velog'])) {
+  if (areArraysEqual(data.resourceSourceTypes, ['youtube', 'velog'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -663,7 +679,7 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['tistory', 'naverBlog'])) {
+  if (areArraysEqual(data.resourceSourceTypes, ['tistory', 'naverBlog'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -675,7 +691,7 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['tistory', 'velog'])) {
+  if (areArraysEqual(data.resourceSourceTypes, ['tistory', 'velog'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -687,7 +703,7 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['naverBlog', 'velog'])) {
+  if (areArraysEqual(data.resourceSourceTypes, ['naverBlog', 'velog'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -699,7 +715,7 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['tistory'])) {
+  if (areArraysEqual(data.resourceSourceTypes, ['tistory'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -708,7 +724,7 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['naverBlog'])) {
+  if (areArraysEqual(data.resourceSourceTypes, ['naverBlog'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -717,7 +733,7 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['velog'])) {
+  if (areArraysEqual(data.resourceSourceTypes, ['velog'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -726,7 +742,7 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['youtube'])) {
+  if (areArraysEqual(data.resourceSourceTypes, ['youtube'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -738,7 +754,6 @@ const PlatformSet = ({ data }: { data: SearchResult }) => {
 };
 
 const CollectionAmount = ({ data }: { data: SearchResult }) => {
-  console.log('data 확인:', data);
   return (
     <CollectionDetail>
       {data.textCount !== 0 && <Detail>아티클</Detail>}
@@ -746,6 +761,200 @@ const CollectionAmount = ({ data }: { data: SearchResult }) => {
       {data.videoCount !== 0 && <Detail marginLeft={'5px'}>영상</Detail>}
       {data.videoCount !== 0 && <Number>{data.videoCount}</Number>}
     </CollectionDetail>
+  );
+};
+
+const DashedLine = ({ width, path }: { width?: number; path?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={width}
+    height="2"
+    viewBox={`0 0 ${width} 2`}
+    fill="none"
+  >
+    <path
+      d={path}
+      stroke="#FAFAFC"
+      strokeWidth="740061"
+      strokeDasharray="1.61 1.61"
+    />
+  </svg>
+);
+
+const HeaderLine = ({
+  data,
+  status,
+}: {
+  data: SearchResult;
+  status: string;
+}) => {
+  const areArraysEqual = (arr1: string[], arr2: string[]) => {
+    return (
+      arr1.length === arr2.length &&
+      new Set(arr1).size === new Set([...arr1, ...arr2]).size
+    );
+  };
+
+  if (status === '학습완료') {
+    return (
+      <LineWrapper status="학습완료">
+        <DashedLine width={95} path="M0 1H95" />
+        <Image src={Circle} alt="circle" />
+      </LineWrapper>
+    );
+  } else {
+    if (
+      areArraysEqual(data.resourceSourceTypes, [
+        'youtube',
+        'tistory',
+        'naverBlog',
+        'velog',
+      ])
+    ) {
+      return (
+        <LineWrapper status="" left={'96px'}>
+          <DashedLine width={62} path="M0 1H62" />
+          <Image src={Circle} alt="circle" />
+        </LineWrapper>
+      );
+    }
+    if (
+      areArraysEqual(data.resourceSourceTypes, [
+        'youtube',
+        'tistory',
+        'naverBlog',
+      ]) ||
+      areArraysEqual(data.resourceSourceTypes, [
+        'youtube',
+        'tistory',
+        'velog',
+      ]) ||
+      areArraysEqual(data.resourceSourceTypes, [
+        'youtube',
+        'naverBlog',
+        'velog',
+      ])
+    ) {
+      return (
+        <LineWrapper status="" left={'78px'}>
+          <DashedLine width={74} path="M0 1H74" />
+          <Image src={Circle} alt="circle" />
+        </LineWrapper>
+      );
+    }
+
+    if (
+      areArraysEqual(data.resourceSourceTypes, [
+        'tistory',
+        'naverBlog',
+        'velog',
+      ])
+    ) {
+      return (
+        <LineWrapper status="" left={'78px'}>
+          <DashedLine width={111} path="M0 1H111" />
+          <Image src={Circle} alt="circle" />
+        </LineWrapper>
+      );
+    }
+    if (
+      areArraysEqual(data.resourceSourceTypes, ['youtube', 'tistory']) ||
+      areArraysEqual(data.resourceSourceTypes, ['youtube', 'naverBlog']) ||
+      areArraysEqual(data.resourceSourceTypes, ['youtube', 'velog'])
+    ) {
+      return (
+        <LineWrapper status="" left={'60px'}>
+          <DashedLine width={98} path="M0 1H98" />
+          <Image src={Circle} alt="circle" />
+        </LineWrapper>
+      );
+    }
+
+    if (
+      areArraysEqual(data.resourceSourceTypes, ['tistory', 'naverBlog']) ||
+      areArraysEqual(data.resourceSourceTypes, ['tistory', 'velog']) ||
+      areArraysEqual(data.resourceSourceTypes, ['naverBlog', 'velog'])
+    ) {
+      return (
+        <LineWrapper status="" left={'60px'}>
+          <DashedLine width={129} path="M0 1H129" />
+          <Image src={Circle} alt="circle" />
+        </LineWrapper>
+      );
+    }
+
+    if (
+      areArraysEqual(data.resourceSourceTypes, ['tistory']) ||
+      areArraysEqual(data.resourceSourceTypes, ['naverBlog']) ||
+      areArraysEqual(data.resourceSourceTypes, ['velog'])
+    ) {
+      return (
+        <LineWrapper status="" left={'42px'}>
+          <DashedLine width={147} path="M0 1H147" />
+          <Image src={Circle} alt="circle" />
+        </LineWrapper>
+      );
+    }
+
+    if (areArraysEqual(data.resourceSourceTypes, ['youtube'])) {
+      return (
+        <LineWrapper status="" left={'42px'}>
+          <DashedLine width={154} path="M0 1H154" />
+          <Image src={Circle} alt="circle" />
+        </LineWrapper>
+      );
+    }
+  }
+};
+
+const BookmarkButton = ({ collection }: { collection: SearchResult }) => {
+  const [isBookmarked, setIsBookmarked] = useState(collection.liked);
+  const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
+
+  const handleBookmark = async (e: React.MouseEvent) => {
+    // 클릭 이벤트 전파 차단 (북마크 버튼에서만 동작)
+    e.stopPropagation();
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('로그인이 필요합니다!'); // 모달로 변경 필요
+      router.push('/login');
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await axios.post(
+        `http://onboarding.p-e.kr:8080/collections/${collection.collectionId}/likes`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (response.data.isSuccess) {
+        setIsBookmarked(!isBookmarked);
+      }
+    } catch (error) {
+      console.error('북마크 처리 중 오류가 발생했습니다: ', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Bookmark onClick={handleBookmark} disabled={loading} data-bookmark="true">
+      {isBookmarked ? (
+        <Image src={BookmarkFilledIcon} alt="bookmark" width={36} height={36} />
+      ) : (
+        <Image src={BookmarkIcon} alt="bookmark" width={36} height={36} />
+      )}
+    </Bookmark>
   );
 };
 
@@ -760,32 +969,14 @@ const HoverCollection = ({
     <HoverWrapper>
       <HoverBackgroundTopWrapper>
         <Image src={HoverBackgroundTop} alt="hoverbackgroundtop" />
-        <Bookmark>
-          <Image src={BookmarkIcon} alt="bookmark" width={36} height={36} />
-        </Bookmark>
+        <BookmarkButton collection={data} />
       </HoverBackgroundTopWrapper>
       {status === '학습완료' ? (
         <>
           <Image src={HoverBackground} alt="hover background" />
           <CollectionHeader>
             <Number status="학습완료">총 {data.amount}회차</Number>
-            <LineWrapper status="학습완료">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="95"
-                height="2"
-                viewBox="0 0 95 2"
-                fill="none"
-              >
-                <path
-                  d="M0 1H95"
-                  stroke="#FAFAFC"
-                  strokeWidth="0.740061"
-                  strokeDasharray="1.61 1.61"
-                />
-              </svg>
-              <Image src={Circle} alt="circle" />
-            </LineWrapper>
+            <HeaderLine data={data} status="학습완료" />
             <CollectionAmount data={data} />
           </CollectionHeader>
 
@@ -833,23 +1024,7 @@ const HoverCollection = ({
           <Image src={HoverBackground} alt="hover background" />
           <CollectionHeader>
             <PlatformSet data={data} />
-            <LineWrapper>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="49"
-                height="2"
-                viewBox="0 0 49 2"
-                fill="none"
-              >
-                <path
-                  d="M0.597656 1H48.7016"
-                  stroke="#FAFAFC"
-                  strokeWidth="0.740061"
-                  strokeDasharray="1.61 1.61"
-                />
-              </svg>
-              <Image src={Circle} alt="circle" />
-            </LineWrapper>
+            <HeaderLine data={data} status="" />
             <CollectionAmount data={data} />
           </CollectionHeader>
           <CollectionWrapper>
@@ -881,13 +1056,14 @@ const BoardingPassBottom = ({
 }) => {
   const [departureLabel, setDepartureLabel] = useState('');
   const [arrivalLabel, setArrivalLabel] = useState('');
+  const [lineWidth, setLineWidth] = useState(0);
+
+  const equals = (a: number[], b: number[]) =>
+    a.length === b.length && a.every((v, i) => v === b[i]);
+
+  const level = data.difficulties.sort();
 
   const setDifficultyLabel = () => {
-    const equals = (a: number[], b: number[]) =>
-      a.length === b.length && a.every((v, i) => v === b[i]);
-
-    const level = data.difficulties.sort();
-
     if (equals(level, [1])) {
       setDepartureLabel('입문자');
       setArrivalLabel('초급자');
@@ -920,8 +1096,26 @@ const BoardingPassBottom = ({
     }
   };
 
+  const setPlaneLineWidth = () => {
+    if (equals(level, [1]) || equals(level, [2]) || equals(level, [3])) {
+      setLineWidth(61);
+      return;
+    }
+
+    if (equals(level, [1, 2]) || equals(level, [2, 3])) {
+      setLineWidth(52.5);
+      return;
+    }
+
+    if (equals(level, [1, 2, 3])) {
+      setLineWidth(37.5);
+      return;
+    }
+  };
+
   useEffect(() => {
     setDifficultyLabel();
+    setPlaneLineWidth();
   }, []);
 
   return (
@@ -942,14 +1136,14 @@ const BoardingPassBottom = ({
             <DepartureArrival>Departure</DepartureArrival>
             <Level>{departureLabel}</Level>
           </ColumnFlexDiv>
-          <ColumnFlexDiv>
+          <RuntimeWrapper>
             <Step>{data.runtime} 시간</Step>
             <PlaneWrapper>
-              <PlaneLine></PlaneLine>
+              <PlaneLine width={lineWidth} />
               <Image src={Plane} alt="plane" style={{ margin: '0 5px' }} />
-              <PlaneLine></PlaneLine>
+              <PlaneLine width={lineWidth} />
             </PlaneWrapper>
-          </ColumnFlexDiv>
+          </RuntimeWrapper>
           <ColumnFlexDiv>
             <DepartureArrival>Arrival</DepartureArrival>
             <Level>{arrivalLabel}</Level>
@@ -969,8 +1163,18 @@ const BoardingPass = ({
 }) => {
   const router = useRouter();
 
+  const handleCollectionClick = (e: React.MouseEvent) => {
+    // 북마크 버튼을 클릭했을 경우, router.push 방지
+    if (e.target instanceof HTMLButtonElement && e.target.dataset.bookmark) {
+      e.stopPropagation(); // 이벤트 전파 차단
+      return;
+    }
+    // 북마크 버튼이 아닌 다른 곳 클릭 시 router.push 실행
+    router.push(`/collection/${data.collectionId}`);
+  };
+
   return (
-    <Container onClick={() => router.push(`/collection/${data.collectionId}`)}>
+    <Container onClick={handleCollectionClick}>
       <Image src={BoardingPassContainer} alt="boarding pass" />
       <BoardingPassImage src={CollectionImage} alt="collection image" />
       <StatusTag status=""></StatusTag>
