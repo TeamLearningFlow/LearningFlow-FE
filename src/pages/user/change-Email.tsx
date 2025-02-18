@@ -25,7 +25,7 @@ const VerifyEmail: React.FC = () => {
 
       try {
         const response = await axios.get(
-          `http://onboarding.p-e.kr:8080/user/change-email?emailResetCode=${emailResetCode}`,
+          `https://onboarding-kappa.vercel.app/user/change-email?emailResetCode=${emailResetCode}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           },

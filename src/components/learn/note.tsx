@@ -193,7 +193,7 @@ const Note: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
       // localStorage.setItem(`noteContent_${episodeId}`, noteContent);
       try {
         const response = await axios.post(
-          `http://onboarding.p-e.kr:8080/resources/${episodeId}/memo`,
+          `https://onboarding-kappa.vercel.app/resources/${episodeId}/memo`,
           {
             contents: noteContent,
           },

@@ -453,7 +453,7 @@ const userModal: React.FC = () => {
       }
 
       const response = await axios.post(
-        'http://onboarding.p-e.kr:8080/logout', // 로그아웃 api
+        'https://onboarding-kappa.vercel.app/logout', // 로그아웃 api
         {},
         {
           headers: {
@@ -483,7 +483,7 @@ const userModal: React.FC = () => {
           return;
         }
 
-        const response = await axios.get('http://onboarding.p-e.kr:8080/user', {
+        const response = await axios.get('https://onboarding-kappa.vercel.app/user', {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',

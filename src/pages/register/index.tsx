@@ -159,7 +159,7 @@ const RegisterPage: React.FC = () => {
   const registeraxios = async () => {
     try {
       const response = await axios.post(
-        'http://onboarding.p-e.kr:8080/register',
+        'https://onboarding-kappa.vercel.app/register',
         {
           email: email,
           password: password,

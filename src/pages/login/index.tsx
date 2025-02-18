@@ -171,7 +171,7 @@ const LoginPage: React.FC = () => {
     try {
       const rememberValue = context.state.remember;
 
-      const response = await axios.post('http://onboarding.p-e.kr:8080/login', {
+      const response = await axios.post('https://onboarding-kappa.vercel.app/login', {
         email,
         password,
         remember: rememberValue,

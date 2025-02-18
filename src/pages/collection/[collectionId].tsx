@@ -127,7 +127,7 @@ export default function CollectionPage() {
 
       try {
         const response = await axios.get(
-          `http://onboarding.p-e.kr:8080/collections/${collectionId}`,
+          `https://onboarding-kappa.vercel.app/collections/${collectionId}`,
         );
 
         if (response.data.isSuccess) {

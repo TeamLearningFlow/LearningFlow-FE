@@ -96,7 +96,7 @@ const Profile = () => {
         }
 
         // Authorization 헤더 추가
-        const response = await axios.get('http://onboarding.p-e.kr:8080/user', {
+        const response = await axios.get('https://onboarding-kappa.vercel.app/user', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -143,7 +143,7 @@ const Profile = () => {
         }
 
         const response = await axios.get(
-          `http://onboarding.p-e.kr:8080/user/change-password?passwordResetCode=${passwordResetCode}`,
+          `https://onboarding-kappa.vercel.app/user/change-password?passwordResetCode=${passwordResetCode}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           },

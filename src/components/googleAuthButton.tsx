@@ -57,7 +57,7 @@ const GoogleAuthButton = ({ text }: { text: string }) => {
 
   const handleGoogleLogin = () => {
     const popup = window.open(
-      'http://onboarding.p-e.kr:8080/login/google',
+      'https://onboarding-kappa.vercel.app/login/google',
       '_blank',
       'width=600,height=800',
     );
@@ -68,7 +68,7 @@ const GoogleAuthButton = ({ text }: { text: string }) => {
     }
 
     window.addEventListener('message', (event) => {
-      if (event.origin !== 'http://onboarding.p-e.kr:8080') {
+      if (event.origin !== 'https://onboarding-kappa.vercel.app/') {
         return;
       }
 
@@ -79,7 +79,7 @@ const GoogleAuthButton = ({ text }: { text: string }) => {
 
         // 홈(/)으로 인증된 GET 요청 (401 에러 처리)
         axios
-          .get('http://onboarding.p-e.kr:8080', {
+          .get('https://onboarding-kappa.vercel.app/', {
             headers: {
               Authorization: 'Bearer ' + accessToken,
             },
@@ -101,7 +101,7 @@ const GoogleAuthButton = ({ text }: { text: string }) => {
                 // 새 Access Token으로 원래 요청 다시 시도
                 try {
                   const retryResponse = await axios.get(
-                    'http://onboarding.p-e.kr:8080',
+                    'https://onboarding-kappa.vercel.app/',
                     {
                       headers: {
                         Authorization: newAccessToken,

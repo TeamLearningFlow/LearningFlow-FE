@@ -461,7 +461,7 @@ const MyProfile = ({
       }
 
       const response = await axios.post(
-        'http://onboarding.p-e.kr:8080/image/upload',
+        'https://onboarding-kappa.vercel.app/image/upload',
         formData,
         {
           headers: {
@@ -507,7 +507,7 @@ const MyProfile = ({
       }
 
       const response = await axios.post(
-        'http://onboarding.p-e.kr:8080/image/upload',
+        'https://onboarding-kappa.vercel.app/image/upload',
         formData,
         {
           headers: {
@@ -617,7 +617,7 @@ const MyProfile = ({
         console.log('전송 데이터:', payload);
 
         const response = await axios.put(
-          'http://onboarding.p-e.kr:8080/user',
+          'https://onboarding-kappa.vercel.app/user',
           payload,
           {
             headers: {

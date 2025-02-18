@@ -49,7 +49,7 @@ const MyPage = () => {
         }
 
         const response = await axios.get(
-          'http://onboarding.p-e.kr:8080/user/mypage',
+          'https://onboarding-kappa.vercel.app/user/mypage',
           {
             headers: {
               Authorization: `Bearer ${token}`,

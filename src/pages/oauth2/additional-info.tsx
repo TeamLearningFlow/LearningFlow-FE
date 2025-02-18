@@ -97,7 +97,7 @@ const GoogleRedirectionPage = () => {
 
       try {
         const response = await axios.get(
-          `http://onboarding.p-e.kr:8080/oauth2/additional-info?oauth2RegistrationCode=${token}`,
+          `https://onboarding-kappa.vercel.app/oauth2/additional-info?oauth2RegistrationCode=${token}`,
           { withCredentials: true },
         );
 

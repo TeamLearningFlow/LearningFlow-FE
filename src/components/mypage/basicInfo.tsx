@@ -315,7 +315,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
       }
 
       const response = await axios.post(
-        'http://onboarding.p-e.kr:8080/user/send/change-email',
+        'https://onboarding-kappa.vercel.app/user/send/change-email',
         { email },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -378,7 +378,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
       }
 
       const response = await axios.post(
-        'http://onboarding.p-e.kr:8080/user/send/change-password',
+        'https://onboarding-kappa.vercel.app/user/send/change-password',
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -428,7 +428,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
       }
 
       const response = await axios.get(
-        `http://onboarding.p-e.kr:8080/user/change-password?passwordResetCode=${code}`,
+        `https://onboarding-kappa.vercel.app/user/change-password?passwordResetCode=${code}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -463,7 +463,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
       }
 
       const response = await axios.post(
-        `http://onboarding.p-e.kr:8080/user/change-password?passwordResetCode=${passwordResetCode}`,
+        `https://onboarding-kappa.vercel.app/user/change-password?passwordResetCode=${passwordResetCode}`,
         {
           currentPassword,
           newPassword,

@@ -107,7 +107,7 @@ const CollectionInfo: React.FC<CollectionInfoProps> = ({
       if (!token) return;
 
       const response = await axios.get(
-        `http://onboarding.p-e.kr:8080/collections/${collectionId}`,
+        `https://onboarding-kappa.vercel.app/collections/${collectionId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
