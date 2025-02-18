@@ -274,19 +274,20 @@ const Page1: React.FC<{
     const formData = new FormData();
     formData.append('image', file);
 
-    try {
+    /* try {
       const token = localStorage.getItem('token');
       if (!token) {
         console.error('토큰이 필요합니다.');
         return;
-      }
+      } */
 
+    try {
       const response = await axios.post(
         'https://onboarding.p-e.kr/image/upload',
         formData,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            // Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data',
           },
         },
