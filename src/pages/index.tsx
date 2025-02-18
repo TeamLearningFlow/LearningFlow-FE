@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import NotLoginHeader from '../components/home/homeNotLoginHeader';
 import HomeTop from '../components/home/homeTop';
 import HomeMiddle from '../components/home/homeMiddle';
-import HomeBottom from '../components/home/homeBottom';
 import Footer from '../components/homeFooter';
 import styled from 'styled-components';
 import Header from '../components/header';
 import Banner from '../components/home/homeBanner';
-import HomeCollection from // RecommendedCollection,
-'../components/home/homeCollection';
+import HomeCollection from '../components/home/homeCollection'; // RecommendedCollection
 import RecentCollection, {
   RecentLearning,
 } from '../components/home/recentCollection';
 import HomeModal from '../components/modal/homeModal';
 import axios from 'axios';
+import { LoginContext } from '../components/context/LoginContext';
 
 const Wrapper = styled.div`
   display: flex;
@@ -32,7 +31,14 @@ const Main = styled.div`
 
 const HomePage = () => {
   const [isClient, setIsClient] = useState(false); // 클라이언트 환경 여부 결정
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const context = useContext(LoginContext);
+
+  if (!context) {
+    throw new Error('LoginContext를 찾을 수 없습니다.');
+  }
+
+  const { isLoggedIn } = context.state; // 로그인 상태
+
   const [recentLearning, setRecentLearning] = useState<RecentLearning | null>(
     null,
   );
@@ -55,58 +61,46 @@ const HomePage = () => {
       setIsModalOpen(true); // 모달 열기
       localStorage.removeItem('isFromSignup'); // 플래그 제거
     }
+
+    fetchHomeData();
   }, []);
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+  const fetchHomeData = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      console.log('token: ', token);
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    // console.log('token: ', token);
+      // 요청 헤더 설정 (token이 있으면 Authorization 추가)
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-    if (token) {
-      const fetchHomeData = async () => {
-        try {
-          const response = await axios.get(`https://onboarding.p-e.kr/`, {
-            headers: { Authorization: token },
-            withCredentials: true,
-          });
-          const data = await response.data.result;
-          console.log('home data: ', data);
-          setRecentLearning(data.recentLearning);
-          setRecommendedCollections(data.recommendedCollections);
-        } catch (error) {
-          console.error('Home data fetch 오류:', error);
-        }
-      };
-      fetchHomeData();
-      setIsLoggedIn(true);
-    } else {
-      console.log('토큰이 없습니다.');
-      setIsLoggedIn(false);
+      const response = await axios.get(`https://onboarding.p-e.kr/`, {
+        headers,
+        withCredentials: true,
+      });
+      const data = await response.data.result;
+      console.log('home data: ', data);
+      setRecentLearning(data?.recentLearning);
+      setRecommendedCollections(data.recommendedCollections);
+    } catch (error) {
+      console.error('Home data fetch 오류:', error);
     }
-  }, []);
+  };
 
   if (!isClient) {
     return null; // 클라이언트 환경에서만 렌더링
   }
 
   return (
-    <div>
+    <>
       {isLoggedIn ? <Header /> : <NotLoginHeader />}
-      {isLoggedIn ? (
+
+      {isLoggedIn && recentLearning ? (
         <>
           <Banner />
-          {recentLearning ? (
-            <RecentCollection collectionInfo={recentLearning} />
-          ) : null}
-          {recommendedCollections ? (
-            <HomeCollection
-              nickname={nickname}
-              collections={recommendedCollections}
-            />
-          ) : null}
+          <RecentCollection collectionInfo={recentLearning} />
           <Wrapper>
             {isModalOpen && <HomeModal onClose={handleCloseModal} />}
             {!isModalOpen && <Main></Main>}
@@ -116,11 +110,15 @@ const HomePage = () => {
         <>
           <HomeTop />
           <HomeMiddle />
-          <HomeBottom />
         </>
       )}
+      <HomeCollection
+        nickname={nickname}
+        collections={recommendedCollections}
+      />
+
       <Footer />
-    </div>
+    </>
   );
 };
 
