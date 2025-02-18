@@ -15,7 +15,7 @@ const VerifyEmail: React.FC = () => {
     const validateToken = async () => {
       if (!emailResetCode) return; // 토큰이 없는 경우 작업 중단
 
-      const token = localStorage.getItem('emailResetCode');
+      const token = localStorage.getItem('token');
 
       if (!token) {
         alert('로그인이 필요한 서비스입니다.');
@@ -31,13 +31,19 @@ const VerifyEmail: React.FC = () => {
           },
         );
 
+        console.log('Response:', response.data);
+
         // 유효성 확인 후 페이지 이동
         if (response.data.isSuccess) {
-          console.log('토큰 유효');
+          console.log('토큰 유효, 이메일 변경 성공');
 
           // 로컬 스토리지에 토큰 저장
           localStorage.setItem('emailResetCode', emailResetCode as string);
           console.log('토큰 저장 완료');
+
+          // 변경된 이메일 저장
+          localStorage.setItem('changedEmail', response.data.result);
+          console.log("변경된 이메일:", response.data.result);
 
           router.push('/mypage/profile'); // 개인 정보 페이지로 이동
         } else {
