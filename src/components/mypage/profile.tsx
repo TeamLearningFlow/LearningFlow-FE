@@ -157,6 +157,9 @@ const Profile = () => {
         if (response.data.isSuccess) {
           console.log('이메일 변경 성공');
 
+          // 기존 토큰 유지
+          localStorage.setItem('token', token);
+
           // 변경된 이메일 저장
           if (response.data.result) {
             console.log('변경된 이메일:', response.data.result);
