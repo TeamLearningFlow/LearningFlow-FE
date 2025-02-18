@@ -928,7 +928,7 @@ const BookmarkButton = ({ collection }: { collection: SearchResult }) => {
       setLoading(true);
 
       const response = await axios.post(
-        `http://onboarding.p-e.kr:8080/collections/${collection.collectionId}/likes`,
+        `https://onboarding.p-e.kr/collections/${collection.collectionId}/likes`,
         {},
         {
           headers: {
