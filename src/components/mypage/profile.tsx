@@ -79,14 +79,11 @@ const Profile = () => {
   const [isLocalDeleteModalOpen, setIsLocalDeleteModalOpen] = useState(false);
 
   const router = useRouter();
-  const { emailResetCode } = router.query;
   const { passwordResetCode } = router.query;
   const [isEditingPassword, setIsEditingPassword] = useState(false);
 
   useEffect(() => {
-    if (!emailResetCode) return;
-
-    const verifyEmailChange = async () => {
+    const fetchUserData = async () => {
       try {
         // 로컬 스토리지에서 토큰 가져오기 (로그인 시에만 접근 가능)
         const token = localStorage.getItem('token');
@@ -129,56 +126,8 @@ const Profile = () => {
       }
     };
 
-    verifyEmailChange();
+    fetchUserData();
   }, []);
-
-  useEffect(() => {
-    if (!emailResetCode) return;
-
-    const verifyEmailChange = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const storedSocialType = localStorage.getItem('socialType');
-        setSocialType(storedSocialType);
-
-        if (!token) {
-          alert('로그인이 필요한 서비스입니다.');
-          router.replace('/login');
-          return;
-        }
-
-        const response = await axios.get(
-          `https://onboarding.p-e.kr/user/change-email?emailResetCode=${emailResetCode}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          },
-        );
-
-        if (response.data.isSuccess) {
-          console.log('이메일 변경 성공');
-
-          // 기존 토큰 유지
-          localStorage.setItem('token', token);
-
-          // 변경된 이메일 저장
-          if (response.data.result) {
-            console.log('변경된 이메일:', response.data.result);
-            localStorage.setItem('email', response.data.result);
-          }
-
-          router.replace(`/mypage/profile`);
-        } else {
-          console.log('이메일 변경 실패');
-          router.replace('/');
-        }
-      } catch (error) {
-        console.error('이메일 변경 검증 실패:', error);
-        router.replace('/');
-      }
-    };
-
-    verifyEmailChange();
-  }, [emailResetCode, router]);
 
   useEffect(() => {
     if (!passwordResetCode) return;
