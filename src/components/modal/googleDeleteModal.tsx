@@ -118,7 +118,7 @@ const GoogleDeleteModal: React.FC<GoogleDeleteModalProps> = ({ onClose }) => {
       }
 
       const response = await axios.delete(
-        'https://onboarding-kappa.vercel.app/user/withdraw',
+        'https://onboarding.p-e.kr/user/withdraw',
         {
           headers: { Authorization: `Bearer ${token}` },
         },

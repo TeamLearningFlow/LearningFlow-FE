@@ -107,7 +107,7 @@ const CollectionInfo: React.FC<CollectionInfoProps> = ({
       if (!token) return;
 
       const response = await axios.get(
-        `https://onboarding-kappa.vercel.app/collections/${collectionId}`,
+        `https://onboarding.p-e.kr/collections/${collectionId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -143,7 +143,7 @@ const CollectionInfo: React.FC<CollectionInfoProps> = ({
 
     try {
       const response = await axios.post(
-        `http://onboarding.p-e.kr:8080/collections/${collectionId}/likes`,
+        `https://onboarding.p-e.kr/collections/${collectionId}/likes`,
         {},
         {
           headers: {
@@ -179,9 +179,9 @@ const CollectionInfo: React.FC<CollectionInfoProps> = ({
           }
         }
       } else if (err instanceof Error) {
-        console.log('Error:', err.message);
+        console.log(err.message);
       } else {
-        console.log('알 수 없는 오류 발생:', err);
+        console.log(err);
       }
     }
   };

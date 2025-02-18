@@ -97,7 +97,7 @@ const GoogleRedirectionPage = () => {
 
       try {
         const response = await axios.get(
-          `https://onboarding-kappa.vercel.app/oauth2/additional-info?oauth2RegistrationCode=${token}`,
+          `https://onboarding.p-e.kr/oauth2/additional-info?oauth2RegistrationCode=${token}`,
           { withCredentials: true },
         );
 
@@ -120,7 +120,7 @@ const GoogleRedirectionPage = () => {
           router.push(`/landing?token=${token}`);
         } else {
           // 기존 회원 → home 페이지로 이동
-          router.push('/homePage');
+          router.push('/');
         }
       } catch (error) {
         console.error('추가 정보 확인 중 오류 발생:', error);

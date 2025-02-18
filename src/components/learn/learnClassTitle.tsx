@@ -196,7 +196,7 @@ const ClassTitle: React.FC<ClassTitleProps> = ({ episodeId, episodeData }) => {
       };
 
       const response = await axios.post(
-        `https://onboarding-kappa.vercel.app/resources/${episodeId}/update-complete`,
+        `https://onboarding.p-e.kr/resources/${episodeId}/update-complete`,
         { progress: 0 },
         { headers },
       );

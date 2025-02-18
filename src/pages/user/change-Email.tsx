@@ -25,7 +25,7 @@ const VerifyEmail: React.FC = () => {
 
       try {
         const response = await axios.get(
-          `https://onboarding-kappa.vercel.app/user/change-email?emailResetCode=${emailResetCode}`,
+          `https://onboarding.p-e.kr/user/change-email?emailResetCode=${emailResetCode}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           },
@@ -42,11 +42,11 @@ const VerifyEmail: React.FC = () => {
           router.push('/mypage/profile'); // 개인 정보 페이지로 이동
         } else {
           console.log('토큰 무효');
-          router.push('/homePage'); // 홈 페이지로 이동
+          router.push('/'); // 홈 페이지로 이동
         }
       } catch (err) {
         console.error('토큰 검증 오류:', err);
-        router.push('/homePage'); // 오류 발생 시 홈 페이지로 이동
+        router.push('/'); // 오류 발생 시 홈 페이지로 이동
       }
     };
 

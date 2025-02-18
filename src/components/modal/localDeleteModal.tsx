@@ -215,7 +215,7 @@ const LocalDeleteModal: React.FC<LocalDeleteModalProps> = ({ onClose }) => {
       }
 
       const response = await axios.delete(
-        'https://onboarding-kappa.vercel.app/user/withdraw',
+        'https://onboarding.p-e.kr/user/withdraw',
         {
           headers: { Authorization: `Bearer ${token}` },
           data: { password }, // 비밀번호 포함해서 요청

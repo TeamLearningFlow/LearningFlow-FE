@@ -17,7 +17,7 @@ const RegisterCompletePage: React.FC = () => {
 
       try {
         const response = await axios.get(
-          `http://onboarding.p-e.kr:8080/register/complete?emailVerificationCode=${emailVerificationCode}`,
+          `https://onboarding.p-e.kr/register/complete?emailVerificationCode=${emailVerificationCode}`,
         );
 
         // 유효성 확인 후 페이지 이동

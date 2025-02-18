@@ -144,7 +144,7 @@ const LearnPage: React.FC = () => {
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
       const youtubeResponse = await axios.get(
-        `https://onboarding-kappa.vercel.app/resources/${episodeId}/youtube`,
+        `https://onboarding.p-e.kr/resources/${episodeId}/youtube`,
         { headers },
       );
 
@@ -159,7 +159,7 @@ const LearnPage: React.FC = () => {
 
       // YouTube가 아니면 Blog 조회
       const blogResponse = await axios.get(
-        `https://onboarding-kappa.vercel.app/resources/${episodeId}/blog`,
+        `https://onboarding.p-e.kr/resources/${episodeId}/blog`,
         { headers },
       );
 

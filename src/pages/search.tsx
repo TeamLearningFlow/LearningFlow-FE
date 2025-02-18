@@ -93,7 +93,7 @@ const SearchPage: React.FC = () => {
         }).filter(([, value]) => value), // 빈 값('') 또는 undefined는 필터링
       );
 
-      const response = await axios.get(`https://onboarding-kappa.vercel.app/search`, {
+      const response = await axios.get(`https://onboarding.p-e.kr/search`, {
         params,
       });
       const data = await response.data.result;
@@ -107,7 +107,7 @@ const SearchPage: React.FC = () => {
 
   const fetchAllResults = async () => {
     try {
-      const response = await axios.get(`https://onboarding-kappa.vercel.app/search`);
+      const response = await axios.get(`https://onboarding.p-e.kr/search`);
       const data = await response.data.result;
       setSearchResult(data.searchResults);
     } catch (error) {

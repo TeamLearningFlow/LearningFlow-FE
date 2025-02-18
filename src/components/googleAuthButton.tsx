@@ -57,7 +57,7 @@ const GoogleAuthButton = ({ text }: { text: string }) => {
 
   const handleGoogleLogin = () => {
     const popup = window.open(
-      'https://onboarding-kappa.vercel.app/login/google',
+      'https://onboarding.p-e.kr/login/google',
       '_blank',
       'width=600,height=800',
     );
@@ -68,7 +68,7 @@ const GoogleAuthButton = ({ text }: { text: string }) => {
     }
 
     window.addEventListener('message', (event) => {
-      if (event.origin !== 'https://onboarding-kappa.vercel.app/') {
+      if (event.origin !== 'https://onboarding.p-e.kr/') {
         return;
       }
 
@@ -79,7 +79,7 @@ const GoogleAuthButton = ({ text }: { text: string }) => {
 
         // 홈(/)으로 인증된 GET 요청 (401 에러 처리)
         axios
-          .get('https://onboarding-kappa.vercel.app/', {
+          .get('https://onboarding.p-e.kr/', {
             headers: {
               Authorization: 'Bearer ' + accessToken,
             },
@@ -87,7 +87,7 @@ const GoogleAuthButton = ({ text }: { text: string }) => {
           })
           .then((response) => {
             console.log('Home page response:', response.data);
-            router.push('/homePage');
+            router.push('/');
           })
           .catch(async (error) => {
             if (error.response && error.response.status === 401) {
@@ -101,7 +101,7 @@ const GoogleAuthButton = ({ text }: { text: string }) => {
                 // 새 Access Token으로 원래 요청 다시 시도
                 try {
                   const retryResponse = await axios.get(
-                    'https://onboarding-kappa.vercel.app/',
+                    'https://onboarding.p-e.kr/',
                     {
                       headers: {
                         Authorization: newAccessToken,
@@ -113,7 +113,7 @@ const GoogleAuthButton = ({ text }: { text: string }) => {
                     'Home page response (retry):',
                     retryResponse.data,
                   );
-                  router.push('/homePage');
+                  router.push('/');
                 } catch (retryError) {
                   console.error('Error after retry:', retryError);
                   handleAuthFailure(); // 재시도 실패 시 처리

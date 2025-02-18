@@ -285,7 +285,7 @@ const BlogArticle: React.FC<{
 
         // 블로그 API 호출
         const blogResponse = await axios.get(
-          `http://onboarding.p-e.kr:8080/resources/${episodeId}/blog`,
+          `https://onboarding.p-e.kr/resources/${episodeId}/blog`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -301,7 +301,7 @@ const BlogArticle: React.FC<{
 
         // /content 호출하여 PNG 이미지 URL 얻기
         const contentResponse = await axios.get(
-          `http://onboarding.p-e.kr:8080/resources/${episodeId}/blog/content`,
+          `https://onboarding.p-e.kr/resources/${episodeId}/blog/content`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -340,7 +340,7 @@ const BlogArticle: React.FC<{
 
     try {
       await axios.post(
-        `http://onboarding.p-e.kr:8080/resources/${episodeId}/save-progress`,
+        `https://onboarding.p-e.kr/resources/${episodeId}/save-progress`,
         { resourceType: 'TEXT', progress: 0 },
         {
           headers: {
@@ -363,7 +363,7 @@ const BlogArticle: React.FC<{
 
     try {
       const response = await axios.post(
-        `http://onboarding.p-e.kr:8080/resources/${episodeId}/update-complete`,
+        `https://onboarding.p-e.kr/resources/${episodeId}/update-complete`,
         {},
         {
           headers: {

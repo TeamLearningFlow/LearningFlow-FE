@@ -68,7 +68,7 @@ const HomePage = () => {
     if (token) {
       const fetchHomeData = async () => {
         try {
-          const response = await axios.get(`https://onboarding-kappa.vercel.app/`, {
+          const response = await axios.get(`https://onboarding.p-e.kr/`, {
             headers: { Authorization: token },
             withCredentials: true,
           });

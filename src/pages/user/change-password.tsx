@@ -25,7 +25,7 @@ const ChangePasswordRedirect = () => {
     const verifyResetCode = async () => {
       try {
         const response = await axios.get(
-          `https://onboarding-kappa.vercel.app/user/change-password?passwordResetCode=${passwordResetCode}`,
+          `https://onboarding.p-e.kr/user/change-password?passwordResetCode=${passwordResetCode}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           },

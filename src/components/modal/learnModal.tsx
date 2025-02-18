@@ -28,7 +28,7 @@ const LearnModal: React.FC<LearnModalProps> = ({
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
       const response = await axios.post(
-        `https://onboarding-kappa.vercel.app/resources/${episodeId}/update-complete`,
+        `https://onboarding.p-e.kr/resources/${episodeId}/update-complete`,
         {},
         { headers },
       );

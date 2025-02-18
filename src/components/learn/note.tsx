@@ -193,7 +193,7 @@ const Note: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
       // localStorage.setItem(`noteContent_${episodeId}`, noteContent);
       try {
         const response = await axios.post(
-          `https://onboarding-kappa.vercel.app/resources/${episodeId}/memo`,
+          `https://onboarding.p-e.kr/resources/${episodeId}/memo`,
           {
             contents: noteContent,
           },
@@ -223,9 +223,9 @@ const Note: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
             console.log('메모 작성 중 오류 발생');
           }
         } else if (err instanceof Error) {
-          console.log('예상치 못한 오류:', err.message);
+          console.log(err.message);
         } else {
-          console.log('알 수 없는 오류 발생:', err);
+          console.log(err);
         }
       }
     }

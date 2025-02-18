@@ -282,7 +282,7 @@ const Page1: React.FC<{
       }
 
       const response = await axios.post(
-        'https://onboarding-kappa.vercel.app/image/upload',
+        'https://onboarding.p-e.kr/image/upload',
         formData,
         {
           headers: {

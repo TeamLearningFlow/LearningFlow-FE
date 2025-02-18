@@ -76,7 +76,7 @@ const LandingPage: React.FC = () => {
     try {
       // 1. 회원가입 요청 api
       const registerResponse = await axios.post(
-        `https://onboarding-kappa.vercel.app/register/complete?emailVerificationCode=${token}`,
+        `https://onboarding.p-e.kr/register/complete?emailVerificationCode=${token}`,
         requestData,
         {
           headers: {
@@ -99,7 +99,7 @@ const LandingPage: React.FC = () => {
 
       // 자동 로그인 연결
       const loginResponse = await axios.post(
-        'https://onboarding-kappa.vercel.app/login',
+        'https://onboarding.p-e.kr/login',
         {
           email: storedEmail,
           password: storedPassword,

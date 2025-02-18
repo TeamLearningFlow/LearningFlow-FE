@@ -90,7 +90,7 @@ export const CompletedClass: React.FC<ResourceData & { collectionData: Collectio
   
       // resourceSource에 따라 API 경로 설정
       const resourceType = resourceSource === "youtube" ? "youtube" : "blog";
-      const apiUrl = `https://onboarding-kappa.vercel.app/resources/${episodeId}/${resourceType}`;
+      const apiUrl = `https://onboarding.p-e.kr/resources/${episodeId}/${resourceType}`;
   
       // API 요청
       const response = await axios.get(apiUrl, { headers });
@@ -138,7 +138,7 @@ export const CurrentClass: React.FC<ResourceData & { collectionData: CollectionD
   
       // resourceSource에 따라 API 경로 설정
       const resourceType = resourceSource === "youtube" ? "youtube" : "blog";
-      const apiUrl = `https://onboarding-kappa.vercel.app/resources/${episodeId}/${resourceType}`;
+      const apiUrl = `https://onboarding.p-e.kr/resources/${episodeId}/${resourceType}`;
   
       // API 요청
       const response = await axios.get(apiUrl, { headers });
@@ -185,7 +185,7 @@ export const NextClass: React.FC<ResourceData & { collectionData: CollectionData
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
       const resourceType = resourceSource === "youtube" ? "youtube" : "blog";
-      const apiUrl = `https://onboarding-kappa.vercel.app/resources/${episodeId}/${resourceType}`;
+      const apiUrl = `https://onboarding.p-e.kr/resources/${episodeId}/${resourceType}`;
 
       const response = await axios.get(apiUrl, { headers });
 
