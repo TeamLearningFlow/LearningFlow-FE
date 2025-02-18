@@ -181,7 +181,7 @@ const Page1: React.FC<{
   onNext: (data: {
     nickname: string;
     job: string;
-    imgProfileUrl: string | null;
+    imgProfileUrl: string;
   }) => void;
 }> = ({ onNext }) => {
   const [isHovered, setIsHovered] = useState(false); // 편집 아이콘 hover
@@ -190,7 +190,7 @@ const Page1: React.FC<{
   const [isNicknameValid, setIsNicknameValid] = useState<boolean | null>(null);
   const [job, setJob] = useState('');
   const [isJobDropdownOpen, setIsJobDropdownOpen] = useState(false);
-  const [imgProfileUrl, setImgProfileUrl] = useState<string | null>(null); // null 값일 때 디폴트
+  const [imgProfileUrl, setImgProfileUrl] = useState<string>(Guest.src); // null 값일 때 디폴트
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // 부모에게 전달 할 string 정의
@@ -312,7 +312,7 @@ const Page1: React.FC<{
   if (!isClient) {
     return null;
   }
-  
+
   return (
     <>
       <Content>
@@ -403,7 +403,11 @@ const Page1: React.FC<{
             active={isNextButtonActive}
             onClick={() => {
               if (isNextButtonActive) {
-                onNext({ nickname, job, imgProfileUrl }); // 부모 컴포넌트로 직업 값 전달
+                onNext({
+                  nickname,
+                  job,
+                  imgProfileUrl: imgProfileUrl || Guest.src,
+                }); // 부모 컴포넌트로 직업 값 전달
               }
             }}
           >

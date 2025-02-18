@@ -6,7 +6,7 @@ import Page2 from './page2';
 import Page3 from './page3';
 import styled from 'styled-components';
 import TopLogo from '../../components/landing/landingHeader';
-// import Guest from '../../assets/Guest.svg';
+import Guest from '/public/Guest.svg';
 import { LoginContext } from '../../components/context/LoginContext';
 
 const PageIndicator = styled.div`
@@ -26,7 +26,7 @@ const Indicator = styled.div<{ active: boolean }>`
 const LandingPage: React.FC = () => {
   const [isClient, setIsClient] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [imgUrl, setImgProfileUrl] = useState<string | null>(null); // 프로필 url 값
+  const [imgProfileUrl, setImgProfileUrl] = useState<string>(Guest.src); // 프로필 url 값
   const [nickname, setNickname] = useState(''); // 닉네임 값
   const [job, setJob] = useState(''); // 직업 값
   const [interestFields, setInterestFields] = useState<string[]>([]); // 카테고리 값
@@ -63,7 +63,7 @@ const LandingPage: React.FC = () => {
       job,
       interestFields,
       preferType: finalPreferType,
-      imgProfileUrl: imgUrl,
+      imgProfileUrl: imgProfileUrl || Guest.src,
     };
 
     console.log('requestData:', requestData);
@@ -88,14 +88,14 @@ const LandingPage: React.FC = () => {
       console.log('회원가입 성공:', registerResponse.data);
       alert('회원가입이 완료되었습니다.');
 
-      localStorage.removeItem('profileImgUrl'); // 기존에 저장된 이미지 삭제
+      // localStorage.removeItem('profileImgUrl'); // 기존에 저장된 이미지 삭제
 
       const userName = registerResponse.data.result.name;
       localStorage.setItem('userName', userName); // 닉네임 저장
       console.log('저장된 닉네임:', registerResponse.data.result.name);
 
-      // localStorage.setItem('profileImgUrl', imgUrl);
-      console.log('저장된 이미지 URL:', imgUrl);
+      localStorage.setItem('profileImgUrl', imgProfileUrl || Guest.src);
+      console.log('저장된 이미지 URL:', imgProfileUrl);
 
       // 자동 로그인 연결
       const loginResponse = await axios.post(
@@ -148,7 +148,7 @@ const LandingPage: React.FC = () => {
           onNext={({ nickname, job, imgProfileUrl }) => {
             setNickname(nickname);
             setJob(job);
-            setImgProfileUrl(imgProfileUrl);
+            setImgProfileUrl(imgProfileUrl || Guest.src);
             setCurrentPage(2);
           }}
         />
