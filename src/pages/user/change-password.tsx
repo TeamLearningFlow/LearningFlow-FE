@@ -14,7 +14,8 @@ const ChangePasswordRedirect = () => {
   useEffect(() => {
     if (!passwordResetCode) return;
 
-    const token = localStorage.getItem('token');
+    const token =
+      localStorage.getItem('token') || sessionStorage.getItem('token');
 
     if (!token) {
       alert('로그인이 필요한 서비스입니다.');
