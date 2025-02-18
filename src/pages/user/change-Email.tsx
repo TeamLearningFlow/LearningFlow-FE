@@ -42,8 +42,10 @@ const VerifyEmail: React.FC = () => {
           console.log('토큰 저장 완료');
 
           // 변경된 이메일 저장
-          localStorage.setItem('changedEmail', response.data.result);
-          console.log("변경된 이메일:", response.data.result);
+          if (response.data.result) {
+            console.log("변경된 이메일:", response.data.result);
+            localStorage.setItem('email', response.data.result);
+          }
 
           router.push('/mypage/profile'); // 개인 정보 페이지로 이동
         } else {

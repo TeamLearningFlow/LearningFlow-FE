@@ -367,6 +367,16 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
     setEditedEmail(originalEmail); // 이메일 변경 즉시 반영
   }, [originalEmail]);
 
+  // 변경된 이메일 반영
+  useEffect(() => {
+    const savedEmail = localStorage.getItem('email');
+    if (savedEmail) {
+      console.log("변경된 이메일:", savedEmail);
+      setEditedEmail(savedEmail);
+      setCurrentEmail(savedEmail);
+    }
+  }, []);
+
   // 비밀번호 변경 메일 인증 api 연결
   const sendPasswordChangeRequest = async () => {
     try {
