@@ -36,11 +36,15 @@ const SearchPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // query에 page가 없으면 기본값 1로 설정
-    if (!query.page) {
+    // query에 page 또는 sortType이 없으면 기본값 설정
+    if (!query.page || !query.sortType) {
       router.replace({
         pathname: '/search',
-        query: { ...query, page: '1' },
+        query: {
+          ...query,
+          page: query.page || '1',
+          sortType: query.sortType || '0',
+        },
       });
     }
 
@@ -50,7 +54,8 @@ const SearchPage: React.FC = () => {
       !query?.difficulties &&
       !query?.amounts &&
       !query?.preferMediaType &&
-      !query?.page
+      !query?.page &&
+      !query?.sortType
     ) {
       fetchAllResults();
     } else {
@@ -77,6 +82,7 @@ const SearchPage: React.FC = () => {
     query.difficulties,
     query.amounts,
     query.preferMediaType,
+    query.sortType,
   ]);
 
   const fetchSearchResults = async () => {
@@ -90,6 +96,7 @@ const SearchPage: React.FC = () => {
           amounts: query?.amounts,
           preferMediaType: query?.preferMediaType,
           page: query?.page,
+          sortType: query?.sortType,
         }).filter(([, value]) => value), // 빈 값('') 또는 undefined는 필터링
       );
 

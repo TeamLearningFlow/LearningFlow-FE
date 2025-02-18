@@ -4,6 +4,7 @@ import LevelButton from './levelButton';
 import AmountButton from '../search/amountButton';
 import PreferenceButton from './preferButton';
 import Tags from './tags';
+import { useRouter } from 'next/router';
 
 const FiltersContainer = styled.div<{ hasTags: boolean }>`
   display: flex;
@@ -75,6 +76,9 @@ type TagData = {
 };
 
 const Filters = () => {
+  const router = useRouter();
+  const { query } = router;
+
   const [levelTags, setLevelTags] = useState<string[]>([]); // 난이도 태그
   const [amountTags, setAmountTags] = useState<string[]>([]); // 분량 태그
   const [preferTags, setPreferTags] = useState<string[]>([]); // 매체 선호도 태그
@@ -103,6 +107,25 @@ const Filters = () => {
     }
   };
 
+  const handleSort = (option: string) => {
+    const sortOption = [
+      { id: 0, text: '최신순' },
+      { id: 1, text: '인기순' },
+    ];
+    const selectedSort = sortOption.find((sort) => sort.text === option);
+    if (!selectedSort) return;
+
+    setActiveSort(selectedSort.text);
+
+    router.push({
+      pathname: '/search',
+      query: {
+        ...query,
+        sortType: selectedSort.id,
+      },
+    });
+  };
+
   return (
     <FiltersContainer hasTags={hasTags}>
       <SectionContainer>
@@ -124,13 +147,13 @@ const Filters = () => {
         <OptionWrapper>
           <Option
             active={activeSort === '최신순'}
-            onClick={() => setActiveSort('최신순')}
+            onClick={() => handleSort('최신순')}
           >
             최신순
           </Option>
           <Option
             active={activeSort === '인기순'}
-            onClick={() => setActiveSort('인기순')}
+            onClick={() => handleSort('인기순')}
           >
             인기순
           </Option>
