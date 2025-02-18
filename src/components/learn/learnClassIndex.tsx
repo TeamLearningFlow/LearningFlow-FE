@@ -99,12 +99,15 @@ export const CompletedClass: React.FC<ResourceData & { collectionData: Collectio
   
       if (response.status === 200) {
         const data = response.data;
+        const videoId = data.result.episodeContents;
+        console.log("내부 이동 videoId:",videoId);
+        // resourceItem 대신 episodeName 사용
         router.push({
-          pathname: `/learn/${episodeId}`, // 수강페이지로 이동
+          pathname: `/learn/${episodeId}`, 
           query: { 
-            episodeData: JSON.stringify(data),
+            episodeData: JSON.stringify({ ...data, episodeName }), 
             collectionData: JSON.stringify(collectionData)
-           }, // 응답 데이터를 쿼리로 전달
+          },
         });
       }
     } catch (error) {
@@ -147,18 +150,22 @@ export const CurrentClass: React.FC<ResourceData & { collectionData: CollectionD
   
       if (response.status === 200) {
         const data = response.data;
+        const videoId = data.result.episodeContents;
+        console.log("내부 이동 videoId:",videoId);
+        // resourceItem 대신 episodeName 사용
         router.push({
-          pathname: `/learn/${episodeId}`, // 수강페이지로 이동
+          pathname: `/learn/${episodeId}`, 
           query: { 
-            episodeData: JSON.stringify(data),
+            episodeData: JSON.stringify({ ...data, episodeName }), 
             collectionData: JSON.stringify(collectionData)
-           }, // 응답 데이터를 쿼리로 전달
+          },
         });
       }
     } catch (error) {
       console.error("강의 불러오기 실패:", error);
     }
   };
+
 
   return (
     <CurrentIndexWrapper onClick={() => handleClick(episodeId, resourceSource)}>
@@ -172,6 +179,7 @@ export const CurrentClass: React.FC<ResourceData & { collectionData: CollectionD
     </CurrentIndexWrapper>
   );
 };
+
 
 export const NextClass: React.FC<ResourceData & { collectionData: CollectionData }> = ({
   episodeId,

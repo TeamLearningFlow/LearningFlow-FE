@@ -5,6 +5,7 @@ import { createGlobalStyle } from 'styled-components';
 import { LoginProvider } from '../pages/context/LoginContext';
 import { LearnProvider } from '../pages/context/LearnContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ProgressProvider } from './context/ProgressContext';
 
 const queryClient = new QueryClient();
 
@@ -44,8 +45,10 @@ function MyApp({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={queryClient}>
         <LoginProvider>
           <LearnProvider>
-            <GlobalStyle />
-            <Component {...pageProps} />
+            <ProgressProvider>
+              <GlobalStyle />
+              <Component {...pageProps} />
+            </ProgressProvider>
           </LearnProvider>
         </LoginProvider>
       </QueryClientProvider>

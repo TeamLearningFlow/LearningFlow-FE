@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useRouter } from "next/router";
 import axios from "axios";
 import styled from 'styled-components';
 import Image from 'next/image';
+import LoginAuthModal from '../modal/loginModal';
 import PlayButton from '../../assets/playButton.svg';
 import CompletedIndexIcon from '../../assets/completedRadio.svg';
 import EndIndexIcon from '../../assets/defaultRadio.svg';
@@ -20,8 +21,10 @@ interface ClassIndexProps {
 
 const ClassIndex: React.FC<ClassIndexProps> = ({ classData, collection }) => {
   const router = useRouter();
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
- {/* const handleClick = async () => {
+  {
+    /* const handleClick = async () => {
     // episodeId를 임의로 설정
     const episodeId = 54;
   
@@ -45,87 +48,129 @@ const ClassIndex: React.FC<ClassIndexProps> = ({ classData, collection }) => {
       console.error("강의 불러오기 실패:", error);
     }
   };
-  */} 
+  */
+  }
 
- 
   const handleClick = async () => {
     const episodeId = classData.episodeId;
-  
-  try {
-    const token = localStorage.getItem("token");
-    const headers = token ? { Authorization: `Bearer ${token}` } : {};
-    
-    // resourceSource에 따라 API 경로 설정
-    const resourceType = classData.resourceSource === "youtube" ? "youtube" : "blog";
-    const apiUrl = `http://onboarding.p-e.kr:8080/resources/${episodeId}/${resourceType}`;
 
-    // API 요청
-    const response = await axios.get(apiUrl, { headers });
+    try {
+      const token = localStorage.getItem('token');
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-    if (response.status === 200) {
-      const data = response.data;
-      console.log('API 응답 데이터:', data);
-      router.push({
-        pathname: `/learn/${episodeId}`, // 수강페이지로 이동
-        query: { 
-          episodeData: JSON.stringify(data),
-          collectionData: JSON.stringify(collection)
-         }, // 응답 데이터를 쿼리로 전달
+      // resourceSource에 따라 API 경로 설정
+      const resourceType =
+        classData.resourceSource === 'youtube' ? 'youtube' : 'blog';
+      const apiUrl = `http://onboarding.p-e.kr:8080/resources/${episodeId}/${resourceType}`;
 
-      });
+      // API 요청
+      const response = await axios.get(apiUrl, { headers });
 
+      if (response.status === 200) {
+        const data = response.data;
+        console.log('API 응답 데이터:', data);
+        const episodeDataWithName = {
+          ...data,
+          episodeName: classData.episodeName,
+        };
+        router.push({
+          pathname: `/learn/${episodeId}`,
+          query: {
+            episodeData: JSON.stringify(episodeDataWithName),
+            collectionData: JSON.stringify(collection),
+          },
+        });
+      }
+    } catch (error: any) {
+      if (error.response?.status === 401) {
+        setIsLoginModalOpen(true); // 로그인 모달 열기
+      } else {
+        console.error('강의 불러오기 실패:', error);
+      }
     }
-  } catch (error) {
-    console.error("강의 불러오기 실패:", error);
-  }
-};
-
+  };
 
   const getPlatformIcon = () => {
     switch (classData.resourceSource) {
       case 'youtube':
-        return <Image src={CheckedYoutube} alt="YouTube" fill style={{ objectFit: "contain" }} />;
+        return (
+          <Image
+            src={CheckedYoutube}
+            alt="YouTube"
+            fill
+            style={{ objectFit: 'contain' }}
+          />
+        );
       case 'naverBlog':
-        return <Image src={CheckedBlog} alt="Naver Blog" fill style={{ objectFit: "contain" }} />;
+        return (
+          <Image
+            src={CheckedBlog}
+            alt="Naver Blog"
+            fill
+            style={{ objectFit: 'contain' }}
+          />
+        );
       case 'tistory':
-        return <Image src={CheckedTistory} alt="Tistory" fill style={{ objectFit: "contain" }} />;
+        return (
+          <Image
+            src={CheckedTistory}
+            alt="Tistory"
+            fill
+            style={{ objectFit: 'contain' }}
+          />
+        );
       case 'velog':
-        return <Image src={CheckedVelog} alt="Velog" fill style={{ objectFit: "contain" }} />;
+        return (
+          <Image
+            src={CheckedVelog}
+            alt="Velog"
+            fill
+            style={{ objectFit: 'contain' }}
+          />
+        );
       default:
         return null;
     }
   };
 
   return (
-    <ComponentWrapper>
-      <RadioWrapper>
-        <IndexIcon>
-          <Image
-            src={CompletedIndexIcon}
-            alt="completed-icon"
-            fill
-            style={{ objectFit: "contain" }}
-          />
-        </IndexIcon>
-      </RadioWrapper>
-      <IndexWrapper>
-        <PlatformIcon>
-          {getPlatformIcon()}
-        </PlatformIcon>
-        <IndexContainer>
-          <OrderBox>{classData.episodeNumber}회차</OrderBox>
-          <TitleBox>{classData.episodeName}</TitleBox>
-        </IndexContainer>
-        <ButtonWrapper onClick={handleClick}>
-          <Image
-            src={PlayButton}
-            alt="Play Button"
-            fill
-            style={{ objectFit: "contain" }}
-          />
-        </ButtonWrapper>
-      </IndexWrapper>
-    </ComponentWrapper>
+    <>
+      <ComponentWrapper>
+        <RadioWrapper>
+          <IndexIcon>
+            <Image
+              src={CompletedIndexIcon}
+              alt="completed-icon"
+              fill
+              style={{ objectFit: 'contain' }}
+            />
+          </IndexIcon>
+        </RadioWrapper>
+        <IndexWrapper>
+          <PlatformIcon>{getPlatformIcon()}</PlatformIcon>
+          <IndexContainer>
+            <OrderBox>{classData.episodeNumber}회차</OrderBox>
+            <TitleBox>{classData.episodeName}</TitleBox>
+          </IndexContainer>
+          <ButtonWrapper onClick={handleClick}>
+            <Image
+              src={PlayButton}
+              alt="Play Button"
+              fill
+              style={{ objectFit: 'contain' }}
+            />
+          </ButtonWrapper>
+        </IndexWrapper>
+      </ComponentWrapper>
+
+      {/* 로그인 모달 */}
+      {isLoginModalOpen && (
+        <LoginAuthModal
+          onClose={() => setIsLoginModalOpen(false)}
+          onContinue={() => router.push('/login')}
+        />
+      )}
+    </>
   );
 };
 
@@ -413,7 +458,7 @@ const EndIndexContainer = styled.div<{ allProgressed: boolean }>`
   font-size: 18px;
   font-weight: 600;
   color: ${(props) =>
-    props.allProgressed ? 'rgba(79, 83, 87, 1)' : 'rgba(221, 224, 228, 1)'};
+    props.allProgressed ? 'rgba(94, 82, 255, 1)' : 'rgba(221, 224, 228, 1)'};
 
   @media (max-width: 850px) {
     font-size: 16px;

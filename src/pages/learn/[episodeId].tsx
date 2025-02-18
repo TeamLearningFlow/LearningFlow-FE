@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { LearnContext } from '../context/LearnContext';
+import { ProgressContext } from '../context/ProgressContext';
 import { useParams } from 'react-router-dom';
 import { useRouter } from 'next/router';
 import axios from 'axios';
@@ -101,6 +102,7 @@ const LearnPage: React.FC = () => {
   const [field, setField] = useState<string>('');
   const [youtubeContent, setYoutubeContent] = useState<string>('');
   const context = useContext(LearnContext);
+  const { updateProgress } = useContext(ProgressContext);
   const router = useRouter();
   const { episodeId, episodeData, collectionData } = router.query;
 
@@ -135,6 +137,13 @@ const LearnPage: React.FC = () => {
       checkResourceType();
     }
   }, [episodeData, episodeId]);
+
+  useEffect(() => {
+    if (parsedEpisodeData) {
+      //console.log('API에서 받은 article 데이터:', parsedEpisodeData);
+      console.log('영상 진도율 (progress):', parsedEpisodeData.result.progress);
+    }
+  }, [parsedEpisodeData]);
 
   const checkResourceType = async () => {
     try {
@@ -215,9 +224,14 @@ const LearnPage: React.FC = () => {
               <>
                 {type === 'youtube' ? (
                   <Article
-                    videoId={youtubeContent}
-                    isCompleted={context.state.isCompleted}
-                  />
+                  videoId={youtubeContent}
+                  isCompleted={context.state.isCompleted}
+                  onProgressChange={(progress) => {
+                    //console.log(`LearnPage - Article에서 전달받은 진도율: ${progress}%`);
+                    updateProgress(episodeIdNumber, progress);
+                    localStorage.setItem(`progress-${episodeIdNumber}`, progress.toString());
+                  }}
+                />
                 ) : (
                   <BlogArticle
                     episodeId={episodeIdNumber}

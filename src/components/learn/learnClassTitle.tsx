@@ -7,13 +7,13 @@ import { FaCheck } from 'react-icons/fa6';
 import EffectUp from '../../assets/buttonEffectUp.svg';
 import EffectDown from '../../assets/buttonEffectDown.svg';
 import LearnModal from '../modal/learnModal';
-import { CollectionData } from '@/pages/collection/[collectionId]';
 
 const TitleWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  height: 8vh;
   padding: 1.5% 0 1.5% 0;
 
   @media (max-width: 850px) {
@@ -102,33 +102,22 @@ const IconBox = styled.div`
   }
 `;
 
+const EffectButtonWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  z-index: 20;
+`;
+
 const EffectUpWrapper = styled.div<{
   isClicked: boolean;
   isCompleted: boolean;
 }>`
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  bottom: 29.7%;
-  right: 33%;
-  width: 20px;
-  height: 20px;
-  gap: 50px;
   z-index: 20;
   // opacity: 1; /* 항상 보이도록 설정 */
   // visibility: visible; /* 항상 보이도록 설정 */
-  opacity: ${(props) => (props.isCompleted ? 0 : props.isClicked ? 1 : 0)};
+  opacity: ${(props) => (props.isClicked ? 1 : 0)};
   transition: opacity 1s ease;
-
-  @media (max-width: 850px) {
-    width: 17px;
-    height: 17px;
-  }
-
-  @media (max-width: 560px) {
-    width: 11px;
-    height: 11px;
-  }
+  margin-bottom: -2px;
 `;
 
 const EffectDownWrapper = styled.div<{
@@ -136,28 +125,12 @@ const EffectDownWrapper = styled.div<{
   isCompleted: boolean;
 }>`
   display: flex;
-  flex-direction: column;
-  position: absolute;
-  bottom: 23.5%;
-  right: 29.5%;
-  width: 20px;
-  height: 20px;
-  gap: 50px;
+  align-self: flex-end;
   z-index: 20;
   // opacity: 1; /* 항상 보이도록 설정 */
-  // visibility: visible; /* 항상 보이도록 설정 */
-  opacity: ${(props) => (props.isCompleted ? 0 : props.isClicked ? 1 : 0)};
+  visibility: visible; /* 항상 보이도록 설정 */
+  opacity: ${(props) => (props.isClicked ? 1 : 0)};
   transition: opacity 1s ease;
-
-  @media (max-width: 850px) {
-    width: 17px;
-    height: 17px;
-  }
-
-  @media (max-width: 560px) {
-    width: 13px;
-    height: 13px;
-  }
 `;
 
 const ButtonLetter = styled.div`
@@ -198,14 +171,18 @@ const ClassTitle: React.FC<ClassTitleProps> = ({ episodeId, episodeData }) => {
       );
 
       if (response.status === 200 && response.data?.result?.isComplete) {
-        setIsCompleted(true);
-        setProgress(100);
-        console.log('학습 완료 처리 성공:', response.data);
+        setTimeout(() => {
+          setIsCompleted(true);
+          setProgress(100);
+          console.log('학습 완료 처리 성공:', response.data);
+        }, 700);
       }
     } catch (error) {
       console.error('수강 상태 변경 실패:', error);
     } finally {
-      setIsClicked(false);
+      setTimeout(() => {
+        setIsClicked(false);
+      }, 700);
     }
   };
 
@@ -218,12 +195,10 @@ const ClassTitle: React.FC<ClassTitleProps> = ({ episodeId, episodeData }) => {
   return (
     <TitleWrapper>
       <TitleBox>{episodeName}</TitleBox>
+      <EffectButtonWrapper>
       <EffectUpWrapper isClicked={isClicked} isCompleted={isCompleted}>
         <Image src={EffectUp} alt="Button Effect Up" />
       </EffectUpWrapper>
-      <EffectDownWrapper isClicked={isClicked} isCompleted={isCompleted}>
-        <Image src={EffectDown} alt="Button Effect Down" />
-      </EffectDownWrapper>
       <ButtonWrapper
         isClicked={isClicked}
         isCompleted={isCompleted}
@@ -234,6 +209,10 @@ const ClassTitle: React.FC<ClassTitleProps> = ({ episodeId, episodeData }) => {
         </IconBox>
         <ButtonLetter>수강완료</ButtonLetter>
       </ButtonWrapper>
+      <EffectDownWrapper isClicked={isClicked} isCompleted={isCompleted}>
+        <Image src={EffectDown} alt="Button Effect Down" />
+      </EffectDownWrapper>
+      </EffectButtonWrapper>
 
       {isModalVisible && (
         <LearnModal

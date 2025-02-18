@@ -10,6 +10,7 @@ const ComponentWrapper = styled.div`
   width: 100%;
   max-height: 200px;
   overflow-y: scroll;
+  margin-top: 10px;
 
   &::-webkit-scrollbar {
     width: 8px; /* 스크롤바의 너비 */

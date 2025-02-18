@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
+import axios from 'axios';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
 interface YoutubeArticleProps {
@@ -15,8 +17,9 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
   const playerRef = useRef<any>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const isTestMode = false;
+  const router = useRouter();
+  const { episodeId } = router.query;
 
-  // 컴포넌트 언마운트 시 진도율 추적 인터벌 및 플레이어 클린업
   useEffect(() => {
     return () => {
       stopTrackingProgress();
@@ -76,17 +79,17 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
   };
 
   const onPlayerReady = (event: any) => {
-    console.log("Player ready");
+    console.log('Player ready');
   };
 
-  // 플레이어 상태 변경 감지:  진도율 추적 시작
+  // 플레이어 상태 변경 감지: 진도율 추적 시작
   const handlePlayerStateChange = (event: any) => {
     if (event.data === window.YT.PlayerState.PLAYING) {
       console.log('영상 재생 시작 - 진도율 추적 준비중');
       // duration이 준비될 때까지 폴링
       const pollInterval = setInterval(() => {
         const duration = playerRef.current.getDuration();
-        console.log("영상 총 길이:", duration);
+        console.log('영상 총 길이:', duration);
         if (duration > 0) {
           clearInterval(pollInterval);
           startTrackingProgress();
@@ -97,7 +100,28 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
     }
   };
 
-  // 진도율 추적 시작
+  // 진도율 저장 API 호출
+  const saveProgress = async (progressValue: number) => {
+    if (!episodeId) return;
+    try {
+      const token = localStorage.getItem('token');
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      const response = await axios.post(
+        `http://onboarding.p-e.kr:8080/resources/${episodeId}/save-progress`,
+        {
+          resourceType: 'VIDEO',
+          // progress 필드에 계산된 progressValue(백분율)를 전달합니다.
+          progress: progressValue,
+        },
+        { headers }
+      );
+      console.log('진도 저장 응답:', response.data);
+    } catch (error) {
+      console.error('진도 저장 에러:', error);
+    }
+  };
+
+  // 진도율 추적 시작 (1초마다 재생 시간(초) 및 진도율(%) 업데이트)
   const startTrackingProgress = () => {
     stopTrackingProgress();
     intervalRef.current = setInterval(() => {
@@ -108,12 +132,13 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
       ) {
         const currentTime = playerRef.current.getCurrentTime();
         const duration = playerRef.current.getDuration();
-        // console.log('currentTime:', currentTime, 'duration:', duration);
         if (duration > 0) {
           const progressValue = Math.round((currentTime / duration) * 100);
           setProgress(progressValue);
           onProgressChange(progressValue);
           console.log(`진도율 업데이트: ${progressValue}%`);
+          // 계산된 progressValue를 saveProgress의 progress로 보냅니다.
+          saveProgress(progressValue);
         }
       } else {
         console.log('플레이어가 준비되지 않음');
