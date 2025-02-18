@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image'; /* 이미지를 가져올 때 StaticImageData 타입을 자동으로 처리 */
-import LogoGraphic from '/public/logoMark.svg';
+import LogoGraphic from '/public/logoMarkFull.svg';
 import PlaneGraphic from '/public/PlaneGraphic.svg';
 import NoteBookGraphic from '/public/noteBook.svg';
 
@@ -48,13 +48,11 @@ const LoginPageCover = styled.div`
 const LogoWrapper = styled.div`
   display: flex;
   position: absolute;
-  bottom: 14%;
-  right: -2%;
+  bottom: 13%;
+  right: 1%;
   // transform: rotate(15deg);
 
-  
   @media (max-width: 768px) {
-
   }
 `;
 
@@ -83,8 +81,8 @@ const LogoGraphicImg = styled(Image)`
 
 const ShadowWrapper = styled.div`
   position: absolute;
-  bottom: 5%;
-  right: -10%;
+  bottom: 10%;
+  right: 0%;
   width: 28vw;
   height: 4vh;
   background: rgba(172, 172, 172, 0.55);
@@ -100,26 +98,24 @@ const ShadowWrapper = styled.div`
       filter: blur(25px) brightness(1);
     }
     100% {
-      background: rgba(172, 172, 172, 0.3); 
+      background: rgba(172, 172, 172, 0.3);
       filter: blur(40px) brightness(1.5);
     }
   }
 `;
 
-
 const IconWrapper = styled.div`
   display: flex;
   position: absolute;
   bottom: 29%;
-  left: 18%;
-  
-  @media (max-width: 768px) {
+  left: 25%;
 
+  @media (max-width: 768px) {
   }
 `;
 
 const PlaneGraphicImg = styled(Image)`
-  width: 36vw;
+  width: 30vw;
   height: auto;
   transform: rotate(5deg);
 
@@ -135,17 +131,15 @@ const PlaneGraphicImg = styled(Image)`
 const NoteBookWrapper = styled.div`
   display: flex;
   position: absolute;
-  bottom: 0;
+  bottom: -2%;
   left: 0;
 
-  
   @media (max-width: 768px) {
-
   }
 `;
 
 const NoteBookGraphicImg = styled(Image)`
-  width: 55vw;
+  width: 50vw;
   height: auto;
 
   @media (max-width: 768px) {
@@ -157,16 +151,18 @@ const NoteBookGraphicImg = styled(Image)`
   }
 `;
 
-
-
 const InstructionContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: left;
 
   position: absolute;
-  left: 8%;
-  top: 16%;
+  left: 7%;
+  top: 15%;
+
+  @media (max-width: 1024px) {
+    top: 15%;
+  }
 
   @media (max-width: 768px) {
     right: 7%;
@@ -174,11 +170,15 @@ const InstructionContainer = styled.div`
 `;
 
 const Instruction1 = styled.div`
-  font-size: 47px;
+  font-size: 40px;
   font-weight: 600;
   color: #181818;
   text-align: left;
   letter-spacing: -1.5px;
+
+  @media (max-width: 1024px) {
+    font-size: 30px;
+  }
 
   @media (max-width: 768px) {
     font-size: 23px;
@@ -190,10 +190,14 @@ const Instruction1 = styled.div`
 `;
 
 const Instruction2 = styled.div`
-  font-size: 47px;
+  font-size: 40px;
   font-weight: 600;
   text-align: left;
   letter-spacing: -1.5px;
+
+  @media (max-width: 1024px) {
+    font-size: 30px;
+  }
 
   @media (max-width: 768px) {
     font-size: 22px;
