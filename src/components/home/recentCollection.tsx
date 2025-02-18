@@ -6,6 +6,12 @@ import { useRouter } from 'next/router';
 import plane from '/public/plane_today.svg';
 import naverblogChecked from '/public/platformicon/naver blog_checked_ic.svg';
 import naverblog from '/public/platformicon/naverblog_ic.svg';
+import tistoryChecked from '/public/platformicon/tistory_checked_ic.svg';
+import tistory from '/public/platformicon/tistory_ic.svg';
+import velogChecked from '/public/platformicon/velog_checked_ic.svg';
+import velog from '/public/platformicon/velog_ic.svg';
+import youtubeChecked from '/public/platformicon/youtube_checked_ic.svg';
+import youtube from '/public/platformicon/youtube_ic.svg';
 
 const Container = styled.div`
   display: flex;
@@ -328,11 +334,25 @@ export type RecentLearning = {
   textCount: number;
   videoCount: number;
   resource: {
+    completed: boolean;
+    today: boolean;
+    episodeId: number;
     episodeNumber: number;
     episodeName: string;
     resourceSource: string;
     url: string;
   }[];
+};
+
+const getPlatformImage = (resourceSource: string, completed: boolean) => {
+  const imageMap = {
+    youtube: completed ? youtubeChecked : youtube,
+    tistory: completed ? tistoryChecked : tistory,
+    velog: completed ? velogChecked : velog,
+    naverBlog: completed ? naverblogChecked : naverblog,
+  } as const; // 객체를 읽기 전용으로 선언하여 안전한 타입 체크
+
+  return imageMap[resourceSource as keyof typeof imageMap];
 };
 
 const TodayContent = ({ children }: { children: ReactNode }) => {
@@ -386,44 +406,28 @@ const RecentCollection = ({
               </ProgressWrapper>
             </LearningRate>
             <ContentList>
-              <Content>
-                <Image src={naverblogChecked} alt="naver blog" />
-                <ContentWrapper>
-                  <ContentNumber>1회차</ContentNumber>
-                  <ContentTitle>
-                    콘텐츠명을 입력하세요.콘텐츠명을 입력하세요.
-                  </ContentTitle>
-                </ContentWrapper>
-              </Content>
-              <TodayContent>
-                <Content>
-                  <Image src={naverblog} alt="naver blog" />
-                  <ContentWrapper>
-                    <ContentNumber>1회차</ContentNumber>
-                    <ContentTitle>
-                      콘텐츠명을 입력하세요.콘텐츠명을 입력하세요.
-                    </ContentTitle>
-                  </ContentWrapper>
-                </Content>
-              </TodayContent>
-              <Content>
-                <Image src={naverblog} alt="naver blog" />
-                <ContentWrapper>
-                  <ContentNumber>1회차</ContentNumber>
-                  <ContentTitle>
-                    콘텐츠명을 입력하세요.콘텐츠명을 입력하세요.
-                  </ContentTitle>
-                </ContentWrapper>
-              </Content>
-              <Content>
-                <Image src={naverblog} alt="naver blog" />
-                <ContentWrapper>
-                  <ContentNumber>1회차</ContentNumber>
-                  <ContentTitle>
-                    콘텐츠명을 입력하세요.콘텐츠명을 입력하세요.
-                  </ContentTitle>
-                </ContentWrapper>
-              </Content>
+              {collectionInfo?.resource.map((item, index) => {
+                const contentImage = getPlatformImage(
+                  item.resourceSource,
+                  item.completed,
+                );
+
+                const contentElement = (
+                  <Content key={index}>
+                    <Image src={contentImage} alt={item.resourceSource} />
+                    <ContentWrapper>
+                      <ContentNumber>{item.episodeNumber}회차</ContentNumber>
+                      <ContentTitle>{item.episodeName}</ContentTitle>
+                    </ContentWrapper>
+                  </Content>
+                );
+
+                return item.today ? (
+                  <TodayContent key={index}>{contentElement}</TodayContent>
+                ) : (
+                  contentElement
+                );
+              })}
             </ContentList>
           </ContentDescription>
         </CollectionWrapper>

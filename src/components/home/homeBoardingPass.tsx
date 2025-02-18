@@ -4,6 +4,7 @@ import Image from 'next/image';
 import BoardingPassContainer from '/public/M_Background.svg';
 import CollectionImage from '/public/boardingpassM.svg';
 import BookmarkIcon from '/public/bookmark.svg';
+import BookmarkFilledIcon from '/public/bookmarkFilled.svg';
 import HoverBackgroundTop from '/public/hover-backgroundTopM.svg';
 import HoverBackground from '/public/hover-backgroundM.svg';
 import Plane from '/public/plane_M.svg';
@@ -22,6 +23,7 @@ import OnStudying from '/public/onstudying.svg';
 import CompletedStamp from '/public/completedStamp.svg';
 import { RecommendedCollection } from './homeCollection';
 import { useRouter } from 'next/router';
+import axios from 'axios';
 
 const ColumnFlexDiv = styled.div`
   display: flex;
@@ -44,7 +46,6 @@ const Container = styled(ColumnFlexDiv)`
   position: relative;
   background: transparent;
   overflow: hidden;
-  cursor: pointer;
 `;
 
 const BoardingPassImage = styled(Image)`
@@ -87,13 +88,15 @@ const StatusTag = styled.span<{ status?: string }>`
   }
 `;
 
-const Bookmark = styled.div`
+const Bookmark = styled.button`
   position: absolute;
   top: 15px;
-  right: -80px;
+  right: 15px;
   cursor: pointer;
   width: 35px;
   height: 35px;
+  background: transparent;
+  border: none;
 `;
 
 const Body = styled.div`
@@ -103,6 +106,7 @@ const Body = styled.div`
   position: absolute;
   top: 225px;
   left: 2px;
+  cursor: pointer;
 `;
 
 const TagWrapper = styled(RowFlexSpan)`
@@ -215,6 +219,7 @@ const Bottom = styled(RowFlexDiv)`
   top: 391px;
   left: 1px;
   gap: 10px;
+  cursor: pointer;
 `;
 
 const DepartureArrival = styled.span`
@@ -236,6 +241,10 @@ const Level = styled.span`
   white-space: nowrap;
 `;
 
+const RuntimeWrapper = styled(ColumnFlexDiv)`
+  gap: 4px;
+`;
+
 const Step = styled.span`
   color: #5e52ff;
   text-align: center;
@@ -251,8 +260,8 @@ const PlaneWrapper = styled(RowFlexSpan)`
   align-items: center;
 `;
 
-const PlaneLine = styled.span`
-  width: 100px;
+const PlaneLine = styled.span<{ width: number }>`
+  width: ${(props) => props.width}px;
   height: 0.25px;
   background: #5e52ff;
 `;
@@ -316,6 +325,7 @@ const HoverWrapper = styled.div`
   position: absolute;
   top: 159.2px;
   left: 1px;
+  cursor: pointer;
   background: transparent;
   opacity: 0;
   transition: all 0.3s; // 몇 초로 할지 설정
@@ -330,6 +340,7 @@ const HoverBackgroundTopWrapper = styled.div`
   top: -158px;
   width: 100%;
   height: 158px;
+  cursor: default;
 `;
 
 const CollectionHeader = styled(RowFlexDiv)`
@@ -341,7 +352,6 @@ const CollectionHeader = styled(RowFlexDiv)`
   height: 36px;
 `;
 
-// svg 감싸는 애로 추후 변경 필요
 const Thumbnail = styled.div<{ left: number; zIndex: number }>`
   width: 36px;
   height: 36px;
@@ -524,10 +534,6 @@ const PlatformIcon = (source: string) => {
 };
 
 const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
-  const platformSources = [
-    ...new Set(data?.resource.map((episode) => episode?.resourceSource)),
-  ];
-
   const areArraysEqual = (arr1: string[], arr2: string[]) => {
     return (
       arr1.length === arr2.length &&
@@ -536,7 +542,7 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
   };
 
   if (
-    areArraysEqual(platformSources, [
+    areArraysEqual(data?.resourceSourceTypes, [
       'youtube',
       'tistory',
       'naverBlog',
@@ -560,7 +566,13 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['youtube', 'tistory', 'naverBlog'])) {
+  if (
+    areArraysEqual(data?.resourceSourceTypes, [
+      'youtube',
+      'tistory',
+      'naverBlog',
+    ])
+  ) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -575,7 +587,9 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['youtube', 'tistory', 'velog'])) {
+  if (
+    areArraysEqual(data?.resourceSourceTypes, ['youtube', 'tistory', 'velog'])
+  ) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -590,7 +604,9 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['youtube', 'naverBlog', 'velog'])) {
+  if (
+    areArraysEqual(data?.resourceSourceTypes, ['youtube', 'naverBlog', 'velog'])
+  ) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -605,7 +621,9 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['tistory', 'naverBlog', 'velog'])) {
+  if (
+    areArraysEqual(data?.resourceSourceTypes, ['tistory', 'naverBlog', 'velog'])
+  ) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -620,7 +638,7 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['youtube', 'tistory'])) {
+  if (areArraysEqual(data?.resourceSourceTypes, ['youtube', 'tistory'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -632,7 +650,7 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['youtube', 'naverBlog'])) {
+  if (areArraysEqual(data?.resourceSourceTypes, ['youtube', 'naverBlog'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -644,7 +662,7 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['youtube', 'velog'])) {
+  if (areArraysEqual(data?.resourceSourceTypes, ['youtube', 'velog'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -656,7 +674,7 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['tistory', 'naverBlog'])) {
+  if (areArraysEqual(data?.resourceSourceTypes, ['tistory', 'naverBlog'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -668,7 +686,7 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['tistory', 'velog'])) {
+  if (areArraysEqual(data?.resourceSourceTypes, ['tistory', 'velog'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -680,7 +698,7 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['naverBlog', 'velog'])) {
+  if (areArraysEqual(data?.resourceSourceTypes, ['naverBlog', 'velog'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -692,7 +710,7 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['tistory'])) {
+  if (areArraysEqual(data?.resourceSourceTypes, ['tistory'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -701,7 +719,7 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['naverBlog'])) {
+  if (areArraysEqual(data?.resourceSourceTypes, ['naverBlog'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -710,7 +728,7 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['velog'])) {
+  if (areArraysEqual(data?.resourceSourceTypes, ['velog'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -719,7 +737,7 @@ const PlatformSet = ({ data }: { data: RecommendedCollection }) => {
       </ThumbnailWrapper>
     );
   }
-  if (areArraysEqual(platformSources, ['youtube'])) {
+  if (areArraysEqual(data?.resourceSourceTypes, ['youtube'])) {
     return (
       <ThumbnailWrapper>
         <Thumbnail left={0} zIndex={3}>
@@ -741,6 +759,61 @@ const CollectionAmount = ({ data }: { data: RecommendedCollection }) => {
   );
 };
 
+const BookmarkButton = ({
+  collection,
+}: {
+  collection: RecommendedCollection;
+}) => {
+  const [isBookmarked, setIsBookmarked] = useState(collection.liked);
+  const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
+
+  const handleBookmark = async (e: React.MouseEvent) => {
+    // 클릭 이벤트 전파 차단 (북마크 버튼에서만 동작)
+    e.stopPropagation();
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('로그인이 필요합니다!'); // 모달로 변경 필요
+      router.push('/login');
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await axios.post(
+        `http://onboarding.p-e.kr:8080/collections/${collection.collectionId}/likes`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (response.data.isSuccess) {
+        setIsBookmarked(!isBookmarked);
+      }
+    } catch (error) {
+      console.error('북마크 처리 중 오류가 발생했습니다: ', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Bookmark onClick={handleBookmark} disabled={loading} data-bookmark="true">
+      {isBookmarked ? (
+        <Image src={BookmarkFilledIcon} alt="bookmark" width={36} height={36} />
+      ) : (
+        <Image src={BookmarkIcon} alt="bookmark" width={36} height={36} />
+      )}
+    </Bookmark>
+  );
+};
+
 const HoverCollection = ({
   data,
   status,
@@ -752,9 +825,7 @@ const HoverCollection = ({
     <HoverWrapper>
       <HoverBackgroundTopWrapper>
         <Image src={HoverBackgroundTop} alt="hoverbackgroundtop" />
-        <Bookmark>
-          <Image src={BookmarkIcon} alt="bookmark" width={36} height={36} />
-        </Bookmark>
+        <BookmarkButton collection={data} />
       </HoverBackgroundTopWrapper>
       {status === '학습완료' ? (
         <>
@@ -883,13 +954,14 @@ const BoardingPassBottom = ({
 }) => {
   const [departureLabel, setDepartureLabel] = useState('');
   const [arrivalLabel, setArrivalLabel] = useState('');
+  const [lineWidth, setLineWidth] = useState(0);
+
+  const equals = (a: number[], b: number[]) =>
+    a.length === b.length && a.every((v, i) => v === b[i]);
+
+  const level = data?.difficulties.sort() || [];
 
   const setDifficultyLabel = () => {
-    const equals = (a: number[], b: number[]) =>
-      a?.length === b.length && a.every((v, i) => v === b[i]);
-
-    const level = data?.difficulties.sort();
-
     if (equals(level, [1])) {
       setDepartureLabel('입문자');
       setArrivalLabel('초급자');
@@ -922,8 +994,26 @@ const BoardingPassBottom = ({
     }
   };
 
+  const setPlaneLineWidth = () => {
+    if (equals(level, [1]) || equals(level, [2]) || equals(level, [3])) {
+      setLineWidth(83.45);
+      return;
+    }
+
+    if (equals(level, [1, 2]) || equals(level, [2, 3])) {
+      setLineWidth(69.45);
+      return;
+    }
+
+    if (equals(level, [1, 2, 3])) {
+      setLineWidth(48.95);
+      return;
+    }
+  };
+
   useEffect(() => {
     setDifficultyLabel();
+    setPlaneLineWidth();
   }, []);
 
   return (
@@ -944,14 +1034,14 @@ const BoardingPassBottom = ({
             <DepartureArrival>Departure</DepartureArrival>
             <Level>{departureLabel}</Level>
           </ColumnFlexDiv>
-          <ColumnFlexDiv>
+          <RuntimeWrapper>
             <Step>{data?.runtime} 시간</Step>
             <PlaneWrapper>
-              <PlaneLine></PlaneLine>
-              <Image src={Plane} alt="plane" style={{ margin: '0 5px' }} />
-              <PlaneLine></PlaneLine>
+              <PlaneLine width={lineWidth} />
+              <Image src={Plane} alt="plane" style={{ margin: '0 8px' }} />
+              <PlaneLine width={lineWidth} />
             </PlaneWrapper>
-          </ColumnFlexDiv>
+          </RuntimeWrapper>
           <ColumnFlexDiv>
             <DepartureArrival>Arrival</DepartureArrival>
             <Level>{arrivalLabel}</Level>
@@ -970,10 +1060,21 @@ const BoardingPass = ({
   showHoverCollection?: boolean;
 }) => {
   const router = useRouter();
+
+  const handleCollectionClick = (e: React.MouseEvent) => {
+    // 북마크 버튼을 클릭했을 경우, router.push 방지
+    if (e.target instanceof HTMLButtonElement && e.target.dataset.bookmark) {
+      e.stopPropagation(); // 이벤트 전파 차단
+      return;
+    }
+    // 북마크 버튼이 아닌 다른 곳 클릭 시 router.push 실행
+    router.push(`/collection/${data.collectionId}`);
+  };
+
   console.log('BoardingPass 데이터 ', data);
 
   return (
-    <Container onClick={() => router.push(`/collection/${data.collectionId}`)}>
+    <Container onClick={handleCollectionClick}>
       <Image src={BoardingPassContainer} alt="boardingpass" />
       <BoardingPassImage src={CollectionImage} alt="collection image" />
       <StatusTag status=""></StatusTag>

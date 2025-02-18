@@ -152,19 +152,11 @@ const Bottom = styled(RowFlexDiv)`
   border-radius: 0px 0px 16px 16px;
   background: #f5f5ff;
   height: 53px;
-  padding: 10px 15px;
+  padding: 10px 20px;
   position: absolute;
   top: 281px;
   left: 1px;
   gap: 10px;
-`;
-
-const Departure = styled(ColumnFlexDiv)`
-  margin-right: 10px;
-`;
-
-const Arrival = styled(ColumnFlexDiv)`
-  margin-left: 10px;
 `;
 
 const DepartureArrival = styled.span`
@@ -188,6 +180,10 @@ const Level = styled.span`
   white-space: nowrap;
 `;
 
+const RuntimeWrapper = styled(ColumnFlexDiv)`
+  gap: 2.95px;
+`;
+
 const Step = styled.span`
   color: #5e52ff;
   text-align: center;
@@ -203,8 +199,8 @@ const PlaneWrapper = styled(RowFlexSpan)`
   align-items: center;
 `;
 
-const PlaneLine = styled.span`
-  width: 45px;
+const PlaneLine = styled.span<{ width: number }>`
+  width: ${(props) => props.width}px;
   height: 0.25px;
   background: #5e52ff;
 `;
@@ -230,13 +226,14 @@ const BoardingPassBottom = ({
 }) => {
   const [departureLabel, setDepartureLabel] = useState('');
   const [arrivalLabel, setArrivalLabel] = useState('');
+  const [lineWidth, setLineWidth] = useState(0);
+
+  const equals = (a: number[], b: number[]) =>
+    a?.length === b.length && a.every((v, i) => v === b[i]);
+
+  const level = collectionInfo?.difficulties.sort();
 
   const setDifficultyLabel = () => {
-    const equals = (a: number[], b: number[]) =>
-      a?.length === b.length && a.every((v, i) => v === b[i]);
-
-    const level = collectionInfo?.difficulties.sort();
-
     if (equals(level, [1])) {
       setDepartureLabel('입문자');
       setArrivalLabel('초급자');
@@ -269,28 +266,46 @@ const BoardingPassBottom = ({
     }
   };
 
+  const setPlaneLineWidth = () => {
+    if (equals(level, [1]) || equals(level, [2]) || equals(level, [3])) {
+      setLineWidth(61);
+      return;
+    }
+
+    if (equals(level, [1, 2]) || equals(level, [2, 3])) {
+      setLineWidth(52.5);
+      return;
+    }
+
+    if (equals(level, [1, 2, 3])) {
+      setLineWidth(37.5);
+      return;
+    }
+  };
+
   useEffect(() => {
     setDifficultyLabel();
+    setPlaneLineWidth();
   }, []);
 
   return (
     <Bottom>
-      <Departure>
+      <ColumnFlexDiv>
         <DepartureArrival>Departure</DepartureArrival>
         <Level>{departureLabel}</Level>
-      </Departure>
-      <ColumnFlexDiv>
+      </ColumnFlexDiv>
+      <RuntimeWrapper>
         <Step>{collectionInfo?.runtime} 시간</Step>
         <PlaneWrapper>
-          <PlaneLine></PlaneLine>
+          <PlaneLine width={lineWidth} />
           <Image src={Plane} alt="plane" style={{ margin: '0 5px' }} />
-          <PlaneLine></PlaneLine>
+          <PlaneLine width={lineWidth} />
         </PlaneWrapper>
-      </ColumnFlexDiv>
-      <Arrival>
+      </RuntimeWrapper>
+      <ColumnFlexDiv>
         <DepartureArrival>Arrival</DepartureArrival>
         <Level>{arrivalLabel}</Level>
-      </Arrival>
+      </ColumnFlexDiv>
     </Bottom>
   );
 };
