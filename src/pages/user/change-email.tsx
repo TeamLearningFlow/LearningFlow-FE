@@ -42,7 +42,7 @@ const VerifyEmail: React.FC = () => {
             localStorage.setItem('email', response.data.result);
           }
 
-          router.replace(`/login`); // 다시 로그인 페이지로 이동
+          router.replace(`/mypage/profile`); // 다시 마이 페이지로 이동
         } else {
           console.log('토큰 무효');
           router.replace('/'); // 홈 페이지로 이동
