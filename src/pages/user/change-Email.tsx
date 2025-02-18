@@ -15,7 +15,7 @@ const VerifyEmail: React.FC = () => {
     const validateToken = async () => {
       if (!emailResetCode) return; // 토큰이 없는 경우 작업 중단
 
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('emailResetCode');
 
       if (!token) {
         alert('로그인이 필요한 서비스입니다.');
