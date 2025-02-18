@@ -128,7 +128,7 @@ const Liked = () => {
         }
 
         const response = await axios.get(
-          'http://onboarding.p-e.kr:8080/user/likes?page=1',
+          'https://onboarding.p-e.kr/user/likes?page=1',
           {
             headers: {
               Authorization: `Bearer ${token}`,
