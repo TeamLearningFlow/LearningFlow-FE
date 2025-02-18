@@ -84,7 +84,9 @@ const Profile = () => {
   const [isEditingPassword, setIsEditingPassword] = useState(false);
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    if (!emailResetCode) return;
+
+    const verifyEmailChange = async () => {
       try {
         // 로컬 스토리지에서 토큰 가져오기 (로그인 시에만 접근 가능)
         const token = localStorage.getItem('token');
@@ -127,7 +129,7 @@ const Profile = () => {
       }
     };
 
-    fetchUserData();
+    verifyEmailChange();
   }, []);
 
   useEffect(() => {
@@ -136,6 +138,8 @@ const Profile = () => {
     const verifyEmailChange = async () => {
       try {
         const token = localStorage.getItem('token');
+        const storedSocialType = localStorage.getItem('socialType');
+        setSocialType(storedSocialType);
 
         if (!token) {
           alert('로그인이 필요한 서비스입니다.');
@@ -152,9 +156,6 @@ const Profile = () => {
 
         if (response.data.isSuccess) {
           console.log('이메일 변경 성공');
-
-          // 기존 토큰 유지
-          localStorage.setItem('token', token);
 
           // 변경된 이메일 저장
           if (response.data.result) {
