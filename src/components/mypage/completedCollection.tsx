@@ -9,7 +9,7 @@ import CollectionImage from '/public/boardingpassS.svg';
 import BookmarkIcon from '/public/bookmark.svg';
 import HoverBackgroundTop from '/public/hover-backgroundTopS.svg';
 import HoverBackground from '/public/hover-background.svg';
-import Plane from '/public/plane.svg';
+import Plane from '/public/plane_S.svg';
 import Circle from '/public/circle.svg';
 import Calendar from '/public/calendarIcon.svg';
 import BookmarkFilledIcon from '/public/bookmarkFilled.svg';

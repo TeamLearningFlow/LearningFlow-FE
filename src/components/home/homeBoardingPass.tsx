@@ -6,7 +6,7 @@ import CollectionImage from '/public/boardingpassM.svg';
 import BookmarkIcon from '/public/bookmark.svg';
 import HoverBackgroundTop from '/public/hover-backgroundTopM.svg';
 import HoverBackground from '/public/hover-backgroundM.svg';
-import Plane from '/public/plane.svg';
+import Plane from '/public/plane_M.svg';
 import Circle from '/public/circle.svg';
 import Calendar from '/public/calendarIcon.svg';
 

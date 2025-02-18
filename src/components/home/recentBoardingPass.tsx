@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import BoardingPassContainer from '/public/S_Background.svg';
 import CollectionImage from '/public/boardingpassS.svg';
-import Plane from '/public/plane.svg';
+import Plane from '/public/plane_S.svg';
 import { RecentLearning } from './recentCollection';
 
 const ColumnFlexDiv = styled.div`
