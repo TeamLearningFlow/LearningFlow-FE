@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Header from '../components/searchHeader';
 import Banner from '../components/search/searchBanner';
@@ -10,6 +10,8 @@ import axios from 'axios';
 import SearchResult from '@/components/search/searchResult';
 import { useQuery } from '@tanstack/react-query';
 import SkeletonList from '@/components/skeleton/skeletonList_boardingPass_S';
+import { LoginContext } from '@/components/context/LoginContext';
+import NotLoginHeader from '@/components/notLoginHeader';
 
 const SearchWrapper = styled.div`
   background-color: #fafafc;
@@ -26,6 +28,14 @@ const SearchPage: React.FC = () => {
 
   const router = useRouter();
   const [isClient, setIsClient] = useState(false);
+  const context = useContext(LoginContext);
+
+  if (!context) {
+    throw new Error('LoginContext를 찾을 수 없습니다.');
+  }
+
+  const { isLoggedIn } = context.state; // 로그인 상태
+
   const { query } = router;
   const [searchResult, setSearchResult] = useState<[]>([]);
   const [totalPages, setTotalPages] = useState(1);
@@ -146,7 +156,7 @@ const SearchPage: React.FC = () => {
 
   return (
     <SearchWrapper>
-      <Header />
+      {isLoggedIn ? <Header /> : <NotLoginHeader />}
       <Banner />
       <div>
         <CategoryList />
