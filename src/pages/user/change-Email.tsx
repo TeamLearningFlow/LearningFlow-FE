@@ -1,15 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 
 const VerifyEmail: React.FC = () => {
-  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
   const { emailResetCode } = router.query; // URL에서 token 추출
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   useEffect(() => {
     const validateToken = async () => {
@@ -47,7 +42,7 @@ const VerifyEmail: React.FC = () => {
             localStorage.setItem('email', response.data.result);
           }
 
-          router.replace(`/mypage/profile?emailResetCode=${emailResetCode}`); // 개인 정보 페이지로 이동
+          router.push(`/mypage/profile?emailResetCode=${emailResetCode}`); // 개인 정보 페이지로 이동
         } else {
           console.log('토큰 무효');
           router.push('/'); // 홈 페이지로 이동
@@ -60,10 +55,6 @@ const VerifyEmail: React.FC = () => {
 
     validateToken();
   }, [emailResetCode, router]);
-
-  if (!isClient) {
-    return null;
-  }
 
   return null;
 };

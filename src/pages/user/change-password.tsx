@@ -1,21 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 
 const ChangePasswordRedirect = () => {
-  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
   const { passwordResetCode } = router.query;
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   useEffect(() => {
     if (!passwordResetCode) return;
 
     const token =
-      localStorage.getItem('token') || sessionStorage.getItem('token');
+      localStorage.getItem('token');
 
     if (!token) {
       alert('로그인이 필요한 서비스입니다.');
@@ -49,10 +44,6 @@ const ChangePasswordRedirect = () => {
 
     verifyResetCode();
   }, [passwordResetCode, router]);
-
-  if (!isClient) {
-    return null;
-  }
 
   return null;
 };
