@@ -106,22 +106,24 @@ const HomePage = () => {
         </Wrapper>
       )}
 
-      {isLoggedIn && recentLearning ? (
-        <>
-          <Banner />
-          <RecentCollection collectionInfo={recentLearning} />
-        </>
-      ) : (
-        <>
-          <HomeTop />
-          <HomeMiddle />
-        </>
-      )}
-      <HomeCollection
-        isLoggedIn={isLoggedIn}
-        nickname={nickname}
-        collections={recommendedCollections}
-      />
+      <main>
+        {isLoggedIn && recentLearning ? (
+          <>
+            <Banner />
+            <RecentCollection collectionInfo={recentLearning} />
+          </>
+        ) : (
+          <>
+            <HomeTop />
+            <HomeMiddle />
+          </>
+        )}
+        <HomeCollection
+          isLoggedIn={isLoggedIn}
+          nickname={nickname}
+          collections={recommendedCollections}
+        />
+      </main>
 
       <Footer />
     </>
