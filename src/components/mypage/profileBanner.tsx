@@ -35,7 +35,7 @@ const Banner = styled.div<{ imgUrl: string }>`
   background: ${({ imgUrl }) =>
     imgUrl.startsWith('linear-gradient') ? imgUrl : `url(${imgUrl})`};
   background-size: cover;
-  background-position: center;
+  // background-position: center;
   background-repeat: no-repeat;
 
   /* 반응형 설정 */
