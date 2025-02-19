@@ -85,6 +85,7 @@ const UserName = styled.div`
   font-weight: 600;
   line-height: 150%;
   letter-spacing: -0.4px;
+  margin-top: 1px;
 
   @media (max-width: 850px) {
     font-size: 14px;
@@ -590,7 +591,7 @@ const userModal: React.FC = () => {
         </>
       ) : (
         <>
-          <p>로딩중</p>
+          <p></p>
         </>
       )}
     </UserModalWrapper>

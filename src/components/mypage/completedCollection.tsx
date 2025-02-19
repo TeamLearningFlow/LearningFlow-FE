@@ -15,7 +15,8 @@ import Calendar from '/public/calendarIcon.svg';
 import BookmarkFilledIcon from '/public/bookmarkFilled.svg';
 
 import CompletedFront from '/public/completedFront.svg';
-import CompletedStamp from '/public/completedStamp.svg';
+import CompletedStamp from '/public/completedStampL.svg';
+import CompletedStampS from '/public/completedStampS.svg';
 
 const ColumnFlexDiv = styled.div`
   display: flex;
@@ -345,6 +346,7 @@ const Number = styled.span<{ status?: string }>`
   margin-left: 2px;
   color: #5e52ff;
   text-align: center;
+  white-space: nowrap;
 
   font-size: 8px;
   font-style: normal;
@@ -393,12 +395,12 @@ const Label = styled.span<{
   align-items: center;
 `;
 
-const CompletedStampIcon = styled.div`
+const CompletedStampIcon = styled(Image)`
   position: relative;
-  width: 85px;
-  height: 85px;
+  width: 90px;
+  height: 90px;
   margin-left: 160px;
-  margin-top: -15px;
+  margin-top: -27px;
 `;
 
 const HoverCollection = ({
@@ -422,6 +424,8 @@ const HoverCollection = ({
       <BoardingPassImage
         src={collection.imageUrl || CollectionImage}
         alt="collection image"
+        width={282}
+        height={158}
         style={{
           left: '0',
         }}
@@ -489,14 +493,12 @@ const HoverCollection = ({
           </Label>
         </Content>
       </ContentWrapper>
-      <CompletedStampIcon>
-        <Image
-          src={CompletedStamp}
-          alt="completedstamp"
-          width={90}
-          height={90}
-        />
-      </CompletedStampIcon>
+      <CompletedStampIcon
+        src={CompletedStampS}
+        alt="completedstamp"
+        width={90}
+        height={90}
+      />
     </CollectionWrapper>
   </HoverWrapper>
 );
@@ -570,7 +572,7 @@ const CompletedCollection = ({
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/collections/${collection.collectionId}`);
+    router.push(`/collection/${collection.collectionId}`);
   };
 
   return (
@@ -616,7 +618,7 @@ const CompletedCollection = ({
             style={{
               position: 'absolute',
               top: '50px',
-              left: '43px',
+              left: '37px',
             }}
           />
         </FrontFace>

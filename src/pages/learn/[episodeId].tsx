@@ -9,17 +9,15 @@ import Header from '../../components/learnHeader';
 import TitleBar from '../../components/learn/learnTitleBar';
 import ClassTitle from '../../components/learn/learnClassTitle';
 import ClassList from '../../components/learn/learnClassList';
-import Article from '../../components/learn/article';
-//import BlogArticle from '@/components/learn/articleFolder/blogArticle';
-//import YoutubeArticle from '@/components/learn/articleFolder/newYoutubeArticle';
-
+// import Article from '../../components/learn/article';
+import YoutubeArticle from '@/components/learn/article/youtubeArticle';
+import BlogArticle from '@/components/learn/article/blogArticle';
 import Note from '../../components/learn/note';
 import {
   SkeletonClassList_S,
   SkeletonClassTitle,
   SkeletonArticle,
 } from '@/components/skeleton/skeleton_learnComponents';
-import BlogArticle from '@/components/learn/articleFolder/blogArticle';
 
 const PageWrapper = styled.div``;
 
@@ -108,14 +106,10 @@ const interestFieldMap: Record<string, string> = {
 
 const LearnPage: React.FC = () => {
   const [isClient, setIsClient] = useState(false);
-  // const { episodeId } = useParams<{ episodeId: number }>();
-  // const { collectionId } = useParams<{ collectionId: number }>();
-  // const [collectionData, setCollectionData] = useState<CollectionData | null>(null);
   const [type, setType] = useState<'youtube' | 'blog' | null>(null);
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState<string>('');
   const [field, setField] = useState<string>('');
-  // const [progress, setProgress] = useState(0);
   const context = useContext(LearnContext);
 
   if (!context) {
@@ -124,7 +118,10 @@ const LearnPage: React.FC = () => {
 
   const { updateProgress } = useContext(ProgressContext);
   const [youtubeContent, setYoutubeContent] = useState<string>('');
-  const [episodeDataState, setEpisodeDataState] = useState<EpisodeData | null>(null);
+  const [blogContent, setBlogContent] = useState<string>('');
+  const [episodeDataState, setEpisodeDataState] = useState<EpisodeData | null>(
+    null,
+  );
 
   if (!context) {
     throw new Error('LearnContext를 찾을 수 없습니다.');
@@ -140,7 +137,9 @@ const LearnPage: React.FC = () => {
 
   // query로 전달받은 JSON 문자열을 파싱 (존재할 경우)
   // const parsedEpisodeData = episodeData ? JSON.parse(episodeData as string) : null;
-  const parsedCollectionData = collectionData ? JSON.parse(collectionData as string) : null;
+  const parsedCollectionData = collectionData
+    ? JSON.parse(collectionData as string)
+    : null;
 
   useEffect(() => {
     setIsClient(true);
@@ -167,6 +166,7 @@ const LearnPage: React.FC = () => {
           setType('blog');
           setTitle(parsedData.result.urlTitle);
           setField(parsedData.result.interestField);
+          setBlogContent(parsedData.result.episodeContents);
         }
         setLoading(false);
       } catch (error) {
@@ -177,14 +177,18 @@ const LearnPage: React.FC = () => {
     }
   }, [episodeData, episodeId]);
 
-
   useEffect(() => {
     if (episodeIdNumber) {
-      const storedProgress = localStorage.getItem(`progress-${episodeIdNumber}`);
+      const storedProgress = localStorage.getItem(
+        `progress-${episodeIdNumber}`,
+      );
       if (storedProgress) {
         updateProgress(episodeIdNumber, Number(storedProgress));
         // episodeDataState가 이미 있다면, 동일한 값인지 확인 후 업데이트
-        if (episodeDataState && Number(storedProgress) !== episodeDataState.result.progress) {
+        if (
+          episodeDataState &&
+          Number(storedProgress) !== episodeDataState.result.progress
+        ) {
           setEpisodeDataState((prev) => {
             if (prev === null) return prev;
             return {
@@ -202,13 +206,11 @@ const LearnPage: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [episodeIdNumber]);
 
-
   useEffect(() => {
     if (episodeDataState) {
       console.log('영상 진도율 (progress):', episodeDataState.result.progress);
     }
   }, [episodeDataState]);
-
 
   const checkResourceType = async () => {
     try {
@@ -240,6 +242,7 @@ const LearnPage: React.FC = () => {
         setType('blog');
         setTitle(blogResponse.data.result.urlTitle);
         setField(blogResponse.data.result.interestField);
+        setBlogContent(blogResponse.data.result.episodeContents);
       } else {
         console.error('유튜브도 블로그도 아닌 오류');
         setType(null);
@@ -256,7 +259,6 @@ const LearnPage: React.FC = () => {
     console.log(`현재 에피소드 ID: ${episodeIdNumber}`);
   }, [episodeIdNumber]);
 
-
   if (!isClient) {
     return null;
   }
@@ -270,7 +272,8 @@ const LearnPage: React.FC = () => {
           <TitleBar
             data={{
               title: parsedCollectionData.title,
-              interestField: interestFieldMap[parsedCollectionData.interestField],
+              interestField:
+                interestFieldMap[parsedCollectionData.interestField],
             }}
           />
         )}
@@ -290,21 +293,31 @@ const LearnPage: React.FC = () => {
       ) : (
         <BodyWrapper>
           <TopWrapper>
-          {parsedCollectionData && episodeId && (
+            {parsedCollectionData && episodeId && (
               <>
                 {type === 'youtube' ? (
-                  <Article
+                  <YoutubeArticle
                     videoId={youtubeContent}
                     isCompleted={context.state.isCompleted}
                     onProgressChange={(progress) => {
                       updateProgress(episodeIdNumber, progress);
-                      localStorage.setItem(`progress-${episodeIdNumber}`, progress.toString());
+                      localStorage.setItem(
+                        `progress-${episodeIdNumber}`,
+                        progress.toString(),
+                      );
                     }}
                   />
                 ) : (
                   <BlogArticle
-                    episodeId={episodeIdNumber}
+                    blogId={blogContent}
                     isCompleted={context.state.isCompleted}
+                    onProgressChange={(progress) => {
+                      updateProgress(episodeIdNumber, progress);
+                      localStorage.setItem(
+                        `progress-${episodeIdNumber}`,
+                        progress.toString(),
+                      );
+                    }}
                   />
                 )}
                 {episodeDataState && (

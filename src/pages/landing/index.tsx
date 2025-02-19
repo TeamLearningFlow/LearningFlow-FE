@@ -86,7 +86,7 @@ const LandingPage: React.FC = () => {
       );
 
       console.log('회원가입 성공:', registerResponse.data);
-      alert('회원가입이 완료되었습니다.');
+      // alert('회원가입이 완료되었습니다.');
 
       // localStorage.removeItem('profileImgUrl'); // 기존에 저장된 이미지 삭제
 
@@ -126,7 +126,7 @@ const LandingPage: React.FC = () => {
       }
 
       // 로그인 상태 업데이트 및 회원가입 후 모달 표시 여부 저장
-      localStorage.setItem('isFromSignup', 'true');
+      localStorage.setItem('isFormSignup', 'true');
       context.actions.setIsLoggedIn(true);
 
       router.push('/'); // 회원가입 완료 후 홈페이지로 이동
@@ -151,6 +151,7 @@ const LandingPage: React.FC = () => {
             setImgProfileUrl(imgProfileUrl || Guest.src);
             setCurrentPage(2);
           }}
+          // userData={{ nickname, job, imgProfileUrl }}
         />
       )}
       {currentPage === 2 && (

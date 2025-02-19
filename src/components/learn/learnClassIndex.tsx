@@ -3,22 +3,22 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import Image from 'next/image';
-import CheckedYoutube from '../../assets/platformicon/youtube_checked_ic.svg';
-import CheckedBlog from '../../assets/platformicon/naver blog_checked_ic.svg';
-import CheckedTistory from '../../assets/platformicon/tistory_checked_ic.svg';
-import CheckedVelog from '../../assets/platformicon/velog_checked_ic.svg';
-import YoutubeActiveIcon from '../../assets/platformicon/youtube_active_ic.svg';
-import BlogActiveIcon from '../../assets/platformicon/naverblog_active_ic.svg';
-import VelogActiveIcon from '../../assets/platformicon/velog_active_ic.svg';
-import TistoryActiveIcon from '../../assets/platformicon/tistory_active_ic.svg';
-import Youtube from '../../assets/platformicon/youtube_nostroke_ic.svg';
-import Blog from '../../assets/platformicon/naverblog_nostroke_ic.svg';
-import Tistory from '../../assets/platformicon/tistory_nostroke_ic.svg';
-import Velog from '../../assets/platformicon/velog_nostroke_ic.svg';
+import CheckedYoutube from '/public/platformicon/youtube_checked_ic.svg';
+import CheckedBlog from '/public/platformicon/naver blog_checked_ic.svg';
+import CheckedTistory from '/public/platformicon/tistory_checked_ic.svg';
+import CheckedVelog from '/public/platformicon/velog_checked_ic.svg';
+import YoutubeActiveIcon from '/public/platformicon/youtube_active_ic.svg';
+import BlogActiveIcon from '/public/platformicon/naverblog_active_ic.svg';
+import VelogActiveIcon from '/public/platformicon/velog_active_ic.svg';
+import TistoryActiveIcon from '/public/platformicon/tistory_active_ic.svg';
+import Youtube from '/public/platformicon/youtube_nostroke_ic.svg';
+import Blog from '/public/platformicon/naverblog_nostroke_ic.svg';
+import Tistory from '/public/platformicon/tistory_nostroke_ic.svg';
+import Velog from '/public/platformicon/velog_nostroke_ic.svg';
 
 
 interface ResourceData {
-  episodeId: string; // 강의의 고유 ID
+  episodeId: number; // 강의의 고유 ID
   episodeName: string; // 강의 이름
   url: string; // 강의 URL
   resourceSource: "youtube" | "naverBlog" | "tistory" | "velog"; // 리소스 출처
@@ -39,7 +39,7 @@ interface CollectionData {
   liked: boolean; // 좋아요 여부
   likesCount: number; // 좋아요 수
   progressRatePercentage: number | null; // 전체 강의 진행률
-  progressRatio: number | null; // 전체 진행 비율
+  progressRatio: string | null; // 전체 진행 비율
   resource: ResourceData[]; // 강의 목록 (각 강의에 대한 정보)
 }
 
@@ -74,9 +74,6 @@ const getPlatformIcon = (
   return icons[resourceSource]?.[type] || Youtube;
 };
 
-
-
- 
 export const CompletedClass: React.FC<ResourceData & { collectionData: CollectionData }> = ({
   episodeId,
   episodeName,
@@ -85,7 +82,7 @@ export const CompletedClass: React.FC<ResourceData & { collectionData: Collectio
   collectionData,
 }) => {
   const router = useRouter();
-  const handleClick = async (episodeId: string, resourceSource: "youtube" | "naverBlog" | "tistory" | "velog") => { 
+  const handleClick = async (episodeId: number, resourceSource: "youtube" | "naverBlog" | "tistory" | "velog") => { 
     try {
       const token = localStorage.getItem("token");
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
@@ -136,7 +133,7 @@ export const CurrentClass: React.FC<ResourceData & { collectionData: CollectionD
   collectionData,
 }) => {
   const router = useRouter();
-  const handleClick = async (episodeId: string, resourceSource: "youtube" | "naverBlog" | "tistory" | "velog") => { 
+  const handleClick = async (episodeId: number, resourceSource: "youtube" | "naverBlog" | "tistory" | "velog") => { 
     try {
       const token = localStorage.getItem("token");
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
@@ -189,7 +186,7 @@ export const NextClass: React.FC<ResourceData & { collectionData: CollectionData
   collectionData,
 }) => {
   const router = useRouter();
-  const handleClick = async (episodeId: string, resourceSource: "youtube" | "naverBlog" | "tistory" | "velog") => { 
+  const handleClick = async (episodeId: number, resourceSource: "youtube" | "naverBlog" | "tistory" | "velog") => { 
     try {
       const token = localStorage.getItem("token");
       const headers = token ? { Authorization: `Bearer ${token}` } : {};

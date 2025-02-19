@@ -22,6 +22,7 @@ const Wrapper = styled.div`
   justify-content: center;
   height: 100vh;
   background-color: #ffffff;
+  z-index: 999;
 `;
 
 const Main = styled.div`
@@ -57,9 +58,11 @@ const HomePage = () => {
     }
 
     // 회원가입 후 모달 표시 여부 확인
-    if (localStorage.getItem('isFromSignup') === 'true') {
-      setIsModalOpen(true); // 모달 열기
-      localStorage.removeItem('isFromSignup'); // 플래그 제거
+    const isFormSignup = localStorage.getItem('isFormSignup') === 'true';
+
+    if (isFormSignup) {
+      setIsModalOpen(true);
+      localStorage.removeItem('isFormSignup');
     }
 
     fetchHomeData();
@@ -68,6 +71,7 @@ const HomePage = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+
   const fetchHomeData = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -95,28 +99,32 @@ const HomePage = () => {
 
   return (
     <>
+      {isModalOpen && (
+        <Wrapper>
+          <HomeModal onClose={handleCloseModal} />
+        </Wrapper>
+      )}
+
       {isLoggedIn ? <Header /> : <NotLoginHeader />}
 
-      {isLoggedIn && recentLearning ? (
-        <>
-          <Banner />
-          <RecentCollection collectionInfo={recentLearning} />
-          <Wrapper>
-            {isModalOpen && <HomeModal onClose={handleCloseModal} />}
-            {!isModalOpen && <Main></Main>}
-          </Wrapper>
-        </>
-      ) : (
-        <>
-          <HomeTop />
-          <HomeMiddle />
-        </>
-      )}
-      <HomeCollection
-        isLoggedIn={isLoggedIn}
-        nickname={nickname}
-        collections={recommendedCollections}
-      />
+      <main>
+        {isLoggedIn && recentLearning ? (
+          <>
+            <Banner />
+            <RecentCollection collectionInfo={recentLearning} />
+          </>
+        ) : (
+          <>
+            <HomeTop />
+            <HomeMiddle />
+          </>
+        )}
+        <HomeCollection
+          isLoggedIn={isLoggedIn}
+          nickname={nickname}
+          collections={recommendedCollections}
+        />
+      </main>
 
       <Footer />
     </>

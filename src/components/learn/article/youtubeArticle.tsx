@@ -32,7 +32,10 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
   useEffect(() => {
     return () => {
       stopTrackingProgress();
-      if (playerRef.current && typeof playerRef.current.destroy === 'function') {
+      if (
+        playerRef.current &&
+        typeof playerRef.current.destroy === 'function'
+      ) {
         playerRef.current.destroy();
       }
     };
@@ -87,8 +90,8 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
     });
   };
 
-   // 사용하지 않는 매개변수는 _를 붙여 표시
-   const onPlayerReady = (_event: YT.PlayerEvent) => {
+  // 사용하지 않는 매개변수는 _를 붙여 표시
+  const onPlayerReady = (_event: YT.PlayerEvent) => {
     console.log('Player ready');
   };
 
@@ -106,7 +109,6 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
           startTrackingProgress();
         }
       }, 500);
-      
     } else {
       stopTrackingProgress();
     }
@@ -125,7 +127,7 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
           // progress 필드에 계산된 progressValue(백분율)를 전달합니다.
           progress: progressValue,
         },
-        { headers }
+        { headers },
       );
       console.log('진도 저장 응답:', response.data);
     } catch (error) {
@@ -180,7 +182,6 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
 };
 
 export default YoutubeArticle;
-
 
 const ArticleWrapper = styled.div`
   display: flex;
