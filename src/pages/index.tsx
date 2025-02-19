@@ -22,6 +22,7 @@ const Wrapper = styled.div`
   justify-content: center;
   height: 100vh;
   background-color: #ffffff;
+  z-index: 999;
 `;
 
 const Main = styled.div`
@@ -98,30 +99,32 @@ const HomePage = () => {
 
   return (
     <>
-      {isLoggedIn ? <Header /> : <NotLoginHeader />}
-
       {isModalOpen && (
         <Wrapper>
           <HomeModal onClose={handleCloseModal} />
         </Wrapper>
       )}
 
-      {isLoggedIn && recentLearning ? (
-        <>
-          <Banner />
-          <RecentCollection collectionInfo={recentLearning} />
-        </>
-      ) : (
-        <>
-          <HomeTop />
-          <HomeMiddle />
-        </>
-      )}
-      <HomeCollection
-        isLoggedIn={isLoggedIn}
-        nickname={nickname}
-        collections={recommendedCollections}
-      />
+      {isLoggedIn ? <Header /> : <NotLoginHeader />}
+
+      <main>
+        {isLoggedIn && recentLearning ? (
+          <>
+            <Banner />
+            <RecentCollection collectionInfo={recentLearning} />
+          </>
+        ) : (
+          <>
+            <HomeTop />
+            <HomeMiddle />
+          </>
+        )}
+        <HomeCollection
+          isLoggedIn={isLoggedIn}
+          nickname={nickname}
+          collections={recommendedCollections}
+        />
+      </main>
 
       <Footer />
     </>

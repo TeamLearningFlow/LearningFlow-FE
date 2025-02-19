@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import Prev from '/public/previous.svg';
-import Next from '/public/next.svg';
+import Prev from '/public/previous_myPage.svg';
+import Prev_disabled from '/public/previous_disabled_myPage.svg';
+import Next from '/public/next_myPage.svg';
+import Next_disabled from '/public/next_disabled_myPage.svg';
 import EmptyLearned from '../../components/mypage/emptyLearned';
 import naverBlog from '/public/platformicon/naverblog_active_ic.svg';
 import tistory from '/public/platformicon/tistory_active_ic.svg';
@@ -10,6 +12,7 @@ import velog from '/public/platformicon/velog_active_ic.svg';
 import youtube from '/public/platformicon/youtube_active_ic.svg';
 import circle from '/public/circle.svg';
 import { useRouter } from 'next/router';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const NoOverflowDiv = styled.div`
   white-space: nowrap;
@@ -180,8 +183,10 @@ const PageButton = styled.div`
   gap: 20px;
 `;
 
-const Button = styled(Image)`
+const Button = styled.button`
   cursor: pointer;
+  background: transparent;
+  border: none;
 `;
 
 const CollectionList = styled.div`
@@ -207,6 +212,13 @@ const CollectionList = styled.div`
     grid-template-columns: repeat(1, 1fr); /* 폰 화면 */
     place-items: center;
   }
+`;
+
+const CollectionWrapper = styled.div`
+  overflow: hidden;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
 `;
 
 interface EpisodeData {
@@ -263,24 +275,47 @@ const CollectionItem: React.FC<{ episode: EpisodeData }> = ({ episode }) => {
 
 const NotCompleted: React.FC<{ episodes: EpisodeData[] }> = ({ episodes }) => {
   const [itemsShown, setItemsShown] = useState<number>(4);
+  const [currentPage, setCurrentPage] = useState<number>(0); // 현재 페이지 상태
 
   useEffect(() => {
     const updateItemsShown = () => {
+      let newItemsShown = 4;
       if (window.innerWidth <= 480) {
-        setItemsShown(1);
+        newItemsShown = 1;
       } else if (window.innerWidth <= 768) {
-        setItemsShown(2);
+        newItemsShown = 2;
       } else if (window.innerWidth <= 1024) {
-        setItemsShown(3);
-      } else {
-        setItemsShown(4);
+        newItemsShown = 3;
       }
+
+      setItemsShown(newItemsShown);
+      setCurrentPage(0); // 화면 크기 변경 시 첫 페이지로 리셋
     };
 
     updateItemsShown(); // 초기 설정
     window.addEventListener('resize', updateItemsShown);
     return () => window.removeEventListener('resize', updateItemsShown);
   }, []);
+
+  const totalPages = Math.ceil(episodes.length / itemsShown);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages - 1) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const startIndex = currentPage * itemsShown;
+  const visibleCollections = episodes.slice(
+    startIndex,
+    startIndex + itemsShown,
+  );
 
   const validEpisodes = episodes.filter(
     (episode) =>
@@ -296,21 +331,45 @@ const NotCompleted: React.FC<{ episodes: EpisodeData[] }> = ({ episodes }) => {
       <TitleWrapper>
         <Title>이어서 학습하기</Title>
         <PageButton>
-          <Button src={Prev} alt="prev" />
-          <Button src={Next} alt="next" />
+          <Button onClick={handlePrevPage} disabled={currentPage === 0}>
+            <Image src={currentPage === 0 ? Prev_disabled : Prev} alt="prev" />
+          </Button>
+          <Button
+            onClick={handleNextPage}
+            disabled={currentPage >= totalPages - 1}
+          >
+            <Image
+              src={currentPage >= totalPages - 1 ? Next_disabled : Next}
+              alt="next"
+            />
+          </Button>
         </PageButton>
       </TitleWrapper>
-      <CollectionList>
-        {validEpisodes.length > 0 ? (
-          validEpisodes
-            .slice(0, itemsShown)
-            .map((episode) => (
-              <CollectionItem key={episode.resourceId} episode={episode} />
-            ))
-        ) : (
-          <EmptyLearned />
-        )}
-      </CollectionList>
+      <CollectionWrapper>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentPage} // 페이지 변경 시 새로운 애니메이션 적용
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            style={{
+              display: 'flex',
+              gap: '24px',
+            }}
+          >
+            {validEpisodes.length > 0 ? (
+              validEpisodes.slice(0, itemsShown).map((episode) => (
+                <motion.div key={episode.resourceId} layout>
+                  <CollectionItem episode={episode} />
+                </motion.div>
+              ))
+            ) : (
+              <EmptyLearned />
+            )}
+          </motion.div>
+        </AnimatePresence>
+      </CollectionWrapper>
     </NotCompletedWrapper>
   );
 };

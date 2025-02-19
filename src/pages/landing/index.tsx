@@ -151,6 +151,7 @@ const LandingPage: React.FC = () => {
             setImgProfileUrl(imgProfileUrl || Guest.src);
             setCurrentPage(2);
           }}
+          // userData={{ nickname, job, imgProfileUrl }}
         />
       )}
       {currentPage === 2 && (

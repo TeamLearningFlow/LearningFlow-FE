@@ -183,6 +183,7 @@ const Page1: React.FC<{
     job: string;
     imgProfileUrl: string;
   }) => void;
+  // userData: { nickname: string; job: string; imgProfileUrl: string };
 }> = ({ onNext }) => {
   const [isHovered, setIsHovered] = useState(false); // 편집 아이콘 hover
   const [nickname, setNickname] = useState('');
@@ -211,6 +212,12 @@ const Page1: React.FC<{
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  /* useEffect(() => {
+    setNickname(userData.nickname);
+    setJob(userData.job);
+    setImgProfileUrl(userData.imgProfileUrl);
+  }, [userData]); */
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
