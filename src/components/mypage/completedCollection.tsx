@@ -422,6 +422,8 @@ const HoverCollection = ({
       <BoardingPassImage
         src={collection.imageUrl || CollectionImage}
         alt="collection image"
+        width={282}
+        height={158}
         style={{
           left: '0',
         }}
