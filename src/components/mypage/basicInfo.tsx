@@ -305,24 +305,31 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
   }; */
 
   // 변경된 이메일 확인 후 유저 정보 업데이트
+  const router = useRouter();
+  const { emailResetCode } = router.query;
+
   useEffect(() => {
-    const storedEmail = localStorage.getItem('email');
-    if (storedEmail) setCurrentEmail(storedEmail);
+    if (emailResetCode) {
+      verifyEmailResetCode(emailResetCode as string);
+    }
+  }, [emailResetCode]);
 
-    fetchUserProfile();
-  }, []);
-
-  const fetchUserProfile = async () => {
+  const verifyEmailResetCode = async (code: string) => {
     try {
       const token = localStorage.getItem('token');
+
       if (!token) {
-        router.replace('/login');
+        alert('로그인이 필요한 서비스입니다.');
+        router.push('/login');
         return;
       }
 
-      const response = await axios.get('https://onboarding.p-e.kr/user', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        `https://onboarding.p-e.kr/user/change-email?emailResetCode=${code}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
 
       if (response.data.isSuccess) {
         setCurrentEmail(response.data.result.email);
@@ -333,6 +340,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
     }
   };
 
+  // 이메일 변경 인증 메일 보내기 api 연결
   const sendEmailVerification = async (email: string) => {
     try {
       // 로컬 스토리지에서 토큰 가져오기 (로그인 시에만 접근 가능)
@@ -437,7 +445,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
   };
 
   // 비밀번호 변경 이메일 링크 클릭 시 토큰 검증 후 편집상태 활성화
-  const router = useRouter();
+  // const router = useRouter();
   const { passwordResetCode } = router.query;
 
   useEffect(() => {
