@@ -111,6 +111,29 @@ export default function CollectionPage() {
     fetchCollection();
   }, [collectionId]);
 
+  const handleProgressUpdate = (updatedEpisodes: {
+    episodeNumber: number;
+    progress: number;
+    completed: boolean;
+  }[]) => {
+    if (!collection) return;
+    // resource에서 episodeId가 mergedResource의 episodeNumber와 일치하면 업데이트
+    const updatedResource = collection.resource.map((ep) => {
+      const matching = updatedEpisodes.find(
+        (upd) => upd.episodeNumber === ep.episodeId, // episodeNumber와 episodeId 매칭
+      );
+      if (matching) {
+        return {
+          ...ep,
+          progress: matching.progress,
+          completed: matching.completed,
+        };
+      }
+      return ep;
+    });
+    setCollection({ ...collection, resource: updatedResource });
+  };
+
   // ESLint 오류 방지용
   useEffect(() => {
     console.log('현재 에러 상태:', error);
@@ -141,7 +164,7 @@ export default function CollectionPage() {
             />
           )}
           <ContentWrapper>
-            {collection && <CollectionList collection={collection} />}
+            {collection && <CollectionList collection={collection} onProgressUpdate={handleProgressUpdate} />}
           </ContentWrapper>
         </>
       )}

@@ -15,10 +15,10 @@ const TitleWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 1.5% 0 1.5% 0;
+  height: 55px;
 
   @media (max-width: 850px) {
-    padding: 2% 0 2.5% 0;
+
   }
 
   @media (max-width: 560px) {
@@ -29,9 +29,16 @@ const TitleBox = styled.div`
   display: block;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 600;
   color: rgba(50, 53, 56, 1);
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 750px;
+  z-index: 100;
+
 
   @media (max-width: 850px) {
     font-size: 18px;
@@ -142,21 +149,13 @@ const ButtonLetter = styled.div`
 interface ClassTitleProps {
   episodeId: number;
   episodeData: { urlTitle: string; progress?: number };
-  isCompleted: boolean;
 }
 
 const ClassTitle: React.FC<ClassTitleProps> = ({
   episodeId,
   episodeData,
-  isCompleted: propIsCompleted,
 }) => {
-  // localStorage에서 진도율을 초기값으로 읽음
-  const initialProgress =
-    typeof window !== 'undefined'
-      ? Number(localStorage.getItem(`progress-${episodeId}`)) || 0
-      : 0;
-
-  // const [progress, setProgress] = useState(initialProgress);
+  const [localIsCompleted, setLocalIsCompleted] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const context = useContext(LearnContext);
@@ -165,21 +164,21 @@ const ClassTitle: React.FC<ClassTitleProps> = ({
 
   const { updateProgress } = useContext(ProgressContext);
   // const { isCompleted } = state;
-  const { setIsCompleted } = context.actions;
-
-  // 만약 localStorage에 저장된 진도율이 100이면, 수강 완료 상태로 설정
-  useEffect(() => {
-    const storedProgress = localStorage.getItem(`progress-${episodeId}`);
-    if (storedProgress && Number(storedProgress) === 100) {
-      setIsCompleted(true);
-    }
-  }, [episodeId, setIsCompleted]);
+  // const { setIsCompleted } = context.actions;
 
   const episodeName = episodeData.urlTitle;
 
+  // 만약 localStorage에 저장된 진도율이 100이면, 수강 완료 상태로 설정
+  useEffect(() => {
+    const storedProgress = Number(localStorage.getItem(`progress-${episodeId}`)) || 0;
+    setLocalIsCompleted(storedProgress >= 80);
+  }, [episodeId]);
+
+
+
   const handleClick = async () => {
-    // 만약 수강 완료 상태라면 바로 진도율 0 업데이트하지 않고 모달만 띄움
-    if (propIsCompleted) {
+    // 수강 완료 상태라면 모달만
+    if (localIsCompleted) {
       setIsModalVisible(true);
       return;
     }
@@ -202,14 +201,10 @@ const ClassTitle: React.FC<ClassTitleProps> = ({
       );
       if (response.status === 200) {
         setTimeout(() => {
-          const newIsCompleted = !propIsCompleted;
-          setIsCompleted(newIsCompleted);
-          // setProgress(targetProgress);
+          // 여기서는 전역 상태 업데이트 대신 localStorage 업데이트 후 로컬 상태를 갱신
           updateProgress(episodeId, targetProgress);
-          localStorage.setItem(
-            `progress-${episodeId}`,
-            targetProgress.toString(),
-          );
+          localStorage.setItem(`progress-${episodeId}`, targetProgress.toString());
+          setLocalIsCompleted(true);
           console.log('학습 상태 업데이트 성공:', response.data);
         }, 700);
       }
@@ -225,22 +220,22 @@ const ClassTitle: React.FC<ClassTitleProps> = ({
   const handleRetakeClass = () => {
     // 진도율 0으로 초기화 및 수강 완료 상태 해제
     // setProgress(0);
-    setIsCompleted(false);
-    setIsModalVisible(false);
     updateProgress(episodeId, 0);
     localStorage.setItem(`progress-${episodeId}`, '0');
+    setLocalIsCompleted(false);
+    setIsModalVisible(false);
   };
 
   return (
     <TitleWrapper>
       <TitleBox>{episodeName}</TitleBox>
       <EffectButtonWrapper>
-        <EffectUpWrapper isClicked={isClicked} isCompleted={propIsCompleted}>
+        <EffectUpWrapper isClicked={isClicked} isCompleted={localIsCompleted}>
           <Image src={EffectUp} alt="Button Effect Up" width={35} height={35} />
         </EffectUpWrapper>
         <ButtonWrapper
           isClicked={isClicked}
-          isCompleted={propIsCompleted}
+          isCompleted={localIsCompleted}
           onClick={handleClick}
         >
           <IconBox>
@@ -248,7 +243,7 @@ const ClassTitle: React.FC<ClassTitleProps> = ({
           </IconBox>
           <ButtonLetter>수강완료</ButtonLetter>
         </ButtonWrapper>
-        <EffectDownWrapper isClicked={isClicked} isCompleted={propIsCompleted}>
+        <EffectDownWrapper isClicked={isClicked} isCompleted={localIsCompleted}>
           <Image
             src={EffectDown}
             alt="Button Effect Down"

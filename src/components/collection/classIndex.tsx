@@ -206,7 +206,7 @@ const EndIndex: React.FC<{allProgressed: boolean}> = ({allProgressed}) => {
     <EndComponentWrapper>
       <RadioWrapper>
         <IndexIcon>
-        <Image
+          <Image
             src={allProgressed ? CompletedIndexIcon : EndIndexIcon}
             alt="End-icon"
             style={{ objectFit: 'contain' }}
@@ -215,7 +215,7 @@ const EndIndex: React.FC<{allProgressed: boolean}> = ({allProgressed}) => {
       </RadioWrapper>
       <StartIndexWrapper>
         <EndIndexContainer allProgressed={allProgressed}>
-            Congrats! 컬렉션 완주를 축하드려요!
+          Congrats! 컬렉션 완주를 축하드려요!
         </EndIndexContainer>
       </StartIndexWrapper>
     </EndComponentWrapper>
