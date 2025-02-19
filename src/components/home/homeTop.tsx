@@ -286,7 +286,7 @@ const WindowImage = styled(Image)`
   z-index: 2;
 `;
 
-const WindowInGif = styled.img`
+const WindowInVideo = styled.video`
   position: absolute;
   width: 100%;
   height: 100%;
@@ -425,7 +425,9 @@ const HomeTop: React.FC = () => {
           <Image src={Airplane} alt="airplane" />
         </AirplaneWrapper>
         <WindowWrapper>
-          <WindowInGif src="/video.gif" alt="video" />
+          <WindowInVideo autoPlay loop muted playsInline>
+            <source src="/video.mp4" type="video/mp4" />
+          </WindowInVideo>
           <WindowImage
             src={Window}
             alt="window"
