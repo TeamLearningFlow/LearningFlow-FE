@@ -327,8 +327,8 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
       );
 
       if (response.data.isSuccess) {
-        setCurrentEmail(response.data.result);
-        localStorage.setItem('email', response.data.result);
+        setCurrentEmail(editedEmail);
+        localStorage.setItem('email', editedEmail);
       }
 
       fetchUserProfile();
