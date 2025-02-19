@@ -46,7 +46,7 @@ export interface CollectionData {
   }[];
   likesCount: number;
   progressRatePercentage: number;
-  progressRatio: number;
+  progressRatio: string;
   learningStatus: 'BEFORE' | 'IN_PROGRESS' | 'COMPLETED';
   startDate: string;
   completedDate: string;
