@@ -38,12 +38,12 @@ const TitleWrapper = styled.div`
   text-align: center;
   max-width: 988px;
   z-index: 1;
+  margin-bottom: 60px;
+  margin-top: -250px;
 
   img {
-    width: 100%;
+    width: 90%;
     height: auto;
-    margin-bottom: 60px;
-    margin-top: -250px;
   }
 
   @media (max-width: 1024px) {
@@ -52,10 +52,13 @@ const TitleWrapper = styled.div`
 
   @media (max-width: 768px) {
     max-width: 600px;
+    margin-bottom: 50px;
   }
 
   @media (max-width: 480px) {
     max-width: 400px;
+    margin-bottom: 25px;
+    margin-top: -220px;
   }
 `;
 
@@ -78,6 +81,11 @@ const SearchWrapper = styled.div`
 
   @media (max-width: 768px) {
     height: 50px;
+    margin-bottom: 60px;
+  }
+
+  @media (max-width: 480px) {
+    height: 46px;
     margin-bottom: 60px;
   }
 `;
@@ -234,13 +242,17 @@ const GasEffect = styled.div`
   }
 
   @media (max-width: 768px) {
-    width: 200px;
-    height: 35px;
+    width: 230px;
+    height: 50px;
+    bottom: -10%;
+    left: -33%;
   }
 
   @media (max-width: 480px) {
     width: 180px;
     height: 30px;
+    bottom: -5%;
+    left: -30%;
   }
 `;
 
@@ -274,7 +286,7 @@ const WindowWrapper = styled.div`
       max-width: 280px;
       max-height: 300px;
       left: -4%;
-      top: 40%;
+      top: 30%;
     }
   }
 `;
@@ -299,8 +311,8 @@ const WindowInVideo = styled.video`
   transform: rotate(-25deg);
 
   @media (max-width: 768px) {
-  width: 80%;
-  height: 80%;
+    width: 80%;
+    height: 80%;
     top: 13%;
     left: -7%;
     clip-path: inset(0% 20% 0% 28% round 180px);
@@ -308,9 +320,10 @@ const WindowInVideo = styled.video`
 
   @media (max-width: 470px) {
     position: relative;
-    margin-top: -44%;
-    margin-left: -35%;
-    clip-path: inset(0% 13% 0% 23% round 180px);
+    width: 70%;
+    height: 70%;
+    margin-left: -30%;
+    clip-path: inset(0% 18% 0% 33% round 180px);
   }
 `;
 
@@ -346,7 +359,8 @@ const LogoMarkWrapper = styled.div`
   }
 
   @media (max-width: 768px) {
-    right: -10%;
+    right: -9%;
+    top: 33%;
   }
 
   @media (max-width: 480px) {
@@ -392,6 +406,14 @@ const ShadowWrapper = styled.div`
       filter: blur(40px) brightness(1.2);
     }
   }
+
+  @media (max-width: 768px) {
+    bottom: 25%;
+  }
+
+  @media (max-width: 480px) {
+    bottom: 35%;
+  }
 `;
 
 const WindowShadow = styled.div`
@@ -403,6 +425,16 @@ const WindowShadow = styled.div`
   background: rgba(160, 160, 160, 0.7);
   filter: blur(38px);
   border-radius: 406.111px;
+
+  @media (max-width: 768px) {
+    bottom: 8%;
+    left: 20%;
+  }
+
+  @media (max-width: 480px) {
+    bottom: 5%;
+    left: 30%;
+  }
 `;
 
 const HomeTop: React.FC = () => {
