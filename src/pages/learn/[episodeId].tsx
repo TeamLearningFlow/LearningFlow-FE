@@ -80,6 +80,18 @@ const BottomWrapper = styled.div`
   }
 `;
 
+interface EpisodeDataResult {
+  resourceType: 'VIDEO' | 'TEXT';
+  urlTitle: string;
+  interestField: string;
+  episodeContents?: string;
+  progress?: number;
+}
+
+interface EpisodeData {
+  result: EpisodeDataResult;
+}
+
 const interestFieldMap: Record<string, string> = {
   APP_DEVELOPMENT: '앱개발',
   WEB_DEVELOPMENT: '웹개발',
@@ -109,10 +121,10 @@ const LearnPage: React.FC = () => {
   if (!context) {
     throw new Error('LearnContext를 찾을 수 없습니다.');
   }
-  const { isCompleted } = context.state;
+
   const { updateProgress } = useContext(ProgressContext);
   const [youtubeContent, setYoutubeContent] = useState<string>('');
-  const [episodeDataState, setEpisodeDataState] = useState<any>(null);
+  const [episodeDataState, setEpisodeDataState] = useState<EpisodeData | null>(null);
 
   if (!context) {
     throw new Error('LearnContext를 찾을 수 없습니다.');
@@ -173,13 +185,16 @@ const LearnPage: React.FC = () => {
         updateProgress(episodeIdNumber, Number(storedProgress));
         // episodeDataState가 이미 있다면, 동일한 값인지 확인 후 업데이트
         if (episodeDataState && Number(storedProgress) !== episodeDataState.result.progress) {
-          setEpisodeDataState((prev: any) => ({
-            ...prev,
-            result: {
-              ...prev.result,
-              progress: Number(storedProgress),
-            },
-          }));
+          setEpisodeDataState((prev) => {
+            if (prev === null) return prev;
+            return {
+              ...prev,
+              result: {
+                ...prev.result,
+                progress: Number(storedProgress),
+              },
+            };
+          });
         }
       }
     }

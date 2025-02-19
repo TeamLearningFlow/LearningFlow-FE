@@ -80,11 +80,15 @@ const ClassIndex: React.FC<ClassIndexProps> = ({ classData, collection }) => {
           },
         });
       }
-    } catch (error: any) {
-      if (error.response?.status === 401) {
-        setIsLoginModalOpen(true); // 로그인 모달 열기
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          setIsLoginModalOpen(true); // 로그인 모달 열기
+        } else {
+          console.error('강의 불러오기 실패:', error);
+        }
       } else {
-        console.error('강의 불러오기 실패:', error);
+        console.error('예상치 못한 에러:', error);
       }
     }
   };

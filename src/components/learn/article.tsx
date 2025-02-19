@@ -21,7 +21,7 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
   videoId,
   onProgressChange = () => {},
 }) => {
-  const [progress, setProgress] = useState<number>(0);
+  // const [progress, setProgress] = useState<number>(0);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const playerRef = useRef<YT.Player | null>(null); // YouTube Player 인스턴스 저장
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -59,7 +59,7 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
 
     // YouTube IFrame API 스크립트 로드 및 플레이어 초기화
     if (!window.YT || !window.YT.Player) {
-      (window as any).onYouTubeIframeAPIReady = () => {
+      window.onYouTubeIframeAPIReady = () => {
         initializePlayer();
       };
       const tag = document.createElement('script');
@@ -87,12 +87,13 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
     });
   };
 
-  const onPlayerReady = (event: any) => {
+   // 사용하지 않는 매개변수는 _를 붙여 표시
+   const onPlayerReady = (_event: YT.PlayerEvent) => {
     console.log('Player ready');
   };
 
   // 플레이어 상태 변경 감지: 진도율 추적 시작
-  const handlePlayerStateChange = (event: any) => {
+  const handlePlayerStateChange = (event: YT.OnStateChangeEvent) => {
     if (event.data === window.YT.PlayerState.PLAYING) {
       console.log('영상 재생 시작 - 진도율 추적 준비중');
       // duration이 준비될 때까지 폴링
@@ -145,7 +146,7 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
         const duration = playerRef.current.getDuration();
         if (duration > 0) {
           const progressValue = Math.round((currentTime / duration) * 100);
-          setProgress(progressValue);
+          // setProgress(progressValue);
           onProgressChange(progressValue);
           console.log(`진도율 업데이트: ${progressValue}%`);
           // 계산된 progressValue를 saveProgress의 progress로 보냅니다.

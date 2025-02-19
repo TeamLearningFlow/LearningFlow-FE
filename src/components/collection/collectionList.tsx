@@ -8,7 +8,7 @@ import {
 import NowPlaying from './nowPlaying';
 import NextClassIndex from './nextClassIndex';
 import IndexLine from './indexLine';
-import { CollectionData } from '@/pages/collection/[collectionId]';
+import type { CollectionData } from '@/pages/collection/[collectionId]';
 import { ProgressContext } from '@/components/context/ProgressContext';
 
 const CollectionListWrapper = styled.div`
@@ -47,6 +47,22 @@ const ListWrapper = styled.div`
 
 const ListContainer = styled.div``;
 
+interface Episode {
+  episodeId: number;
+  episodeName: string;
+  url: string;
+  resourceSource: "youtube" | "naverBlog" | "tistory" | "velog";
+  episodeNumber: number;
+  today: boolean;
+  progress?: number; // progress가 없을 수도
+}
+
+interface MergedEpisode extends Episode {
+  progress: number;
+  completed: boolean;
+}
+
+
 interface CollectionListProps {
   collection: CollectionData;
 }
@@ -58,21 +74,21 @@ const CollectionList: React.FC<CollectionListProps> = ({ collection }) => {
   const [allProgressed, setAllProgressed] = useState(false);
   const { progressByEpisode } = useContext(ProgressContext);
 
-  // mergedResource: 각 에피소드에 대해, 전역 progress가 있으면 반영하고 없으면 기존값 사용
-  const mergedResource = resource.map((episode: any) => {
-    // 전역 상태(ProgressContext)에서 진도율을 가져옴
-    const globalProgress = progressByEpisode[episode.episodeId];
-    // 클라이언트(브라우저)에서 localStorage에 저장된 진도율을 가져옴
-    const localProgress = typeof window !== 'undefined'
-      ? localStorage.getItem(`progress-${episode.episodeId}`)
-      : null;
-    // 우선 순위: 전역 상태 > localStorage > API 원본 (null이면 0으로 처리)
-    const progress =
-      globalProgress !== undefined
-        ? globalProgress
-        : localProgress !== null
-        ? Number(localProgress)
-        : (episode.progress ?? 0);
+// 각 에피소드에 대해 전역 progress와 localStorage를 반영한 mergedResource 생성
+const mergedResource: MergedEpisode[] = resource.map((episode: Episode) => {
+  // 전역 상태(ProgressContext)에서 진도율을 가져옴
+  const globalProgress = progressByEpisode[episode.episodeId];
+  // 클라이언트(브라우저)에서 localStorage에 저장된 진도율을 가져옴
+  const localProgress = typeof window !== 'undefined'
+    ? localStorage.getItem(`progress-${episode.episodeId}`)
+    : null;
+  // 우선 순위: 전역 상태 > localStorage > API 원본 (null이면 0으로 처리)
+  const progress =
+    globalProgress !== undefined
+      ? globalProgress
+      : localProgress !== null
+      ? Number(localProgress)
+      : episode.progress ?? 0;
 
         return {
           ...episode,
@@ -82,90 +98,89 @@ const CollectionList: React.FC<CollectionListProps> = ({ collection }) => {
         };
       });
 
-  useEffect(() => {
-    if (mergedResource.length === 0) return;
-
-    // 진행된 강의(progress > 0) 중에서 가장 마지막 episode 찾기
-    const lastPlayedClass = mergedResource
-      .filter((classData) => classData.progress > 0)
-      .reduce(
-        (maxEpisode, classData) =>
-          Math.max(maxEpisode, classData.episodeNumber),
-        1,
+      useEffect(() => {
+        if (mergedResource.length === 0) return;
+    
+        // 진행된 강의(progress > 0) 중에서 가장 마지막 episode 찾기
+        const lastPlayedClass = mergedResource
+          .filter((classData: MergedEpisode) => classData.progress > 0)
+          .reduce(
+            (maxEpisode, classData: MergedEpisode) =>
+              Math.max(maxEpisode, classData.episodeNumber),
+            1,
+          );
+    
+        // 모든 강의 중에서 가장 마지막 episode 찾기
+        const maxEpisodeNumber = Math.max(
+          ...mergedResource.map((classData: MergedEpisode) => classData.episodeNumber),
+        );
+    
+        // 진행된 강의의 마지막 episode가 전체 episode 중 마지막이면 +1 적용
+        if (lastPlayedClass === maxEpisodeNumber) {
+          setClassRound(maxEpisodeNumber + 1);
+        } else {
+          setClassRound(lastPlayedClass);
+        }
+    
+        const isAllProgressed = mergedResource.every(
+          (classData: MergedEpisode) => classData.progress >= 80,
+        );
+        setAllProgressed(isAllProgressed); // 모든 강의가 진도율 80 이상일 때 상태 업데이트
+      }, [mergedResource]);
+    
+      useEffect(() => {
+        if (mergedResource.length > 0) {
+          console.log(
+            "각 에피소드 progress 및 completed (업데이트 후):",
+            mergedResource.map((episode: MergedEpisode) => ({
+              episodeNumber: episode.episodeNumber,
+              progress: episode.progress,
+              completed: episode.completed,
+            }))
+          );
+        }
+      }, [mergedResource]);
+    
+      return (
+        <CollectionListWrapper>
+          <LineWrapper>
+            <IndexLine classRound={classRound} />
+          </LineWrapper>
+          <ListWrapper>
+            <StartIndex />
+            <ListContainer>
+              {mergedResource.map((classData: MergedEpisode) => {
+                if (classData.progress === 0) {
+                  return (
+                    <NextClassIndex
+                      key={classData.episodeNumber}
+                      classData={classData}
+                      collection={collection}
+                    />
+                  );
+                } else if (classData.progress >= 80) {
+                  return (
+                    <ClassIndex
+                      key={classData.episodeNumber}
+                      classData={classData}
+                      collection={collection}
+                    />
+                  );
+                } else {
+                  return (
+                    <NowPlaying
+                      key={classData.episodeNumber}
+                      classData={classData}
+                      collection={collection}
+                    />
+                  );
+                }
+              })}
+            </ListContainer>
+            <EndIndex allProgressed={allProgressed} />
+          </ListWrapper>
+        </CollectionListWrapper>
       );
-
-    // 모든 강의 중에서 가장 마지막 episode 찾기
-    const maxEpisodeNumber = Math.max(
-      ...mergedResource.map((classData) => classData.episodeNumber),
-    );
-
-    // 진행된 강의의 마지막 episode가 전체 episode 중 마지막이면 +1 적용
-    if (lastPlayedClass === maxEpisodeNumber) {
-      setClassRound(maxEpisodeNumber + 1);
-    } else {
-      setClassRound(lastPlayedClass);
-    }
-
-    const isAllProgressed = mergedResource.every(
-      (classData) => classData.progress >= 80,
-    );
-    setAllProgressed(isAllProgressed); // 모든 강의가 진도율 80 이상일 때, 상태 업데이트
-  }, [mergedResource]);
-
-  useEffect(() => {
-    if (mergedResource && mergedResource.length > 0) {
-      console.log(
-        "각 에피소드 progress 및 completed (업데이트 후):",
-        mergedResource.map((episode: any) => ({
-          episodeNumber: episode.episodeNumber,
-          progress: episode.progress,
-          completed: episode.completed,
-        }))
-      );
-    }
-  }, [mergedResource]);
-  
-
-  return (
-    <CollectionListWrapper>
-      <LineWrapper>
-        <IndexLine classRound={classRound} />
-      </LineWrapper>
-      <ListWrapper>
-        <StartIndex />
-        <ListContainer>
-          {mergedResource.map((classData: any) => {
-            if (classData.progress === 0) {
-              return (
-                <NextClassIndex
-                  key={classData.episodeNumber}
-                  classData={classData}
-                  collection={collection}
-                />
-              );
-            } else if (classData.progress >= 80) {
-              return (
-                <ClassIndex
-                  key={classData.episodeNumber}
-                  classData={classData}
-                  collection={collection}
-                />
-              );
-            } else {
-              return (
-                <NowPlaying
-                  key={classData.episodeNumber}
-                  classData={classData}
-                  collection={collection}
-                />
-              );
-            }
-          })}
-        </ListContainer>
-        <EndIndex allProgressed={allProgressed} />
-      </ListWrapper>
-    </CollectionListWrapper>
-  );
-};
-
-export default CollectionList;
+    };
+    
+    export default CollectionList;

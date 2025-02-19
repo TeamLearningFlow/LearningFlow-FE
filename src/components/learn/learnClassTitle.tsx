@@ -151,7 +151,7 @@ const ClassTitle: React.FC<ClassTitleProps> = ({ episodeId, episodeData, isCompl
     ? Number(localStorage.getItem(`progress-${episodeId}`)) || 0
     : 0;
   
-  const [progress, setProgress] = useState(initialProgress);
+  // const [progress, setProgress] = useState(initialProgress);
   const [isClicked, setIsClicked] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const context = useContext(LearnContext);
@@ -196,7 +196,7 @@ const ClassTitle: React.FC<ClassTitleProps> = ({ episodeId, episodeData, isCompl
         setTimeout(() => {
           const newIsCompleted = !propIsCompleted;
           setIsCompleted(newIsCompleted);
-          setProgress(targetProgress);
+          // setProgress(targetProgress);
           updateProgress(episodeId, targetProgress);
           localStorage.setItem(`progress-${episodeId}`, targetProgress.toString());
           console.log('학습 상태 업데이트 성공:', response.data);
@@ -213,7 +213,7 @@ const ClassTitle: React.FC<ClassTitleProps> = ({ episodeId, episodeData, isCompl
 
   const handleRetakeClass = () => {
     // 진도율 0으로 초기화 및 수강 완료 상태 해제
-    setProgress(0);
+    // setProgress(0);
     setIsCompleted(false);
     setIsModalVisible(false);
     updateProgress(episodeId, 0);
