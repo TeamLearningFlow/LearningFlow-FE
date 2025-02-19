@@ -125,6 +125,9 @@ const Profile = styled.div`
 const PersonalInfo = styled.div`
   display: flex;
   gap: 10px;
+  white-space: nowrap;
+  width: 100%;
+  // overflow: hidden; 
 `;
 
 const Nickname = styled.span`
@@ -137,6 +140,7 @@ const Nickname = styled.span`
   font-weight: 600;
   line-height: 48px; /* 150% */
   letter-spacing: -0.64px;
+  white-space: nowrap;
 
   /* 반응형 설정 */
   @media (max-width: 480px) {
@@ -157,6 +161,7 @@ const GrayLabel = styled.span`
   font-weight: 400;
   line-height: 27px; /* 150% */
   letter-spacing: -0.36px;
+  white-space: nowrap;
 
   /* 반응형 설정 */
   @media (max-width: 480px) {
@@ -167,6 +172,7 @@ const GrayLabel = styled.span`
 const Job = styled(GrayLabel)`
   display: flex;
   align-items: end;
+  white-space: nowrap;
 `;
 
 const Email = styled(GrayLabel)``;
