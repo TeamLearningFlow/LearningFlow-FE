@@ -14,8 +14,12 @@ interface ProgressProviderProps {
   children: React.ReactNode;
 }
 
-export const ProgressProvider: React.FC<ProgressProviderProps> = ({ children }) => {
-  const [progressByEpisode, setProgressByEpisode] = useState<Record<number, number>>({});
+export const ProgressProvider: React.FC<ProgressProviderProps> = ({
+  children,
+}) => {
+  const [progressByEpisode, setProgressByEpisode] = useState<
+    Record<number, number>
+  >({});
 
   const updateProgress = (episodeId: number, progress: number) => {
     setProgressByEpisode((prev) => {
@@ -24,7 +28,7 @@ export const ProgressProvider: React.FC<ProgressProviderProps> = ({ children }) 
       return newState;
     });
   };
-  
+
   return (
     <ProgressContext.Provider value={{ progressByEpisode, updateProgress }}>
       {children}

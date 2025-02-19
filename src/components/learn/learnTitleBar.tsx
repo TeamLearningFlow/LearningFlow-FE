@@ -66,6 +66,13 @@ const TitleBox = styled.div`
     font-size: 13px;
     margin-top: -4px;
   }
+  @media (max-width: 430px) {
+    font-size: 10px;
+    margin-top: -4px;
+    // white-space: wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 `;
 
 const TitleDot = styled.span`

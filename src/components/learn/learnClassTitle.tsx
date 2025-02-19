@@ -145,12 +145,17 @@ interface ClassTitleProps {
   isCompleted: boolean;
 }
 
-const ClassTitle: React.FC<ClassTitleProps> = ({ episodeId, episodeData, isCompleted: propIsCompleted }) => {
+const ClassTitle: React.FC<ClassTitleProps> = ({
+  episodeId,
+  episodeData,
+  isCompleted: propIsCompleted,
+}) => {
   // localStorage에서 진도율을 초기값으로 읽음
-  const initialProgress = typeof window !== 'undefined'
-    ? Number(localStorage.getItem(`progress-${episodeId}`)) || 0
-    : 0;
-  
+  const initialProgress =
+    typeof window !== 'undefined'
+      ? Number(localStorage.getItem(`progress-${episodeId}`)) || 0
+      : 0;
+
   // const [progress, setProgress] = useState(initialProgress);
   const [isClicked, setIsClicked] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -178,19 +183,22 @@ const ClassTitle: React.FC<ClassTitleProps> = ({ episodeId, episodeData, isCompl
       setIsModalVisible(true);
       return;
     }
-    
+
     // 미수강 상태라면 수강 완료 처리 진행 (진도율 100으로 업데이트)
     setIsClicked(true);
     const targetProgress = 100;
     try {
       const token = localStorage.getItem('token');
       const headers = token
-        ? { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
+        ? {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          }
         : {};
       const response = await axios.post(
         `http://onboarding.p-e.kr:8080/resources/${episodeId}/update-complete`,
         { progress: targetProgress },
-        { headers }
+        { headers },
       );
       if (response.status === 200) {
         setTimeout(() => {
@@ -198,7 +206,10 @@ const ClassTitle: React.FC<ClassTitleProps> = ({ episodeId, episodeData, isCompl
           setIsCompleted(newIsCompleted);
           // setProgress(targetProgress);
           updateProgress(episodeId, targetProgress);
-          localStorage.setItem(`progress-${episodeId}`, targetProgress.toString());
+          localStorage.setItem(
+            `progress-${episodeId}`,
+            targetProgress.toString(),
+          );
           console.log('학습 상태 업데이트 성공:', response.data);
         }, 700);
       }
@@ -217,7 +228,7 @@ const ClassTitle: React.FC<ClassTitleProps> = ({ episodeId, episodeData, isCompl
     setIsCompleted(false);
     setIsModalVisible(false);
     updateProgress(episodeId, 0);
-    localStorage.setItem(`progress-${episodeId}`, "0");
+    localStorage.setItem(`progress-${episodeId}`, '0');
   };
 
   return (
@@ -238,7 +249,12 @@ const ClassTitle: React.FC<ClassTitleProps> = ({ episodeId, episodeData, isCompl
           <ButtonLetter>수강완료</ButtonLetter>
         </ButtonWrapper>
         <EffectDownWrapper isClicked={isClicked} isCompleted={propIsCompleted}>
-          <Image src={EffectDown} alt="Button Effect Down" width={35} height={35} />
+          <Image
+            src={EffectDown}
+            alt="Button Effect Down"
+            width={35}
+            height={35}
+          />
         </EffectDownWrapper>
       </EffectButtonWrapper>
       {isModalVisible && (
