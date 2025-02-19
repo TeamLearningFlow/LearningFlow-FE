@@ -74,7 +74,6 @@ const getPlatformIcon = (
   return icons[resourceSource]?.[type] || Youtube;
 };
 
-
 export const CompletedClass: React.FC<ResourceData & { collectionData: CollectionData }> = ({
   episodeId,
   episodeName,
@@ -90,19 +89,22 @@ export const CompletedClass: React.FC<ResourceData & { collectionData: Collectio
   
       // resourceSource에 따라 API 경로 설정
       const resourceType = resourceSource === "youtube" ? "youtube" : "blog";
-      const apiUrl = `https://onboarding.p-e.kr/resources/${episodeId}/${resourceType}`;
+      const apiUrl = `http://onboarding.p-e.kr:8080/resources/${episodeId}/${resourceType}`;
   
       // API 요청
       const response = await axios.get(apiUrl, { headers });
   
       if (response.status === 200) {
         const data = response.data;
+        const videoId = data.result.episodeContents;
+        console.log("내부 이동 videoId:",videoId);
+        // resourceItem 대신 episodeName 사용
         router.push({
-          pathname: `/learn/${episodeId}`, // 수강페이지로 이동
+          pathname: `/learn/${episodeId}`, 
           query: { 
-            episodeData: JSON.stringify(data),
+            episodeData: JSON.stringify({ ...data, episodeName }), 
             collectionData: JSON.stringify(collectionData)
-           }, // 응답 데이터를 쿼리로 전달
+          },
         });
       }
     } catch (error) {
@@ -138,25 +140,29 @@ export const CurrentClass: React.FC<ResourceData & { collectionData: CollectionD
   
       // resourceSource에 따라 API 경로 설정
       const resourceType = resourceSource === "youtube" ? "youtube" : "blog";
-      const apiUrl = `https://onboarding.p-e.kr/resources/${episodeId}/${resourceType}`;
+      const apiUrl = `http://onboarding.p-e.kr:8080/resources/${episodeId}/${resourceType}`;
   
       // API 요청
       const response = await axios.get(apiUrl, { headers });
   
       if (response.status === 200) {
         const data = response.data;
+        const videoId = data.result.episodeContents;
+        console.log("내부 이동 videoId:",videoId);
+        // resourceItem 대신 episodeName 사용
         router.push({
-          pathname: `/learn/${episodeId}`, // 수강페이지로 이동
+          pathname: `/learn/${episodeId}`, 
           query: { 
-            episodeData: JSON.stringify(data),
+            episodeData: JSON.stringify({ ...data, episodeName }), 
             collectionData: JSON.stringify(collectionData)
-           }, // 응답 데이터를 쿼리로 전달
+          },
         });
       }
     } catch (error) {
       console.error("강의 불러오기 실패:", error);
     }
   };
+
 
   return (
     <CurrentIndexWrapper onClick={() => handleClick(episodeId, resourceSource)}>
@@ -170,6 +176,7 @@ export const CurrentClass: React.FC<ResourceData & { collectionData: CollectionD
     </CurrentIndexWrapper>
   );
 };
+
 
 export const NextClass: React.FC<ResourceData & { collectionData: CollectionData }> = ({
   episodeId,
@@ -185,18 +192,19 @@ export const NextClass: React.FC<ResourceData & { collectionData: CollectionData
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
       const resourceType = resourceSource === "youtube" ? "youtube" : "blog";
-      const apiUrl = `https://onboarding.p-e.kr/resources/${episodeId}/${resourceType}`;
+      const apiUrl = `http://onboarding.p-e.kr:8080/resources/${episodeId}/${resourceType}`;
 
       const response = await axios.get(apiUrl, { headers });
 
       if (response.status === 200) {
         const data = response.data;
-
+        const videoId = data.result.episodeContents;
+        console.log("내부 이동 videoId:",videoId);
         // resourceItem 대신 episodeName 사용
         router.push({
           pathname: `/learn/${episodeId}`, 
           query: { 
-            episodeData: JSON.stringify({ ...data, episodeName }), // 수정된 부분
+            episodeData: JSON.stringify({ ...data, episodeName }), 
             collectionData: JSON.stringify(collectionData)
           },
         });
@@ -387,4 +395,3 @@ const TitleBox = styled.div`
     max-width: 180px;
   }
 `;
-

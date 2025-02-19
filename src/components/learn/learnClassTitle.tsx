@@ -151,10 +151,10 @@ const ClassTitle: React.FC<ClassTitleProps> = ({
   isCompleted: propIsCompleted,
 }) => {
   // localStorage에서 진도율을 초기값으로 읽음
-  // const initialProgress =
-  //   typeof window !== 'undefined'
-  //     ? Number(localStorage.getItem(`progress-${episodeId}`)) || 0
-  //     : 0;
+  const initialProgress =
+    typeof window !== 'undefined'
+      ? Number(localStorage.getItem(`progress-${episodeId}`)) || 0
+      : 0;
 
   // const [progress, setProgress] = useState(initialProgress);
   const [isClicked, setIsClicked] = useState(false);

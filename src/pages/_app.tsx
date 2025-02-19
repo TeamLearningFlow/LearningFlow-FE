@@ -4,6 +4,7 @@ import Head from 'next/head'; // 뷰포트 설정
 import { createGlobalStyle } from 'styled-components';
 import { LoginProvider } from '../components/context/LoginContext';
 import { LearnProvider } from '../components/context/LearnContext';
+import { ProgressProvider } from '../components/context/ProgressContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient();
@@ -44,8 +45,10 @@ function MyApp({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={queryClient}>
         <LoginProvider>
           <LearnProvider>
-            <GlobalStyle />
-            <Component {...pageProps} />
+            <ProgressProvider>
+              <GlobalStyle />
+              <Component {...pageProps} />
+            </ProgressProvider>
           </LearnProvider>
         </LoginProvider>
       </QueryClientProvider>

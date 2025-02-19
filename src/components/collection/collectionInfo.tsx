@@ -550,7 +550,7 @@ const CollectionUpperDescription = styled.div`
 
   @media (max-width: 850px) {
     margin-top: -30px;
-    margin-left: 0vw;
+    margin-left: 21vw;
   }
 
   @media (max-width: 560px) {
@@ -793,8 +793,8 @@ const TypeImgBox = styled.div`
 
   @media (max-width: 850px) {
     margin-top: 66px;
-    // width: 50vw;
-    width: 30vw;
+    width: 52vw;
+    padding-left: 30vw;
   }
 
   @media (max-width: 560px) {
@@ -808,10 +808,12 @@ const TypeImgBoxWrapper = styled.span`
   justify-content: space-between;
   width: 30%;
 
-  border: 1px solid blue;
+  border: 1px solid black;
 
   @media (max-width: 850px) {
-    justify-content: flex-start;
+    justify-content: flex-end;
+    gap: 0px;
+    // width: 80%;
   }
 `;
 
@@ -821,7 +823,11 @@ const TypeImgList = styled.div`
   min-width: 30px;
   align-items: center;
 
-  // border: 1px solid blue;
+  border: 1px solid blue;
+
+  @media (max-width: 850px) {
+    justify-content: flex-start;
+  }
 `;
 
 const TypeImgWrapper = styled.div<{ index: number; totalImages: number }>`
@@ -860,16 +866,17 @@ const LineNDotWrapper = styled.div<{ numImages: number }>`
   justify-content: center;
   align-items: center;
 
-  // border: 1px solid green;
+  border: 1px solid green;
 
   margin-left: ${({ numImages }) =>
     `${numImages * 25}px`}; /* 마지막 아이콘 기준 여백 유지 */
   }
   
   @media (max-width: 850px) {
-    margin-left: ${({ numImages }) => ` ${numImages * 10}px`};
+    
   }
-    `;
+`;
+// margin-left: ${({ numImages }) => ` ${numImages * 5}px`};
 
 const LineNDot = styled.div`
   display: flex;
@@ -879,7 +886,7 @@ const LineNDot = styled.div`
   // position: absolute;
 
   @media (max-width: 850px) {
-    width: 100%;
+    // width: 100%;
   }
 
   @media (max-width: 560px) {
@@ -889,6 +896,10 @@ const LineNDot = styled.div`
 
 const LineWrapper = styled.div`
   flex: 1;
+
+  @media (max-width: 850px) {
+    // flex-grow: 1;
+  }
 `;
 
 // width: ${(props) => (props.numImages === 4 ? '100px' : props.numImages === 3 ? '80px' : '50px')};
@@ -1039,7 +1050,7 @@ const VideoNumber = styled.span`
     font-size: 8px;
     width: 12px;
     height: 12px;
-    padding-bottom: 0.45px;
+    padding-bottom: 0.5px;
   }
 
   @media (max-width: 560px) {

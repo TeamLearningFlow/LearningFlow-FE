@@ -207,6 +207,7 @@ const LearnPage: React.FC = () => {
       }
     }
     // episodeDataState를 제거하여 무한반복을 방지
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [episodeIdNumber]);
 
   useEffect(() => {
