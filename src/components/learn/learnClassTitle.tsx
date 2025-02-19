@@ -170,7 +170,7 @@ const ClassTitle: React.FC<ClassTitleProps> = ({
   // 만약 localStorage에 저장된 진도율이 100이면, 수강 완료 상태로 설정
   useEffect(() => {
     const storedProgress = localStorage.getItem(`progress-${episodeId}`);
-    if (storedProgress && Number(storedProgress) === 100) {
+    if (storedProgress && Number(storedProgress) >= 100) {
       setIsCompleted(true);
     }
   }, [episodeId, setIsCompleted]);
@@ -228,8 +228,26 @@ const ClassTitle: React.FC<ClassTitleProps> = ({
     setIsCompleted(false);
     setIsModalVisible(false);
     updateProgress(episodeId, 0);
+    context.actions.setIsCompleted(false);
     localStorage.setItem(`progress-${episodeId}`, '0');
   };
+
+  useEffect(() => {
+    const storedProgress = localStorage.getItem(`progress-${episodeId}`);
+    const storedCompletionStatus = context.state.isCompleted;
+
+    if (storedProgress) {
+      const progress = Number(storedProgress);
+      updateProgress(episodeId, progress);
+
+      if (progress >= 80 && !storedCompletionStatus) {
+        context.actions.setIsCompleted(true);
+        console.log('회색버튼!!');
+      }
+    } else if (storedCompletionStatus) {
+      context.actions.setIsCompleted(true);
+    }
+  }, [episodeId, context.state.isCompleted]);
 
   return (
     <TitleWrapper>

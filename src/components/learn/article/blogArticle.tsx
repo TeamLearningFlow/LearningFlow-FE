@@ -53,24 +53,52 @@ const BlogArticle: React.FC<blogArticleProps> = ({
   const router = useRouter();
   const { episodeId } = router.query;
 
-  // 진도율을 가져와서 스크롤 위치 설정
   useEffect(() => {
+    if (!episodeId || !articleWrapperRef.current) return;
+
     const loadProgress = () => {
       const savedProgress = localStorage.getItem(`progress-${episodeId}`);
-      if (savedProgress) {
-        const progress = parseInt(savedProgress, 10);
-        if (articleWrapperRef.current) {
-          const scrollHeight = articleWrapperRef.current.scrollHeight;
-          const scrollTop =
-            (progress / 100) *
-            (scrollHeight - articleWrapperRef.current.clientHeight);
-          articleWrapperRef.current.scrollTop = scrollTop; // 저장된 진도율 위치로 스크롤 이동
-          console.log(`스크롤 위치를 ${progress}%로 설정했습니다.`);
-        }
+      if (!savedProgress) {
+        localStorage.setItem(`progress-${episodeId}`, '0');
+        return;
+      }
+
+      const progress = parseInt(savedProgress, 10);
+      if (articleWrapperRef.current) {
+        const scrollHeight = articleWrapperRef.current.scrollHeight;
+        const scrollTop =
+          (progress / 100) *
+          (scrollHeight - articleWrapperRef.current.clientHeight);
+        articleWrapperRef.current.scrollTop = scrollTop;
       }
     };
 
-    loadProgress(); // 컴포넌트가 렌더링될 때 진도율을 불러와서 스크롤 위치 설정
+    // scrollHeight 변화 감지
+    const observer = new MutationObserver(() => {
+      if (articleWrapperRef.current) {
+        loadProgress();
+      }
+    });
+
+    observer.observe(articleWrapperRef.current, {
+      childList: true, // 내부 요소 추가/변경 감지
+      subtree: true, // 하위 요소까지 감지
+    });
+
+    // 일정 간격으로 progress 변경 감지 (다시 학습하기 버튼)
+    const intervalId = setInterval(() => {
+      const savedProgress = localStorage.getItem(`progress-${episodeId}`);
+      if (savedProgress === '0') {
+        loadProgress();
+      }
+    }, 1000);
+
+    loadProgress();
+
+    return () => {
+      observer.disconnect(); // Cleanup
+      clearInterval(intervalId); // Cleanup
+    };
   }, [episodeId]);
 
   useEffect(() => {
@@ -87,7 +115,7 @@ const BlogArticle: React.FC<blogArticleProps> = ({
 
         // 블로그 API 호출
         const blogResponse = await axios.get(
-          `http://onboarding.p-e.kr:8080/resources/${episodeId}/blog`,
+          `https://onboarding.p-e.kr/resources/${episodeId}/blog`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -103,7 +131,7 @@ const BlogArticle: React.FC<blogArticleProps> = ({
 
         // /content 호출하여 PNG 이미지 URL 얻기
         const contentResponse = await axios.get(
-          `http://onboarding.p-e.kr:8080/resources/${episodeId}/blog/content`,
+          `https://onboarding.p-e.kr/resources/${episodeId}/blog/content`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -133,7 +161,7 @@ const BlogArticle: React.FC<blogArticleProps> = ({
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        `http://onboarding.p-e.kr:8080/resources/${episodeId}/save-progress`,
+        `https://onboarding.p-e.kr/resources/${episodeId}/save-progress`,
         // { resourceType: 'TEXT', progress: scrolled },
         { resourceType: 'TEXT', progress: scrolled },
         {
@@ -158,7 +186,7 @@ const BlogArticle: React.FC<blogArticleProps> = ({
 
     try {
       const response = await axios.post(
-        `http://onboarding.p-e.kr:8080/resources/${episodeId}/update-complete`,
+        `https://onboarding.p-e.kr/resources/${episodeId}/update-complete`,
         {},
         {
           headers: {
