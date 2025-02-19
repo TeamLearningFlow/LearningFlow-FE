@@ -42,7 +42,7 @@ const VerifyEmail: React.FC = () => {
             localStorage.setItem('email', response.data.result);
           }
 
-          router.replace(`/login`); // 일단 로그인 페이지로 이동하도록 수정
+          window.location.href = '/mypage/profile';
         } else {
           console.log('토큰 무효');
           router.replace('/'); // 홈 페이지로 이동
