@@ -60,7 +60,7 @@ const ClassIndex: React.FC<ClassIndexProps> = ({ classData, collection }) => {
       // resourceSource에 따라 API 경로 설정
       const resourceType =
         classData.resourceSource === 'youtube' ? 'youtube' : 'blog';
-      const apiUrl = `http://onboarding.p-e.kr:8080/resources/${episodeId}/${resourceType}`;
+      const apiUrl = `https://onboarding.p-e.kr/resources/${episodeId}/${resourceType}`;
 
       // API 요청
       const response = await axios.get(apiUrl, { headers });

@@ -119,7 +119,7 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
       const token = localStorage.getItem('token');
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
       const response = await axios.post(
-        `http://onboarding.p-e.kr:8080/resources/${episodeId}/save-progress`,
+        `https://onboarding.p-e.kr/resources/${episodeId}/save-progress`,
         {
           resourceType: 'VIDEO',
           // progress 필드에 계산된 progressValue(백분율)를 전달합니다.

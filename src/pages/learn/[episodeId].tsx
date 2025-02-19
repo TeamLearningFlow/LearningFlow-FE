@@ -216,7 +216,7 @@ const LearnPage: React.FC = () => {
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
       const youtubeResponse = await axios.get(
-        `http://onboarding.p-e.kr:8080/resources/${episodeId}/youtube`,
+        `https://onboarding.p-e.kr/resources/${episodeId}/youtube`,
         { headers },
       );
 
@@ -231,7 +231,7 @@ const LearnPage: React.FC = () => {
       }
 
       const blogResponse = await axios.get(
-        `http://onboarding.p-e.kr:8080/resources/${episodeId}/blog`,
+        `https://onboarding.p-e.kr/resources/${episodeId}/blog`,
         { headers },
       );
 

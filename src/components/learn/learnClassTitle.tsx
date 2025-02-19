@@ -188,7 +188,7 @@ const ClassTitle: React.FC<ClassTitleProps> = ({ episodeId, episodeData, isCompl
         ? { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
         : {};
       const response = await axios.post(
-        `http://onboarding.p-e.kr:8080/resources/${episodeId}/update-complete`,
+        `https://onboarding.p-e.kr/resources/${episodeId}/update-complete`,
         { progress: targetProgress },
         { headers }
       );
