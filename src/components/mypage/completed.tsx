@@ -196,26 +196,32 @@ const Completed: React.FC<CompletedProps> = ({ completedCollections }) => {
               gap: '24px',
             }}
           >
-            {visibleCollections.length > 0 ? (
-              visibleCollections.map((collection, index) => (
-                <motion.div
-                  key={collection.collectionId}
-                  onMouseEnter={() => handleMouseEnter(index)}
-                  onMouseLeave={() => handleMouseLeave(index)}
-                  layout
-                >
-                  <CompletedBoardingPass
-                    collection={collection}
-                    showHoverCollection={hoverStates[index]}
-                  />
-                </motion.div>
-              ))
-            ) : (
-              <EmptyCompleted />
-            )}
+            {visibleCollections.length > 0
+              ? visibleCollections.map((collection, index) => (
+                  <motion.div
+                    key={collection.collectionId}
+                    onMouseEnter={() => handleMouseEnter(index)}
+                    onMouseLeave={() => handleMouseLeave(index)}
+                    layout
+                  >
+                    <CompletedBoardingPass
+                      collection={collection}
+                      showHoverCollection={hoverStates[index]}
+                    />
+                  </motion.div>
+                ))
+              : null}
           </motion.div>
         </AnimatePresence>
       </CollectionWrapper>
+
+      {visibleCollections.length === 0 && (
+        <div
+          style={{ display: 'flex', justifyContent: 'center', width: '100%' }}
+        >
+          <EmptyCompleted />
+        </div>
+      )}
     </CompletedWrapper>
   );
 };

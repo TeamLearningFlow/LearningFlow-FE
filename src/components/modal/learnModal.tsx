@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 interface LearnModalProps {
@@ -7,15 +7,18 @@ interface LearnModalProps {
   onRetakeClass: () => void;
 }
 
-const LearnModal: React.FC<LearnModalProps> = ({ onClose, episodeId, onRetakeClass }) => {
-
+const LearnModal: React.FC<LearnModalProps> = ({
+  onClose,
+  episodeId,
+  onRetakeClass,
+}) => {
   // const [isClicked, setIsClicked] = useState(false);
 
-  
   const ReTakeClass = () => {
     // setIsClicked(true);
     // 진도율을 0으로 업데이트 (API 호출 없이 localStorage와 부모 콜백으로 처리)
-    localStorage.setItem(`progress-${episodeId}`, "0");
+    localStorage.setItem(`progress-${episodeId}`, '0');
+
     // 부모에서 진도율 0 업데이트 및 기타 상태 초기화 로직 실행
     onRetakeClass();
     onClose();

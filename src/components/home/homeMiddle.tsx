@@ -93,13 +93,13 @@ const StepBox = styled.div<{ isActive: boolean }>`
   position: relative;
   padding: 32px 30px;
   width: 384px;
-  height: 172px;
+  // height: 172px;
   border-radius: 9.302px;
   background: ${({ isActive }) => (isActive ? '#5e52ff' : '#fff')};
   box-shadow: ${({ isActive }) =>
     isActive ? 'none' : '0px 3.721px 8.558px 0px #e9e7ff'};
   transition: all 0.3s ease-in-out;
-  white-space: nowrap;
+  // white-space: nowrap;
   z-index: 1;
 
   @media (max-width: 480px) {
@@ -138,7 +138,7 @@ const NotebookImage = styled(Image)<{ isHovered: boolean }>`
   position: absolute;
   width: 100%;
   max-width: 1200px;
-  height: 674px;
+  max-height: 674px;
   object-fit: contain;
   opacity: ${({ isHovered }) => (isHovered ? '1' : '0')};
   transform: translateY(${({ isHovered }) => (isHovered ? '0' : '200px')});
@@ -150,15 +150,20 @@ const NotebookImage = styled(Image)<{ isHovered: boolean }>`
 
   @media (max-width: 1024px) {
     max-width: 900px;
-    max-height: 50vh;
+    max-height: 32vh;
+    margin-bottom: 25px;
   }
 
   @media (max-width: 768px) {
     max-width: 600px;
+    max-height: 32vh;
+    margin-bottom: 18px;
   }
 
   @media (max-width: 480px) {
-    max-width: 400px;
+    max-width: 450px;
+    max-height: 674px;
+    margin-bottom: 20px;
   }
 `;
 

@@ -10,7 +10,7 @@ const EmptyWrapper = styled.div`
   justify-content: center;
   width: 100%;
   text-align: center;
-  grid-column: span 4;
+  margin-top: 50px;
 `;
 
 const EmptyTitle = styled.div`

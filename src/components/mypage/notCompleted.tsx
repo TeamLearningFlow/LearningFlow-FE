@@ -358,18 +358,28 @@ const NotCompleted: React.FC<{ episodes: EpisodeData[] }> = ({ episodes }) => {
               gap: '24px',
             }}
           >
-            {validEpisodes.length > 0 ? (
-              validEpisodes.slice(0, itemsShown).map((episode) => (
-                <motion.div key={episode.resourceId} layout>
-                  <CollectionItem episode={episode} />
-                </motion.div>
-              ))
-            ) : (
-              <EmptyLearned />
-            )}
+            {validEpisodes.length > 0
+              ? validEpisodes.slice(0, itemsShown).map((episode) => (
+                  <motion.div key={episode.resourceId} layout>
+                    <CollectionItem episode={episode} />
+                  </motion.div>
+                ))
+              : null}
           </motion.div>
         </AnimatePresence>
       </CollectionWrapper>
+
+      {validEpisodes.length === 0 && (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            width: '100%',
+          }}
+        >
+          <EmptyLearned />
+        </div>
+      )}
     </NotCompletedWrapper>
   );
 };

@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import Image from 'next/image';
+import MessageIcon from '/public/messageIcon.svg';
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -12,46 +14,62 @@ const ModalOverlay = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 999;
-  white-space: nowrap;
 `;
 
 const ModalContainer = styled.div`
-  background: white;
-  // width: 456px;
+  background: #fff;
   padding: 36px;
   border-radius: 16px;
+  width: auto;
   text-align: center;
-  background: #fff;
   white-space: nowrap;
 `;
 
-const ModalTitle = styled.h2`
+const Title = styled.h2`
+  text-align: left;
+  color: #1f1f1f;
   font-size: 22px;
   font-style: normal;
   font-weight: 600;
   line-height: 150%; /* 33px */
   letter-spacing: -0.44px;
-  color: #1f1f1f;
-  text-align: left;
   margin-bottom: 16px;
 `;
 
-const ModalMessage = styled.p`
+const EmailBox = styled.div`
+  display: flex;
+  align-items: center;
+  background: #f1f1f3;
+  padding: 8px 16px;
+  border-radius: 4px;
+  text-align: left;
+  gap: 8px;
+  margin-bottom: 16px;
+`;
+
+const EmailText = styled.span`
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%; /* 27px */
+  letter-spacing: -0.36px;
+  color: #323538;
+`;
+
+const Message = styled.p`
+  color: #64696e;
   font-size: 20px;
   font-style: normal;
   font-weight: 500;
   line-height: 150%; /* 30px */
   letter-spacing: -0.4px;
-  color: #64696e;
   text-align: left;
-  margin-bottom: 24px;
-  white-space: nowrap;
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: flex-end;
-  width: 100%;
+  margin-top: 24px;
 `;
 
 const Button = styled.button`
@@ -59,8 +77,7 @@ const Button = styled.button`
   color: #fff;
   border: none;
   padding: 6px 16px;
-  justify-content: center;
-  align-items: center;
+  border-radius: 8px;
   font-feature-settings:
     'liga' off,
     'clig' off;
@@ -69,32 +86,33 @@ const Button = styled.button`
   font-weight: 500;
   line-height: 150%; /* 27px */
   letter-spacing: -0.36px;
-  border-radius: 8px;
   cursor: pointer;
+  white-space: nowrap;
 `;
 
 interface PasswordChangeCheckProps {
+  email: string;
   onClose: () => void;
 }
 
 const PasswordChangeModal: React.FC<PasswordChangeCheckProps> = ({
+  email,
   onClose,
 }) => {
-
-  const handleConfirm = () => {
-    onClose();
-  };
-
   return (
     <ModalOverlay>
       <ModalContainer>
-        <ModalTitle>비밀번호 재인증 메일 발송</ModalTitle>
-        <ModalMessage>
-          재인증 메일을 보내드렸어요.
-          <br /> 메일이 확인되지 않을 경우, 스팸함을 확인해주세요.
-        </ModalMessage>
+        <Title>재인증 메일 발송</Title>
+        <EmailBox>
+          <Image src={MessageIcon} alt="Message Icon" width={20} height={20} />
+          <EmailText>{email}</EmailText>
+        </EmailBox>
+        <Message>
+          위 이메일로 재인증 메일을 보내드렸어요. <br />
+          메일이 확인되지 않을 경우, 스팸함을 확인해주세요.
+        </Message>
         <ButtonContainer>
-          <Button onClick={handleConfirm}>확인</Button>
+          <Button onClick={onClose}>확인</Button>
         </ButtonContainer>
       </ModalContainer>
     </ModalOverlay>
