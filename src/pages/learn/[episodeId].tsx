@@ -101,6 +101,8 @@ const LearnPage: React.FC = () => {
   const [title, setTitle] = useState<string>('');
   const [field, setField] = useState<string>('');
   const [youtubeContent, setYoutubeContent] = useState<string>('');
+  const [episodeDataState, setEpisodeDataState] = useState<any>(null);
+  
   const context = useContext(LearnContext);
   const { updateProgress } = useContext(ProgressContext);
   const router = useRouter();
@@ -110,7 +112,7 @@ const LearnPage: React.FC = () => {
   const episodeIdNumber = Array.isArray(episodeId) ? Number(episodeId[0]) : Number(episodeId);
 
   // query로 전달받은 JSON 문자열을 파싱 (존재할 경우)
-  const parsedEpisodeData = episodeData ? JSON.parse(episodeData as string) : null;
+  // const parsedEpisodeData = episodeData ? JSON.parse(episodeData as string) : null;
   const parsedCollectionData = collectionData ? JSON.parse(collectionData as string) : null;
 
   // episodeData가 존재하면 파싱된 데이터를 기반으로 상태 업데이트
@@ -118,6 +120,7 @@ const LearnPage: React.FC = () => {
     if (episodeData) {
       try {
         const parsedData = JSON.parse(episodeData as string);
+        setEpisodeDataState(parsedData);
         if (parsedData.result.resourceType === 'VIDEO') {
           setType('youtube');
           setTitle(parsedData.result.urlTitle);
@@ -133,17 +136,40 @@ const LearnPage: React.FC = () => {
         console.error('episodeData 파싱 실패:', error);
       }
     } else if (episodeId) {
-      // episodeData가 없으면 백엔드에서 데이터를 가져옴
       checkResourceType();
     }
   }, [episodeData, episodeId]);
 
+
   useEffect(() => {
-    if (parsedEpisodeData) {
-      //console.log('API에서 받은 article 데이터:', parsedEpisodeData);
-      console.log('영상 진도율 (progress):', parsedEpisodeData.result.progress);
+    if (episodeIdNumber) {
+      const storedProgress = localStorage.getItem(`progress-${episodeIdNumber}`);
+      if (storedProgress) {
+        updateProgress(episodeIdNumber, Number(storedProgress));
+        // episodeDataState가 이미 있다면, 동일한 값인지 확인 후 업데이트
+        if (episodeDataState && Number(storedProgress) !== episodeDataState.result.progress) {
+          setEpisodeDataState((prev: any) => ({
+            ...prev,
+            result: {
+              ...prev.result,
+              progress: Number(storedProgress),
+            },
+          }));
+        }
+      }
     }
-  }, [parsedEpisodeData]);
+    // episodeDataState를 제거하여 무한반복을 방지
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [episodeIdNumber]);
+  
+
+
+  useEffect(() => {
+    if (episodeDataState) {
+      console.log('영상 진도율 (progress):', episodeDataState.result.progress);
+    }
+  }, [episodeDataState]);
+
 
   const checkResourceType = async () => {
     try {
@@ -224,24 +250,23 @@ const LearnPage: React.FC = () => {
               <>
                 {type === 'youtube' ? (
                   <Article
-                  videoId={youtubeContent}
-                  isCompleted={context.state.isCompleted}
-                  onProgressChange={(progress) => {
-                    //console.log(`LearnPage - Article에서 전달받은 진도율: ${progress}%`);
-                    updateProgress(episodeIdNumber, progress);
-                    localStorage.setItem(`progress-${episodeIdNumber}`, progress.toString());
-                  }}
-                />
+                    videoId={youtubeContent}
+                    isCompleted={context.state.isCompleted}
+                    onProgressChange={(progress) => {
+                      updateProgress(episodeIdNumber, progress);
+                      localStorage.setItem(`progress-${episodeIdNumber}`, progress.toString());
+                    }}
+                  />
                 ) : (
                   <BlogArticle
                     episodeId={episodeIdNumber}
                     isCompleted={context.state.isCompleted}
                   />
                 )}
-                {parsedEpisodeData && (
+                {episodeDataState && (
                   <ClassTitle
                     episodeId={episodeIdNumber}
-                    episodeData={parsedEpisodeData}
+                    episodeData={episodeDataState.result}
                     isCompleted={context.state.isCompleted}
                   />
                 )}

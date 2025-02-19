@@ -61,23 +61,25 @@ interface CollectionListProps {
 
     // mergedResource: 각 에피소드에 대해, 전역 progress가 있으면 반영하고 없으면 기존값 사용
     const mergedResource = resource.map((episode: any) => {
-      // 먼저 전역 상태에서 progress를 가져옴
+      // 전역 상태(ProgressContext)에서 진도율을 가져옴
       const globalProgress = progressByEpisode[episode.episodeId];
-      // 없다면 localStorage에서 가져옴
-      const localProgress = localStorage.getItem(
-        `progress-${episode.episodeId}`,
-      );
+      // 클라이언트(브라우저)에서 localStorage에 저장된 진도율을 가져옴
+      const localProgress = typeof window !== 'undefined'
+        ? localStorage.getItem(`progress-${episode.episodeId}`)
+        : null;
+      // 우선 순위: 전역 상태 > localStorage > API 원본 (null이면 0으로 처리)
       const progress =
         globalProgress !== undefined
           ? globalProgress
           : localProgress !== null
-            ? Number(localProgress)
-            : (episode.progress ?? 0);
-
+          ? Number(localProgress)
+          : (episode.progress ?? 0);
+      
       return {
         ...episode,
         progress,
-        completed: progress >= 80, // 진도율이 80 이상이면 completed를 true로 설정
+        // 진도율이 80 이상이면 completed를 true로 설정
+        completed: progress >= 80,
       };
     });
 
@@ -111,20 +113,20 @@ interface CollectionListProps {
       setAllProgressed(isAllProgressed); // 모든 강의가 진도율 80 이상일 때, 상태 업데이트
     }, [mergedResource]);
 
+    
     useEffect(() => {
       if (mergedResource && mergedResource.length > 0) {
         console.log(
-          "각 에피소드 progress 및 completed (업데이트 후):",
+          "각 에피소드 progress 및 completed:",
           mergedResource.map((episode: any) => ({
             episodeNumber: episode.episodeNumber,
             progress: episode.progress,
             completed: episode.completed,
           }))
         );
-        // 원본 collectionData의 resource도 업데이트하고 싶을 때
-        // setCollection(prev => prev ? { ...prev, resource: mergedResource } : prev);
       }
     }, [mergedResource]);
+    
     
 
     return (

@@ -15,31 +15,15 @@ const LearnModal: React.FC<LearnModalProps> = ({ onClose, episodeId, onRetakeCla
   const [isClicked, setIsClicked] = useState(false);
   const [progress, setProgress] = useState(0);
   
-    const ReTakeClass = async () => {
-      setIsClicked(true);
-      try {
-        const token = localStorage.getItem("token");
-        const headers = token ? { Authorization: `Bearer ${token}` } : {};
-        
-        const response = await axios.post(
-          `http://onboarding.p-e.kr:8080/resources/${episodeId}/update-complete`, 
-          {},
-          { headers }
-        );
-    
-        if (response.status === 200 && response.data?.result?.isComplete) {
-          setProgress(0);
-          console.log("다시 학습 처리 성공:", response.data);
-          console.log(`변경된 진도율(초기화): ${progress}%`);
-          onRetakeClass();
-          onClose();
-        }
-      } catch (error) {
-        console.error("수강 상태 변경 실패:", error);
-      } finally { 
-        setIsClicked(false);
-      }
-    };
+  const ReTakeClass = () => {
+    setIsClicked(true);
+    // 진도율을 0으로 업데이트 (API 호출 없이 localStorage와 부모 콜백으로 처리)
+    localStorage.setItem(`progress-${episodeId}`, "0");
+    // 부모에서 진도율 0 업데이트 및 기타 상태 초기화 로직 실행
+    onRetakeClass();
+    onClose();
+    setIsClicked(false);
+  };
     
   return (
     <>
