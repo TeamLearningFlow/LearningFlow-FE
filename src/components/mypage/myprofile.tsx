@@ -598,20 +598,20 @@ const MyProfile = ({
           )
           .filter(Boolean);
 
-        /*const preferredMedia =
+        const preferType =
           profileData.preferredMedia < 40
             ? 'TEXT'
             : profileData.preferredMedia > 60
               ? 'VIDEO'
-              : 'NO_PREFERENCE'; */
+              : 'NO_PREFERENCE';
 
         const payload = {
           name: profileData.nickname,
           job: jobKey,
-          imgProfileUrl: profileData.profileImage,
-          imgBannerUrl: profileData.bannerImage,
+          profileImgUrl: profileData.profileImage,
+          bannerImgUrl: profileData.bannerImage,
           interestFields: interestFields, // 변환된 관심분야 리스트
-          // preferType: preferredMedia,
+          preferType: preferType,
         };
 
         console.log('전송 데이터:', payload);
@@ -632,15 +632,15 @@ const MyProfile = ({
           setProfileData((prev) => ({
             ...prev,
             profileImage:
-              response.data.result.imgProfileUrl || prev.profileImage, // 서버 응답이 없으면 기존 값 유지
-            bannerImage: response.data.result.imgBannerUrl || prev.bannerImage, // 배너 이미지도 마찬가지
+              response.data.result.profileImgUrl || prev.profileImage, // 서버 응답이 없으면 기존 값 유지
+            bannerImage: response.data.result.bannerImgUrl || prev.bannerImage, // 배너 이미지도 마찬가지
           }));
 
           setOriginalProfileData((prev) => ({
             ...prev,
             profileImage:
-              response.data.result.imgProfileUrl || prev.profileImage,
-            bannerImage: response.data.result.imgBannerUrl || prev.bannerImage,
+              response.data.result.profileImgUrl || prev.profileImage,
+            bannerImage: response.data.result.bannerImgUrl || prev.bannerImage,
           }));
 
           setIsEditing(false);

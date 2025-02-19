@@ -60,15 +60,16 @@ const StatusTag = styled.span<{ status?: string }>`
   left: 16px;
   height: 22px;
   display: ${(props) =>
-    props.status === '학습중' || props.status === '학습완료'
+    props.status === 'IN_PROGRESS' || props.status === 'COMPLETED'
       ? 'inline-flex'
       : 'none'};
   padding: 2px 8px;
   justify-content: center;
   align-items: center;
   border-radius: 4px;
-  background: ${(props) => (props.status === '학습중' ? '#5e52ff' : '#F5F5F5')};
-  color: ${(props) => (props.status === '학습중' ? '#fff' : '#4F5357')};
+  background: ${(props) =>
+    props.status === 'IN_PROGRESS' ? '#5e52ff' : '#F5F5F5'};
+  color: ${(props) => (props.status === 'IN_PROGRESS' ? '#fff' : '#4F5357')};
 
   /* 100 */
   box-shadow: 0.74px 0.74px 1.47px 0px rgba(0, 0, 0, 0.25);
@@ -306,9 +307,9 @@ const ProgressBarFull = styled.div`
   border-radius: 17.515px;
 `;
 
-const ProgressBar = styled.div`
+const ProgressBar = styled.div<{ percentage: number }>`
   height: 100%;
-  width: 20%;
+  width: ${(props) => props.percentage}%;
   background-color: #5e52ff;
   border-radius: 17.515px;
 `;
@@ -422,6 +423,9 @@ const Number = styled.span<{ status?: string }>`
   font-weight: 500;
   line-height: 12px; /* 150% */
   letter-spacing: -0.16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const CollectionWrapper = styled(ColumnFlexDiv)`
@@ -452,13 +456,14 @@ const TextWrapper = styled.div`
 const Label = styled.span<{
   color: string;
   fontSize?: string;
+  fontWeight?: number;
   letterSpacing?: string;
   lineHeight?: string;
   width?: string;
 }>`
   color: ${(props) => props.color};
   font-size: ${(props) => props.fontSize || '10px'};
-  font-weight: 350;
+  font-weight: ${(props) => props.fontWeight || 350};
   line-height: ${(props) => props.lineHeight || '15px'};
   letter-spacing: ${(props) => props.letterSpacing || '-0.2px'};
   width: ${(props) => props.width};
@@ -505,6 +510,11 @@ const interestFieldMap: Record<string, string> = {
   BUSINESS_PRODUCTIVITY: '업무생산성',
   FOREIGN_LANGUAGE: '외국어',
   CAREER: '취업',
+};
+
+const LearningStatusMap: Record<string, string> = {
+  IN_PROGRESS: '학습중',
+  COMPLETED: '학습완료',
 };
 
 const PlatformIcon = (source: string) => {
@@ -781,13 +791,7 @@ const DashedLine = ({ width, path }: { width?: number; path?: string }) => (
   </svg>
 );
 
-const HeaderLine = ({
-  data,
-  status,
-}: {
-  data: SearchResult;
-  status: string;
-}) => {
+const HeaderLine = ({ data }: { data: SearchResult }) => {
   const areArraysEqual = (arr1: string[], arr2: string[]) => {
     return (
       arr1.length === arr2.length &&
@@ -795,7 +799,7 @@ const HeaderLine = ({
     );
   };
 
-  if (status === '학습완료') {
+  if (data.learningStatus === 'COMPLETED') {
     return (
       <LineWrapper status="학습완료">
         <DashedLine width={95} path="M0 1H95" />
@@ -958,25 +962,19 @@ const BookmarkButton = ({ collection }: { collection: SearchResult }) => {
   );
 };
 
-const HoverCollection = ({
-  data,
-  status,
-}: {
-  data: SearchResult;
-  status: string;
-}) => {
+const HoverCollection = ({ data }: { data: SearchResult }) => {
   return (
     <HoverWrapper>
       <HoverBackgroundTopWrapper>
         <Image src={HoverBackgroundTop} alt="hoverbackgroundtop" />
         <BookmarkButton collection={data} />
       </HoverBackgroundTopWrapper>
-      {status === '학습완료' ? (
+      {data.learningStatus === 'COMPLETED' ? (
         <>
           <Image src={HoverBackground} alt="hover background" />
           <CollectionHeader>
             <Number status="학습완료">총 {data.amount}회차</Number>
-            <HeaderLine data={data} status="학습완료" />
+            <HeaderLine data={data} />
             <CollectionAmount data={data} />
           </CollectionHeader>
 
@@ -1004,8 +1002,11 @@ const HoverCollection = ({
                   fontSize="12px"
                   lineHeight="18px"
                   letterSpacing="-0.24px"
+                  fontWeight={500}
                 >
-                  2025.XX.XX ~ 2025.XX.XX
+                  {data.startDate[0]}.{data.startDate[1]}.{data.startDate[2]} ~
+                  {data.completedDate[0]}.{data.completedDate[1]}.
+                  {data.completedDate[2]}
                 </Label>
               </Content>
             </ContentWrapper>
@@ -1024,7 +1025,7 @@ const HoverCollection = ({
           <Image src={HoverBackground} alt="hover background" />
           <CollectionHeader>
             <PlatformSet data={data} />
-            <HeaderLine data={data} status="" />
+            <HeaderLine data={data} />
             <CollectionAmount data={data} />
           </CollectionHeader>
           <CollectionWrapper>
@@ -1047,13 +1048,9 @@ const HoverCollection = ({
   );
 };
 
-const BoardingPassBottom = ({
-  data,
-  status,
-}: {
-  data: SearchResult;
-  status?: string;
-}) => {
+const BoardingPassBottom = ({ data }: { data: SearchResult }) => {
+  console.log('boardingpass data: ', data);
+
   const [departureLabel, setDepartureLabel] = useState('');
   const [arrivalLabel, setArrivalLabel] = useState('');
   const [lineWidth, setLineWidth] = useState(0);
@@ -1120,15 +1117,15 @@ const BoardingPassBottom = ({
 
   return (
     <Bottom>
-      {status == '학습중' ? (
+      {data.learningStatus == 'IN_PROGRESS' ? (
         <ProgressWrapper>
           <ProgressLabel>
             <Image src={OnStudying} alt=""></Image>학습중
           </ProgressLabel>
           <ProgressBarFull>
-            <ProgressBar />
+            <ProgressBar percentage={data.progressRatePercentage} />
           </ProgressBarFull>
-          <ProgressRate>4 / 20회차 (20%)</ProgressRate>
+          <ProgressRate>{data.progressRatio}</ProgressRate>
         </ProgressWrapper>
       ) : (
         <>
@@ -1177,7 +1174,9 @@ const BoardingPass = ({
     <Container onClick={handleCollectionClick}>
       <Image src={BoardingPassContainer} alt="boarding pass" />
       <BoardingPassImage src={CollectionImage} alt="collection image" />
-      <StatusTag status=""></StatusTag>
+      <StatusTag status={data.learningStatus}>
+        {LearningStatusMap[data.learningStatus]}
+      </StatusTag>
       <Body>
         <TagWrapper>
           <Category interestField={data.interestField}>
@@ -1189,8 +1188,8 @@ const BoardingPass = ({
         <Title>{data.title}</Title>
         <Author>{data.creator}</Author>
       </Body>
-      <BoardingPassBottom data={data} status="" />
-      {showHoverCollection && <HoverCollection data={data} status="" />}
+      <BoardingPassBottom data={data} />
+      {showHoverCollection && <HoverCollection data={data} />}
     </Container>
   );
 };
