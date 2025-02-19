@@ -295,7 +295,7 @@ const WindowInGif = styled.img`
   border-radius: 180px;
   clip-path: inset(0% 15% 0% 20% round 180px);
   z-index: 1;
-  object-fit: contain;
+  object-fit: cover;
   transform: rotate(-25deg);
 
   @media (max-width: 768px) {
@@ -425,7 +425,7 @@ const HomeTop: React.FC = () => {
           <Image src={Airplane} alt="airplane" />
         </AirplaneWrapper>
         <WindowWrapper>
-          <WindowInGif src="/video.gif?v=2" alt="video" />
+          <WindowInGif src="/video.gif" alt="video" />
           <WindowImage
             src={Window}
             alt="window"
