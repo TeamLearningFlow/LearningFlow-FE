@@ -297,13 +297,6 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
     }
   };
 
-  /* const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewPassword(e.target.value);
-    setIsPasswordChecked(false);
-    setPasswordError('');
-    setIsPasswordValid(true);
-  }; */
-
   // 변경된 이메일 확인 후 유저 정보 업데이트
   const router = useRouter();
   const { emailResetCode } = router.query;
@@ -311,6 +304,8 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
   useEffect(() => {
     if (emailResetCode) {
       verifyEmailResetCode(emailResetCode as string);
+    } else {
+      fetchUserProfile(); // 변경된 이메일이 없으면 유저 정보만 불러오기
     }
   }, [emailResetCode]);
 
@@ -332,6 +327,30 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
       );
 
       if (response.data.isSuccess) {
+        setCurrentEmail(response.data.result);
+        localStorage.setItem('email', response.data.result);
+      }
+
+      fetchUserProfile();
+    } catch (error) {
+      console.error('이메일 검증 실패:', error);
+    }
+  };
+
+  const fetchUserProfile = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        router.replace('/login');
+        return;
+      }
+
+      const response = await axios.get('https://onboarding.p-e.kr/user', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.data.isSuccess) {
+        console.log('유저 정보 가져오기 성공:', response.data.result);
         setCurrentEmail(response.data.result.email);
         localStorage.setItem('email', response.data.result.email);
       }

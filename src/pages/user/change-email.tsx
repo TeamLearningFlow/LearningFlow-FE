@@ -42,8 +42,6 @@ const VerifyEmail: React.FC = () => {
             localStorage.setItem('email', response.data.result);
           }
 
-          // 새로운 이메일을 사용하여 유저 상태를 다시 불러옴
-
           // 로그인 유지한 채 마이페이지로 이동
           router.replace(`/mypage/profile?emailResetCode=${emailResetCode}`);
         } else {
