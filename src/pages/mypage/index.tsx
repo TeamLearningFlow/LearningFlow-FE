@@ -6,6 +6,8 @@ import Tab from '../../components/mypage/mypageTabMenu';
 import Footer from '@/components/homeFooter';
 import { CompletedCollectionData } from '@/types/types';
 
+import LoginProtected from '../../components/loginProtected';
+
 const DEFAULT_BANNER = 'linear-gradient(90deg, #5e52ff 0%, #383199 100%)';
 
 interface EpisodeData {
@@ -92,7 +94,7 @@ const MyPage = () => {
   }
   
   return (
-    <>
+    <LoginProtected>
       <Header />
       <ProfileBanner userInfo={userInfo} />
       <Tab
@@ -100,7 +102,7 @@ const MyPage = () => {
         completedCollections={completedCollections}
       />
       <Footer />
-    </>
+    </LoginProtected>
   );
 };
 

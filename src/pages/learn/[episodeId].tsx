@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import { LearnContext } from '../../components/context/LearnContext';
 import { ProgressContext } from '../../components/context/ProgressContext';
+import LoginProtected from '../../components/loginProtected';
 // import { useParams } from 'react-router-dom';
 import { useRouter } from 'next/router';
 import axios from 'axios';
@@ -264,88 +265,90 @@ const LearnPage: React.FC = () => {
   }
 
   return (
-    <PageWrapper>
-      <Header />
-      {parsedCollectionData &&
-        parsedCollectionData.title &&
-        parsedCollectionData.interestField && (
-          <TitleBar
-            data={{
-              title: parsedCollectionData.title,
-              interestField:
-                interestFieldMap[parsedCollectionData.interestField],
-            }}
-          />
+    <LoginProtected>
+      <PageWrapper>
+        <Header />
+        {parsedCollectionData &&
+          parsedCollectionData.title &&
+          parsedCollectionData.interestField && (
+            <TitleBar
+              data={{
+                title: parsedCollectionData.title,
+                interestField:
+                  interestFieldMap[parsedCollectionData.interestField],
+              }}
+            />
+          )}
+        {loading ? (
+          <BodyWrapper>
+            <TopWrapper>
+              <SkeletonArticle />
+              <SkeletonClassTitle />
+            </TopWrapper>
+            <MidWrapper>
+              <Note />
+            </MidWrapper>
+            <BottomWrapper>
+              <SkeletonClassList_S />
+            </BottomWrapper>
+          </BodyWrapper>
+        ) : (
+          <BodyWrapper>
+            <TopWrapper>
+              {parsedCollectionData && episodeId && (
+                <>
+                  {type === 'youtube' ? (
+                    <YoutubeArticle
+                      videoId={youtubeContent}
+                      isCompleted={context.state.isCompleted}
+                      onProgressChange={(progress) => {
+                        updateProgress(episodeIdNumber, progress);
+                        localStorage.setItem(
+                          `progress-${episodeIdNumber}`,
+                          progress.toString(),
+                        );
+                      }}
+                    />
+                  ) : (
+                    <BlogArticle
+                      blogId={blogContent}
+                      isCompleted={context.state.isCompleted}
+                      onProgressChange={(progress) => {
+                        updateProgress(episodeIdNumber, progress);
+                        localStorage.setItem(
+                          `progress-${episodeIdNumber}`,
+                          progress.toString(),
+                        );
+                      }}
+                    />
+                  )}
+                  {episodeDataState && (
+                    <ClassTitle
+                      episodeId={episodeIdNumber}
+                      episodeData={episodeDataState.result}
+                    />
+                  )}
+                </>
+              )}
+            </TopWrapper>
+            <MidWrapper>
+              {parsedCollectionData && episodeId && (
+                <Note episodeId={episodeIdNumber} />
+              )}
+            </MidWrapper>
+            <BottomWrapper>
+              {parsedCollectionData && (
+                <ClassList
+                  resource={parsedCollectionData.resource}
+                  currentEpisode={episodeIdNumber}
+                  collectionData={parsedCollectionData}
+                />
+              )}
+            </BottomWrapper>
+          </BodyWrapper>
         )}
-      {loading ? (
-        <BodyWrapper>
-          <TopWrapper>
-            <SkeletonArticle />
-            <SkeletonClassTitle />
-          </TopWrapper>
-          <MidWrapper>
-            <Note />
-          </MidWrapper>
-          <BottomWrapper>
-            <SkeletonClassList_S />
-          </BottomWrapper>
-        </BodyWrapper>
-      ) : (
-        <BodyWrapper>
-          <TopWrapper>
-            {parsedCollectionData && episodeId && (
-              <>
-                {type === 'youtube' ? (
-                  <YoutubeArticle
-                    videoId={youtubeContent}
-                    isCompleted={context.state.isCompleted}
-                    onProgressChange={(progress) => {
-                      updateProgress(episodeIdNumber, progress);
-                      localStorage.setItem(
-                        `progress-${episodeIdNumber}`,
-                        progress.toString(),
-                      );
-                    }}
-                  />
-                ) : (
-                  <BlogArticle
-                    blogId={blogContent}
-                    isCompleted={context.state.isCompleted}
-                    onProgressChange={(progress) => {
-                      updateProgress(episodeIdNumber, progress);
-                      localStorage.setItem(
-                        `progress-${episodeIdNumber}`,
-                        progress.toString(),
-                      );
-                    }}
-                  />
-                )}
-                {episodeDataState && (
-                  <ClassTitle
-                    episodeId={episodeIdNumber}
-                    episodeData={episodeDataState.result}
-                  />
-                )}
-              </>
-            )}
-          </TopWrapper>
-          <MidWrapper>
-            {parsedCollectionData && episodeId && (
-              <Note episodeId={episodeIdNumber} />
-            )}
-          </MidWrapper>
-          <BottomWrapper>
-            {parsedCollectionData && (
-              <ClassList
-                resource={parsedCollectionData.resource}
-                currentEpisode={episodeIdNumber}
-                collectionData={parsedCollectionData}
-              />
-            )}
-          </BottomWrapper>
-        </BodyWrapper>
-      )}
-    </PageWrapper>
+      </PageWrapper>
+    </LoginProtected>
   );
 };
 
