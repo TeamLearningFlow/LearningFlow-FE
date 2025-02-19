@@ -290,18 +290,20 @@ const WindowInVideo = styled.video`
   position: absolute;
   width: 100%;
   height: 100%;
-  top: 30.5%;
+  top: 3%;
   left: -1%;
   border-radius: 180px;
-  clip-path: inset(0% 15% 0% 20% round 180px);
+  clip-path: inset(0% 20% 0% 25% round 180px);
   z-index: 1;
-  object-fit: cover;
+  object-fit: contain;
   transform: rotate(-25deg);
 
   @media (max-width: 768px) {
-    top: 34%;
-    left: -1%;
-    clip-path: inset(0% 15% 0% 20% round 180px);
+  width: 80%;
+  height: 80%;
+    top: 13%;
+    left: -7%;
+    clip-path: inset(0% 20% 0% 28% round 180px);
   }
 
   @media (max-width: 470px) {
