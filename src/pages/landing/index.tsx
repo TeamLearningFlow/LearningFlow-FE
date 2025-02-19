@@ -86,7 +86,7 @@ const LandingPage: React.FC = () => {
       );
 
       console.log('회원가입 성공:', registerResponse.data);
-      alert('회원가입이 완료되었습니다.');
+      // alert('회원가입이 완료되었습니다.');
 
       // localStorage.removeItem('profileImgUrl'); // 기존에 저장된 이미지 삭제
 

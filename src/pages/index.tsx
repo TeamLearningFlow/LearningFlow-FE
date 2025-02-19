@@ -70,7 +70,7 @@ const HomePage = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-  
+
   const fetchHomeData = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -100,14 +100,16 @@ const HomePage = () => {
     <>
       {isLoggedIn ? <Header /> : <NotLoginHeader />}
 
+      {isModalOpen && (
+        <Wrapper>
+          <HomeModal onClose={handleCloseModal} />
+        </Wrapper>
+      )}
+
       {isLoggedIn && recentLearning ? (
         <>
           <Banner />
           <RecentCollection collectionInfo={recentLearning} />
-          <Wrapper>
-            {isModalOpen && <HomeModal onClose={handleCloseModal} />}
-            {!isModalOpen && <Main></Main>}
-          </Wrapper>
         </>
       ) : (
         <>
