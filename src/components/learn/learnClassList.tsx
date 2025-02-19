@@ -60,20 +60,37 @@ interface ClassListProps {
   collectionData: CollectionData;
 }
 
-const ClassList: React.FC<ClassListProps> = ({resource, collectionData}) => {
-  
+const ClassList: React.FC<ClassListProps> = ({ resource, collectionData }) => {
   return (
     <ComponentWrapper>
       {resource.map((classItem) => {
         if (classItem.progress >= 80) {
-          return <CompletedClass key={classItem.episodeNumber} resourceItem={classItem} collectionData={collectionData} />;
+          return (
+            <CompletedClass
+              key={classItem.episodeNumber}
+              {...classItem} // 수정 필요할 수도 있음 (일단 오류 방지)
+              collectionData={collectionData}
+            />
+          );
         } else if (classItem.progress > 0) {
-          return <CurrentClass key={classItem.episodeNumber} {...classItem} collectionData={collectionData} />;
+          return (
+            <CurrentClass
+              key={classItem.episodeNumber}
+              {...classItem}
+              collectionData={collectionData}
+            />
+          );
         } else {
-          return <NextClass key={classItem.episodeNumber} {...classItem} collectionData={collectionData} />;
+          return (
+            <NextClass
+              key={classItem.episodeNumber}
+              {...classItem}
+              collectionData={collectionData}
+            />
+          );
         }
       })}
-    </ComponentWrapper> 
+    </ComponentWrapper>
   );
 };
 

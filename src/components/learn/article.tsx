@@ -3,10 +3,18 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
+// Youtube api 전역 객체 선언
+declare global {
+  interface Window {
+    onYouTubeIframeAPIReady?: () => void;
+    YT: typeof YT;
+  }
+}
 
 interface YoutubeArticleProps {
   videoId?: string;
   onProgressChange?: (progress: number) => void;
+  isCompleted: boolean;
 }
 
 const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
@@ -15,7 +23,7 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
 }) => {
   const [progress, setProgress] = useState<number>(0);
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const playerRef = useRef<any>(null);
+  const playerRef = useRef<YT.Player | null>(null); // YouTube Player 인스턴스 저장
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const isTestMode = false;
   const router = useRouter();
@@ -89,6 +97,7 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
       console.log('영상 재생 시작 - 진도율 추적 준비중');
       // duration이 준비될 때까지 폴링
       const pollInterval = setInterval(() => {
+        if (!playerRef.current) return;
         const duration = playerRef.current.getDuration();
         console.log('영상 총 길이:', duration);
         if (duration > 0) {
@@ -96,6 +105,7 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
           startTrackingProgress();
         }
       }, 500);
+      
     } else {
       stopTrackingProgress();
     }

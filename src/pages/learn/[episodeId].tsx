@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { LearnContext } from '../../components/context/LearnContext';
 import { ProgressContext } from '../../components/context/ProgressContext';
-import { useParams } from 'react-router-dom';
+// import { useParams } from 'react-router-dom';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import styled from 'styled-components';
@@ -94,30 +94,58 @@ const interestFieldMap: Record<string, string> = {
   CAREER: '취업',
 };
 
-
 const LearnPage: React.FC = () => {
+  const [isClient, setIsClient] = useState(false);
+  // const { episodeId } = useParams<{ episodeId: number }>();
+  // const { collectionId } = useParams<{ collectionId: number }>();
+  // const [collectionData, setCollectionData] = useState<CollectionData | null>(null);
   const [type, setType] = useState<'youtube' | 'blog' | null>(null);
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState<string>('');
   const [field, setField] = useState<string>('');
-  const [youtubeContent, setYoutubeContent] = useState<string>('');
+  // const [progress, setProgress] = useState(0);
   const context = useContext(LearnContext);
+
+  if (!context) {
+    throw new Error('LearnContext를 찾을 수 없습니다.');
+  }
+  const { isCompleted } = context.state;
   const { updateProgress } = useContext(ProgressContext);
+  const [youtubeContent, setYoutubeContent] = useState<string>('');
+  const [episodeDataState, setEpisodeDataState] = useState<any>(null);
+
+  if (!context) {
+    throw new Error('LearnContext를 찾을 수 없습니다.');
+  }
+
   const router = useRouter();
   const { episodeId, episodeData, collectionData } = router.query;
 
-  // episodeId를 숫자로 변환
-  const episodeIdNumber = Array.isArray(episodeId) ? Number(episodeId[0]) : Number(episodeId);
+  // episodeId를 string 타입에서 숫자 타입으로 변환
+  const episodeIdNumber = Array.isArray(episodeId)
+    ? Number(episodeId[0])
+    : Number(episodeId);
 
   // query로 전달받은 JSON 문자열을 파싱 (존재할 경우)
-  const parsedEpisodeData = episodeData ? JSON.parse(episodeData as string) : null;
+  // const parsedEpisodeData = episodeData ? JSON.parse(episodeData as string) : null;
   const parsedCollectionData = collectionData ? JSON.parse(collectionData as string) : null;
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // ESLint 오류 방지용
+  useEffect(() => {
+    console.log('현재 Title:', title);
+    console.log('현재 Field:', field);
+  }, [title, field]);
 
   // episodeData가 존재하면 파싱된 데이터를 기반으로 상태 업데이트
   useEffect(() => {
     if (episodeData) {
       try {
         const parsedData = JSON.parse(episodeData as string);
+        setEpisodeDataState(parsedData);
         if (parsedData.result.resourceType === 'VIDEO') {
           setType('youtube');
           setTitle(parsedData.result.urlTitle);
@@ -133,17 +161,39 @@ const LearnPage: React.FC = () => {
         console.error('episodeData 파싱 실패:', error);
       }
     } else if (episodeId) {
-      // episodeData가 없으면 백엔드에서 데이터를 가져옴
       checkResourceType();
     }
   }, [episodeData, episodeId]);
 
+
   useEffect(() => {
-    if (parsedEpisodeData) {
-      //console.log('API에서 받은 article 데이터:', parsedEpisodeData);
-      console.log('영상 진도율 (progress):', parsedEpisodeData.result.progress);
+    if (episodeIdNumber) {
+      const storedProgress = localStorage.getItem(`progress-${episodeIdNumber}`);
+      if (storedProgress) {
+        updateProgress(episodeIdNumber, Number(storedProgress));
+        // episodeDataState가 이미 있다면, 동일한 값인지 확인 후 업데이트
+        if (episodeDataState && Number(storedProgress) !== episodeDataState.result.progress) {
+          setEpisodeDataState((prev: any) => ({
+            ...prev,
+            result: {
+              ...prev.result,
+              progress: Number(storedProgress),
+            },
+          }));
+        }
+      }
     }
-  }, [parsedEpisodeData]);
+    // episodeDataState를 제거하여 무한반복을 방지
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [episodeIdNumber]);
+
+
+  useEffect(() => {
+    if (episodeDataState) {
+      console.log('영상 진도율 (progress):', episodeDataState.result.progress);
+    }
+  }, [episodeDataState]);
+
 
   const checkResourceType = async () => {
     try {
@@ -191,6 +241,11 @@ const LearnPage: React.FC = () => {
     console.log(`현재 에피소드 ID: ${episodeIdNumber}`);
   }, [episodeIdNumber]);
 
+
+  if (!isClient) {
+    return null;
+  }
+
   return (
     <PageWrapper>
       <Header />
@@ -220,28 +275,27 @@ const LearnPage: React.FC = () => {
       ) : (
         <BodyWrapper>
           <TopWrapper>
-            {parsedCollectionData && episodeId && (
+          {parsedCollectionData && episodeId && (
               <>
                 {type === 'youtube' ? (
                   <Article
-                  videoId={youtubeContent}
-                  isCompleted={context.state.isCompleted}
-                  onProgressChange={(progress) => {
-                    //console.log(`LearnPage - Article에서 전달받은 진도율: ${progress}%`);
-                    updateProgress(episodeIdNumber, progress);
-                    localStorage.setItem(`progress-${episodeIdNumber}`, progress.toString());
-                  }}
-                />
+                    videoId={youtubeContent}
+                    isCompleted={context.state.isCompleted}
+                    onProgressChange={(progress) => {
+                      updateProgress(episodeIdNumber, progress);
+                      localStorage.setItem(`progress-${episodeIdNumber}`, progress.toString());
+                    }}
+                  />
                 ) : (
                   <BlogArticle
                     episodeId={episodeIdNumber}
                     isCompleted={context.state.isCompleted}
                   />
                 )}
-                {parsedEpisodeData && (
+                {episodeDataState && (
                   <ClassTitle
                     episodeId={episodeIdNumber}
-                    episodeData={parsedEpisodeData}
+                    episodeData={episodeDataState.result}
                     isCompleted={context.state.isCompleted}
                   />
                 )}
