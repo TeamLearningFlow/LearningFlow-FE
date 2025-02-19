@@ -34,6 +34,9 @@ const Banner = styled.div<{ imgUrl: string }>`
   border-radius: 32px 32px 0px 0px;
   background: ${({ imgUrl }) =>
     imgUrl.startsWith('linear-gradient') ? imgUrl : `url(${imgUrl})`};
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
   /* 반응형 설정 */
   @media (max-width: 1024px) {
@@ -127,7 +130,7 @@ const PersonalInfo = styled.div`
   gap: 10px;
   white-space: nowrap;
   width: 100%;
-  // overflow: hidden; 
+  // overflow: hidden;
 `;
 
 const Nickname = styled.span`
