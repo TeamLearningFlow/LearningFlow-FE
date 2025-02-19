@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { LearnContext } from '../context/LearnContext';
+import { ProgressContext } from '../context/ProgressContext';
 import axios from 'axios';
 import styled from 'styled-components';
 import Image from 'next/image';
@@ -102,33 +103,23 @@ const IconBox = styled.div`
   }
 `;
 
+const EffectButtonWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 20;
+`;
+
 const EffectUpWrapper = styled.div<{
   isClicked: boolean;
   isCompleted: boolean;
 }>`
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  bottom: 29.7%;
-  right: 33%;
-  width: 20px;
-  height: 20px;
-  gap: 50px;
   z-index: 20;
   // opacity: 1; /* 항상 보이도록 설정 */
-  // visibility: visible; /* 항상 보이도록 설정 */
   opacity: ${(props) => (props.isCompleted ? 0 : props.isClicked ? 1 : 0)};
   transition: opacity 1s ease;
-
-  @media (max-width: 850px) {
-    width: 17px;
-    height: 17px;
-  }
-
-  @media (max-width: 560px) {
-    width: 11px;
-    height: 11px;
-  }
+  margin-bottom: -10px;
+  margin-right: 50px;
 `;
 
 const EffectDownWrapper = styled.div<{
@@ -136,28 +127,12 @@ const EffectDownWrapper = styled.div<{
   isCompleted: boolean;
 }>`
   display: flex;
-  flex-direction: column;
-  position: absolute;
-  bottom: 23.5%;
-  right: 29.5%;
-  width: 20px;
-  height: 20px;
-  gap: 50px;
   z-index: 20;
   // opacity: 1; /* 항상 보이도록 설정 */
-  // visibility: visible; /* 항상 보이도록 설정 */
   opacity: ${(props) => (props.isCompleted ? 0 : props.isClicked ? 1 : 0)};
   transition: opacity 1s ease;
-
-  @media (max-width: 850px) {
-    width: 17px;
-    height: 17px;
-  }
-
-  @media (max-width: 560px) {
-    width: 13px;
-    height: 13px;
-  }
+  margin-top: -6px;
+  margin-left: 50px;
 `;
 
 const ButtonLetter = styled.div`
@@ -166,132 +141,125 @@ const ButtonLetter = styled.div`
 
 interface ClassTitleProps {
   episodeId: number;
-  episodeData: { episodeName: string };
+  episodeData: { urlTitle: string; progress?: number };
   isCompleted: boolean;
 }
 
-const ClassTitle: React.FC<ClassTitleProps> = ({ episodeId, episodeData }) => {
+const ClassTitle: React.FC<ClassTitleProps> = ({
+  episodeId,
+  episodeData,
+  isCompleted: propIsCompleted,
+}) => {
+  // localStorage에서 진도율을 초기값으로 읽음
+  // const initialProgress =
+  //   typeof window !== 'undefined'
+  //     ? Number(localStorage.getItem(`progress-${episodeId}`)) || 0
+  //     : 0;
+
+  // const [progress, setProgress] = useState(initialProgress);
   const [isClicked, setIsClicked] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [progress, setProgress] = useState(0);
   const context = useContext(LearnContext);
 
   if (!context) throw new Error('LearnContext를 찾을 수 없습니다.');
 
-  const { isCompleted } = context.state;
+  const { updateProgress } = useContext(ProgressContext);
+  // const { isCompleted } = state;
   const { setIsCompleted } = context.actions;
 
-  // 해당 episode가 있을 경우 episodeName을 사용
-  const episodeName = episodeData.episodeName;
+  // 만약 localStorage에 저장된 진도율이 100이면, 수강 완료 상태로 설정
+  useEffect(() => {
+    const storedProgress = localStorage.getItem(`progress-${episodeId}`);
+    if (storedProgress && Number(storedProgress) === 100) {
+      setIsCompleted(true);
+    }
+  }, [episodeId, setIsCompleted]);
+
+  const episodeName = episodeData.urlTitle;
 
   const handleClick = async () => {
-    if (isCompleted) return;
-    setIsClicked(true);
+    // 만약 수강 완료 상태라면 바로 진도율 0 업데이트하지 않고 모달만 띄움
+    if (propIsCompleted) {
+      setIsModalVisible(true);
+      return;
+    }
 
+    // 미수강 상태라면 수강 완료 처리 진행 (진도율 100으로 업데이트)
+    setIsClicked(true);
+    const targetProgress = 100;
     try {
       const token = localStorage.getItem('token');
-      const headers = {
-        Authorization: token ? `Bearer ${token}` : '',
-        'Content-Type': 'application/json',
-      };
-
+      const headers = token
+        ? {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          }
+        : {};
       const response = await axios.post(
-        `https://onboarding.p-e.kr/resources/${episodeId}/update-complete`,
-        { progress: 0 },
+        `http://onboarding.p-e.kr:8080/resources/${episodeId}/update-complete`,
+        { progress: targetProgress },
         { headers },
       );
-
-      if (response.status === 200 && response.data?.result?.isComplete) {
-        setIsCompleted(true);
-        setProgress(100);
-        console.log('학습 완료 처리 성공:', response.data);
+      if (response.status === 200) {
+        setTimeout(() => {
+          const newIsCompleted = !propIsCompleted;
+          setIsCompleted(newIsCompleted);
+          // setProgress(targetProgress);
+          updateProgress(episodeId, targetProgress);
+          localStorage.setItem(
+            `progress-${episodeId}`,
+            targetProgress.toString(),
+          );
+          console.log('학습 상태 업데이트 성공:', response.data);
+        }, 700);
       }
     } catch (error) {
       console.error('수강 상태 변경 실패:', error);
     } finally {
-      setIsClicked(false);
-      {
-        /* setTimeout(() => {
+      setTimeout(() => {
         setIsClicked(false);
-      }, 1000); */
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (isClicked) {
-      handleClick(); // isClicked가 true로 변경될 때마다 API 호출
-    }
-  }, [isClicked]);
-
-  useEffect(() => {
-    console.log(`변경된 진도율(완료): ${progress}%`);
-  }, [progress]);
-
-  useEffect(() => {
-    setIsCompleted(isCompleted);
-  }, [isCompleted]);
-
-  useEffect(() => {
-    if (isCompleted) {
-      setIsClicked(true);
-
-      const timer = setTimeout(() => {
-        setIsClicked(false);
-      }, 1000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [isCompleted]);
-
-  const handleShowModal = () => {
-    if (isCompleted) {
-      // 버튼 회색일 때만 모달을 보여줌
-      setIsModalVisible(true);
-    }
-  };
-
-  const handleCloseModal = () => {
-    setIsModalVisible(false);
-  };
-
-  const handleButtonClick = () => {
-    if (isCompleted) {
-      handleShowModal(); // isCompleted가 true일 때만 모달을 열도록
-    } else {
-      handleClick();
+      }, 700);
     }
   };
 
   const handleRetakeClass = () => {
-    setProgress(0);
-    setIsCompleted(false); // isCompleted 상태 초기화 (버튼 보라색으로 돌아감)
+    // 진도율 0으로 초기화 및 수강 완료 상태 해제
+    // setProgress(0);
+    setIsCompleted(false);
     setIsModalVisible(false);
+    updateProgress(episodeId, 0);
+    localStorage.setItem(`progress-${episodeId}`, '0');
   };
 
   return (
     <TitleWrapper>
       <TitleBox>{episodeName}</TitleBox>
-      <EffectUpWrapper isClicked={isClicked} isCompleted={isCompleted}>
-        <Image src={EffectUp} alt="Button Effect Up" />
-      </EffectUpWrapper>
-      <EffectDownWrapper isClicked={isClicked} isCompleted={isCompleted}>
-        <Image src={EffectDown} alt="Button Effect Down" />
-      </EffectDownWrapper>
-      <ButtonWrapper
-        isClicked={isClicked}
-        isCompleted={isCompleted}
-        onClick={handleButtonClick}
-      >
-        <IconBox>
-          <FaCheck size="15px" />
-        </IconBox>
-        <ButtonLetter>수강완료</ButtonLetter>
-      </ButtonWrapper>
-
+      <EffectButtonWrapper>
+        <EffectUpWrapper isClicked={isClicked} isCompleted={propIsCompleted}>
+          <Image src={EffectUp} alt="Button Effect Up" width={35} height={35} />
+        </EffectUpWrapper>
+        <ButtonWrapper
+          isClicked={isClicked}
+          isCompleted={propIsCompleted}
+          onClick={handleClick}
+        >
+          <IconBox>
+            <FaCheck size="15px" />
+          </IconBox>
+          <ButtonLetter>수강완료</ButtonLetter>
+        </ButtonWrapper>
+        <EffectDownWrapper isClicked={isClicked} isCompleted={propIsCompleted}>
+          <Image
+            src={EffectDown}
+            alt="Button Effect Down"
+            width={35}
+            height={35}
+          />
+        </EffectDownWrapper>
+      </EffectButtonWrapper>
       {isModalVisible && (
         <LearnModal
-          onClose={handleCloseModal}
+          onClose={() => setIsModalVisible(false)}
           episodeId={episodeId}
           onRetakeClass={handleRetakeClass}
         />

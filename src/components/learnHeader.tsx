@@ -60,10 +60,7 @@ const ProfileImage = styled(Image)`
 const ProfileUser = styled.div`
   position: absolute;
   display: flex;
-  // width: 100%;
-  // width: 30%;
-  // justify-content: flex-end;
-  margin-right: 10%;
+  margin-right: 3.5%;
   top: 60px;
   right: 0px;
   margin-top: 7px;

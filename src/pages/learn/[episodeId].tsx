@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { LearnContext } from '../../components/context/LearnContext';
+import { ProgressContext } from '../../components/context/ProgressContext';
 // import { useParams } from 'react-router-dom';
 import { useRouter } from 'next/router';
 import axios from 'axios';
@@ -79,6 +80,18 @@ const BottomWrapper = styled.div`
   }
 `;
 
+interface EpisodeDataResult {
+  resourceType: 'VIDEO' | 'TEXT';
+  urlTitle: string;
+  interestField: string;
+  episodeContents?: string;
+  progress?: number;
+}
+
+interface EpisodeData {
+  result: EpisodeDataResult;
+}
+
 const interestFieldMap: Record<string, string> = {
   APP_DEVELOPMENT: '앱개발',
   WEB_DEVELOPMENT: '웹개발',
@@ -99,12 +112,21 @@ const LearnPage: React.FC = () => {
   // const { collectionId } = useParams<{ collectionId: number }>();
   // const [collectionData, setCollectionData] = useState<CollectionData | null>(null);
   const [type, setType] = useState<'youtube' | 'blog' | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState<string>('');
   const [field, setField] = useState<string>('');
   // const [progress, setProgress] = useState(0);
-  const [youtubeContent, setYoutubeContent] = useState<string>('');
   const context = useContext(LearnContext);
+
+  if (!context) {
+    throw new Error('LearnContext를 찾을 수 없습니다.');
+  }
+
+  const { updateProgress } = useContext(ProgressContext);
+  const [youtubeContent, setYoutubeContent] = useState<string>('');
+  const [episodeDataState, setEpisodeDataState] = useState<EpisodeData | null>(
+    null,
+  );
 
   if (!context) {
     throw new Error('LearnContext를 찾을 수 없습니다.');
@@ -118,14 +140,11 @@ const LearnPage: React.FC = () => {
     ? Number(episodeId[0])
     : Number(episodeId);
 
-  // episodeData와 collectionData를 JSON 파싱해서 사용할 준비
-  const EpisodeData = episodeData ? JSON.parse(episodeData as string) : null;
-  const CollectionData = collectionData
+  // query로 전달받은 JSON 문자열을 파싱 (존재할 경우)
+  // const parsedEpisodeData = episodeData ? JSON.parse(episodeData as string) : null;
+  const parsedCollectionData = collectionData
     ? JSON.parse(collectionData as string)
     : null;
-
-  const { isCompleted } = context.state;
-  // const { setIsCompleted } = context.actions;
 
   useEffect(() => {
     setIsClient(true);
@@ -137,14 +156,72 @@ const LearnPage: React.FC = () => {
     console.log('현재 Field:', field);
   }, [title, field]);
 
-  // resource type을 확인하는 비동기 함수
+  // episodeData가 존재하면 파싱된 데이터를 기반으로 상태 업데이트
+  useEffect(() => {
+    if (episodeData) {
+      try {
+        const parsedData = JSON.parse(episodeData as string);
+        setEpisodeDataState(parsedData);
+        if (parsedData.result.resourceType === 'VIDEO') {
+          setType('youtube');
+          setTitle(parsedData.result.urlTitle);
+          setField(parsedData.result.interestField);
+          setYoutubeContent(parsedData.result.episodeContents);
+        } else if (parsedData.result.resourceType === 'TEXT') {
+          setType('blog');
+          setTitle(parsedData.result.urlTitle);
+          setField(parsedData.result.interestField);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error('episodeData 파싱 실패:', error);
+      }
+    } else if (episodeId) {
+      checkResourceType();
+    }
+  }, [episodeData, episodeId]);
+
+  useEffect(() => {
+    if (episodeIdNumber) {
+      const storedProgress = localStorage.getItem(
+        `progress-${episodeIdNumber}`,
+      );
+      if (storedProgress) {
+        updateProgress(episodeIdNumber, Number(storedProgress));
+        // episodeDataState가 이미 있다면, 동일한 값인지 확인 후 업데이트
+        if (
+          episodeDataState &&
+          Number(storedProgress) !== episodeDataState.result.progress
+        ) {
+          setEpisodeDataState((prev) => {
+            if (prev === null) return prev;
+            return {
+              ...prev,
+              result: {
+                ...prev.result,
+                progress: Number(storedProgress),
+              },
+            };
+          });
+        }
+      }
+    }
+    // episodeDataState를 제거하여 무한반복을 방지
+  }, [episodeIdNumber]);
+
+  useEffect(() => {
+    if (episodeDataState) {
+      console.log('영상 진도율 (progress):', episodeDataState.result.progress);
+    }
+  }, [episodeDataState]);
+
   const checkResourceType = async () => {
     try {
       const token = localStorage.getItem('token');
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
       const youtubeResponse = await axios.get(
-        `https://onboarding.p-e.kr/resources/${episodeId}/youtube`,
+        `http://onboarding.p-e.kr:8080/resources/${episodeId}/youtube`,
         { headers },
       );
 
@@ -154,12 +231,12 @@ const LearnPage: React.FC = () => {
         setTitle(youtubeResponse.data.result.urlTitle);
         setField(youtubeResponse.data.result.interestField);
         setYoutubeContent(youtubeResponse.data.result.episodeContents);
-        return; // YouTube가 확인되었으면 종료
+        setLoading(false);
+        return;
       }
 
-      // YouTube가 아니면 Blog 조회
       const blogResponse = await axios.get(
-        `https://onboarding.p-e.kr/resources/${episodeId}/blog`,
+        `http://onboarding.p-e.kr:8080/resources/${episodeId}/blog`,
         { headers },
       );
 
@@ -181,12 +258,6 @@ const LearnPage: React.FC = () => {
   };
 
   useEffect(() => {
-    if (episodeId) {
-      checkResourceType();
-    }
-  }, [episodeId]);
-
-  useEffect(() => {
     console.log(`현재 에피소드 ID: ${episodeIdNumber}`);
   }, [episodeIdNumber]);
 
@@ -197,13 +268,14 @@ const LearnPage: React.FC = () => {
   return (
     <PageWrapper>
       <Header />
-      {CollectionData &&
-        CollectionData.title &&
-        CollectionData.interestField && (
+      {parsedCollectionData &&
+        parsedCollectionData.title &&
+        parsedCollectionData.interestField && (
           <TitleBar
             data={{
-              title: CollectionData.title,
-              interestField: interestFieldMap[CollectionData.interestField],
+              title: parsedCollectionData.title,
+              interestField:
+                interestFieldMap[parsedCollectionData.interestField],
             }}
           />
         )}
@@ -223,38 +295,47 @@ const LearnPage: React.FC = () => {
       ) : (
         <BodyWrapper>
           <TopWrapper>
-            {CollectionData &&
-              episodeId &&
-              (type === 'youtube' ? (
-                <Article
-                  videoId={youtubeContent}
-                  isCompleted={isCompleted ?? false}
-                />
-              ) : (
-                <BlogArticle
-                  episodeId={episodeIdNumber}
-                  isCompleted={isCompleted ?? false}
-                />
-              ))}
-            {CollectionData && EpisodeData && episodeId && (
-              <ClassTitle
-                episodeId={episodeIdNumber}
-                episodeData={EpisodeData}
-                isCompleted={isCompleted}
-              />
+            {parsedCollectionData && episodeId && (
+              <>
+                {type === 'youtube' ? (
+                  <Article
+                    videoId={youtubeContent}
+                    isCompleted={context.state.isCompleted}
+                    onProgressChange={(progress) => {
+                      updateProgress(episodeIdNumber, progress);
+                      localStorage.setItem(
+                        `progress-${episodeIdNumber}`,
+                        progress.toString(),
+                      );
+                    }}
+                  />
+                ) : (
+                  <BlogArticle
+                    episodeId={episodeIdNumber}
+                    isCompleted={context.state.isCompleted}
+                  />
+                )}
+                {episodeDataState && (
+                  <ClassTitle
+                    episodeId={episodeIdNumber}
+                    episodeData={episodeDataState.result}
+                    isCompleted={context.state.isCompleted}
+                  />
+                )}
+              </>
             )}
           </TopWrapper>
           <MidWrapper>
-            {CollectionData && episodeId && (
+            {parsedCollectionData && episodeId && (
               <Note episodeId={episodeIdNumber} />
             )}
           </MidWrapper>
           <BottomWrapper>
-            {CollectionData && (
+            {parsedCollectionData && (
               <ClassList
-                resource={CollectionData.resource}
+                resource={parsedCollectionData.resource}
                 currentEpisode={episodeIdNumber}
-                collectionData={CollectionData}
+                collectionData={parsedCollectionData}
               />
             )}
           </BottomWrapper>

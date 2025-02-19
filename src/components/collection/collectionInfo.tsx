@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import Image from 'next/image';
-import tmpIMG from '/public/collection-clock.png';
 import collectionInfoIMG from '/public/CollectionInfo.png';
 import yesBookMarked from '/public/yesBookMarked.svg';
 import noBookMarked from '/public/noBookMarked.svg';
@@ -17,6 +16,7 @@ import plane from '/public/Airplane.svg';
 
 interface CollectionData {
   collectionId: number;
+  imageUrl: string;
   interestField: string;
   title: string;
   creator: string;
@@ -78,6 +78,8 @@ const CollectionInfo: React.FC<CollectionInfoProps> = ({
   const [isBookMarked, setIsBookMarked] = useState<boolean>(false);
   const [departureLabel, setDepartureLabel] = useState('');
   const [arrivalLabel, setArrivalLabel] = useState('');
+  const [articleCount, setArticleCount] = useState<boolean>(false);
+  const [videoCount, setVideoCount] = useState<boolean>(false);
 
   // resourceSource 값들을 배열로 추출
   const resourceSources = data.resource.map((item) => item.resourceSource);
@@ -252,6 +254,16 @@ const CollectionInfo: React.FC<CollectionInfoProps> = ({
 
   useEffect(() => {
     console.log('collectionId: ', collectionId);
+    if (data.textCount === 0) {
+      setArticleCount(false);
+    } else {
+      setArticleCount(true);
+    }
+    if (data.videoCount === 0) {
+      setVideoCount(false);
+    } else {
+      setVideoCount(true);
+    }
   }, [collectionId]);
 
   return (
@@ -261,7 +273,12 @@ const CollectionInfo: React.FC<CollectionInfoProps> = ({
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          <CollectionLeftIMG src={tmpIMG} alt="컬렉션 이미지" height={252} />
+          <CollectionLeftIMG
+            src={data.imageUrl}
+            alt="컬렉션 이미지"
+            height={252}
+            width={252}
+          />
           <HoverColletionLeftIMG isHovered={isHovered}></HoverColletionLeftIMG>
           <BookMarkedBox onClick={handleBookMarked}>
             <BookMarkedIMG
@@ -292,35 +309,55 @@ const CollectionInfo: React.FC<CollectionInfoProps> = ({
             {data.keywords[4] && <Keyword>{data.keywords[4]}</Keyword>}
           </KeywordBox>
           <TypeImgBox>
-            <TypeImgList>
-              {availableImages.map((image, index) => (
-                <TypeImg
-                  key={index}
-                  src={image.src}
-                  alt={image.alt}
-                  index={index}
-                  totalImages={availableImages.length}
-                  width={35}
-                  height={35}
-                />
-              ))}
-              {/* <TypeImg src={YoutubeIcon} alt="youtube" index={0} />
-              <TypeImg src={TistoryIcon} alt="tistory" index={1} />
-              <TypeImg src={NaverblogIcon} alt="blog" index={2} />
-              <TypeImg src={VelogIcon} alt="velog" index={3} /> */}
-            </TypeImgList>
-            <LineNDot>
-              <TypeImgToArticleLine src={line} alt="------" width={50} />
-              <TypeImgToArticleDot src={dot} alt="O" />
-            </LineNDot>
-            <ArticleNVideo>
-              <ArticleLetter>아티클</ArticleLetter>
-              <ArticleNumber>{data.textCount}</ArticleNumber>
-              <VideoLetter>영상</VideoLetter>
-              <VideoNumber>{data.videoCount}</VideoNumber>
-            </ArticleNVideo>
+            <TypeImgBoxWrapper>
+              <TypeImgList>
+                {availableImages.map((image, index) => (
+                  <TypeImgWrapper
+                    key={image.alt}
+                    index={index}
+                    totalImages={availableImages.length}
+                  >
+                    <TypeImg src={image.src} alt={image.alt} />
+                  </TypeImgWrapper>
+                ))}
+              </TypeImgList>
+              <LineNDotWrapper numImages={availableImages.length}>
+                <LineNDot>
+                  <LineWrapper>
+                    <TypeImgToArticleLine
+                      src={line}
+                      alt="------"
+                      numImages={availableImages.length}
+                      articleCount={articleCount}
+                      videoCount={videoCount}
+                      layout="responsive"
+                    />
+                  </LineWrapper>
+                  <TypeImgToArticleDot src={dot} alt="O" />
+                </LineNDot>
+              </LineNDotWrapper>
+              <ArticleNVideo>
+                {data.textCount !== 0 && (
+                  <>
+                    <ArticleLetter>아티클</ArticleLetter>
+                    <ArticleNumber>{data.textCount}</ArticleNumber>
+                  </>
+                )}
+                {data.videoCount !== 0 && (
+                  <>
+                    <VideoLetter>영상</VideoLetter>
+                    <VideoNumber>{data.videoCount}</VideoNumber>
+                  </>
+                )}
+              </ArticleNVideo>
+            </TypeImgBoxWrapper>
           </TypeImgBox>
-          <Title>{renderTitleWithLineBreaks(data.title)}</Title>
+          <TitleWrapper>
+            <Title>{renderTitleWithLineBreaks(data.title)}</Title>
+            {/* <Title>
+              두줄 두줄 <br /> 제목제목제목제목
+            </Title> */}
+          </TitleWrapper>
           <Author>{data.creator}</Author>
         </CollectionUpperDescription>
         <Departure>
@@ -398,6 +435,7 @@ const CollectionLeftIMG = styled(Image)`
   }
   @media (max-width: 560px) {
     height: 80px;
+    border-radius: 10px;
   }
 `;
 
@@ -411,26 +449,46 @@ const HoverColletionLeftIMG = styled.div<{ isHovered: boolean }>`
   background-color: ${({ isHovered }) =>
     isHovered ? 'rgba(0, 0, 0, 0.6)' : 'rgba(0,0,0,0)'};
   z-index: 100;
+
+  @media (max-width: 850px) {
+    height: 150px;
+  }
+
+  @media (max-width: 560px) {
+    border-radius: 10px;
+    height: 80px;
+  }
 `;
 
 const BookMarkedBox = styled.div`
   // position: absolute;
 
-  margin-left: -3.5vw;
-  margin-top: 17px;
+  margin-left: -16%;
+  margin-top: 22px;
 
   z-index: 2000;
 
   @media (max-width: 1160px) {
-    margin-left: -4vw;
+    margin-left: -18%;
   }
 
   @media (max-width: 960px) {
-    margin-left: -5vw;
+    margin-top: 13px;
+  }
+
+  @media (max-width: 850px) {
+    margin-left: -17%;
+    margin-top: 11px;
   }
 
   @media (max-width: 560px) {
-    // margin-left:
+    margin-left: -15%;
+    margin-top: -4px;
+  }
+
+  @media (max-width: 340px) {
+    margin-left: -17%;
+    // margin-top:
   }
 `;
 
@@ -442,13 +500,23 @@ const BookMarkedIMG = styled(Image)<{ isHovered: boolean }>`
   visibility: ${(props) => (props.isHovered ? 'visible' : 'hidden')};
 
   @media (max-width: 960px) {
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
+  }
+
+  @media (max-width: 850px) {
+    width: 19px;
+    height: 19px;
   }
 
   @media (max-width: 560px) {
-    // width:
-    // height:
+    width: 10px;
+    height: 10px;
+  }
+
+  @media (max-width: 400px) {
+    width: 8px;
+    height: 8px;
   }
 `;
 
@@ -461,7 +529,6 @@ const CollectionRightIMGBox = styled.div`
 const CollectionRightIMG = styled(Image)`
   display: flex;
 
-  // width: 54vw;
   width: 100%;
   border-radius: 20px;
 
@@ -471,6 +538,7 @@ const CollectionRightIMG = styled(Image)`
 
   @media (max-width: 560px) {
     height: 80px;
+    border-radius: 10px;
   }
 `;
 
@@ -482,6 +550,7 @@ const CollectionUpperDescription = styled.div`
 
   @media (max-width: 850px) {
     margin-top: -30px;
+    margin-left: 0vw;
   }
 
   @media (max-width: 560px) {
@@ -493,21 +562,25 @@ const KeywordBox = styled.div`
   position: absolute;
 
   margin-left: 25px;
+  margin-top: 5px;
   // margin-top: 20px;
 
   @media (max-width: 850px) {
+    margin-top: 0px;
     margin-left: 14px;
   }
 
   @media (max-width: 560px) {
-    margin-left: 7px;
+    margin-top: 1px;
+    margin-left: 9px;
   }
 `;
 
 const Interest = styled.div<{ interestField: string }>`
   width: 150px;
   display: inline;
-  padding: 7.339px 18.349px;
+  // padding: 1.4% 3.3%;
+  padding: 6px 12px;
   margin-right: 10px;
 
   border-radius: 6px;
@@ -573,10 +646,13 @@ const Interest = styled.div<{ interestField: string }>`
   }};
 
   @media (max-width: 850px) {
-    width: 120px;
+    width: 90px;
     font-size: 8px;
-    padding: 3px 8px;
-    margin-right: 5px;
+    line-height: 10px;
+    padding: 3px 6px;
+    margin-right: 3px;
+
+    border-radius: 3px;
   }
 
   @media (max-width: 560px) {
@@ -584,13 +660,15 @@ const Interest = styled.div<{ interestField: string }>`
     font-size: 5px;
     padding: 2px 5px;
     margin-right: 3px;
+    border-radius: 3px;
   }
 `;
 
 const Keyword = styled.span`
   width: 150px;
   display: inline;
-  padding: 7.339px 18.349px;
+  // padding: 1.4% 3.5%;
+  padding: 6px 12px;
   margin-right: 10px;
 
   border-radius: 6px;
@@ -601,10 +679,13 @@ const Keyword = styled.span`
   line-height: 23.996px;
 
   @media (max-width: 850px) {
-    width: 120px;
+    width: 90px;
     font-size: 8px;
-    padding: 3px 8px;
-    margin-right: 5px;
+    line-height: 10px;
+    padding: 3px 6px;
+    margin-right: 3px;
+
+    border-radius: 3px;
   }
 
   @media (max-width: 560px) {
@@ -612,6 +693,33 @@ const Keyword = styled.span`
     font-size: 5px;
     padding: 2px 5px;
     margin-right: 3px;
+    border-radius: 3px;
+  }
+`;
+
+const TitleWrapper = styled.div`
+  position: absolute;
+  height: 90px;
+
+  align-items: center;
+
+  // margin-top: 20px;
+  margin-top: 30px;
+  margin-left: 25px;
+  width: 327.273px;
+
+  @media (max-width: 850px) {
+    height: 50px;
+    width: 250px;
+    margin-top: 0px;
+    margin-left: 14px;
+  }
+
+  @media (max-width: 560px) {
+    height: 30px;
+    width: 200px;
+    margin-top: -10px;
+    margin-left: 10px;
   }
 `;
 
@@ -622,26 +730,25 @@ const Title = styled.div`
   line-height: 36px;
   letter-spacing: -0.48px;
 
-  margin-top: 45px;
-  margin-left: 25px;
-  width: 327.273px;
+  // width: 327.273px;
 
   whitespace: pre-line;
   display: flex;
   flex-direction: column;
 
+  // height: 90px;
+  height: 82px;
+  margin-top: 7px;
+  justify-content: center;
+
   @media (max-width: 850px) {
     font-size: 16px;
     line-height: 21px;
-    margin-top: 32px;
-    margin-left: 14px;
   }
 
   @media (max-width: 560px) {
     font-size: 9px;
     line-height: 13px;
-    margin-top: 25px;
-    margin-left: 7px;
   }
 `;
 
@@ -664,25 +771,30 @@ const Author = styled.div`
   @media (max-width: 560px) {
     font-size: 6px;
     margin-top: 52px;
-    margin-left: 7px;
+    margin-left: 10px;
   }
 `;
 
 const TypeImgBox = styled.div`
   display: flex;
-  // position: absolute;
   margin-top: 110px;
 
-  // margin-left: 425px;
-  // width: 300px;
-  // width: 30%;
   height: 40px;
   width: 54vw;
-  padding-left: 30vw;
-  // padding-right: 30px;
+
+  padding-left: 33vw;
+
+  @media (max-width: 1150px) {
+    padding-left: 30vw;
+    width: 53vw;
+  }
+
+  border: 1px solid red;
 
   @media (max-width: 850px) {
     margin-top: 66px;
+    // width: 50vw;
+    width: 30vw;
   }
 
   @media (max-width: 560px) {
@@ -690,91 +802,137 @@ const TypeImgBox = styled.div`
   }
 `;
 
+const TypeImgBoxWrapper = styled.span`
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  width: 30%;
+
+  border: 1px solid blue;
+
+  @media (max-width: 850px) {
+    justify-content: flex-start;
+  }
+`;
+
 const TypeImgList = styled.div`
   display: flex;
   position: relative;
-  justify-content: center;
+  min-width: 30px;
   align-items: center;
+
+  // border: 1px solid blue;
 `;
 
-const TypeImg = styled(Image)<{ index: number; totalImages: number }>`
+const TypeImgWrapper = styled.div<{ index: number; totalImages: number }>`
   position: absolute;
-  left: ${({ index }) => index * 25}px; /* 이미지의 기본 위치 조정 (겹침 효과)
-
-  border-radius: 50%;
+  left: ${({ index }) => `${index * 25}px`}; /* 겹침 효과 */
   z-index: ${({ index }) => 100 - index};
 
-  // width: 25.185px;
-  // height: 25.185px;
-
-  // margin-left: 30vw;
-
   @media (max-width: 850px) {
-    width: 20px;
-    height: 20px;
-
-    left: ${({ index }) => index * 15}px;
+    left: ${({ index }) => `${index * 13}px`};
   }
 
   @media (max-width: 560px) {
-    width: 10px;
-    height: 10px;
-
-    left: ${({ index }) => index * 5}px;
+    left: ${({ index }) => `${index * 8}px`};
+    margin-bottom: 3px;
   }
 `;
 
-const LineNDot = styled.div`
+const TypeImg = styled(Image)`
+  width: 35px;
+  height: 35px;
+
+  @media (max-width: 850px) {
+    width: 18px;
+    height: 18px;
+  }
+
+  @media (max-width: 560px) {
+    width: 11px;
+    height: 11px;
+  }
+`;
+
+const LineNDotWrapper = styled.div<{ numImages: number }>`
   display: flex;
-  // position: absolute;
-  // flex: 1;
-  margin-left: 10vw;
+  flex: 1;
+  justify-content: center;
   align-items: center;
 
-  // justify-content: center;
+  // border: 1px solid green;
+
+  margin-left: ${({ numImages }) =>
+    `${numImages * 25}px`}; /* 마지막 아이콘 기준 여백 유지 */
+  }
+  
+  @media (max-width: 850px) {
+    margin-left: ${({ numImages }) => ` ${numImages * 10}px`};
+  }
+    `;
+
+const LineNDot = styled.div`
+  display: flex;
+  flex: 1;
+  align-items: center;
+  position: relative;
+  // position: absolute;
+
+  @media (max-width: 850px) {
+    width: 100%;
+  }
 
   @media (max-width: 560px) {
     margin-left: 9vw;
   }
 `;
 
-const TypeImgToArticleLine = styled(Image)`
-  position: absolute;
-  display: flex;
-
-  @media (max-width: 850px) {
-    width: 20px;
-  }
-
- @media (max-width: 560px) {
-    width: 10px;
+const LineWrapper = styled.div`
+  flex: 1;
 `;
 
-const TypeImgToArticleDot = styled(Image)`
-  position: absolute;
-  display: flex;
-  margin-left: 47px;
+// width: ${(props) => (props.numImages === 4 ? '100px' : props.numImages === 3 ? '80px' : '50px')};
+const TypeImgToArticleLine = styled(Image)<{
+  numImages: number;
+  articleCount: boolean;
+  videoCount: boolean;
+}>`
+  display: block;
+  width: 100%;
+  min-width: 20px;
 
   @media (max-width: 850px) {
-    margin-left: 18px;
-    height: 3px;
+    // min-width: 300px;
   }
 
   @media (max-width: 560px) {
-    margin-left: 9px;
+    width: 10px;
+    margin-bottom: 1px;
+  }
+`;
+
+const TypeImgToArticleDot = styled(Image)`
+  display: flex;
+
+  @media (max-width: 850px) {
+    height: 3px;
+    margin-bottom: 0.5px;
+  }
+
+  @media (max-width: 560px) {
     height: 1px;
     margin-bottom: 0.4px;
   }
 `;
 
 const ArticleNVideo = styled.div`
-  // position: absolute;
   display: flex;
   align-items: center;
-  // margin-left: 100px;
-  margin-left: 5.5vw;
+  margin-left: 15px;
 
   padding-bottom: 1px;
+
+  // border: 1px solid yellow;
 
   @media (max-width: 850px) {
     margin-left: 4vw;
@@ -804,16 +962,16 @@ const ArticleLetter = styled.span`
 
 const ArticleNumber = styled.span`
   display: flex;
-  width: 15px;
-  height: 15px;
+  width: 17px;
+  height: 17px;
 
   align-items: center;
   justify-content: center;
-  padding: 1.939px;
+  text-align: center;
 
   font-size: 12px;
   font-weight: 500;
-  line-height: 18px;
+  line-height: 12px;
   letter-spacing: -0.24px;
   font-weight: 500;
   color: #5e52ff;
@@ -822,15 +980,18 @@ const ArticleNumber = styled.span`
 
   @media (max-width: 850px) {
     font-size: 8px;
-    width: 7px;
-    height: 7px;
+    width: 12px;
+    height: 12px;
+    padding-bottom: 0.45px;
     // padding: 0.5px;
   }
 
   @media (max-width: 560px) {
     font-size: 4px;
-    width: 3px;
-    height: 3px;
+    line-height: 5px;
+    width: 6px;
+    height: 6px;
+    padding: 2px;
   }
 `;
 
@@ -858,16 +1019,16 @@ const VideoLetter = styled.span`
 
 const VideoNumber = styled.span`
   display: flex;
-  width: 15px;
-  height: 15px;
+  width: 17px;
+  height: 17px;
 
   align-items: center;
   justify-content: center;
-  padding: 1.939px;
+  text-align: center;
 
   font-size: 12px;
   font-weight: 500;
-  line-height: 18px;
+  line-height: 12px;
   letter-spacing: -0.24px;
   font-weight: 500;
   color: #5e52ff;
@@ -876,15 +1037,17 @@ const VideoNumber = styled.span`
 
   @media (max-width: 850px) {
     font-size: 8px;
-    width: 7px;
-    height: 7px;
-    // padding: 0.5px;
+    width: 12px;
+    height: 12px;
+    padding-bottom: 0.45px;
   }
 
   @media (max-width: 560px) {
     font-size: 4px;
-    width: 3px;
-    height: 3px;
+    line-height: 5px;
+    width: 6px;
+    height: 6px;
+    padding: 2px;
   }
 `;
 
@@ -895,12 +1058,12 @@ const Departure = styled.div`
 
   margin-top: 184px;
   margin-left: -54vw;
-  padding: 16px 100px;
+  padding: 16px 100px 16px 70px;
   width: 54vw;
   height: 69px;
 
   @media (max-width: 850px) {
-    margin-top: 107px;
+    margin-top: 110px;
     padding: 10px 30px;
     width: 55vw;
     height: 35px;
