@@ -362,7 +362,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
     setIsEditingEmail(false);
     setIsModalOpen(false);
   };
-
+  
   useEffect(() => {
     setEditedEmail(originalEmail); // 이메일 변경 즉시 반영
   }, [originalEmail]);
@@ -788,6 +788,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
       )}
       {isPasswordChangeModalOpen && (
         <PasswordChangeModal
+          email={currentEmail}
           onClose={() => setIsPasswordChangeModalOpen(false)}
         />
       )}
