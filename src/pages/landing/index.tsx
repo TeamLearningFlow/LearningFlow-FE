@@ -126,7 +126,7 @@ const LandingPage: React.FC = () => {
       }
 
       // 로그인 상태 업데이트 및 회원가입 후 모달 표시 여부 저장
-      localStorage.setItem('isFromSignup', 'true');
+      localStorage.setItem('isFormSignup', 'true');
       context.actions.setIsLoggedIn(true);
 
       router.push('/'); // 회원가입 완료 후 홈페이지로 이동
