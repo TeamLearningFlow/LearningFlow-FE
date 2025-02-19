@@ -20,7 +20,7 @@ import NaverblogLine from '/public/platformicon/naverblog_ic_M.svg';
 import TistoryLine from '/public/platformicon/tistory_ic_M.svg';
 import YoutubeLine from '/public/platformicon/youtube_ic_M.svg';
 import OnStudying from '/public/onstudying.svg';
-import CompletedStamp from '/public/completedStamp.svg';
+import CompletedStamp from '/public/completedStampS.svg';
 import { RecommendedCollection } from './homeCollection';
 import { useRouter } from 'next/router';
 import axios from 'axios';
@@ -385,7 +385,7 @@ const LineWrapper = styled.span<{ status?: string; left?: string }>`
   align-items: center;
   position: absolute;
   left: ${(props) =>
-    props.status === '학습완료' ? '65px' : props.left || '96px'};
+    props.status === '학습완료' ? '130px' : props.left || '96px'};
 `;
 
 const CollectionDetail = styled(RowFlexSpan)`
@@ -474,7 +474,7 @@ const CompletedStampIcon = styled.div`
   width: 120px;
   height: 120px;
   margin-left: 225px;
-  margin-top: -2px;
+  margin-top: -19px;
 `;
 
 const Gradient = styled.div`
