@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import Prev from '/public/previous.svg';
-import Next from '/public/next.svg';
+import Prev from '/public/previous_myPage.svg';
+import Prev_disabled from '/public/previous_disabled_myPage.svg';
+import Next from '/public/next_myPage.svg';
+import Next_disabled from '/public/next_disabled_myPage.svg';
 import CompletedBoardingPass from './completedCollection';
 import EmptyCompleted from '../../components/mypage/emptyCompleted';
 import { CompletedCollectionData } from '@/types/types';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const CompletedWrapper = styled.div`
   width: 1200px;
@@ -57,8 +60,10 @@ const PageButton = styled.div`
   gap: 20px;
 `;
 
-const Button = styled(Image)`
+const Button = styled.button`
   cursor: pointer;
+  background: transparent;
+  border: none;
 `;
 
 const CollectionList = styled.div`
@@ -87,6 +92,13 @@ const CollectionList = styled.div`
   }
 `;
 
+const CollectionWrapper = styled.div`
+  overflow: hidden;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+`;
+
 interface CompletedProps {
   completedCollections: CompletedCollectionData[];
 }
@@ -96,25 +108,48 @@ const Completed: React.FC<CompletedProps> = ({ completedCollections }) => {
   const [hoverStates, setHoverStates] = useState<boolean[]>(
     Array(4).fill(false),
   );
+  const [currentPage, setCurrentPage] = useState<number>(0); // 현재 페이지 상태
 
   useEffect(() => {
     const updateItemsShown = () => {
+      let newItemsShown = 4;
       if (window.innerWidth <= 480) {
-        setItemsShown(1);
+        newItemsShown = 1;
       } else if (window.innerWidth <= 768) {
-        setItemsShown(2);
+        newItemsShown = 2;
       } else if (window.innerWidth <= 1024) {
-        setItemsShown(3);
-      } else {
-        setItemsShown(4);
+        newItemsShown = 3;
       }
-      setHoverStates(Array(itemsShown).fill(false)); // 아이템 개수에 맞게 초기화
+
+      setItemsShown(newItemsShown);
+      setHoverStates(Array(newItemsShown).fill(false)); // 아이템 개수 변경 시 hover 상태 초기화
+      setCurrentPage(0); // 화면 크기 변경 시 첫 페이지로 리셋
     };
 
     updateItemsShown();
     window.addEventListener('resize', updateItemsShown);
     return () => window.removeEventListener('resize', updateItemsShown);
-  }, [itemsShown]);
+  }, []);
+
+  const totalPages = Math.ceil(completedCollections.length / itemsShown);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages - 1) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const startIndex = currentPage * itemsShown;
+  const visibleCollections = completedCollections.slice(
+    startIndex,
+    startIndex + itemsShown,
+  );
 
   const handleMouseEnter = (index: number) => {
     const newHoverStates = [...hoverStates];
@@ -133,28 +168,54 @@ const Completed: React.FC<CompletedProps> = ({ completedCollections }) => {
       <TitleWrapper>
         <Title>완료한 학습 컬렉션</Title>
         <PageButton>
-          <Button src={Prev} alt="prev" />
-          <Button src={Next} alt="next" />
+          <Button onClick={handlePrevPage} disabled={currentPage === 0}>
+            <Image src={currentPage === 0 ? Prev_disabled : Prev} alt="prev" />
+          </Button>
+          <Button
+            onClick={handleNextPage}
+            disabled={currentPage >= totalPages - 1}
+          >
+            <Image
+              src={currentPage >= totalPages - 1 ? Next_disabled : Next}
+              alt="next"
+            />
+          </Button>
         </PageButton>
       </TitleWrapper>
-      <CollectionList>
-        {completedCollections.length > 0 ? (
-          completedCollections.slice(0, itemsShown).map((collection, index) => (
-            <div
-              key={collection.collectionId}
-              onMouseEnter={() => handleMouseEnter(index)}
-              onMouseLeave={() => handleMouseLeave(index)}
-            >
-              <CompletedBoardingPass
-                collection={collection}
-                showHoverCollection={hoverStates[index]}
-              />
-            </div>
-          ))
-        ) : (
-          <EmptyCompleted />
-        )}
-      </CollectionList>
+
+      <CollectionWrapper>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentPage} // 페이지 변경 시 새로운 애니메이션 적용
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            style={{
+              display: 'flex',
+              gap: '24px',
+            }}
+          >
+            {visibleCollections.length > 0 ? (
+              visibleCollections.map((collection, index) => (
+                <motion.div
+                  key={collection.collectionId}
+                  onMouseEnter={() => handleMouseEnter(index)}
+                  onMouseLeave={() => handleMouseLeave(index)}
+                  layout
+                >
+                  <CompletedBoardingPass
+                    collection={collection}
+                    showHoverCollection={hoverStates[index]}
+                  />
+                </motion.div>
+              ))
+            ) : (
+              <EmptyCompleted />
+            )}
+          </motion.div>
+        </AnimatePresence>
+      </CollectionWrapper>
     </CompletedWrapper>
   );
 };

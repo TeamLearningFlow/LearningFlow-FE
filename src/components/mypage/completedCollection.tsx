@@ -572,7 +572,7 @@ const CompletedCollection = ({
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/collections/${collection.collectionId}`);
+    router.push(`/collection/${collection.collectionId}`);
   };
 
   return (
