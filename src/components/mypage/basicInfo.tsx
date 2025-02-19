@@ -304,6 +304,35 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
     setIsPasswordValid(true);
   }; */
 
+  // 변경된 이메일 확인 후 유저 정보 업데이트
+  useEffect(() => {
+    const storedEmail = localStorage.getItem('email');
+    if (storedEmail) setCurrentEmail(storedEmail);
+
+    fetchUserProfile();
+  }, []);
+
+  const fetchUserProfile = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        router.replace('/login');
+        return;
+      }
+
+      const response = await axios.get('https://onboarding.p-e.kr/user', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.data.isSuccess) {
+        setCurrentEmail(response.data.result.email);
+        localStorage.setItem('email', response.data.result.email);
+      }
+    } catch (error) {
+      console.error('유저 정보 가져오기 실패:', error);
+    }
+  };
+
   const sendEmailVerification = async (email: string) => {
     try {
       // 로컬 스토리지에서 토큰 가져오기 (로그인 시에만 접근 가능)
@@ -362,10 +391,10 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
     setIsEditingEmail(false);
     setIsModalOpen(false);
   };
-  
-  useEffect(() => {
+
+  /* useEffect(() => {
     setEditedEmail(originalEmail); // 이메일 변경 즉시 반영
-  }, [originalEmail]);
+  }, [originalEmail]); */
 
   // 비밀번호 변경 메일 인증 api 연결
   const sendPasswordChangeRequest = async () => {

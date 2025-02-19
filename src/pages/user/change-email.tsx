@@ -40,9 +40,13 @@ const VerifyEmail: React.FC = () => {
           if (response.data.result) {
             console.log('변경된 이메일:', response.data.result);
             localStorage.setItem('email', response.data.result);
+
+            // 새로운 이메일을 사용하여 유저 상태를 다시 불러옴
+            fetchUserProfile();
           }
 
-          window.location.href = '/mypage/profile';
+          // 로그인 유지한 채 마이페이지로 이동
+          router.replace('/mypage/profile');
         } else {
           console.log('토큰 무효');
           router.replace('/'); // 홈 페이지로 이동
@@ -50,6 +54,30 @@ const VerifyEmail: React.FC = () => {
       } catch (err) {
         console.error('토큰 검증 오류:', err);
         router.replace('/'); // 오류 발생 시 홈 페이지로 이동
+      }
+    };
+
+    // 유저 정보 다시 불러오기
+    const fetchUserProfile = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          router.replace('/login');
+          return;
+        }
+
+        const response = await axios.get('https://onboarding.p-e.kr/user', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (response.data.isSuccess) {
+          console.log('유저 정보 갱신 성공:', response.data.result);
+          localStorage.setItem('email', response.data.result.email);
+        } else {
+          console.log('유저 정보를 불러오지 못함');
+        }
+      } catch (error) {
+        console.error('유저 정보 가져오기 실패:', error);
       }
     };
 
