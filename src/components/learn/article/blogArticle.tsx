@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios, { AxiosError } from 'axios';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
 const ArticleWrapper = styled.div`
@@ -33,17 +34,47 @@ const StyledImg = styled.img`
   z-index: 999;
 `;
 
-// png 사용
-const BlogArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
+interface blogArticleProps {
+  blogId?: string;
+  onProgressChange?: (progress: number) => void;
+  isCompleted: boolean;
+}
+
+const BlogArticle: React.FC<blogArticleProps> = ({
+  blogId,
+  onProgressChange = () => {},
+}) => {
   const [contentUrl, setContentUrl] = useState<string | null>('');
-  const [progress, setProgress] = useState<number>(0);
+  // const [progress, setProgress] = useState<number>(0);
   const [learningCompleted, setLearningCompleted] = useState<boolean>(false);
   const imgRef = useRef<HTMLImageElement>(null); // 이미지 참조
   const articleWrapperRef = useRef<HTMLDivElement>(null); // ArticleWrapper 참조
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const router = useRouter();
+  const { episodeId } = router.query;
+
+  // 진도율을 가져와서 스크롤 위치 설정
+  useEffect(() => {
+    const loadProgress = () => {
+      const savedProgress = localStorage.getItem(`progress-${episodeId}`);
+      if (savedProgress) {
+        const progress = parseInt(savedProgress, 10);
+        if (articleWrapperRef.current) {
+          const scrollHeight = articleWrapperRef.current.scrollHeight;
+          const scrollTop =
+            (progress / 100) *
+            (scrollHeight - articleWrapperRef.current.clientHeight);
+          articleWrapperRef.current.scrollTop = scrollTop; // 저장된 진도율 위치로 스크롤 이동
+          console.log(`스크롤 위치를 ${progress}%로 설정했습니다.`);
+        }
+      }
+    };
+
+    loadProgress(); // 컴포넌트가 렌더링될 때 진도율을 불러와서 스크롤 위치 설정
+  }, [episodeId]);
 
   useEffect(() => {
-    if (!episodeId) {
+    if (!blogId) {
       setContentUrl(null);
       return;
     }
@@ -52,7 +83,7 @@ const BlogArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
       try {
         const token = localStorage.getItem('token');
         console.log('토큰: ', token);
-        console.log('episodeId:', episodeId);
+        console.log('blogId:', blogId);
 
         // 블로그 API 호출
         const blogResponse = await axios.get(
@@ -98,15 +129,13 @@ const BlogArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
   }, [episodeId]);
 
   const saveProgress = async (scrolled: number) => {
-    const token = localStorage.getItem('token');
-
     if (!episodeId) return;
-
     try {
-      await axios.post(
+      const token = localStorage.getItem('token');
+      const response = await axios.post(
         `http://onboarding.p-e.kr:8080/resources/${episodeId}/save-progress`,
         // { resourceType: 'TEXT', progress: scrolled },
-        { resourceType: 'TEXT', progress: 0 },
+        { resourceType: 'TEXT', progress: scrolled },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -114,13 +143,15 @@ const BlogArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
           },
         },
       );
+      console.log('진도 저장 응답: ', response.data);
+      localStorage.setItem(`progress-${episodeId}`, scrolled.toString()); // 진도율 저장
     } catch (error) {
       console.error('진도 저장 오류:', error);
     }
   };
 
   const updateCompletionStatus = async () => {
-    if (!episodeId || learningCompleted) return;
+    if (!blogId || learningCompleted) return;
 
     const token = localStorage.getItem('token');
     console.log('토큰: ', token);
@@ -157,12 +188,11 @@ const BlogArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
         (scrollTop / (scrollHeight - clientHeight)) * 100,
       );
 
-      if (scrolled !== progress) {
-        setProgress(scrolled); // 진도율 업데이트
+      // if (scrolled !== progress) {
+      if (scrolled > 0) {
+        // setProgress(scrolled); // 진도율 업데이트
+        onProgressChange(scrolled);
         saveProgress(scrolled);
-        console.log('scrollTop: ', scrollTop);
-        console.log('clientHeight: ', clientHeight);
-        console.log('scrollHeight: ', scrollHeight);
         console.log(`진도율: ${scrolled}%`);
 
         // debounce로 서버 저장을 지연시킴
@@ -172,6 +202,7 @@ const BlogArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
 
         debounceTimer.current = setTimeout(() => {
           saveProgress(scrolled);
+          onProgressChange(scrolled);
           console.log(`진도율: ${scrolled}%`);
         }, 500);
 
@@ -191,10 +222,11 @@ const BlogArticle: React.FC<{ episodeId?: number }> = ({ episodeId }) => {
   // 컴포넌트 렌더링 상태 확인
   useEffect(() => {
     console.log('contentUrl:', contentUrl);
-    console.log('progress:', progress);
+    // console.log('progress:', progress);
     console.log('learningCompleted:', learningCompleted);
+    console.log({ blogId });
     console.log({ episodeId });
-  }, [contentUrl, progress, learningCompleted, episodeId]);
+  }, [contentUrl, learningCompleted, blogId, episodeId]);
 
   // 이미지 존재확인
   useEffect(() => {

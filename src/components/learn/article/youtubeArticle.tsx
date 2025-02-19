@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
@@ -92,7 +92,6 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
 
   // 사용하지 않는 매개변수는 _를 붙여 표시
   const onPlayerReady = (_event: YT.PlayerEvent) => {
-    void _event; // 사용하지 않지만 오류 방지
     console.log('Player ready');
   };
 

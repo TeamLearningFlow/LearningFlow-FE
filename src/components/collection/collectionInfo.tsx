@@ -789,7 +789,7 @@ const TypeImgBox = styled.div`
     width: 53vw;
   }
 
-  border: 1px solid red;
+  // border: 1px solid red;
 
   @media (max-width: 850px) {
     margin-top: 66px;

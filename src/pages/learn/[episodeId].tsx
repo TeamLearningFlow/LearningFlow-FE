@@ -9,17 +9,15 @@ import Header from '../../components/learnHeader';
 import TitleBar from '../../components/learn/learnTitleBar';
 import ClassTitle from '../../components/learn/learnClassTitle';
 import ClassList from '../../components/learn/learnClassList';
-import Article from '../../components/learn/article';
-//import BlogArticle from '@/components/learn/articleFolder/blogArticle';
-//import YoutubeArticle from '@/components/learn/articleFolder/newYoutubeArticle';
-
+// import Article from '../../components/learn/article';
+import YoutubeArticle from '@/components/learn/article/youtubeArticle';
+import BlogArticle from '@/components/learn/article/blogArticle';
 import Note from '../../components/learn/note';
 import {
   SkeletonClassList_S,
   SkeletonClassTitle,
   SkeletonArticle,
 } from '@/components/skeleton/skeleton_learnComponents';
-import BlogArticle from '@/components/learn/articleFolder/blogArticle';
 
 const PageWrapper = styled.div``;
 
@@ -108,14 +106,10 @@ const interestFieldMap: Record<string, string> = {
 
 const LearnPage: React.FC = () => {
   const [isClient, setIsClient] = useState(false);
-  // const { episodeId } = useParams<{ episodeId: number }>();
-  // const { collectionId } = useParams<{ collectionId: number }>();
-  // const [collectionData, setCollectionData] = useState<CollectionData | null>(null);
   const [type, setType] = useState<'youtube' | 'blog' | null>(null);
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState<string>('');
   const [field, setField] = useState<string>('');
-  // const [progress, setProgress] = useState(0);
   const context = useContext(LearnContext);
 
   if (!context) {
@@ -124,6 +118,7 @@ const LearnPage: React.FC = () => {
 
   const { updateProgress } = useContext(ProgressContext);
   const [youtubeContent, setYoutubeContent] = useState<string>('');
+  const [blogContent, setBlogContent] = useState<string>('');
   const [episodeDataState, setEpisodeDataState] = useState<EpisodeData | null>(
     null,
   );
@@ -171,6 +166,7 @@ const LearnPage: React.FC = () => {
           setType('blog');
           setTitle(parsedData.result.urlTitle);
           setField(parsedData.result.interestField);
+          setBlogContent(parsedData.result.episodeContents);
         }
         setLoading(false);
       } catch (error) {
@@ -246,6 +242,7 @@ const LearnPage: React.FC = () => {
         setType('blog');
         setTitle(blogResponse.data.result.urlTitle);
         setField(blogResponse.data.result.interestField);
+        setBlogContent(blogResponse.data.result.episodeContents);
       } else {
         console.error('유튜브도 블로그도 아닌 오류');
         setType(null);
@@ -299,7 +296,7 @@ const LearnPage: React.FC = () => {
             {parsedCollectionData && episodeId && (
               <>
                 {type === 'youtube' ? (
-                  <Article
+                  <YoutubeArticle
                     videoId={youtubeContent}
                     isCompleted={context.state.isCompleted}
                     onProgressChange={(progress) => {
@@ -312,8 +309,15 @@ const LearnPage: React.FC = () => {
                   />
                 ) : (
                   <BlogArticle
-                    episodeId={episodeIdNumber}
+                    blogId={blogContent}
                     isCompleted={context.state.isCompleted}
+                    onProgressChange={(progress) => {
+                      updateProgress(episodeIdNumber, progress);
+                      localStorage.setItem(
+                        `progress-${episodeIdNumber}`,
+                        progress.toString(),
+                      );
+                    }}
                   />
                 )}
                 {episodeDataState && (

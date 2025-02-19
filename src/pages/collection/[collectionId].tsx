@@ -57,59 +57,9 @@ export default function CollectionPage() {
   const [isClient, setIsClient] = useState(false);
   const router = useRouter();
   const { collectionId } = router.query;
-  // const collectionId = 7; // 테스트용
   const [collection, setCollection] = useState<CollectionData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  // const dummyData:  CollectionData = {
-  //   id: 1,
-  //   interestField: 'WEB_DEVELOPMENT',
-  //   title: `처음 배우는\n스프링 부트`,
-  //   creator: '김개발',
-  //   keywords: ['스프링부트', '웹개발'],
-  //   difficulties: [1, 2],
-  //   amount: 3,
-  //   runtime: 1,
-  //   textCount: 1,
-  //   videoCount: 2,
-  //   resource: [
-  //     {
-  //       episodeId: 1,
-  //       episodeName: '스프링 부트란?',
-  //       url: 'https://youtube.com/1',
-  //       resourceSource: 'youtube',
-  //       episodeNumber: 1,
-  //       progress: 100, //테스트용
-  //     },
-  //     {
-  //       episodeId: 2,
-  //       episodeName: '프로젝트 설정하기',
-  //       url: 'https://youtube.com/2',
-  //       resourceSource: 'youtube',
-  //       episodeNumber: 2,
-  //       progress: 100,
-  //     },
-  //     {
-  //       episodeId: 3,
-  //       episodeName: '첫 애플리케이션 만들기',
-  //       url: 'https://naver.com/3',
-  //       resourceSource: 'youtube',
-  //       episodeNumber: 3,
-  //       progress: 100,
-  //     },
-  //     {
-  //       episodeId: 4,
-  //       episodeName: '첫 애플리케이션 만들기',
-  //       url: 'https://tistory.com/4',
-  //       resourceSource: 'tistory',
-  //       episodeNumber: 4,
-  //       progress: 100,
-  //     }
-  //   ],
-  //   bookmarkCount: 1,
-  //   bookmarked: false,
-  // };
 
   useEffect(() => {
     setIsClient(true);
