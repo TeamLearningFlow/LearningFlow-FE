@@ -808,7 +808,7 @@ const TypeImgBoxWrapper = styled.span`
   justify-content: space-between;
   width: 30%;
 
-  border: 1px solid black;
+  // border: 1px solid black;
 
   @media (max-width: 850px) {
     justify-content: flex-end;
@@ -823,7 +823,7 @@ const TypeImgList = styled.div`
   min-width: 30px;
   align-items: center;
 
-  border: 1px solid blue;
+  // border: 1px solid blue;
 
   @media (max-width: 850px) {
     justify-content: flex-start;
@@ -866,7 +866,7 @@ const LineNDotWrapper = styled.div<{ numImages: number }>`
   justify-content: center;
   align-items: center;
 
-  border: 1px solid green;
+  // border: 1px solid green;
 
   margin-left: ${({ numImages }) =>
     `${numImages * 25}px`}; /* 마지막 아이콘 기준 여백 유지 */
