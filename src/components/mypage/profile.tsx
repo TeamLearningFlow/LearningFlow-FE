@@ -187,7 +187,7 @@ const Profile = () => {
         );
 
         if (response.data.isSuccess) {
-          console.log('이메일 변경 성공: ', response.data);
+          console.log('이메일 변경 성공');
           fetchUserData();
         } else {
           console.error('이메일 변경 실패');

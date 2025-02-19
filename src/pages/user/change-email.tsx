@@ -35,14 +35,7 @@ const VerifyEmail: React.FC = () => {
           // 로컬 스토리지에 토큰 저장
           localStorage.setItem('emailResetCode', emailResetCode as string);
           console.log('토큰 저장 완료');
-
-          // 변경된 이메일 저장
-          if (response.data.result) {
-            console.log('변경된 이메일:', response.data.result);
-            // localStorage.setItem('email', response.data.result);
-          }
-
-          // 로그인 유지한 채 마이페이지로 이동
+          
           router.replace(`/mypage/profile?emailResetCode=${emailResetCode}`);
         } else {
           console.log('토큰 무효');
