@@ -351,8 +351,8 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
 
       if (response.data.isSuccess) {
         console.log('유저 정보 가져오기 성공:', response.data.result);
-        setCurrentEmail(response.data.result.email);
-        localStorage.setItem('email', response.data.result.email);
+        setCurrentEmail(editedEmail);
+        localStorage.setItem('email', editedEmail);
       }
     } catch (error) {
       console.error('유저 정보 가져오기 실패:', error);

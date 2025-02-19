@@ -39,7 +39,7 @@ const VerifyEmail: React.FC = () => {
           // 변경된 이메일 저장
           if (response.data.result) {
             console.log('변경된 이메일:', response.data.result);
-            localStorage.setItem('email', response.data.result);
+            // localStorage.setItem('email', response.data.result);
           }
 
           // 로그인 유지한 채 마이페이지로 이동
