@@ -304,8 +304,6 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
   useEffect(() => {
     if (emailResetCode) {
       verifyEmailResetCode(emailResetCode as string);
-    } else {
-      fetchUserProfile(); // 변경된 이메일이 없으면 유저 정보만 불러오기
     }
   }, [emailResetCode]);
 
@@ -330,32 +328,8 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
         setCurrentEmail(editedEmail);
         localStorage.setItem('email', editedEmail);
       }
-
-      fetchUserProfile();
     } catch (error) {
       console.error('이메일 검증 실패:', error);
-    }
-  };
-
-  const fetchUserProfile = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        router.replace('/login');
-        return;
-      }
-
-      const response = await axios.get('https://onboarding.p-e.kr/user', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      if (response.data.isSuccess) {
-        console.log('유저 정보 가져오기 성공:', response.data.result);
-        setCurrentEmail(editedEmail);
-        localStorage.setItem('email', editedEmail);
-      }
-    } catch (error) {
-      console.error('유저 정보 가져오기 실패:', error);
     }
   };
 

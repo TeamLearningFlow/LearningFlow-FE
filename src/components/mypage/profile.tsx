@@ -79,53 +79,53 @@ const Profile = () => {
   const [isLocalDeleteModalOpen, setIsLocalDeleteModalOpen] = useState(false);
 
   const router = useRouter();
-  const { passwordResetCode } = router.query;
+  const { passwordResetCode, emailResetCode } = router.query;
   const [isEditingPassword, setIsEditingPassword] = useState(false);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        // 로컬 스토리지에서 토큰 가져오기 (로그인 시에만 접근 가능)
-        const token = localStorage.getItem('token');
-        const storedSocialType = localStorage.getItem('socialType');
-        setSocialType(storedSocialType);
+  const fetchUserData = async () => {
+    try {
+      // 로컬 스토리지에서 토큰 가져오기 (로그인 시에만 접근 가능)
+      const token = localStorage.getItem('token');
+      const storedSocialType = localStorage.getItem('socialType');
+      setSocialType(storedSocialType);
 
-        if (!token) {
-          console.error('로그인이 필요한 서비스입니다.');
-          return;
-        }
-
-        // Authorization 헤더 추가
-        const response = await axios.get('https://onboarding.p-e.kr/user', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        console.log('Profile Response Data:', response.data);
-
-        setUserData(response.data.result);
-      } catch (error: unknown) {
-        if (axios.isAxiosError(error)) {
-          if (error.response?.status === 401) {
-            console.error(
-              '토큰이 만료되었거나 잘못되었습니다. 다시 로그인해주세요.',
-            );
-            localStorage.removeItem('token'); // 만료된 토큰 삭제
-          } else {
-            console.error(
-              '사용자 정보 가져오기 실패:',
-              error.response?.data || error.message,
-            );
-          }
-        } else if (error instanceof Error) {
-          console.error(error.message);
-        } else {
-          console.error(error);
-        }
+      if (!token) {
+        console.error('로그인이 필요한 서비스입니다.');
+        return;
       }
-    };
 
+      // Authorization 헤더 추가
+      const response = await axios.get('https://onboarding.p-e.kr/user', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log('Profile Response Data:', response.data);
+
+      setUserData(response.data.result);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          console.error(
+            '토큰이 만료되었거나 잘못되었습니다. 다시 로그인해주세요.',
+          );
+          localStorage.removeItem('token'); // 만료된 토큰 삭제
+        } else {
+          console.error(
+            '사용자 정보 가져오기 실패:',
+            error.response?.data || error.message,
+          );
+        }
+      } else if (error instanceof Error) {
+        console.error(error.message);
+      } else {
+        console.error(error);
+      }
+    }
+  };
+
+  useEffect(() => {
     fetchUserData();
   }, []);
 
@@ -164,6 +164,41 @@ const Profile = () => {
 
     verifyResetCode();
   }, [passwordResetCode, router]);
+
+  // 이메일 변경 코드 확인 및 유저 정보 업데이트
+  useEffect(() => {
+    if (!emailResetCode) return;
+
+    const verifyEmailResetCode = async () => {
+      try {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+          alert('로그인이 필요한 서비스입니다.');
+          router.replace('/login');
+          return;
+        }
+
+        const response = await axios.get(
+          `https://onboarding.p-e.kr/user/change-email?emailResetCode=${emailResetCode}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+
+        if (response.data.isSuccess) {
+          console.log('이메일 변경 성공: ', response.data);
+          fetchUserData();
+        } else {
+          console.error('이메일 변경 실패');
+        }
+      } catch (error) {
+        console.error('이메일 변경 오류:', error);
+      }
+    };
+
+    verifyEmailResetCode();
+  }, [emailResetCode, router]);
 
   const handleDeleteAccount = () => {
     if (socialType === 'GOOGLE') {
