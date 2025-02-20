@@ -29,6 +29,16 @@ const Container = styled(ColumnFlexDiv)`
   // overflow: hidden;
 `;
 
+const BoardingPassImageWrapper = styled.div`
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 282px;
+  height: 158px;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+`;
+
 const BoardingPassImage = styled(Image)`
   position: absolute;
   top: 1px;
@@ -205,6 +215,32 @@ const PlaneLine = styled.span<{ width: number }>`
   background: #5e52ff;
 `;
 
+const Circle = styled.span`
+  height: 34px;
+  width: 18px;
+  background: #fff;
+  position: absolute;
+  top: 142px;
+  z-index: 10;
+  border-top: 1px solid #d9d9d9;
+  border-bottom: 1px solid #d9d9d9;
+`;
+
+const LeftCircle = styled(Circle)`
+  border-radius: 0px 17px 17px 0px;
+  left: 0;
+  border-right: 1px solid #d9d9d9;
+  border-left: 1px solid #fff;
+`;
+
+const RightCircle = styled(Circle)`
+  border-radius: 17px 0px 0px 17px;
+
+  right: 0;
+  border-left: 1px solid #d9d9d9;
+  border-right: 1px solid #fff;
+`;
+
 const interestFieldMap: Record<string, string> = {
   APP_DEVELOPMENT: '앱개발',
   WEB_DEVELOPMENT: '웹개발',
@@ -318,7 +354,20 @@ const RecentBoardingPass = ({
   return (
     <Container>
       <Image src={BoardingPassContainer} alt="boarding pass" />
-      <BoardingPassImage src={CollectionImage} alt="collection image" />
+      <BoardingPassImageWrapper>
+        <BoardingPassImage
+          src={collectionInfo.imageUrl || CollectionImage}
+          alt="collection image"
+          fill
+          style={{
+            borderTopLeftRadius: '16px',
+            borderTopRightRadius: '16px',
+            objectFit: 'cover',
+          }}
+        />
+      </BoardingPassImageWrapper>
+      <LeftCircle />
+      <RightCircle />
       <Body>
         <TagWrapper>
           <Category interestField={collectionInfo?.interestField}>

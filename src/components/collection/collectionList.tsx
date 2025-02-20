@@ -6,7 +6,6 @@ import NextClassIndex from './nextClassIndex';
 import IndexLine from './indexLine';
 import type { CollectionData } from '@/pages/collection/[collectionId]';
 import { ProgressContext } from '@/components/context/ProgressContext';
-import CompletedModal from '@/components/modal/completedModal';
 
 const CollectionListWrapper = styled.div`
   display: flex;
@@ -79,7 +78,6 @@ const CollectionList: React.FC<CollectionListProps> = ({
   const [classRound, setClassRound] = useState(1);
   const [allProgressed, setAllProgressed] = useState(false);
   const { progressByEpisode } = useContext(ProgressContext);
-  const [showCompletedModal, setShowCompletedModal] = useState(false);
 
   // 각 에피소드에 대해 전역 progress와 localStorage를 반영한 mergedResource 생성
   const mergedResource: MergedEpisode[] = resource.map((episode: Episode) => {
@@ -173,20 +171,8 @@ const CollectionList: React.FC<CollectionListProps> = ({
     }
   }, [mergedResource, onProgressUpdate]);
 
-  // 모든 회차 수강 완료하면 모달 표시
-  useEffect(() => {
-    if (allProgressed) {
-      setShowCompletedModal(true);
-    } else {
-      setShowCompletedModal(false);
-    }
-  }, [allProgressed]);
 
   return (
-    <>
-      {showCompletedModal && (
-        <CompletedModal onClose={() => setShowCompletedModal(false)} />
-      )}
       <CollectionListWrapper>
         <LineWrapper>
           <IndexLine classRound={classRound} />
@@ -225,7 +211,6 @@ const CollectionList: React.FC<CollectionListProps> = ({
           <EndIndex allProgressed={allProgressed} />
         </ListWrapper>
       </CollectionListWrapper>
-    </>
   );
 };
 

@@ -179,7 +179,7 @@ const ProgressLabel = styled.span`
   height: 18px;
   color: #959ca4;
   position: absolute;
-  bottom: -23px;
+  bottom: -3px;
   right: 0;
   white-space: nowrap;
 

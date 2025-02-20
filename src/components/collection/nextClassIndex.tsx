@@ -68,7 +68,6 @@ const NextClassIndex: React.FC<ClassIndexProps> = ({
   };
 
   const getPlatformIcon = () => {
-    console.log('4회차 resourceSource:', classData.resourceSource);
     switch (classData.resourceSource) {
       case 'youtube':
         return (

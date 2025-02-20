@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import NotLoginHeader from '../components/home/homeNotLoginHeader';
 import HomeTop from '../components/home/homeTop';
 import HomeMiddle from '../components/home/homeMiddle';
@@ -48,8 +48,20 @@ const HomePage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [nickname, setNickname] = useState('');
 
+  // 로그인 상태 체크 및 설정 함수 추가
+  const checkLoginStatus = useCallback(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      context.actions.setIsLoggedIn(true);
+    }
+  }, [context.actions]);
+
   useEffect(() => {
     setIsClient(true);
+
+    // ✅ 로그인 상태 체크 추가
+    checkLoginStatus();
+
     // 닉네임 연동
     const storedNickname = localStorage.getItem('userName');
 
@@ -66,7 +78,7 @@ const HomePage = () => {
     }
 
     fetchHomeData();
-  }, []);
+  }, [checkLoginStatus]);
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -86,10 +98,24 @@ const HomePage = () => {
       });
       const data = await response.data.result;
       console.log('home data: ', data);
+
+      // 응답에서 사용자 정보가 있으면 저장
+      if (data.userInfo?.name) {
+        localStorage.setItem('userName', data.userInfo.name);
+        setNickname(data.userInfo.name);
+      }
+
       setRecentLearning(data?.recentLearning);
       setRecommendedCollections(data.recommendedCollections);
     } catch (error) {
       console.error('Home data fetch 오류:', error);
+
+      // 토큰이 만료되었거나 유효하지 않은 경우
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        context.actions.setIsLoggedIn(false);
+        localStorage.removeItem('token');
+        localStorage.removeItem('refreshToken');
+      }
     }
   };
 
@@ -121,7 +147,6 @@ const HomePage = () => {
         )}
         <HomeCollection
           isLoggedIn={isLoggedIn}
-          nickname={nickname}
           collections={recommendedCollections}
         />
       </main>

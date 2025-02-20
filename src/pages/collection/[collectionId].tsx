@@ -76,9 +76,15 @@ export default function CollectionPage() {
       setLoading(true);
 
       try {
+        const token = localStorage.getItem('token'); // 토큰 추가가
         const response = await axios.get(
-          `https://onboarding.p-e.kr/collections/${collectionId}`,
-        );
+        `https://onboarding.p-e.kr/collections/${collectionId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        },
+      );
 
         if (response.data.isSuccess) {
           setCollection(response.data.result);

@@ -8,7 +8,7 @@ import BookmarkFilledIcon from '/public/bookmarkFilled.svg';
 import HoverBackgroundTop from '/public/hover-backgroundTopS.svg';
 import HoverBackground from '/public/hover-background.svg';
 import Plane from '/public/plane_S.svg';
-import Circle from '/public/circle.svg';
+import circle from '/public/circle.svg';
 import Calendar from '/public/calendarIcon.svg';
 
 import NaverblogIcon from '/public/platformicon/naverblog_nostroke_ic.svg';
@@ -47,6 +47,16 @@ const Container = styled(ColumnFlexDiv)`
   background: transparent;
   overflow: hidden;
   cursor: pointer;
+`;
+
+const BoardingPassImageWrapper = styled.div`
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 282px;
+  height: 158px;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
 `;
 
 const BoardingPassImage = styled(Image)`
@@ -500,6 +510,32 @@ const Gradient = styled.div`
   backdrop-filter: blur(0.9571801424026489px);
 `;
 
+const Circle = styled.span`
+  height: 34px;
+  width: 18px;
+  background: #fff;
+  position: absolute;
+  top: 142px;
+  z-index: 10;
+  border-top: 1px solid #d9d9d9;
+  border-bottom: 1px solid #d9d9d9;
+`;
+
+const LeftCircle = styled(Circle)`
+  border-radius: 0px 17px 17px 0px;
+  left: 0;
+  border-right: 1px solid #d9d9d9;
+  border-left: 1px solid #fff;
+`;
+
+const RightCircle = styled(Circle)`
+  border-radius: 17px 0px 0px 17px;
+
+  right: 0;
+  border-left: 1px solid #d9d9d9;
+  border-right: 1px solid #fff;
+`;
+
 const interestFieldMap: Record<string, string> = {
   APP_DEVELOPMENT: '앱개발',
   WEB_DEVELOPMENT: '웹개발',
@@ -805,7 +841,7 @@ const HeaderLine = ({ data }: { data: LikedCollectionData }) => {
     return (
       <LineWrapper status="학습완료">
         <DashedLine width={95} path="M0 1H95" />
-        <Image src={Circle} alt="circle" />
+        <Image src={circle} alt="circle" />
       </LineWrapper>
     );
   } else {
@@ -820,7 +856,7 @@ const HeaderLine = ({ data }: { data: LikedCollectionData }) => {
       return (
         <LineWrapper status="" left={'96px'}>
           <DashedLine width={62} path="M0 1H62" />
-          <Image src={Circle} alt="circle" />
+          <Image src={circle} alt="circle" />
         </LineWrapper>
       );
     }
@@ -844,7 +880,7 @@ const HeaderLine = ({ data }: { data: LikedCollectionData }) => {
       return (
         <LineWrapper status="" left={'78px'}>
           <DashedLine width={74} path="M0 1H74" />
-          <Image src={Circle} alt="circle" />
+          <Image src={circle} alt="circle" />
         </LineWrapper>
       );
     }
@@ -859,7 +895,7 @@ const HeaderLine = ({ data }: { data: LikedCollectionData }) => {
       return (
         <LineWrapper status="" left={'78px'}>
           <DashedLine width={111} path="M0 1H111" />
-          <Image src={Circle} alt="circle" />
+          <Image src={circle} alt="circle" />
         </LineWrapper>
       );
     }
@@ -871,7 +907,7 @@ const HeaderLine = ({ data }: { data: LikedCollectionData }) => {
       return (
         <LineWrapper status="" left={'60px'}>
           <DashedLine width={98} path="M0 1H98" />
-          <Image src={Circle} alt="circle" />
+          <Image src={circle} alt="circle" />
         </LineWrapper>
       );
     }
@@ -884,7 +920,7 @@ const HeaderLine = ({ data }: { data: LikedCollectionData }) => {
       return (
         <LineWrapper status="" left={'60px'}>
           <DashedLine width={129} path="M0 1H129" />
-          <Image src={Circle} alt="circle" />
+          <Image src={circle} alt="circle" />
         </LineWrapper>
       );
     }
@@ -897,7 +933,7 @@ const HeaderLine = ({ data }: { data: LikedCollectionData }) => {
       return (
         <LineWrapper status="" left={'42px'}>
           <DashedLine width={147} path="M0 1H147" />
-          <Image src={Circle} alt="circle" />
+          <Image src={circle} alt="circle" />
         </LineWrapper>
       );
     }
@@ -906,7 +942,7 @@ const HeaderLine = ({ data }: { data: LikedCollectionData }) => {
       return (
         <LineWrapper status="" left={'42px'}>
           <DashedLine width={154} path="M0 1H154" />
-          <Image src={Circle} alt="circle" />
+          <Image src={circle} alt="circle" />
         </LineWrapper>
       );
     }
@@ -1177,7 +1213,20 @@ const LikedCollection = ({
   return (
     <Container onClick={handleCollectionClick}>
       <Image src={BoardingPassContainer} alt="boarding pass" />
-      <BoardingPassImage src={CollectionImage} alt="collection image" />
+      <BoardingPassImageWrapper>
+        <BoardingPassImage
+          src={data.imageUrl || CollectionImage}
+          alt="collection image"
+          fill
+          style={{
+            borderTopLeftRadius: '16px',
+            borderTopRightRadius: '16px',
+            objectFit: 'cover',
+          }}
+        />
+      </BoardingPassImageWrapper>
+      <LeftCircle />
+      <RightCircle />
       <StatusTag status={data.learningStatus}>
         {LearningStatusMap[data.learningStatus]}
       </StatusTag>

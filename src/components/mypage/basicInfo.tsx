@@ -250,7 +250,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
   const [isPasswordChangeModalOpen, setIsPasswordChangeModalOpen] =
     useState(false);
 
-  // console.log('소셜 타입:', socialType);
+  console.log('소셜 타입:', socialType);
   const isGoogleLogin = socialType === 'GOOGLE';
 
   useEffect(() => {
@@ -301,7 +301,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
   const router = useRouter();
   const { emailResetCode } = router.query;
 
-  useEffect(() => {
+/*  useEffect(() => {
     if (emailResetCode) {
       verifyEmailResetCode(emailResetCode as string);
     }
@@ -335,7 +335,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
     } catch (error) {
       console.error('이메일 검증 실패:', error);
     }
-  };
+  }; */
 
   // 이메일 변경 인증 메일 보내기 api 연결
   const sendEmailVerification = async (email: string) => {
