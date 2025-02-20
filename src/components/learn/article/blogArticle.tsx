@@ -40,7 +40,6 @@ const BlogArticle: React.FC<blogArticleProps> = ({
   onProgressChange = () => {},
 }) => {
   const [contentUrl, setContentUrl] = useState<string | null>('');
-  // const [learningCompleted, setLearningCompleted] = useState<boolean>(false);
   const imgRef = useRef<HTMLImageElement>(null); // 이미지 참조
   const articleWrapperRef = useRef<HTMLDivElement>(null); // ArticleWrapper 참조
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -140,16 +139,8 @@ const BlogArticle: React.FC<blogArticleProps> = ({
         (scrollTop / (scrollHeight - clientHeight)) * 100,
       );
 
-      // if (scrolled !== progress) {
       if (scrolled > 0) {
-        // onProgressChange(scrolled); // 로컬에
-        // saveProgress(scrolled); // 서버에
         console.log(`블로그 진도율1: ${scrolled}%`);
-
-        // // debounce로 서버 저장을 지연시킴
-        // if (debounceTimer.current) {
-        //   clearTimeout(debounceTimer.current);
-        // }
 
         debounceTimer.current = setTimeout(() => {
           saveProgress(scrolled);
@@ -157,17 +148,19 @@ const BlogArticle: React.FC<blogArticleProps> = ({
           console.log(`블로그 진도율2: ${scrolled}%`);
         }, 500);
 
-        // 진도율이 80% 이상일 경우 학습 완료 처리
-        // if (scrolled >= 80 && !learningCompleted) {
         if (scrolled >= 80) {
           console.log('학습완료');
-          // updateCompletionStatus();
         }
       }
     } catch (err) {
       console.warn(
         '스크롤 이벤트 접근 불가 (CORS 정책으로 인해 차단될 가능성 있음)',
       );
+    }
+  };
+  const resetScrollPosition = () => {
+    if (articleWrapperRef.current) {
+      articleWrapperRef.current.scrollTop = 0; // 스크롤 위치 초기화
     }
   };
   useEffect(() => {
@@ -179,8 +172,6 @@ const BlogArticle: React.FC<blogArticleProps> = ({
   }, []);
 
   useEffect(() => {
-    // setSavedProgress(0); // 새 에피소드가 변경되면 초기화 (이전 진도율 반영 방지)
-
     const getProgress = async () => {
       if (!episodeId) return;
       try {
@@ -196,9 +187,7 @@ const BlogArticle: React.FC<blogArticleProps> = ({
 
         if (response.status === 200) {
           const progress = response.data.result.progress || 0; // 진도율이 없으면 0
-          // setSavedProgress(response.data.result.progress);
           setSavedProgress(progress);
-          // console.log('진도율 가져옴:', response.data.result.progress);
           console.log('진도율 가져옴:', progress);
           const episodeInfo = response.data.result.episodeInformationList.find(
             (episode: { episodeId: number; isCompleted: boolean }) =>
@@ -232,6 +221,7 @@ const BlogArticle: React.FC<blogArticleProps> = ({
     };
 
     getProgress();
+    resetScrollPosition();
 
     const wrapper = articleWrapperRef.current;
     if (wrapper) {
@@ -244,20 +234,6 @@ const BlogArticle: React.FC<blogArticleProps> = ({
       }
     };
   }, [episodeId]);
-
-  // 콘텐츠 로드 후 저장된 진도율에 따라 스크롤 조정
-  // useEffect(() => {
-  //   // contentUrl 또는 savedProgress가 변경될 때만 스크롤을 조정
-  //   if (contentUrl && articleWrapperRef.current && savedProgress !== null) {
-  //     const { scrollHeight, clientHeight } = articleWrapperRef.current;
-  //     const newScrollTop =
-  //       (savedProgress / 100) * (scrollHeight - clientHeight);
-
-  //     // 진도율에 따라 스크롤 위치 조정
-  //     articleWrapperRef.current.scrollTop = newScrollTop;
-  //     console.log(`초기 스크롤 위치 설정: ${newScrollTop}px`);
-  //   }
-  // }, [contentUrl, savedProgress]);
 
   // 컴포넌트 렌더링 상태 확인
   useEffect(() => {

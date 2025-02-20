@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useRouter } from 'next/router';
 
 const TitleWrapper = styled.div`
   display: flex;
@@ -7,6 +8,8 @@ const TitleWrapper = styled.div`
   height: 50px;
   background-color: rgba(31, 31, 31, 1);
   padding: 0 3%;
+
+  cursor: pointer;
 
   @media (max-width: 850px) {
     height: 45px;
@@ -88,12 +91,25 @@ interface TitleBarProps {
   data: {
     title: string;
     interestField: string;
+    collectionId: string;
   };
 }
 
 const TitleBar: React.FC<TitleBarProps> = ({ data }) => {
+  const router = useRouter();
+
+  const handleCollectionPage = () => {
+    const getCollectionId = data.collectionId ?? '';
+    if (!getCollectionId) {
+      console.error('collectionId 없음');
+      return;
+    }
+
+    router.push(`/collection/${getCollectionId}`);
+  };
+
   return (
-    <TitleWrapper>
+    <TitleWrapper onClick={handleCollectionPage}>
       <LineIconWrapper>{/* <LineIcon /> */}|</LineIconWrapper>
       <TitleBox>
         {data.title} <TitleDot>·</TitleDot>

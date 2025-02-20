@@ -17,45 +17,109 @@ const LearnModal: React.FC<LearnModalProps> = ({
   const [serverIsCompleted, setServerIsCompleted] = useState(false);
   const [serverProgress, setServerProgress] = useState(0);
 
-  useEffect(() => {
-    const getServerProgress = async () => {
-      try {
-        const token = localStorage.getItem('token');
+  // useEffect(() => {
+  //   const getServerProgress = async () => {
+  //     try {
+  //       const token = localStorage.getItem('token');
 
-        const response = await axios.get(
-          `https://onboarding.p-e.kr/resources/${episodeId}/blog`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+  //       const response = await axios.get(
+  //         `https://onboarding.p-e.kr/resources/${episodeId}/blog`,
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         },
+  //       );
+
+  //       console.log('응답 상태 코드: ', response.status);
+
+  //       if (response.status === 200) {
+  //         console.log(
+  //           'getServerProgress(LearnModal): ',
+  //           response.data.result.progress,
+  //         );
+  //         console.log(
+  //           'getServerIsCompleted(LearnModal): ',
+  //           response.data.result.isCompleted,
+  //         );
+  //         setServerProgress(response.data.result.progress);
+  //         setServerIsCompleted(response.data.result.isCompleted);
+  //       }
+  //     } catch (error) {
+  //       console.error('에러 발생: ', error);
+  //     }
+  //   };
+  //   getServerProgress();
+  //   // }, [episodeId, serverProgress]);
+  // }, [episodeId]);
+
+  // const ReTakeClass = async () => {
+  //   // setIsClicked(true);
+  //   // 진도율을 0으로 업데이트 (API 호출 없이 localStorage와 부모 콜백으로 처리)
+  //   localStorage.setItem(`progress-${episodeId}`, '0');
+
+  //   try {
+  //     const token = localStorage.getItem('token');
+  //     const headers = token
+  //       ? {
+  //           Authorization: `Bearer ${token}`,
+  //           'Content-Type': 'application/json',
+  //         }
+  //       : {};
+
+  //     const response = await axios.post(
+  //       `https://onboarding.p-e.kr/resources/${episodeId}/update-complete`,
+  //       { progress: 0, isCompleted: false }, // 진도율 0으로 설정
+  //       { headers },
+  //     );
+
+  //     if (response.status === 200) {
+  //       console.log('학습 상태 초기화 성공:', response.data);
+  //       setServerProgress(0);
+  //       setServerIsCompleted(false);
+  //       onRetakeClass();
+  //       onClose();
+  //     }
+  //   } catch (error) {
+  //     console.error('학습 상태 초기화 실패:', error);
+  //   }
+
+  //   // 부모에서 진도율 0 업데이트 및 기타 상태 초기화 로직 실행
+  //   onRetakeClass();
+  //   onClose();
+  //   // setIsClicked(false);
+  // };
+  const getServerProgress = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(
+        `https://onboarding.p-e.kr/resources/${episodeId}/blog`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        },
+      );
 
-        console.log('응답 상태 코드: ', response.status);
+      console.log('응답 상태 코드: ', response.status);
 
-        if (response.status === 200) {
-          console.log(
-            'getServerProgress(LearnModal): ',
-            response.data.result.progress,
-          );
-          console.log(
-            'getServerIsCompleted(LearnModal): ',
-            response.data.result.isCompleted,
-          );
-          setServerProgress(response.data.result.progress);
-          setServerIsCompleted(response.data.result.isCompleted);
-        }
-      } catch (error) {
-        console.error('에러 발생: ', error);
+      if (response.status === 200) {
+        setServerProgress(response.data.result.progress);
+        setServerIsCompleted(response.data.result.isCompleted);
       }
-    };
+    } catch (error) {
+      console.error('에러 발생: ', error);
+    }
+  };
+
+  useEffect(() => {
     getServerProgress();
-  }, [episodeId, serverProgress]);
+  }, [episodeId]);
 
   const ReTakeClass = async () => {
-    // setIsClicked(true);
-    // 진도율을 0으로 업데이트 (API 호출 없이 localStorage와 부모 콜백으로 처리)
+    // 진도율을 0으로 업데이트 (localStorage와 부모 콜백으로 처리)
     localStorage.setItem(`progress-${episodeId}`, '0');
+    setServerProgress(0); // 진도율 초기화
 
     try {
       const token = localStorage.getItem('token');
@@ -68,26 +132,41 @@ const LearnModal: React.FC<LearnModalProps> = ({
 
       const response = await axios.post(
         `https://onboarding.p-e.kr/resources/${episodeId}/update-complete`,
-        { progress: 0 }, // 진도율 0으로 설정
+        { progress: 0, isCompleted: false }, // 진도율 0으로 설정
         { headers },
       );
 
       if (response.status === 200) {
         console.log('학습 상태 초기화 성공:', response.data);
-        setServerProgress(0);
-        setServerIsCompleted(false);
+        // 서버 상태가 갱신되면 getServerProgress를 다시 호출하여 최신 상태를 반영
+        getServerProgress();
         onRetakeClass();
         onClose();
       }
     } catch (error) {
       console.error('학습 상태 초기화 실패:', error);
     }
-
-    // 부모에서 진도율 0 업데이트 및 기타 상태 초기화 로직 실행
-    onRetakeClass();
-    onClose();
-    // setIsClicked(false);
   };
+
+  // 스크롤 감지
+  const handleScroll = () => {
+    const progress =
+      (window.scrollY /
+        (document.documentElement.scrollHeight - window.innerHeight)) *
+      100;
+    setServerProgress(progress); // 진행 상태를 스크롤에 맞춰 갱신
+    localStorage.setItem(`progress-${episodeId}`, `${progress}`);
+  };
+
+  useEffect(() => {
+    // 스크롤 이벤트 등록
+    window.addEventListener('scroll', handleScroll);
+
+    // 컴포넌트 언마운트 시 이벤트 제거
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   return (
     <>

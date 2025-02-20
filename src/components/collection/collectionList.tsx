@@ -68,13 +68,11 @@ interface CollectionListProps {
       completed: boolean;
     }[],
   ) => void;
-  scrollPosition: number;
 }
 
 const CollectionList: React.FC<CollectionListProps> = ({
   collection,
   onProgressUpdate,
-  scrollPosition,
 }) => {
   const { resource } = collection;
   const [classRound, setClassRound] = useState(1);
@@ -105,13 +103,6 @@ const CollectionList: React.FC<CollectionListProps> = ({
       completed: progress >= 80,
     };
   });
-
-  useEffect(() => {
-    if (scrollPosition > 0) {
-      // 페이지 로드 후 스크롤 위치를 이동
-      window.scrollTo(0, scrollPosition);
-    }
-  }, [scrollPosition]);
 
   useEffect(() => {
     if (mergedResource.length === 0) return;
@@ -180,46 +171,45 @@ const CollectionList: React.FC<CollectionListProps> = ({
     }
   }, [mergedResource, onProgressUpdate]);
 
-
   return (
-      <CollectionListWrapper>
-        <LineWrapper>
-          <IndexLine classRound={classRound} />
-        </LineWrapper>
-        <ListWrapper>
-          <StartIndex />
-          <ListContainer>
-            {mergedResource.map((classData: MergedEpisode) => {
-              if (classData.progress === 0) {
-                return (
-                  <NextClassIndex
-                    key={classData.episodeNumber}
-                    classData={classData}
-                    collection={collection}
-                  />
-                );
-              } else if (classData.progress >= 80) {
-                return (
-                  <ClassIndex
-                    key={classData.episodeNumber}
-                    classData={classData}
-                    collection={collection}
-                  />
-                );
-              } else {
-                return (
-                  <NowPlaying
-                    key={classData.episodeNumber}
-                    classData={classData}
-                    collection={collection}
-                  />
-                );
-              }
-            })}
-          </ListContainer>
-          <EndIndex allProgressed={allProgressed} />
-        </ListWrapper>
-      </CollectionListWrapper>
+    <CollectionListWrapper>
+      <LineWrapper>
+        <IndexLine classRound={classRound} />
+      </LineWrapper>
+      <ListWrapper>
+        <StartIndex />
+        <ListContainer>
+          {mergedResource.map((classData: MergedEpisode) => {
+            if (classData.progress === 0) {
+              return (
+                <NextClassIndex
+                  key={classData.episodeNumber}
+                  classData={classData}
+                  collection={collection}
+                />
+              );
+            } else if (classData.progress >= 80) {
+              return (
+                <ClassIndex
+                  key={classData.episodeNumber}
+                  classData={classData}
+                  collection={collection}
+                />
+              );
+            } else {
+              return (
+                <NowPlaying
+                  key={classData.episodeNumber}
+                  classData={classData}
+                  collection={collection}
+                />
+              );
+            }
+          })}
+        </ListContainer>
+        <EndIndex allProgressed={allProgressed} />
+      </ListWrapper>
+    </CollectionListWrapper>
   );
 };
 
