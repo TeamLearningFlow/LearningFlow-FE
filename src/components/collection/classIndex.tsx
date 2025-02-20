@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
-import { useRouter } from "next/router";
-import axios from "axios";
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import axios from 'axios';
 import LoginAuthModal from '../modal/loginModal';
 import styled from 'styled-components';
 import Image from 'next/image';
@@ -18,12 +18,12 @@ interface ClassIndexProps {
   collection: CollectionData;
 }
 
-
 const ClassIndex: React.FC<ClassIndexProps> = ({ classData, collection }) => {
   const router = useRouter();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
- {/* const handleClick = async () => {
+  {
+    /* const handleClick = async () => {
     // episodeId를 임의로 설정
     const episodeId = 54;
   
@@ -47,9 +47,9 @@ const ClassIndex: React.FC<ClassIndexProps> = ({ classData, collection }) => {
       console.error("강의 불러오기 실패:", error);
     }
   };
-  */} 
+  */
+  }
 
- 
   const handleClick = async () => {
     const episodeId = classData.episodeId;
 
@@ -177,7 +177,6 @@ const ClassIndex: React.FC<ClassIndexProps> = ({ classData, collection }) => {
   );
 };
 
-
 const StartIndex = () => {
   return (
     <StartComponentWrapper>
@@ -201,7 +200,7 @@ const StartIndex = () => {
   );
 };
 
-const EndIndex: React.FC<{allProgressed: boolean}> = ({allProgressed}) => {
+const EndIndex: React.FC<{ allProgressed: boolean }> = ({ allProgressed }) => {
   return (
     <EndComponentWrapper>
       <RadioWrapper>
@@ -222,10 +221,7 @@ const EndIndex: React.FC<{allProgressed: boolean}> = ({allProgressed}) => {
   );
 };
 
-
-
 export { ClassIndex, StartIndex, EndIndex };
-
 
 const ComponentWrapper = styled.div`
   display: flex;
@@ -446,7 +442,7 @@ const PlatformIcon = styled.div`
 const StartIndexContainer = styled.div`
   font-size: 18px;
   font-weight: 600;
-  color:  rgba(79, 83, 87, 1);
+  color: rgba(79, 83, 87, 1);
 
   @media (max-width: 850px) {
     font-size: 16px;

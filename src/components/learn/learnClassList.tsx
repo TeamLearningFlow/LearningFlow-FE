@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { CompletedClass, CurrentClass, NextClass } from './learnClassIndex';
 import { CollectionData } from '@/pages/collection/[collectionId]';
@@ -46,7 +46,7 @@ const ComponentWrapper = styled.div`
 `;
 
 interface ResourceData {
-  episodeId: number; 
+  episodeId: number;
   episodeName: string;
   url: string;
   resourceSource: 'youtube' | 'naverBlog' | 'tistory' | 'velog'; // 리소스 출처
@@ -61,14 +61,18 @@ interface ClassListProps {
   collectionData: CollectionData;
 }
 
-const ClassList: React.FC<ClassListProps> = ({ resource, currentEpisode, collectionData }) => {
+const ClassList: React.FC<ClassListProps> = ({
+  resource,
+  currentEpisode,
+  collectionData,
+}) => {
   useEffect(() => {
     console.log('ClassList :', { resource, currentEpisode, collectionData });
   }, [resource, currentEpisode, collectionData]);
   return (
     <ComponentWrapper>
       {resource.map((classItem) => {
-        console.log('classItem:', classItem);
+        // console.log('classItem:', classItem);
         if (classItem.episodeId === currentEpisode) {
           return (
             <CurrentClass

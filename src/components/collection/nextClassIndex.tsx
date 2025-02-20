@@ -1,8 +1,8 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import { useRouter } from "next/router";
-import axios from "axios";
+import { useRouter } from 'next/router';
+import axios from 'axios';
 import LoginAuthModal from '../modal/loginModal';
 import PlayButton from '/public/playButton.svg';
 import Youtube from '/public/platformicon/youtube_ic.svg';
@@ -16,7 +16,6 @@ interface ClassIndexProps {
   classData: CollectionData['resource'][0];
   collection: CollectionData;
 }
-
 
 const NextClassIndex: React.FC<ClassIndexProps> = ({
   classData,
@@ -67,7 +66,6 @@ const NextClassIndex: React.FC<ClassIndexProps> = ({
       }
     }
   };
-
 
   const getPlatformIcon = () => {
     console.log('4회차 resourceSource:', classData.resourceSource);
@@ -155,8 +153,6 @@ const NextClassIndex: React.FC<ClassIndexProps> = ({
 };
 
 export default NextClassIndex;
-
-
 
 const ComponentWrapper = styled.div`
   display: flex;
@@ -299,7 +295,7 @@ const IndexWrapper = styled.div`
 `;
 
 const PlatformIcon = styled.div`
- position: relative;
+  position: relative;
   width: 60px;
   height: 60px;
   min-width: 40px;
@@ -319,7 +315,6 @@ const PlatformIcon = styled.div`
     min-height: 25px;
   }
 `;
-
 
 const IndexContainer = styled.div`
   display: flex;
@@ -394,4 +389,3 @@ const TitleBox = styled.div`
     max-width: 170px;
   }
 `;
-

@@ -126,7 +126,7 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
         {
           resourceType: 'VIDEO',
           // progress 필드에 계산된 progressValue(백분율)를 전달합니다.
-          progress: progressValue, 
+          progress: progressValue,
         },
         {
           headers: {

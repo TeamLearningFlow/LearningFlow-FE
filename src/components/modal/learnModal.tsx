@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 
@@ -14,6 +14,43 @@ const LearnModal: React.FC<LearnModalProps> = ({
   onRetakeClass,
 }) => {
   // const [isClicked, setIsClicked] = useState(false);
+  const [serverIsCompleted, setServerIsCompleted] = useState(false);
+  const [serverProgress, setServerProgress] = useState(0);
+
+  useEffect(() => {
+    const getServerProgress = async () => {
+      try {
+        const token = localStorage.getItem('token');
+
+        const response = await axios.get(
+          `https://onboarding.p-e.kr/resources/${episodeId}/blog`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        console.log('응답 상태 코드: ', response.status);
+
+        if (response.status === 200) {
+          console.log(
+            'getServerProgress(LearnModal): ',
+            response.data.result.progress,
+          );
+          console.log(
+            'getServerIsCompleted(LearnModal): ',
+            response.data.result.isCompleted,
+          );
+          setServerProgress(response.data.result.progress);
+          setServerIsCompleted(response.data.result.isCompleted);
+        }
+      } catch (error) {
+        console.error('에러 발생: ', error);
+      }
+    };
+    getServerProgress();
+  }, [episodeId, serverProgress]);
 
   const ReTakeClass = async () => {
     // setIsClicked(true);
@@ -37,6 +74,8 @@ const LearnModal: React.FC<LearnModalProps> = ({
 
       if (response.status === 200) {
         console.log('학습 상태 초기화 성공:', response.data);
+        setServerProgress(0);
+        setServerIsCompleted(false);
         onRetakeClass();
         onClose();
       }
