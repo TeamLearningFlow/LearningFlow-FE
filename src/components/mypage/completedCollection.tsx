@@ -624,7 +624,7 @@ const CompletedCollection = ({
           <Image src={BoardingPassContainer} alt="boardingpass" />
           <BoardingPassImageWrapper>
             <BoardingPassImage
-              src={data.imageUrl || CollectionImage}
+              src={collection.imageUrl || CollectionImage}
               alt="collection image"
               fill
               style={{
