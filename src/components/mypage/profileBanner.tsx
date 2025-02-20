@@ -6,12 +6,17 @@ import ProfileEditIcon from '/public/profileEditIcon.svg';
 import user from '/public/Guest.svg';
 
 const Container = styled.div`
-  width: 1200px;
+  width: 100%;
+  max-width: 1200px;
   height: 350px;
   position: relative;
   margin: 48px 120px 0 120px;
 
-  /* 반응형 설정 */
+  @media (max-width: 1400px) {
+    max-width: 1000px;
+    margin: 20px 0px 54px 5px;
+  }
+
   @media (max-width: 1024px) {
     width: 1000px;
     margin: 20px 10px 0 10px;

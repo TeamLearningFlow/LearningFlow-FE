@@ -5,6 +5,8 @@ import Image from 'next/image';
 import BoardingPass from './homeBoardingPass';
 import AirplaneIcon from '/public/airplaneIcon.svg';
 
+import Skeleton from '../../components/skeleton/skeleton_boardingPass_M';
+
 const HomeCollectionWrapper = styled.div`
   display: flex;
   width: 100%;
@@ -128,6 +130,8 @@ const HomeCollection: React.FC<{
 
   const [nickname, setNickname] = useState<string | null>(null);
 
+  const [loading, setLoading] = useState(true);
+
   // 유저 닉네임 가져오기
   const fetchUserData = async () => {
     try {
@@ -151,6 +155,13 @@ const HomeCollection: React.FC<{
       fetchUserData();
     }
   }, [isLoggedIn]);
+
+  // 스켈레톤 적용
+  useEffect(() => {
+    if (collections.length > 0) {
+      setLoading(false);
+    }
+  }, [collections]);
 
   return (
     <>
@@ -179,9 +190,17 @@ const HomeCollection: React.FC<{
           </HeaderText>
         </CollectionHeader>
         <CollectionList>
-          {collections?.map((item, index) => (
-            <BoardingPass key={index} data={item} showHoverCollection={true} />
-          ))}
+          {loading
+            ? Array.from({ length: 3 }).map((_, index) => (
+                <Skeleton key={index} />
+              ))
+            : collections.map((item, index) => (
+                <BoardingPass
+                  key={index}
+                  data={item}
+                  showHoverCollection={true}
+                />
+              ))}
         </CollectionList>
       </HomeCollectionWrapper>
     </>
