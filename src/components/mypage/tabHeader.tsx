@@ -21,7 +21,7 @@ const TabMenu = styled.div`
 
   @media (max-width: 1400px) {
     top: 397px;
-    left: 41px;
+    left: 28px;
   }
 
   @media (max-width: 1024px) {

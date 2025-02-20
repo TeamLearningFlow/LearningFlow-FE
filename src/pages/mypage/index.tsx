@@ -17,7 +17,7 @@ const PageContainer = styled.div`
 
   @media (max-width: 1400px) {
     width: 1000px;
-    margin: 20px 50px 100px 50px;
+    margin: 20px 50px 100px 30px;
   }
 
   @media (max-width: 1024px) {
