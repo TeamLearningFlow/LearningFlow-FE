@@ -169,7 +169,7 @@ const LandingPage: React.FC = () => {
     }
 
     try {
-      const response = await axios.put(
+      const response = await axios.post(
         `https://onboarding.p-e.kr/oauth2/additional-info?oauth2RegistrationCode=${storedOauth2RegistrationCode}`,
         requestData,
         {
