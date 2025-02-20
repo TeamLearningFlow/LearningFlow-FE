@@ -38,18 +38,19 @@ interface blogArticleProps {
 const BlogArticle: React.FC<blogArticleProps> = ({
   blogId,
   onProgressChange = () => {},
-  isCompleted,
 }) => {
   const [contentUrl, setContentUrl] = useState<string | null>('');
-  const [learningCompleted, setLearningCompleted] =
-    useState<boolean>(isCompleted);
-  const [savedProgress, setSavedProgress] = useState<number>(0); // 저장된 진도율 상태
+  // const [learningCompleted, setLearningCompleted] = useState<boolean>(false);
   const imgRef = useRef<HTMLImageElement>(null); // 이미지 참조
   const articleWrapperRef = useRef<HTMLDivElement>(null); // ArticleWrapper 참조
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
   const { episodeId } = router.query;
+
+  const [savedProgress, setSavedProgress] = useState<number>(0); // 저장된 진도율 상태
+  const [savedLearningCompleted, setSavedLearningCompleted] =
+    useState<boolean>(false); // 저장된 수강완료 상태
 
   useEffect(() => {
     if (!blogId) {
@@ -104,7 +105,7 @@ const BlogArticle: React.FC<blogArticleProps> = ({
     };
 
     fetchContent();
-  }, [episodeId]);
+  }, [episodeId, blogId]);
 
   const saveProgress = async (scrolled: number) => {
     if (!episodeId) return;
@@ -121,40 +122,14 @@ const BlogArticle: React.FC<blogArticleProps> = ({
         },
       );
       console.log('진도 저장 응답: ', response.data);
-      // localStorage.setItem(`progress-${episodeId}`, scrolled.toString()); // 진도율 저장
+      localStorage.setItem(`progress-${episodeId}`, scrolled.toString()); // 진도율 저장
     } catch (error) {
       console.error('진도 저장 오류:', error);
     }
   };
 
-  const updateCompletionStatus = async () => {
-    if (!blogId || learningCompleted) return;
-
-    const token = localStorage.getItem('token');
-    console.log('토큰: ', token);
-
-    try {
-      const response = await axios.post(
-        `https://onboarding.p-e.kr/resources/${episodeId}/update-complete`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        },
-      );
-      if (response.status === 200) {
-        console.log('수강 완료 상태 업데이트:', response.data);
-        setLearningCompleted(true);
-      }
-    } catch (error) {
-      console.error('수강 완료 업데이트 오류:', error);
-    }
-  };
-
   const handleScroll = () => {
-    if (!articleWrapperRef.current || learningCompleted) return; // 학습 완료되었으면 스크롤 감지 중단
+    if (!articleWrapperRef.current || savedLearningCompleted) return; // 완료된 경우 실행 X
 
     try {
       const { scrollTop, clientHeight, scrollHeight } =
@@ -167,24 +142,24 @@ const BlogArticle: React.FC<blogArticleProps> = ({
 
       // if (scrolled !== progress) {
       if (scrolled > 0) {
-        // setProgress(scrolled); // 진도율 업데이트
-        onProgressChange(scrolled);
-        saveProgress(scrolled);
-        console.log(`진도율: ${scrolled}%`);
+        // onProgressChange(scrolled); // 로컬에
+        // saveProgress(scrolled); // 서버에
+        console.log(`블로그 진도율1: ${scrolled}%`);
 
-        // debounce로 서버 저장을 지연시킴
-        if (debounceTimer.current) {
-          clearTimeout(debounceTimer.current);
-        }
+        // // debounce로 서버 저장을 지연시킴
+        // if (debounceTimer.current) {
+        //   clearTimeout(debounceTimer.current);
+        // }
 
         debounceTimer.current = setTimeout(() => {
           saveProgress(scrolled);
           onProgressChange(scrolled);
-          console.log(`진도율: ${scrolled}%`);
+          console.log(`블로그 진도율2: ${scrolled}%`);
         }, 500);
 
         // 진도율이 80% 이상일 경우 학습 완료 처리
-        if (scrolled >= 80 && !learningCompleted) {
+        // if (scrolled >= 80 && !learningCompleted) {
+        if (scrolled >= 80) {
           console.log('학습완료');
           // updateCompletionStatus();
         }
@@ -195,8 +170,17 @@ const BlogArticle: React.FC<blogArticleProps> = ({
       );
     }
   };
+  useEffect(() => {
+    return () => {
+      if (debounceTimer.current) {
+        clearTimeout(debounceTimer.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
+    // setSavedProgress(0); // 새 에피소드가 변경되면 초기화 (이전 진도율 반영 방지)
+
     const getProgress = async () => {
       if (!episodeId) return;
       try {
@@ -209,15 +193,35 @@ const BlogArticle: React.FC<blogArticleProps> = ({
             },
           },
         );
-        // console.log('/blog 응답: ', response);
 
-        if (response.status !== 200) {
+        if (response.status === 200) {
+          const progress = response.data.result.progress || 0; // 진도율이 없으면 0
+          // setSavedProgress(response.data.result.progress);
+          setSavedProgress(progress);
+          // console.log('진도율 가져옴:', response.data.result.progress);
+          console.log('진도율 가져옴:', progress);
+          const episodeInfo = response.data.result.episodeInformationList.find(
+            (episode: { episodeId: number; isCompleted: boolean }) =>
+              episode.episodeId === Number(episodeId),
+          );
+
+          if (episodeInfo) {
+            setSavedLearningCompleted(episodeInfo.isCompleted);
+            console.log('완료 상태 가져옴:', episodeInfo.isCompleted);
+          }
+
+          // 진도율이 로드된 후 바로 스크롤 위치를 설정
+          if (articleWrapperRef.current && progress !== null) {
+            const { scrollHeight, clientHeight } = articleWrapperRef.current;
+            const newScrollTop =
+              (progress / 100) * (scrollHeight - clientHeight);
+            articleWrapperRef.current.scrollTop = newScrollTop;
+            console.log(`초기 스크롤 위치 설정: ${newScrollTop}px`);
+          }
+        } else {
           console.error('진도율 가져옴 오류: ', response);
           return;
         }
-        const savedProgress = response.data.result.progress;
-        console.log('진도율 가져옴:', savedProgress);
-        setSavedProgress(savedProgress);
       } catch (error) {
         const err = error as AxiosError;
         console.error(
@@ -229,49 +233,44 @@ const BlogArticle: React.FC<blogArticleProps> = ({
 
     getProgress();
 
-    if (articleWrapperRef.current) {
-      articleWrapperRef.current.addEventListener('scroll', handleScroll);
+    const wrapper = articleWrapperRef.current;
+    if (wrapper) {
+      wrapper.addEventListener('scroll', handleScroll);
     }
 
     return () => {
-      if (articleWrapperRef.current) {
-        articleWrapperRef.current.removeEventListener('scroll', handleScroll);
+      if (wrapper) {
+        wrapper.removeEventListener('scroll', handleScroll);
       }
     };
   }, [episodeId]);
 
   // 콘텐츠 로드 후 저장된 진도율에 따라 스크롤 조정
-  useEffect(() => {
-    if (articleWrapperRef.current && savedProgress > 0) {
-      const { scrollHeight, clientHeight } = articleWrapperRef.current;
-      const newScrollTop =
-        (savedProgress / 100) * (scrollHeight - clientHeight);
-      articleWrapperRef.current.scrollTop = newScrollTop;
-      console.log(`초기 스크롤 위치 설정: ${newScrollTop}px`);
-    }
-  }, [contentUrl, savedProgress]);
+  // useEffect(() => {
+  //   // contentUrl 또는 savedProgress가 변경될 때만 스크롤을 조정
+  //   if (contentUrl && articleWrapperRef.current && savedProgress !== null) {
+  //     const { scrollHeight, clientHeight } = articleWrapperRef.current;
+  //     const newScrollTop =
+  //       (savedProgress / 100) * (scrollHeight - clientHeight);
 
-  useEffect(() => {
-    setLearningCompleted(isCompleted);
-  }, [isCompleted]);
+  //     // 진도율에 따라 스크롤 위치 조정
+  //     articleWrapperRef.current.scrollTop = newScrollTop;
+  //     console.log(`초기 스크롤 위치 설정: ${newScrollTop}px`);
+  //   }
+  // }, [contentUrl, savedProgress]);
 
   // 컴포넌트 렌더링 상태 확인
   useEffect(() => {
     console.log('contentUrl:', contentUrl);
-    console.log('learningCompleted:', learningCompleted);
+    console.log('learningCompleted:', savedLearningCompleted);
     console.log({ blogId });
     console.log({ episodeId });
-  }, [contentUrl, learningCompleted, blogId, episodeId]);
+  }, [contentUrl, savedLearningCompleted, blogId, episodeId]);
 
   useEffect(() => {
     if (imgRef.current && !loading) {
       setLoading(false); // 이미지 로드 완료
     }
-  }, [contentUrl]);
-
-  // 이미지 존재확인
-  useEffect(() => {
-    console.log('imgRef:', imgRef.current);
   }, [contentUrl]);
 
   return (

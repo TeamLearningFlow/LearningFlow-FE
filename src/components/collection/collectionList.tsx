@@ -68,11 +68,13 @@ interface CollectionListProps {
       completed: boolean;
     }[],
   ) => void;
+  scrollPosition: number;
 }
 
 const CollectionList: React.FC<CollectionListProps> = ({
   collection,
   onProgressUpdate,
+  scrollPosition,
 }) => {
   const { resource } = collection;
   const [classRound, setClassRound] = useState(1);
@@ -103,6 +105,13 @@ const CollectionList: React.FC<CollectionListProps> = ({
       completed: progress >= 80,
     };
   });
+
+  useEffect(() => {
+    if (scrollPosition > 0) {
+      // 페이지 로드 후 스크롤 위치를 이동
+      window.scrollTo(0, scrollPosition);
+    }
+  }, [scrollPosition]);
 
   useEffect(() => {
     if (mergedResource.length === 0) return;
