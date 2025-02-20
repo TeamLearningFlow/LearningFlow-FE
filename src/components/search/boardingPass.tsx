@@ -20,7 +20,7 @@ import NaverblogLine from '/public/platformicon/naverblog_ic.svg';
 import TistoryLine from '/public/platformicon/tistory_ic.svg';
 import YoutubeLine from '/public/platformicon/youtube_ic.svg';
 import OnStudying from '/public/onstudying.svg';
-import CompletedStamp from '/public/completedStamp.svg';
+import CompletedStamp from '/public/completedStampS.svg';
 import { SearchResult } from './searchResult';
 import { useRouter } from 'next/router';
 import axios from 'axios';
@@ -479,7 +479,7 @@ const CompletedStampIcon = styled.div`
   width: 85px;
   height: 85px;
   margin-left: 160px;
-  margin-top: -15px;
+  margin-top: -23px;
 `;
 
 const Gradient = styled.div`
