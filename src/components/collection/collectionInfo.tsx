@@ -466,7 +466,7 @@ const BookMarkedBox = styled.div`
   margin-left: -16%;
   margin-top: 22px;
 
-  z-index: 2000;
+  z-index: 99;
 
   @media (max-width: 1160px) {
     margin-left: -18%;
@@ -494,7 +494,7 @@ const BookMarkedBox = styled.div`
 
 const BookMarkedIMG = styled(Image)<{ isHovered: boolean }>`
   cursor: pointer;
-  z-index: 2000;
+  z-index: 99;
 
   opacity: ${(props) => (props.isHovered ? 1 : 0)};
   visibility: ${(props) => (props.isHovered ? 'visible' : 'hidden')};
@@ -833,7 +833,7 @@ const TypeImgList = styled.div`
 const TypeImgWrapper = styled.div<{ index: number; totalImages: number }>`
   position: absolute;
   left: ${({ index }) => `${index * 25}px`}; /* 겹침 효과 */
-  z-index: ${({ index }) => 100 - index};
+  // z-index: ${({ index }) => 100 - index};
 
   @media (max-width: 850px) {
     left: ${({ index }) => `${index * 13}px`};
