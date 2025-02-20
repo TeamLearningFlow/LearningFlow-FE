@@ -86,6 +86,7 @@ const Profile = () => {
     try {
       // 로컬 스토리지에서 토큰 가져오기 (로그인 시에만 접근 가능)
       const token = localStorage.getItem('token');
+      // const refreshToken = localStorage.getItem('refreshToken');
       console.log('현재 토큰:', token);
       const storedSocialType = localStorage.getItem('socialType');
       setSocialType(storedSocialType);
@@ -99,6 +100,7 @@ const Profile = () => {
       const response = await axios.get('https://onboarding.p-e.kr/user', {
         headers: {
           Authorization: `Bearer ${token}`,
+          // 'Refresh-Token': `Bearer ${refreshToken}`,
         },
       });
 
@@ -149,6 +151,7 @@ const Profile = () => {
     const verifyResetCode = async () => {
       try {
         const token = localStorage.getItem('token');
+        // const refreshToken = localStorage.getItem('refreshToken');
 
         if (!token) {
           alert('로그인이 필요한 서비스입니다.');
@@ -159,7 +162,9 @@ const Profile = () => {
         const response = await axios.get(
           `https://onboarding.p-e.kr/user/change-password?passwordResetCode=${passwordResetCode}`,
           {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           },
         );
 
@@ -186,6 +191,7 @@ const Profile = () => {
     const verifyEmailResetCode = async () => {
       try {
         const token = localStorage.getItem('token');
+        // const refreshToken = localStorage.getItem('refreshToken');
 
         if (!token) {
           alert('로그인이 필요한 서비스입니다.');
@@ -196,7 +202,10 @@ const Profile = () => {
         const response = await axios.get(
           `https://onboarding.p-e.kr/user/change-email?emailResetCode=${emailResetCode}`,
           {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: {
+              Authorization: `Bearer ${token}`,
+              // 'Refresh-Token': `Bearer ${refreshToken}`,
+            },
           },
         );
 
