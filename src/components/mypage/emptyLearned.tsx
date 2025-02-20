@@ -39,7 +39,7 @@ const EmptyLearned: React.FC = () => {
     <EmptyWrapper>
       <Image src={Icon} alt="icon" width={140} height={140} />
       <EmptyTitle>학습 중인 컬렉션이 없어요</EmptyTitle>
-      <EmptySubtitle>브랜딩이 느껴지는 코멘트를 추가해주세요</EmptySubtitle>
+      <EmptySubtitle>지금 바로 학습을 시작해보세요!</EmptySubtitle>
     </EmptyWrapper>
   );
 };
