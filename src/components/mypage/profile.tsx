@@ -87,9 +87,10 @@ const Profile = () => {
       // 로컬 스토리지에서 토큰 가져오기 (로그인 시에만 접근 가능)
       const token = localStorage.getItem('token');
       // const refreshToken = localStorage.getItem('refreshToken');
-      console.log('현재 토큰:', token);
+      // console.log('현재 토큰:', token);
       const storedSocialType = localStorage.getItem('socialType');
       setSocialType(storedSocialType);
+      // console.log('소셜 타입:', storedSocialType)
 
       if (!token) {
         console.error('로그인이 필요한 서비스입니다.');

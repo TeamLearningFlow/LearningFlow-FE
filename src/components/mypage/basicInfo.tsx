@@ -250,7 +250,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
   const [isPasswordChangeModalOpen, setIsPasswordChangeModalOpen] =
     useState(false);
 
-  // console.log('소셜 타입:', socialType);
+  console.log('소셜 타입:', socialType);
   const isGoogleLogin = socialType === 'GOOGLE';
 
   useEffect(() => {
