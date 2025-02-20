@@ -23,6 +23,9 @@ export const ProgressProvider: React.FC<ProgressProviderProps> = ({
 
   const updateProgress = (episodeId: number, progress: number) => {
     setProgressByEpisode((prev) => {
+      if (prev[episodeId] === progress) {
+        return prev; // 값이 동일하면 업데이트하지 않음
+      }
       const newState = { ...prev, [episodeId]: progress };
       console.log(`ProgressContext - 업데이트된 진도 상태:`, newState);
       return newState;
