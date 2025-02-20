@@ -33,6 +33,9 @@ const LandingPage: React.FC = () => {
   // const [preferType, setPreferType] = useState(''); // 선호도 값
   const [token, setToken] = useState<string | null>(null);
 
+  // 회원가입 타입 state 추가
+  const [isGoogleSignup, setIsGoogleSignup] = useState(false);
+
   const router = useRouter();
   const context = useContext(LoginContext);
 
@@ -44,19 +47,29 @@ const LandingPage: React.FC = () => {
     setIsClient(true);
   }, []);
 
-  // 회원가입 인증 토큰 호출
+  // URL 파라미터를 확인하여 회원가입 타입 결정
   useEffect(() => {
-    const savedToken = localStorage.getItem('emailVerificationCode');
-    if (savedToken) {
-      setToken(savedToken);
+    const params = new URLSearchParams(window.location.search);
+    const emailVerificationCode = params.get('emailVerificationCode');
+    const oauth2RegistrationCode = params.get('oauth2RegistrationCode');
+
+    if (emailVerificationCode) {
+      setToken(emailVerificationCode);
+      setIsGoogleSignup(false);
+      localStorage.setItem('emailVerificationCode', emailVerificationCode);
+    } else if (oauth2RegistrationCode) {
+      setToken(oauth2RegistrationCode);
+      setIsGoogleSignup(true);
+      localStorage.setItem('oauth2RegistrationCode', oauth2RegistrationCode);
     } else {
       console.error('토큰이 존재하지 않습니다.');
     }
   }, []);
 
-  const handleComplete = async (finalPreferType: string) => {
-    const storedEmail = localStorage.getItem('email'); // 회원가입 시 이메일 저장
-    const storedPassword = localStorage.getItem('password'); // 회원가입 시 비밀번호 저장
+  // 일반 회원가입 함수
+  const handleNormalSignup = async (finalPreferType: string) => {
+    const storedEmail = localStorage.getItem('email');
+    const storedPassword = localStorage.getItem('password');
 
     const requestData = {
       name: nickname,
@@ -91,11 +104,8 @@ const LandingPage: React.FC = () => {
       // localStorage.removeItem('profileImgUrl'); // 기존에 저장된 이미지 삭제
 
       const userName = registerResponse.data.result.name;
-      localStorage.setItem('userName', userName); // 닉네임 저장
-      console.log('저장된 닉네임:', registerResponse.data.result.name);
-
+      localStorage.setItem('userName', userName);
       localStorage.setItem('profileImgUrl', imgProfileUrl || Guest.src);
-      console.log('저장된 이미지 URL:', imgProfileUrl);
 
       // 자동 로그인 연결
       const loginResponse = await axios.post(
@@ -119,20 +129,85 @@ const LandingPage: React.FC = () => {
 
       if (loginToken) {
         localStorage.setItem('token', loginToken);
+        localStorage.setItem('isFormSignup', 'true');
+        context.actions.setIsLoggedIn(true);
+        router.push('/');
       } else {
-        console.error('로그인 응답에 Authorization 헤더가 없습니다.');
-        alert('로그인 실패');
-        return;
+        throw new Error('로그인 토큰이 없습니다.');
       }
-
-      // 로그인 상태 업데이트 및 회원가입 후 모달 표시 여부 저장
-      localStorage.setItem('isFormSignup', 'true');
-      context.actions.setIsLoggedIn(true);
-
-      router.push('/'); // 회원가입 완료 후 홈페이지로 이동
     } catch (error) {
-      console.error('회원가입 실패:', error);
+      console.error('일반 회원가입 실패:', error);
       alert('회원가입에 실패했습니다. 다시 시도해주세요.');
+    }
+  };
+
+  // 구글 회원가입 함수
+  const handleGoogleSignup = async (finalPreferType: string) => {
+    const requestData = {
+      name: nickname,
+      job,
+      interestFields,
+      preferType: finalPreferType,
+      imgProfileUrl: imgProfileUrl || Guest.src,
+    };
+
+    console.log('requestData:', requestData);
+
+    if (!token) {
+      alert('토큰이 존재하지 않습니다.');
+      return;
+    }
+
+    try {
+      const response = await axios.put(
+        `https://onboarding.p-e.kr/oauth2/additional-info?oauth2RegistrationCode=${token}`,
+        requestData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+
+      console.log('구글 회원가입 성공:', response.data);
+
+      const userName = response.data.result.name;
+      1;
+
+      localStorage.setItem('userName', userName);
+      localStorage.setItem('profileImgUrl', imgProfileUrl || Guest.src);
+
+      const accessToken = response.headers['authorization']?.split(' ')[1];
+      const refreshToken = response.headers['refresh-token'];
+
+      if (accessToken) {
+        localStorage.setItem('token', accessToken);
+        if (refreshToken) {
+          localStorage.setItem('refreshToken', refreshToken);
+        }
+        localStorage.setItem('isFormSignup', 'true');
+        context.actions.setIsLoggedIn(true);
+        router.push('/');
+      } else {
+        throw new Error('인증 토큰이 없습니다.');
+      }
+    } catch (error) {
+      console.error('구글 회원가입 실패:', error);
+      alert('회원가입에 실패했습니다. 다시 시도해주세요.');
+    }
+  };
+
+  // 회원가입 타입에 따른 처리 함수
+  const handleComplete = async (finalPreferType: string) => {
+    if (!token) {
+      alert('토큰이 존재하지 않습니다.');
+      return;
+    }
+
+    if (isGoogleSignup) {
+      await handleGoogleSignup(finalPreferType);
+    } else {
+      await handleNormalSignup(finalPreferType);
     }
   };
 
@@ -151,7 +226,6 @@ const LandingPage: React.FC = () => {
             setImgProfileUrl(imgProfileUrl || Guest.src);
             setCurrentPage(2);
           }}
-          // userData={{ nickname, job, imgProfileUrl }}
         />
       )}
       {currentPage === 2 && (

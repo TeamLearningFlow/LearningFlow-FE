@@ -87,17 +87,17 @@ const GoogleRedirectionPage = () => {
     const fetchAdditionalInfo = async () => {
       // URL에서 토큰값 가져오기
       const params = new URLSearchParams(window.location.search);
-      const token = params.get('oauth2RegistrationCode');
+      const oauth2RegistrationCode = params.get('oauth2RegistrationCode');
 
-      if (!token) {
-        console.error('토큰이 없습니다.');
+      if (!oauth2RegistrationCode) {
+        console.error('임시 코드가 없습니다.');
         router.push('/login'); // 토큰이 없으면 로그인 페이지로 이동
         return;
       }
 
       try {
         const response = await axios.get(
-          `https://onboarding.p-e.kr/oauth2/additional-info?oauth2RegistrationCode=${token}`,
+          `https://onboarding.p-e.kr/oauth2/additional-info?oauth2RegistrationCode=${oauth2RegistrationCode}`,
           { withCredentials: true },
         );
 
@@ -108,16 +108,20 @@ const GoogleRedirectionPage = () => {
           console.log('토큰 유효');
 
           // 로컬 스토리지에 토큰 저장
-          localStorage.setItem('token', token as string);
-          // localStorage.setItem('loginMethod', 'google'); // 구글 로그인 방식 저장
-          console.log('토큰 저장 완료');
+          localStorage.setItem(
+            'oauth2RegistrationCode',
+            oauth2RegistrationCode,
+          );
+          console.log('코드 저장 완료');
         } else {
-          console.log('토큰 무효');
+          console.log('코드 무효');
         }
 
         // 신규 회원 → landing 페이지로 이동
         if (response.data.result?.requiredFields?.length > 0) {
-          router.push(`/landing?token=${token}`);
+          router.push(
+            `/landing?oauth2RegistrationCode=${oauth2RegistrationCode}`,
+          );
         } else {
           // 기존 회원 → home 페이지로 이동
           router.push('/');
