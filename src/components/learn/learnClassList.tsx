@@ -63,22 +63,22 @@ interface ClassListProps {
 
 const ClassList: React.FC<ClassListProps> = ({ resource, currentEpisode, collectionData }) => {
   useEffect(() => {
-    console.log('ClassList props:', { resource, currentEpisode, collectionData });
+    console.log('ClassList :', { resource, currentEpisode, collectionData });
   }, [resource, currentEpisode, collectionData]);
   return (
     <ComponentWrapper>
       {resource.map((classItem) => {
-        if (classItem.progress >= 80) {
+        if (classItem.episodeNumber === currentEpisode) {
           return (
-            <CompletedClass
+            <CurrentClass
               key={classItem.episodeNumber}
-              {...classItem} // 수정 필요할 수도 있음 (일단 오류 방지)
+              {...classItem}
               collectionData={collectionData}
             />
           );
-        } else if (classItem.progress > 0) {
+        } else if (classItem.progress >= 80) {
           return (
-            <CurrentClass
+            <CompletedClass
               key={classItem.episodeNumber}
               {...classItem}
               collectionData={collectionData}
