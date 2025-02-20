@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import Image from 'next/image';
 import BoardingPass from './homeBoardingPass';
@@ -120,10 +121,37 @@ export type RecommendedCollection = {
 
 const HomeCollection: React.FC<{
   isLoggedIn: boolean;
-  nickname: string;
+  // nickname: string;
   collections: RecommendedCollection[];
-}> = ({ isLoggedIn, nickname, collections }) => {
+}> = ({ isLoggedIn, collections }) => {
   console.log('collections: ', collections);
+
+  const [nickname, setNickname] = useState<string | null>(null);
+
+  // 유저 닉네임 가져오기
+  const fetchUserData = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+
+      const response = await axios.get('https://onboarding.p-e.kr/user', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setNickname(response.data.result.name);
+    } catch (error) {
+      console.error('유저 데이터 가져오기 실패:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      fetchUserData();
+    }
+  }, [isLoggedIn]);
+
   return (
     <>
       <HomeCollectionWrapper>
