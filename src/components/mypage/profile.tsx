@@ -102,8 +102,8 @@ const Profile = () => {
       });
 
       console.log('Profile Response Data:', response.data);
-
       setUserData(response.data.result);
+
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {
