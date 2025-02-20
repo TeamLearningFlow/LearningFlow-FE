@@ -47,46 +47,25 @@ const LandingPage: React.FC = () => {
     setIsClient(true);
   }, []);
 
+  // URL 파라미터를 확인하여 회원가입 타입 결정
   useEffect(() => {
-    const { emailVerificationCode, oauth2RegistrationCode } = router.query;
+    const params = new URLSearchParams(window.location.search);
+    const emailVerificationCode = params.get('emailVerificationCode');
+    const oauth2RegistrationCode = params.get('oauth2RegistrationCode');
 
-    // 쿼리 값이 있으면 localStorage에 저장
     if (emailVerificationCode) {
-      localStorage.setItem(
-        'emailVerificationCode',
-        emailVerificationCode as string,
-      );
-    }
-    if (oauth2RegistrationCode) {
-      localStorage.setItem(
-        'oauth2RegistrationCode',
-        oauth2RegistrationCode as string,
-      );
-    }
-
-    // localstorage에서 토큰 가져옴
-    const storedEmailVerificationCode = localStorage.getItem(
-      'emailVerificationCode',
-    );
-    const storedOauth2RegistrationCode = localStorage.getItem(
-      'oauth2RegistrationCode',
-    );
-
-    if (storedEmailVerificationCode) {
-      console.log('oauth 토큰 사용');
-      setToken(storedEmailVerificationCode);
+      setToken(emailVerificationCode);
       setIsGoogleSignup(false);
       // localStorage.setItem('emailVerificationCode', emailVerificationCode);
-    } else if (storedOauth2RegistrationCode) {
-      console.log('일반 토큰 사용');
-      setToken(storedOauth2RegistrationCode);
+    } else if (oauth2RegistrationCode) {
+      setToken(oauth2RegistrationCode);
       setIsGoogleSignup(true);
       // localStorage.setItem('oauth2RegistrationCode', oauth2RegistrationCode);
     } else {
       console.log('회원가입 타입 결정 실패');
       console.error('토큰이 존재하지 않습니다.');
     }
-  }, [router.query]);
+  }, []);
 
   // 일반 회원가입 함수
   const handleNormalSignup = async (finalPreferType: string) => {
