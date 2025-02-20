@@ -179,10 +179,11 @@
 //   );
 // }
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import styled from 'styled-components';
+import NotLoginHeader from '../../components/notLoginHeader';
 import Header from '../../components/header';
 import TitleBar from '../../components/collection/collectionTitleBar';
 import CollectionInfo from '../../components/collection/collectionInfo';
@@ -190,6 +191,8 @@ import CollectionList from '../../components/collection/collectionList';
 import SkeletonCollectionList from '../../components/skeleton/skeleton_classList_M';
 import SkeletonCollectionInfo from '../../components/skeleton/skeleton_collectionInfo';
 import Footer from '@/components/homeFooter';
+
+import { LoginContext } from '../../components/context/LoginContext';
 
 const PageWrapper = styled.div`
   background-color: #fafafc;
@@ -244,6 +247,12 @@ export default function CollectionPage() {
 
   const scrollPositionRef = useRef<number>(0); // 스크롤 위치 저장할 Ref
 
+  const context = useContext(LoginContext);
+  if (!context) {
+    throw new Error('LoginContext를 찾을 수 없습니다.');
+  }
+  const { isLoggedIn } = context.state;
+
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -261,13 +270,13 @@ export default function CollectionPage() {
       try {
         const token = localStorage.getItem('token'); // 토큰 추가가
         const response = await axios.get(
-        `https://onboarding.p-e.kr/collections/${collectionId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
+          `https://onboarding.p-e.kr/collections/${collectionId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           },
-        },
-      );
+        );
 
         if (response.data.isSuccess) {
           setCollection(response.data.result);
@@ -339,7 +348,8 @@ export default function CollectionPage() {
 
   return (
     <PageWrapper>
-      <Header />
+      {isLoggedIn ? <Header /> : <NotLoginHeader />}
+
       {collection && <TitleBar data={collection} />}
       {loading ? (
         <>
