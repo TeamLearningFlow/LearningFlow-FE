@@ -11,6 +11,7 @@ const VerifyEmail: React.FC = () => {
       if (!emailResetCode) return; // 토큰이 없는 경우 작업 중단
 
       const token = localStorage.getItem('token');
+      // const refreshToken = localStorage.getItem('refreshToken');
 
       if (!token) {
         alert('로그인이 필요한 서비스입니다.');
@@ -22,7 +23,10 @@ const VerifyEmail: React.FC = () => {
         const response = await axios.get(
           `https://onboarding.p-e.kr/user/change-email?emailResetCode=${emailResetCode}`,
           {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: {
+              Authorization: `Bearer ${token}`,
+              // 'Refresh-Token': `Bearer ${refreshToken}`,
+            },
           },
         );
 
@@ -35,7 +39,7 @@ const VerifyEmail: React.FC = () => {
           // 로컬 스토리지에 토큰 저장
           localStorage.setItem('emailResetCode', emailResetCode as string);
           console.log('토큰 저장 완료');
-          
+
           router.replace(`/mypage/profile?emailResetCode=${emailResetCode}`);
         } else {
           console.log('토큰 무효');
