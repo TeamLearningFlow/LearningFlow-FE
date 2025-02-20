@@ -111,11 +111,11 @@ const ProgressBarFull = styled.div`
   border-radius: 2px;
 `;
 
-const ProgressBar = styled.div<{ width: string }>`
+const ProgressBar = styled.div<{ percentage: number }>`
   height: 100%;
-  width: ${({ width }) => width || '0%'};
+  width: ${(props) => props.percentage}%;
   background-color: #5e52ff;
-  border-radius: 2px;
+  border-radius: 17.515px;
 `;
 
 const ProgressRate = styled.div`
@@ -228,6 +228,7 @@ interface EpisodeData {
   resourceSource: string;
   episodeNumber: number;
   episodeName: string;
+  progressRatePercentage: number;
   progressRatio: string;
   currentProgress: number;
   totalProgress: number;
@@ -265,7 +266,7 @@ const CollectionItem: React.FC<{ episode: EpisodeData }> = ({ episode }) => {
       </ContentWrapper>
       <ProgressWrapper>
         <ProgressBarFull>
-          <ProgressBar width={episode.progressRatio} />
+          <ProgressBar percentage={episode.progressRatePercentage} />
         </ProgressBarFull>
         <ProgressRate>{episode.progressRatio}</ProgressRate>
       </ProgressWrapper>
