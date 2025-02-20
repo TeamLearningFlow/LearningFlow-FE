@@ -12,38 +12,42 @@ const RegisterCompletePage: React.FC = () => {
 
       try {
         let response;
+        let queryParam = '';
+
         if (emailVerificationCode) {
           // 일반 회원가입
           response = await axios.get(
             `https://onboarding.p-e.kr/register/complete?emailVerificationCode=${emailVerificationCode}`,
           );
+
+          if (response.data.isSuccess) {
+            localStorage.setItem(
+              'emailVerificationCode',
+              emailVerificationCode as string,
+            );
+            queryParam = `emailVerificationCode=${emailVerificationCode}`;
+          }
         } else if (oauth2RegistrationCode) {
           // 구글 회원가입
           response = await axios.get(
             `https://onboarding.p-e.kr/oauth2/additional-info?oauth2RegistrationCode=${oauth2RegistrationCode}`,
           );
-        }
 
-        if (response && response.data.isSuccess) {
-          console.log('토큰 유효');
-
-          // 올바른 토큰을 로컬 스토리지에 저장
-          if (emailVerificationCode) {
-            localStorage.setItem(
-              'emailVerificationCode',
-              emailVerificationCode as string,
-            );
-          } else if (oauth2RegistrationCode) {
+          if (response.data.isSuccess) {
             localStorage.setItem(
               'oauth2RegistrationCode',
               oauth2RegistrationCode as string,
             );
+            queryParam = `oauth2RegistrationCode=${oauth2RegistrationCode}`;
           }
+        }
 
+        if (response && response.data.isSuccess) {
+          console.log('토큰 유효');
           console.log('토큰 저장 완료');
 
           // 랜딩 페이지로 이동
-          router.push('/landing');
+          router.push('/landing?${queryParam}');
         } else {
           console.log('토큰 무효');
           router.push('/register'); // 회원가입 페이지로 이동
