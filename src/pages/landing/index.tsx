@@ -47,20 +47,18 @@ const LandingPage: React.FC = () => {
     setIsClient(true);
   }, []);
 
+  // URL 파라미터를 확인하여 회원가입 타입 결정
   useEffect(() => {
-    const storedEmailVerificationCode = localStorage.getItem(
-      'emailVerificationCode',
-    );
-    const storedOauth2RegistrationCode = localStorage.getItem(
-      'oauth2RegistrationCode',
-    );
+    const params = new URLSearchParams(window.location.search);
+    const emailVerificationCode = params.get('emailVerificationCode');
+    const oauth2RegistrationCode = params.get('oauth2RegistrationCode');
 
-    if (storedEmailVerificationCode) {
-      setToken(storedEmailVerificationCode);
+    if (emailVerificationCode) {
+      setToken(emailVerificationCode);
       setIsGoogleSignup(false);
       // localStorage.setItem('emailVerificationCode', emailVerificationCode);
-    } else if (storedOauth2RegistrationCode) {
-      setToken(storedOauth2RegistrationCode);
+    } else if (oauth2RegistrationCode) {
+      setToken(oauth2RegistrationCode);
       setIsGoogleSignup(true);
       // localStorage.setItem('oauth2RegistrationCode', oauth2RegistrationCode);
     } else {
