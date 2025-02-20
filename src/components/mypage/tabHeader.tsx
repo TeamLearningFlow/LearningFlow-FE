@@ -19,7 +19,11 @@ const TabMenu = styled.div`
   gap: 24px;
   cursor: pointer;
 
-  /* 반응형 설정 */
+  @media (max-width: 1400px) {
+    top: 397px;
+    left: 41px;
+  }
+
   @media (max-width: 1024px) {
     top: 397px;
     left: 110px;

@@ -12,12 +12,13 @@ import { CompletedCollectionData } from '@/types/types';
 import LoginProtected from '../../components/loginProtected';
 
 const PageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 120px;
-  margin-top: 54px;
+  width: 1200px;
+  margin: 54px 120px 120px 120px;
+
+  @media (max-width: 1400px) {
+    width: 1000px;
+    margin: 20px 50px 100px 50px;
+  }
 
   @media (max-width: 1024px) {
     width: 1000px;
