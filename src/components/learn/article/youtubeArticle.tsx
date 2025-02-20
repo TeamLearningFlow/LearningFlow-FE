@@ -30,6 +30,8 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
   const router = useRouter();
   const { episodeId } = router.query;
 
+  const previousProgressRef = useRef<number | null>(null);
+
   useEffect(() => {
     return () => {
       stopTrackingProgress();
@@ -94,7 +96,26 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
   // 사용하지 않는 매개변수는 _를 붙여 표시
   const onPlayerReady = (_event: YT.PlayerEvent) => {
     console.log('Player ready');
+    const savedProgress = localStorage.getItem(`progress-${episodeId}`);
+    if (savedProgress && playerRef.current) {
+      const pollInterval = setInterval(() => {
+        if (!playerRef.current) return; // null이면 조기 종료
+        const duration = playerRef.current.getDuration();
+        if (duration && duration > 0) {
+          clearInterval(pollInterval);
+          const progressPercent = Number(savedProgress);
+          const savedTime = (progressPercent / 100) * duration;
+          console.log(`저장된 위치로 이동: ${savedTime}초`);
+          if (playerRef.current) {
+            playerRef.current.seekTo(savedTime, true);
+          }
+        }
+      }, 500);
+    }
   };
+  
+  
+  
 
   // 플레이어 상태 변경 감지: 진도율 추적 시작
   const handlePlayerStateChange = (event: YT.OnStateChangeEvent) => {
@@ -155,10 +176,12 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
         if (duration > 0) {
           const progressValue = Math.round((currentTime / duration) * 100);
           // setProgress(progressValue);
-          onProgressChange(progressValue);
-          console.log(`진도율 업데이트: ${progressValue}%`);
-          // 계산된 progressValue를 saveProgress의 progress로 보냅니다.
-          saveProgress(progressValue);
+          if (previousProgressRef.current !== progressValue) {
+            previousProgressRef.current = progressValue;
+            onProgressChange(progressValue);
+            console.log(`진도율 업데이트: ${progressValue}%`);
+            saveProgress(progressValue);
+          }
         }
       } else {
         console.log('플레이어가 준비되지 않음');
