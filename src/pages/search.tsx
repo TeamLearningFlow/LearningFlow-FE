@@ -78,14 +78,10 @@ const SearchPage: React.FC = () => {
     const { page, ...otherQueries } = query; // page를 제외한 query만 추출
 
     console.log('현재 페이지 값:', page); // ESLint 오류 방지용
-    router.replace(
-      {
-        pathname: '/search',
-        query: { ...otherQueries, page: '1' }, // 다른 query 유지, page만 1로 설정
-      },
-      undefined,
-      { shallow: true },
-    );
+    router.replace({
+      pathname: '/search',
+      query: { ...otherQueries, page: '1' }, // 다른 query 유지, page만 1로 설정
+    });
   }, [
     query.keyword,
     query.interestFields,

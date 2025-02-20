@@ -56,12 +56,13 @@ const LandingPage: React.FC = () => {
     if (emailVerificationCode) {
       setToken(emailVerificationCode);
       setIsGoogleSignup(false);
-      localStorage.setItem('emailVerificationCode', emailVerificationCode);
+      // localStorage.setItem('emailVerificationCode', emailVerificationCode);
     } else if (oauth2RegistrationCode) {
       setToken(oauth2RegistrationCode);
       setIsGoogleSignup(true);
-      localStorage.setItem('oauth2RegistrationCode', oauth2RegistrationCode);
+      // localStorage.setItem('oauth2RegistrationCode', oauth2RegistrationCode);
     } else {
+      console.log('회원가입 타입 결정 실패');
       console.error('토큰이 존재하지 않습니다.');
     }
   }, []);
@@ -70,6 +71,9 @@ const LandingPage: React.FC = () => {
   const handleNormalSignup = async (finalPreferType: string) => {
     const storedEmail = localStorage.getItem('email');
     const storedPassword = localStorage.getItem('password');
+    const storedEmailVerificationCode = localStorage.getItem(
+      'emailVerificationCode',
+    ); // localStorage에서 이메일 임시 코드 가져오기
 
     const requestData = {
       name: nickname,
@@ -81,15 +85,15 @@ const LandingPage: React.FC = () => {
 
     console.log('requestData:', requestData);
 
-    if (!token) {
-      alert('토큰이 존재하지 않습니다.');
+    if (!storedEmailVerificationCode) {
+      alert('이메일 임시 코드가 존재하지 않습니다.');
       return;
     }
 
     try {
       // 1. 회원가입 요청 api
       const registerResponse = await axios.post(
-        `https://onboarding.p-e.kr/register/complete?emailVerificationCode=${token}`,
+        `https://onboarding.p-e.kr/register/complete?emailVerificationCode=${storedEmailVerificationCode}`,
         requestData,
         {
           headers: {
@@ -143,6 +147,10 @@ const LandingPage: React.FC = () => {
 
   // 구글 회원가입 함수
   const handleGoogleSignup = async (finalPreferType: string) => {
+    const storedOauth2RegistrationCode = localStorage.getItem(
+      'oauth2RegistrationCode',
+    ); // localStorage에서 구글 회원가입 임시 코드 가져오기
+
     const requestData = {
       name: nickname,
       job,
@@ -153,14 +161,14 @@ const LandingPage: React.FC = () => {
 
     console.log('requestData:', requestData);
 
-    if (!token) {
-      alert('토큰이 존재하지 않습니다.');
+    if (!storedOauth2RegistrationCode) {
+      alert('구글 회원가입 임시 코드가 존재하지 않습니다.');
       return;
     }
 
     try {
       const response = await axios.put(
-        `https://onboarding.p-e.kr/oauth2/additional-info?oauth2RegistrationCode=${token}`,
+        `https://onboarding.p-e.kr/oauth2/additional-info?oauth2RegistrationCode=${storedOauth2RegistrationCode}`,
         requestData,
         {
           headers: {
@@ -172,13 +180,13 @@ const LandingPage: React.FC = () => {
       console.log('구글 회원가입 성공:', response.data);
 
       const userName = response.data.result.name;
-      1;
-
       localStorage.setItem('userName', userName);
       localStorage.setItem('profileImgUrl', imgProfileUrl || Guest.src);
 
       const accessToken = response.headers['authorization']?.split(' ')[1];
       const refreshToken = response.headers['refresh-token'];
+
+      // 자동 로그인 코드 추가해야 할 수도 있음
 
       if (accessToken) {
         localStorage.setItem('token', accessToken);
