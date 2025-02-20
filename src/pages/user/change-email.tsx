@@ -6,36 +6,25 @@ const VerifyEmail: React.FC = () => {
   const router = useRouter();
   const { emailResetCode } = router.query; // URL에서 token 추출
 
-  const getValidToken = () => {
-    const token = localStorage.getItem('token');
-    const refreshToken = localStorage.getItem('refreshToken');
-
-    if (token) return token;
-    if (refreshToken) {
-      console.warn('기존 토큰 만료, 리프레시 토큰 사용');
-      return refreshToken;
-    }
-
-    console.error('토큰 없음, 재로그인 필요');
-    localStorage.removeItem('token');
-    localStorage.removeItem('refreshToken');
-    router.replace('/login');
-    return null;
-  };
-
   useEffect(() => {
     const validateToken = async () => {
       if (!emailResetCode) return; // 토큰이 없는 경우 작업 중단
 
-      const validToken = getValidToken();
-      if (!validToken) return;
+      const token = localStorage.getItem('token');
+      // const refreshToken = localStorage.getItem('refreshToken');
+
+      if (!token) {
+        alert('로그인이 필요한 서비스입니다.');
+        router.replace('/login');
+        return;
+      }
 
       try {
         const response = await axios.get(
           `https://onboarding.p-e.kr/user/change-email?emailResetCode=${emailResetCode}`,
           {
             headers: {
-              Authorization: `Bearer ${validToken}`,
+              Authorization: `Bearer ${token}`,
               // 'Refresh-Token': `Bearer ${refreshToken}`,
             },
           },
@@ -51,7 +40,7 @@ const VerifyEmail: React.FC = () => {
           localStorage.setItem('emailResetCode', emailResetCode as string);
           console.log('토큰 저장 완료');
 
-          router.replace(`/mypage/profile`);
+          router.replace(`/`);
         } else {
           console.log('토큰 무효');
           router.replace('/'); // 홈 페이지로 이동
