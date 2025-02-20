@@ -26,7 +26,9 @@ const RegisterCompletePage: React.FC = () => {
           );
           console.log('토큰 저장 완료');
 
-          router.push('/landing'); // 랜딩 페이지로 이동
+          router.push(
+            `/landing?emailVerificationCode=${emailVerificationCode}`,
+          ); // 랜딩 페이지로 이동(쿼리 붙여서)
         } else {
           console.log('토큰 무효');
           router.push('/register'); // 회원가입 페이지로 이동
