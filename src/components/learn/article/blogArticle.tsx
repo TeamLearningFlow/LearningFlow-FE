@@ -2,21 +2,18 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios, { AxiosError } from 'axios';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
+import { SkeletonArticle } from '@/components/skeleton/skeleton_learnComponents';
 
 const ArticleWrapper = styled.div`
   display: flex;
-  // align-items: center;
   justify-content: center;
   width: 100%;
-  // height: 91%;
   height: 54.4vh;
   border-radius: 11.483px;
   background: #b5b5b5;
   box-shadow: 1.077px 1.435px 6.459px 0px rgba(0, 0, 0, 0.1);
 
-  // overflow: hidden;
   overflow: auto;
-  // overflow-y: scroll;
 `;
 
 const ImgBox = styled.div`
@@ -25,12 +22,10 @@ const ImgBox = styled.div`
 
 const StyledImg = styled.img`
   width: 100%;
-  // height: 100%;
   height: auto;
   border: none;
 
   margin-top: -500px;
-  // margin-top: 300vh;
   z-index: 999;
 `;
 
@@ -45,11 +40,11 @@ const BlogArticle: React.FC<blogArticleProps> = ({
   onProgressChange = () => {},
 }) => {
   const [contentUrl, setContentUrl] = useState<string | null>('');
-  // const [progress, setProgress] = useState<number>(0);
   const [learningCompleted, setLearningCompleted] = useState<boolean>(false);
   const imgRef = useRef<HTMLImageElement>(null); // 이미지 참조
   const articleWrapperRef = useRef<HTMLDivElement>(null); // ArticleWrapper 참조
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
   const { episodeId } = router.query;
 
@@ -72,6 +67,8 @@ const BlogArticle: React.FC<blogArticleProps> = ({
         articleWrapperRef.current.scrollTop = scrollTop;
       }
     };
+
+    loadProgress(); // 추가
 
     // scrollHeight 변화 감지
     const observer = new MutationObserver(() => {
@@ -142,6 +139,7 @@ const BlogArticle: React.FC<blogArticleProps> = ({
         console.log('contentResponse:', contentResponse);
 
         if (contentResponse.status === 200 && contentResponse.data) {
+          setLoading(false);
           setContentUrl(contentResponse.data.result);
         } else {
           console.error('콘텐츠 API 응답 오류:', contentResponse);
@@ -250,11 +248,16 @@ const BlogArticle: React.FC<blogArticleProps> = ({
   // 컴포넌트 렌더링 상태 확인
   useEffect(() => {
     console.log('contentUrl:', contentUrl);
-    // console.log('progress:', progress);
     console.log('learningCompleted:', learningCompleted);
     console.log({ blogId });
     console.log({ episodeId });
   }, [contentUrl, learningCompleted, blogId, episodeId]);
+
+  useEffect(() => {
+    if (imgRef.current && !loading) {
+      setLoading(false); // 이미지 로드 완료
+    }
+  }, [contentUrl]);
 
   // 이미지 존재확인
   useEffect(() => {
@@ -263,22 +266,30 @@ const BlogArticle: React.FC<blogArticleProps> = ({
 
   return (
     <>
-      <ArticleWrapper ref={articleWrapperRef} onScroll={handleScroll}>
-        {contentUrl ? (
-          <>
-            <ImgBox>
-              <StyledImg
-                ref={imgRef}
-                src={contentUrl}
-                alt="content"
-                onError={() => console.error('이미지 로드 실패')}
-              />
-            </ImgBox>
-          </>
-        ) : (
-          <ImgBox></ImgBox>
-        )}
-      </ArticleWrapper>
+      {loading ? (
+        <SkeletonArticle />
+      ) : (
+        <ArticleWrapper ref={articleWrapperRef} onScroll={handleScroll}>
+          {contentUrl ? (
+            <>
+              <ImgBox>
+                <StyledImg
+                  ref={imgRef}
+                  src={contentUrl}
+                  alt="content"
+                  onLoad={() => setLoading(false)}
+                  onError={() => {
+                    console.error('이미지 로드 실패');
+                    setLoading(false);
+                  }}
+                />
+              </ImgBox>
+            </>
+          ) : (
+            <ImgBox></ImgBox>
+          )}
+        </ArticleWrapper>
+      )}
     </>
   );
 };

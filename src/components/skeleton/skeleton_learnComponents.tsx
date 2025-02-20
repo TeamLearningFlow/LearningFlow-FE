@@ -113,11 +113,23 @@ const SkeletonArticleWrapper = styled.div`
   justify-content: center;
 
   width: 100%;
-  // height: 490px;
   height: 91%;
   border-radius: 11.483px;
   background: rgba(0, 0, 0, 0.08);
   box-shadow: 1.077px 1.435px 6.459px 0px rgba(0, 0, 0, 0.1);
+
+  animation: pulse 1.7s infinite ease-in-out;
+  @keyframes pulse {
+    0% {
+      background: rgba(0, 0, 0, 0.1);
+    }
+    50% {
+      background: rgba(0, 0, 0, 0.2);
+    }
+    100% {
+      background: rgba(0, 0, 0, 0.1);
+    }
+  }
 `;
 
 const SkeletonArticle: React.FC = () => {

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
+import { SkeletonArticle } from '@/components/skeleton/skeleton_learnComponents';
 
 // Youtube api 전역 객체 선언
 declare global {
@@ -169,15 +170,17 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
   };
 
   return (
-    <ArticleWrapper>
-      <Iframe
-        key={videoId}
-        ref={iframeRef}
-        src=""
-        frameBorder="0"
-        allowFullScreen
-      />
-    </ArticleWrapper>
+    <>
+      <ArticleWrapper>
+        <Iframe
+          key={videoId}
+          ref={iframeRef}
+          src=""
+          frameBorder="0"
+          allowFullScreen
+        />
+      </ArticleWrapper>
+    </>
   );
 };
 
