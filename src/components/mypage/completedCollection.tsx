@@ -10,7 +10,7 @@ import BookmarkIcon from '/public/bookmark.svg';
 import HoverBackgroundTop from '/public/hover-backgroundTopS.svg';
 import HoverBackground from '/public/hover-background.svg';
 import Plane from '/public/plane_S.svg';
-import Circle from '/public/circle.svg';
+import circle from '/public/circle.svg';
 import Calendar from '/public/calendarIcon.svg';
 import BookmarkFilledIcon from '/public/bookmarkFilled.svg';
 
@@ -68,6 +68,16 @@ const BackFace = styled.div`
   position: absolute;
   top: 0;
   left: 1;
+`;
+
+const BoardingPassImageWrapper = styled.div`
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 282px;
+  height: 158px;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
 `;
 
 const BoardingPassImage = styled(Image)`
@@ -403,6 +413,32 @@ const CompletedStampIcon = styled(Image)`
   margin-top: -27px;
 `;
 
+const Circle = styled.span`
+  height: 34px;
+  width: 18px;
+  background: #fff;
+  position: absolute;
+  top: 142px;
+  z-index: 10;
+  border-top: 1px solid #d9d9d9;
+  border-bottom: 1px solid #d9d9d9;
+`;
+
+const LeftCircle = styled(Circle)`
+  border-radius: 0px 17px 17px 0px;
+  left: 0;
+  border-right: 1px solid #d9d9d9;
+  border-left: 1px solid #fff;
+`;
+
+const RightCircle = styled(Circle)`
+  border-radius: 17px 0px 0px 17px;
+
+  right: 0;
+  border-left: 1px solid #d9d9d9;
+  border-right: 1px solid #fff;
+`;
+
 const HoverCollection = ({
   collection,
 }: {
@@ -421,15 +457,21 @@ const HoverCollection = ({
           zIndex: 2, // 중간
         }}
       />
-      <BoardingPassImage
-        src={collection.imageUrl || CollectionImage}
-        alt="collection image"
-        width={282}
-        height={158}
-        style={{
-          left: '0',
-        }}
-      />
+      <BoardingPassImageWrapper>
+        <BoardingPassImage
+          src={collection.imageUrl || CollectionImage}
+          alt="collection image"
+          fill
+          style={{
+            left: '0',
+            borderTopLeftRadius: '16px',
+            borderTopRightRadius: '16px',
+            objectFit: 'cover',
+          }}
+        />
+      </BoardingPassImageWrapper>
+      <LeftCircle />
+      <RightCircle />
       <Bookmark>
         <Image
           src={collection.liked ? BookmarkFilledIcon : BookmarkIcon}
@@ -459,7 +501,7 @@ const HoverCollection = ({
             strokeDasharray="1.61 1.61"
           />
         </svg>
-        <Image src={Circle} alt="circle" />
+        <Image src={circle} alt="circle" />
       </LineWrapper>
       <CollectionDetail>
         <Detail>아티클</Detail>
@@ -580,12 +622,20 @@ const CompletedCollection = ({
       <FlipCard isFlipped={showHoverCollection ?? false}>
         <FrontFace>
           <Image src={BoardingPassContainer} alt="boardingpass" />
-          <BoardingPassImage
-            src={collection.imageUrl || CollectionImage}
-            alt="collectionimage"
-            width={282}
-            height={158}
-          />
+          <BoardingPassImageWrapper>
+            <BoardingPassImage
+              src={data.imageUrl || CollectionImage}
+              alt="collection image"
+              fill
+              style={{
+                borderTopLeftRadius: '16px',
+                borderTopRightRadius: '16px',
+                objectFit: 'cover',
+              }}
+            />
+          </BoardingPassImageWrapper>
+          <LeftCircle />
+          <RightCircle />
           <Body>
             <TagWrapper>
               <Category interestField={collection.interestField}>
