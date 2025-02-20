@@ -79,18 +79,6 @@ const BottomWrapper = styled.div`
   }
 `;
 
-interface EpisodeDataResult {
-  resourceType: 'VIDEO' | 'TEXT';
-  urlTitle: string;
-  interestField: string;
-  episodeContents?: string;
-  progress?: number;
-}
-
-interface EpisodeData {
-  result: EpisodeDataResult;
-}
-
 const interestFieldMap: Record<string, string> = {
   APP_DEVELOPMENT: '앱개발',
   WEB_DEVELOPMENT: '웹개발',
@@ -104,6 +92,18 @@ const interestFieldMap: Record<string, string> = {
   FOREIGN_LANGUAGE: '외국어',
   CAREER: '취업',
 };
+
+interface EpisodeDataResult {
+  resourceType: 'VIDEO' | 'TEXT';
+  urlTitle: string;
+  interestField: string;
+  episodeContents?: string;
+  progress?: number;
+}
+
+interface EpisodeData {
+  result: EpisodeDataResult;
+}
 
 const LearnPage: React.FC = () => {
   const [isClient, setIsClient] = useState(false);

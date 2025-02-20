@@ -48,12 +48,14 @@ const NowPlaying: React.FC<ClassIndexProps> = ({ classData, collection }) => {
         const episodeDataWithName = {
           ...data,
           episodeName: classData.episodeName,
+          progress: localStorage.getItem(`progress-${episodeId}`) || '0', // 추가
         };
         router.push({
           pathname: `/learn/${episodeId}`,
           query: {
             episodeData: JSON.stringify(episodeDataWithName),
             collectionData: JSON.stringify(collection),
+            progress: episodeDataWithName.progress,
           },
         });
       }

@@ -84,7 +84,6 @@ export default function CollectionPage() {
           setCollection(response.data.result);
           console.log('데이터 로드 성공:', response.data.result);
         } else {
-          // setCollection(dummyData);
           console.log('데이터 로드 실패: 더미 데이터를 사용합니다.');
         }
       } catch (err: unknown) {
@@ -111,11 +110,13 @@ export default function CollectionPage() {
     fetchCollection();
   }, [collectionId]);
 
-  const handleProgressUpdate = (updatedEpisodes: {
-    episodeNumber: number;
-    progress: number;
-    completed: boolean;
-  }[]) => {
+  const handleProgressUpdate = (
+    updatedEpisodes: {
+      episodeNumber: number;
+      progress: number;
+      completed: boolean;
+    }[],
+  ) => {
     if (!collection) return;
     // resource에서 episodeId가 mergedResource의 episodeNumber와 일치하면 업데이트
     const updatedResource = collection.resource.map((ep) => {
@@ -164,7 +165,12 @@ export default function CollectionPage() {
             />
           )}
           <ContentWrapper>
-            {collection && <CollectionList collection={collection} onProgressUpdate={handleProgressUpdate} />}
+            {collection && (
+              <CollectionList
+                collection={collection}
+                onProgressUpdate={handleProgressUpdate}
+              />
+            )}
           </ContentWrapper>
         </>
       )}
