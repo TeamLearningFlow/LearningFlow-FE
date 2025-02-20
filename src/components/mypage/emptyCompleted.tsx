@@ -39,7 +39,9 @@ const EmptyCompleted: React.FC = () => {
     <EmptyWrapper>
       <Image src={Icon} alt="icon" width={140} height={140} />
       <EmptyTitle>아직 완료한 컬렉션이 없어요</EmptyTitle>
-      <EmptySubtitle>브랜딩이 느껴지는 코멘트를 추가해주세요</EmptySubtitle>
+      <EmptySubtitle>
+        조금만 더 노력하면 첫 번째 컬렉션을 완료할 수 있어요!
+      </EmptySubtitle>
     </EmptyWrapper>
   );
 };

@@ -1,15 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import Slider from 'react-slick';
-import BannerText from '/public/bannerText.svg';
+import BannerImage1 from '/public/banner1.svg';
+import BannerImage2 from '/public/banner2.svg';
+import BannerImage3 from '/public/banner3.svg';
 import PrevArrowImage from '/public/left_arrow_ic.svg';
 import NextArrowImage from '/public/right_arrow_ic.svg';
-import LogoMark from '/public/logoMark.svg';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-const BannerWrapper = styled.div`
+/* const BannerWrapper = styled.div`
   width: 100vw;
   height: 250px;
   padding: 0 10%;
@@ -23,102 +25,26 @@ const BannerWrapper = styled.div`
   @media (max-width: 480px) {
     height: 22vh;
   }
-`;
-
-const LogoWrapper = styled.div`
-  position: absolute;
-  top: 14%;
-  right: 16%;
-  transform: translateY(-50%);
-  width: 120px;
-  height: 120px;
-  pointer-events: none;
-
-  @media (max-width: 850px) {
-    top: 4%;
-    right: 28%;
-    width: 60px;
-    height: 60px;
-  }
-
-  @media (max-width: 560px) {
-    width: 60px;
-    height: 60px;
-  }
-`;
-
-
-const Slide = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 100%; 
-  height: 100%;
-  margin-left: 10%;
-
-  @media (max-width: 480px) {
-    margin-left: 0;
-    padding: 0 5%;
-  }
-`;
-
-const CustomSlider = styled(Slider)`
-  width: 100%;
-  position: relative;
-`;
-
-const TextWrapper = styled.div`
-  color: rgba(31, 31, 31, 1);
-  font-size: 30px;
-  font-weight: 600;
-  line-height: 1.5em;
-  justify-content: center;
-
-  @media (max-width: 850px) {
-    font-size: 23px;
-  }
-
-  @media (max-width: 560px) {
-    font-size: 4vw;
-  }
-`;
-
-const ImageWrapper = styled.div`
-  position: relative;
-  width: 200px;
-  height: 40px;
-  margin-bottom: 0.4vh;
-
-  @media (max-width: 850px) {
-    width: 180px;
-    height: 30px;
-    margin-bottom: 0.2vh;
-  }
-
-  @media (max-width: 560px) {
-    width: 130px;
-    height: 25px;
-  }
-`;
+`; */
 
 const ArrowButton = styled.div`
   position: absolute;
-  top: 50%;
+  top: 49%;
   transform: translateY(-50%);
   cursor: pointer;
-  // z-index: 10;
-  width: 40px;
-  height: 40px;
+  z-index: 10;
+  width: 43px;
+  height: 43px;
 
   &.prev {
-    left: -5%;
+    left: 120px;
   }
 
   &.next {
-    right: -5%;
+    right: 120px;
   }
 
-  @media (max-width: 850px) {
+  /* @media (max-width: 850px) {
     width: 30px;
     height: 30px;
 
@@ -142,27 +68,39 @@ const ArrowButton = styled.div`
     &.next {
       right: -8%;
     }
-  }
+  } */
 `;
 
 const CustomPrevArrow: React.FC<{ onClick?: () => void }> = ({ onClick }) => (
   <ArrowButton className="prev" onClick={onClick}>
-    <Image src={PrevArrowImage} alt="Previous" fill style={{ objectFit: 'contain' }} />
+    <Image
+      src={PrevArrowImage}
+      alt="Previous"
+      fill
+      style={{ objectFit: 'contain' }}
+    />
   </ArrowButton>
 );
 
 const CustomNextArrow: React.FC<{ onClick?: () => void }> = ({ onClick }) => (
   <ArrowButton className="next" onClick={onClick}>
-    <Image src={NextArrowImage} alt="Next" fill style={{ objectFit: 'contain' }} />
+    <Image
+      src={NextArrowImage}
+      alt="Next"
+      fill
+      style={{ objectFit: 'contain' }}
+    />
   </ArrowButton>
 );
 
-
 const Banner: React.FC = () => {
+  const router = useRouter();
+
+  // 각 배너에 대한 이미지와 이동할 URL 매핑
   const slides = [
-    '성장을 원하는 사람들을 위한<br />가장 빠른 학습 여정 플랫폼, 온보딩',
-    '홈페이지<br />배너 내용 1',
-    '홈페이지<br />배너 내용 2'
+    { image: BannerImage1, link: '/collection/21' },
+    { image: BannerImage2, link: '/collection/7' },
+    { image: BannerImage3, link: '/collection/12' },
   ];
 
   const settings = {
@@ -170,26 +108,29 @@ const Banner: React.FC = () => {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
+    autoplay: true, // 자동 슬라이드
+    autoplaySpeed: 10000, // 10초마다 넘어감
     prevArrow: <CustomPrevArrow />,
     nextArrow: <CustomNextArrow />,
   };
 
   return (
-    <BannerWrapper>
-      <LogoWrapper>
-        <Image src={LogoMark} alt="Logo Mark" width={310} height={310} />
-      </LogoWrapper>
-      <CustomSlider {...settings}>
-        {slides.map((text, index) => (
-          <Slide key={index}>
-            <ImageWrapper>
-              <Image src={BannerText} alt="Banner Text" fill style={{ objectFit: 'contain' }} />
-            </ImageWrapper>
-            <TextWrapper dangerouslySetInnerHTML={{ __html: text }} />
-          </Slide>
-        ))}
-      </CustomSlider>
-    </BannerWrapper>
+    <Slider {...settings}>
+      {slides.map(({ image, link }, index) => (
+        <div
+          key={index}
+          onClick={() => router.push(link)}
+          style={{ cursor: 'pointer' }}
+        >
+          <Image
+            src={image}
+            alt={`Banner ${index + 1}`}
+            width={1440}
+            height={316}
+          />
+        </div>
+      ))}
+    </Slider>
   );
 };
 
