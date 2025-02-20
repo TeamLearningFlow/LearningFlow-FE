@@ -26,7 +26,7 @@ const Container = styled(ColumnFlexDiv)`
   width: 284px;
   position: relative;
   background: transparent;
-  overflow: hidden;
+  // overflow: hidden;
 `;
 
 const BoardingPassImage = styled(Image)`
