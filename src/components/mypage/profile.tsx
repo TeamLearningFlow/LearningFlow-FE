@@ -82,25 +82,45 @@ const Profile = () => {
   const { passwordResetCode, emailResetCode } = router.query;
   const [isEditingPassword, setIsEditingPassword] = useState(false);
 
+  const getValidToken = () => {
+    const token = localStorage.getItem('token');
+    const refreshToken = localStorage.getItem('refreshToken');
+
+    if (token) return token;
+    if (refreshToken) {
+      console.log('기존 토큰 만료, 리프레시 토큰 사용');
+      return refreshToken;
+    }
+
+    console.error('토큰 없음, 재로그인 필요');
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    router.replace('/login');
+    return null;
+  };
+
   const fetchUserData = async () => {
+    const validToken = getValidToken();
+    if (!validToken) return;
+
     try {
       // 로컬 스토리지에서 토큰 가져오기 (로그인 시에만 접근 가능)
-      const token = localStorage.getItem('token');
+      // const token = localStorage.getItem('token');
       // const refreshToken = localStorage.getItem('refreshToken');
       // console.log('현재 토큰:', token);
       const storedSocialType = localStorage.getItem('socialType');
       setSocialType(storedSocialType);
       // console.log('소셜 타입:', storedSocialType)
 
-      if (!token) {
-        console.error('로그인이 필요한 서비스입니다.');
-        return;
-      }
+      // if (!token) {
+        // console.error('로그인이 필요한 서비스입니다.');
+        // return;
+      // }
 
       // Authorization 헤더 추가
       const response = await axios.get('https://onboarding.p-e.kr/user', {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${validToken}`,
           // 'Refresh-Token': `Bearer ${refreshToken}`,
         },
       });
@@ -130,20 +150,6 @@ const Profile = () => {
 
   useEffect(() => {
     fetchUserData();
-  }, []);
-
-  // 토큰 값이 변경될 때마다 확인
-  useEffect(() => {
-    const checkTokenChange = () => {
-      const newToken = localStorage.getItem('token');
-      console.log('변경된 토큰 확인:', newToken);
-    };
-
-    window.addEventListener('storage', checkTokenChange);
-
-    return () => {
-      window.removeEventListener('storage', checkTokenChange);
-    };
   }, []);
 
   useEffect(() => {
