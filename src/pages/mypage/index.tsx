@@ -88,6 +88,7 @@ interface EpisodeData {
   resourceSource: string;
   episodeNumber: number;
   episodeName: string;
+  progressRatePercentage: number;
   progressRatio: string;
   currentProgress: number;
   totalProgress: number;

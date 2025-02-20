@@ -153,9 +153,9 @@ const ProgressBarFull = styled.div`
   border-radius: 17.515px;
 `;
 
-const ProgressBar = styled.div<{ percent: number }>`
+const ProgressBar = styled.div<{ percentage: number }>`
   height: 100%;
-  width: ${(props) => props.percent}%;
+  width: ${(props) => props.percentage}%;
   background-color: #5e52ff;
   border-radius: 17.515px;
 `;
@@ -398,7 +398,7 @@ const RecentCollection = ({
               <ProgressWrapper>
                 <ProgressBarFull>
                   <ProgressBar
-                    percent={collectionInfo?.progressRatePercentage}
+                    percentage={collectionInfo?.progressRatePercentage}
                   />
                 </ProgressBarFull>
                 <ProgressRate>{collectionInfo?.progressRatio}</ProgressRate>
