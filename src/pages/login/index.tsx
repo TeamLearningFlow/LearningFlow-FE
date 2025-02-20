@@ -182,9 +182,11 @@ const LoginPage: React.FC = () => {
 
       // Authorization 헤더에서 토큰 추출
       const token = response.headers['authorization']?.split(' ')[1];
+      const refreshToken = response.headers['Refresh-Token']; // 리프레시 토큰 저장
 
-      if (response.status === 200 && token) {
+      if (response.status === 200 && token && refreshToken) {
         localStorage.setItem('token', token); // 토큰을 로컬 스토리지에 저장
+        localStorage.setItem('refreshToken', refreshToken); // 리프레시 토큰을 로컬 스토리지에 저장
 
         const userName = response.data.result.name;
         const socialType = response.data.result.socialType;

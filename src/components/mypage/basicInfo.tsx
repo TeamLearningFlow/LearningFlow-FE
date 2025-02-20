@@ -310,6 +310,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
   const verifyEmailResetCode = async (code: string) => {
     try {
       const token = localStorage.getItem('token');
+      const refreshToken = localStorage.getItem('refreshToken');
 
       if (!token) {
         alert('로그인이 필요한 서비스입니다.');
@@ -320,7 +321,10 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
       const response = await axios.get(
         `https://onboarding.p-e.kr/user/change-email?emailResetCode=${code}`,
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Refresh-Token': `Bearer ${refreshToken}`,
+          },
         },
       );
 
@@ -338,6 +342,7 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
     try {
       // 로컬 스토리지에서 토큰 가져오기 (로그인 시에만 접근 가능)
       const token = localStorage.getItem('token');
+      const refreshToken = localStorage.getItem('refreshToken');
 
       if (!token) {
         alert('로그인이 필요한 서비스입니다.');
@@ -348,7 +353,10 @@ const BasicInfo: React.FC<BasicInfoProps> = ({
         'https://onboarding.p-e.kr/user/send/change-email',
         { email },
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Refresh-Token': `Bearer ${refreshToken}`,
+          },
         },
       );
 
