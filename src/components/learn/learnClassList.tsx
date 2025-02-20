@@ -68,7 +68,7 @@ const ClassList: React.FC<ClassListProps> = ({ resource, currentEpisode, collect
   return (
     <ComponentWrapper>
       {resource.map((classItem) => {
-        console.log('classItem:', classItem);
+        // console.log('classItem:', classItem);
         if (classItem.episodeId === currentEpisode) {
           return (
             <CurrentClass

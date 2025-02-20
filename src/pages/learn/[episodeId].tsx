@@ -117,7 +117,7 @@ const LearnPage: React.FC = () => {
     throw new Error('LearnContext를 찾을 수 없습니다.');
   }
 
-  const { updateProgress } = useContext(ProgressContext);
+  const { progressByEpisode, updateProgress } = useContext(ProgressContext);
   const [youtubeContent, setYoutubeContent] = useState<string>('');
   const [blogContent, setBlogContent] = useState<string>('');
   const [episodeDataState, setEpisodeDataState] = useState<EpisodeData | null>(
@@ -256,9 +256,22 @@ const LearnPage: React.FC = () => {
     }
   };
 
+  // useEffect(() => {
+  //  console.log(`현재 에피소드 ID: ${episodeIdNumber}`);
+  //  }, [episodeIdNumber]);
+
+  // progressContext의 진도율 값으로 learnContext 호출해서 isCompleted 관리
   useEffect(() => {
-    console.log(`현재 에피소드 ID: ${episodeIdNumber}`);
-  }, [episodeIdNumber]);
+    const progress = progressByEpisode[episodeIdNumber];
+    if (progress !== undefined) {
+      if (progress >= 80) {
+        context.actions.setIsCompleted(true);
+      } else {
+        context.actions.setIsCompleted(false);
+      }
+    }
+  }, [progressByEpisode[episodeIdNumber]]);
+  
 
   if (!isClient) {
     return null;
