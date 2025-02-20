@@ -41,15 +41,15 @@ const BlogArticle: React.FC<blogArticleProps> = ({
   isCompleted,
 }) => {
   const [contentUrl, setContentUrl] = useState<string | null>('');
-  const [learningCompleted, setLearningCompleted] = useState<boolean>(false);
+  const [learningCompleted, setLearningCompleted] =
+    useState<boolean>(isCompleted);
+  const [savedProgress, setSavedProgress] = useState<number>(0); // 저장된 진도율 상태
   const imgRef = useRef<HTMLImageElement>(null); // 이미지 참조
   const articleWrapperRef = useRef<HTMLDivElement>(null); // ArticleWrapper 참조
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
   const { episodeId } = router.query;
-
-  const [savedProgress, setSavedProgress] = useState<number>(0); // 저장된 진도율 상태
 
   useEffect(() => {
     if (!blogId) {
@@ -154,7 +154,7 @@ const BlogArticle: React.FC<blogArticleProps> = ({
   };
 
   const handleScroll = () => {
-    if (!articleWrapperRef.current) return;
+    if (!articleWrapperRef.current || learningCompleted) return; // 학습 완료되었으면 스크롤 감지 중단
 
     try {
       const { scrollTop, clientHeight, scrollHeight } =
@@ -186,7 +186,7 @@ const BlogArticle: React.FC<blogArticleProps> = ({
         // 진도율이 80% 이상일 경우 학습 완료 처리
         if (scrolled >= 80 && !learningCompleted) {
           console.log('학습완료');
-          updateCompletionStatus();
+          // updateCompletionStatus();
         }
       }
     } catch (err) {
@@ -250,6 +250,10 @@ const BlogArticle: React.FC<blogArticleProps> = ({
       console.log(`초기 스크롤 위치 설정: ${newScrollTop}px`);
     }
   }, [contentUrl, savedProgress]);
+
+  useEffect(() => {
+    setLearningCompleted(isCompleted);
+  }, [isCompleted]);
 
   // 컴포넌트 렌더링 상태 확인
   useEffect(() => {

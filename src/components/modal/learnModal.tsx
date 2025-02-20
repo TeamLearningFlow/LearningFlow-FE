@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 
 interface LearnModalProps {
@@ -14,10 +15,34 @@ const LearnModal: React.FC<LearnModalProps> = ({
 }) => {
   // const [isClicked, setIsClicked] = useState(false);
 
-  const ReTakeClass = () => {
+  const ReTakeClass = async () => {
     // setIsClicked(true);
     // 진도율을 0으로 업데이트 (API 호출 없이 localStorage와 부모 콜백으로 처리)
     localStorage.setItem(`progress-${episodeId}`, '0');
+
+    try {
+      const token = localStorage.getItem('token');
+      const headers = token
+        ? {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          }
+        : {};
+
+      const response = await axios.post(
+        `https://onboarding.p-e.kr/resources/${episodeId}/update-complete`,
+        { progress: 0 }, // 진도율 0으로 설정
+        { headers },
+      );
+
+      if (response.status === 200) {
+        console.log('학습 상태 초기화 성공:', response.data);
+        onRetakeClass();
+        onClose();
+      }
+    } catch (error) {
+      console.error('학습 상태 초기화 실패:', error);
+    }
 
     // 부모에서 진도율 0 업데이트 및 기타 상태 초기화 로직 실행
     onRetakeClass();
