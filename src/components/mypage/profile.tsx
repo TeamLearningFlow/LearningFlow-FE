@@ -86,6 +86,7 @@ const Profile = () => {
     try {
       // 로컬 스토리지에서 토큰 가져오기 (로그인 시에만 접근 가능)
       const token = localStorage.getItem('token');
+      console.log('현재 토큰:', token);
       const storedSocialType = localStorage.getItem('socialType');
       setSocialType(storedSocialType);
 
@@ -102,7 +103,6 @@ const Profile = () => {
       });
 
       console.log('Profile Response Data:', response.data);
-
       setUserData(response.data.result);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
@@ -127,6 +127,20 @@ const Profile = () => {
 
   useEffect(() => {
     fetchUserData();
+  }, []);
+
+  // 토큰 값이 변경될 때마다 확인
+  useEffect(() => {
+    const checkTokenChange = () => {
+      const newToken = localStorage.getItem('token');
+      console.log('변경된 토큰 확인:', newToken);
+    };
+
+    window.addEventListener('storage', checkTokenChange);
+
+    return () => {
+      window.removeEventListener('storage', checkTokenChange);
+    };
   }, []);
 
   useEffect(() => {
@@ -185,6 +199,11 @@ const Profile = () => {
             headers: { Authorization: `Bearer ${token}` },
           },
         );
+
+        if (response.data.result?.newToken) {
+          console.log('새로운 토큰 감지:', response.data.result.newToken);
+          localStorage.setItem('token', response.data.result.newToken);
+        }
 
         if (response.data.isSuccess) {
           console.log('이메일 변경 성공');
