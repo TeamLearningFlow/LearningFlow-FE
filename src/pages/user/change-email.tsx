@@ -11,7 +11,7 @@ const VerifyEmail: React.FC = () => {
       if (!emailResetCode) return; // 토큰이 없는 경우 작업 중단
 
       const token = localStorage.getItem('token');
-      const refreshToken = localStorage.getItem('refreshToken');
+      // const refreshToken = localStorage.getItem('refreshToken');
 
       if (!token) {
         alert('로그인이 필요한 서비스입니다.');
@@ -25,7 +25,7 @@ const VerifyEmail: React.FC = () => {
           {
             headers: {
               Authorization: `Bearer ${token}`,
-              'Refresh-Token': `Bearer ${refreshToken}`,
+              // 'Refresh-Token': `Bearer ${refreshToken}`,
             },
           },
         );
