@@ -552,7 +552,7 @@ const userModal: React.FC = () => {
               <MidLikeIMG>
                 <LikeIMG src={likeIMG} alt="좋아요" width={20} height={20} />
               </MidLikeIMG>
-              <MidLikeLetter onClick={() => router.push('/mypage?tab=liked')}>
+              <MidLikeLetter onClick={() => router.push('/mypage/Liked')}>
                 관심 컬렉션
               </MidLikeLetter>
             </MidLike>
