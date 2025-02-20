@@ -38,6 +38,7 @@ interface blogArticleProps {
 const BlogArticle: React.FC<blogArticleProps> = ({
   blogId,
   onProgressChange = () => {},
+  isCompleted,
 }) => {
   const [contentUrl, setContentUrl] = useState<string | null>('');
   const [learningCompleted, setLearningCompleted] = useState<boolean>(false);
@@ -48,55 +49,7 @@ const BlogArticle: React.FC<blogArticleProps> = ({
   const router = useRouter();
   const { episodeId } = router.query;
 
-  useEffect(() => {
-    if (!episodeId || !articleWrapperRef.current) return;
-
-    const loadProgress = () => {
-      const savedProgress = localStorage.getItem(`progress-${episodeId}`);
-      if (!savedProgress) {
-        localStorage.setItem(`progress-${episodeId}`, '0');
-        return;
-      }
-
-      const progress = parseInt(savedProgress, 10);
-      if (articleWrapperRef.current) {
-        const scrollHeight = articleWrapperRef.current.scrollHeight;
-        const scrollTop =
-          (progress / 100) *
-          (scrollHeight - articleWrapperRef.current.clientHeight);
-        articleWrapperRef.current.scrollTop = scrollTop;
-      }
-    };
-
-    loadProgress(); // 추가
-
-    // scrollHeight 변화 감지
-    const observer = new MutationObserver(() => {
-      if (articleWrapperRef.current) {
-        loadProgress();
-      }
-    });
-
-    observer.observe(articleWrapperRef.current, {
-      childList: true, // 내부 요소 추가/변경 감지
-      subtree: true, // 하위 요소까지 감지
-    });
-
-    // 일정 간격으로 progress 변경 감지 (다시 학습하기 버튼)
-    const intervalId = setInterval(() => {
-      const savedProgress = localStorage.getItem(`progress-${episodeId}`);
-      if (savedProgress === '0') {
-        loadProgress();
-      }
-    }, 1000);
-
-    loadProgress();
-
-    return () => {
-      observer.disconnect(); // Cleanup
-      clearInterval(intervalId); // Cleanup
-    };
-  }, [episodeId]);
+  const [savedProgress, setSavedProgress] = useState<number>(0); // 저장된 진도율 상태
 
   useEffect(() => {
     if (!blogId) {
@@ -144,7 +97,6 @@ const BlogArticle: React.FC<blogArticleProps> = ({
         } else {
           console.error('콘텐츠 API 응답 오류:', contentResponse);
         }
-        // }
       } catch (error) {
         const err = error as AxiosError;
         console.error('콘텐츠 로딩 오류:', err.response ? err.response : err);
@@ -160,7 +112,6 @@ const BlogArticle: React.FC<blogArticleProps> = ({
       const token = localStorage.getItem('token');
       const response = await axios.post(
         `https://onboarding.p-e.kr/resources/${episodeId}/save-progress`,
-        // { resourceType: 'TEXT', progress: scrolled },
         { resourceType: 'TEXT', progress: scrolled },
         {
           headers: {
@@ -170,7 +121,7 @@ const BlogArticle: React.FC<blogArticleProps> = ({
         },
       );
       console.log('진도 저장 응답: ', response.data);
-      localStorage.setItem(`progress-${episodeId}`, scrolled.toString()); // 진도율 저장
+      // localStorage.setItem(`progress-${episodeId}`, scrolled.toString()); // 진도율 저장
     } catch (error) {
       console.error('진도 저장 오류:', error);
     }
@@ -244,6 +195,61 @@ const BlogArticle: React.FC<blogArticleProps> = ({
       );
     }
   };
+
+  useEffect(() => {
+    const getProgress = async () => {
+      if (!episodeId) return;
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get(
+          `https://onboarding.p-e.kr/resources/${episodeId}/blog`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+        // console.log('/blog 응답: ', response);
+
+        if (response.status !== 200) {
+          console.error('진도율 가져옴 오류: ', response);
+          return;
+        }
+        const savedProgress = response.data.result.progress;
+        console.log('진도율 가져옴:', savedProgress);
+        setSavedProgress(savedProgress);
+      } catch (error) {
+        const err = error as AxiosError;
+        console.error(
+          '진도율 불러오기 오류: ',
+          err.response ? err.response : err,
+        );
+      }
+    };
+
+    getProgress();
+
+    if (articleWrapperRef.current) {
+      articleWrapperRef.current.addEventListener('scroll', handleScroll);
+    }
+
+    return () => {
+      if (articleWrapperRef.current) {
+        articleWrapperRef.current.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, [episodeId]);
+
+  // 콘텐츠 로드 후 저장된 진도율에 따라 스크롤 조정
+  useEffect(() => {
+    if (articleWrapperRef.current && savedProgress > 0) {
+      const { scrollHeight, clientHeight } = articleWrapperRef.current;
+      const newScrollTop =
+        (savedProgress / 100) * (scrollHeight - clientHeight);
+      articleWrapperRef.current.scrollTop = newScrollTop;
+      console.log(`초기 스크롤 위치 설정: ${newScrollTop}px`);
+    }
+  }, [contentUrl, savedProgress]);
 
   // 컴포넌트 렌더링 상태 확인
   useEffect(() => {

@@ -161,22 +161,7 @@ const ClassTitle: React.FC<ClassTitleProps> = ({ episodeId, episodeData }) => {
   // const { isCompleted } = state;
   const { setIsCompleted } = context.actions;
 
-  // // 만약 localStorage에 저장된 진도율이 100이면, 수강 완료 상태로 설정
-  // useEffect(() => {
-  //   const storedProgress = localStorage.getItem(`progress-${episodeId}`);
-  //   if (storedProgress && Number(storedProgress) >= 100) {
-  //     setIsCompleted(true);
-  //   }
-  // }, [episodeId, setIsCompleted]);
-
   const episodeName = episodeData.urlTitle;
-
-  // // 만약 localStorage에 저장된 진도율이 100이면, 수강 완료 상태로 설정
-  // useEffect(() => {
-  //   const storedProgress =
-  //     Number(localStorage.getItem(`progress-${episodeId}`)) || 0;
-  //   setLocalIsCompleted(storedProgress >= 80);
-  // }, [episodeId]);
 
   const handleClick = async () => {
     // 수강 완료 상태라면 모달만
@@ -232,18 +217,6 @@ const ClassTitle: React.FC<ClassTitleProps> = ({ episodeId, episodeData }) => {
     setIsModalVisible(false);
   };
 
-  // useEffect(() => {
-  //   const storedProgress = localStorage.getItem(`progress-${episodeId}`);
-
-  //   if (storedProgress) {
-  //     const progress = Number(storedProgress);
-  //     updateProgress(episodeId, progress);
-
-  //     if (progress >= 80) {
-  //       setLocalIsCompleted(true);
-  //     }
-  //   }
-  // }, [episodeId, setLocalIsCompleted]);
   useEffect(() => {
     const storedProgress = localStorage.getItem(`progress-${episodeId}`);
     const progress = storedProgress
