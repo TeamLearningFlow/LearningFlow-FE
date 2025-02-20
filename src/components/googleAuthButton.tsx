@@ -68,7 +68,7 @@ const GoogleAuthButton = ({ text }: { text: string }) => {
     }
 
     window.addEventListener('message', (event) => {
-      if (event.origin !== 'https://onboarding-kappa.vercel.app') {
+      if (event.origin !== 'https://onboarding-kappa.vercel.app/') {
         console.log('origin 아님');
         return;
       }
