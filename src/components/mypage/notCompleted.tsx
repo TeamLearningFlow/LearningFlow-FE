@@ -264,7 +264,6 @@ const CollectionItem: React.FC<{ episode: EpisodeData }> = ({ episode }) => {
         alt="collection image"
         width={282}
         height={158}
-
       />
       <CollectionTitle>{episode.collectionTitle}</CollectionTitle>
       <ContentWrapper>
@@ -295,7 +294,7 @@ const NotCompleted: React.FC<{ episodes: EpisodeData[] }> = ({ episodes }) => {
   const [itemsShown, setItemsShown] = useState<number>(4);
   const [currentPage, setCurrentPage] = useState<number>(0); // 현재 페이지 상태
 
-  useEffect(() => {
+  /*useEffect(() => {
     const updateItemsShown = () => {
       let newItemsShown = 4;
       if (window.innerWidth <= 480) {
@@ -313,7 +312,7 @@ const NotCompleted: React.FC<{ episodes: EpisodeData[] }> = ({ episodes }) => {
     updateItemsShown(); // 초기 설정
     window.addEventListener('resize', updateItemsShown);
     return () => window.removeEventListener('resize', updateItemsShown);
-  }, []);
+  }, []); */
 
   const totalPages = Math.ceil(episodes.length / itemsShown);
 
@@ -376,10 +375,10 @@ const NotCompleted: React.FC<{ episodes: EpisodeData[] }> = ({ episodes }) => {
               gap: '24px',
             }}
           >
-            {episodes.length > 0
-              ? episodes.slice(0, itemsShown).map((episode) => (
-                  <motion.div key={episode.resourceId} layout>
-                    <CollectionItem episode={episode} />
+            {visibleCollections.length > 0
+              ? visibleCollections.map((collection) => (
+                  <motion.div key={collection.resourceId} layout>
+                    <CollectionItem episode={collection} />
                   </motion.div>
                 ))
               : null}
