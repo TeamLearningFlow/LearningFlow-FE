@@ -7,7 +7,6 @@ import LogoDark from '/public/logo_dark.png';
 import Guest from '/public/Guest.svg';
 import UserModal from './modal/userModal';
 import { useRouter } from 'next/router';
-
 const HeaderWrapper = styled.header`
   display: flex;
   align-items: center;
@@ -15,15 +14,13 @@ const HeaderWrapper = styled.header`
   width: 100%;
   height: 70px;
   padding: 0 3%;
-  background-color: #ffffff;
-  border-bottom: 1px solid #dde0e4;
-
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #DDE0E4;
   @media (max-width: 850px) {
     height: 60px;
     padding: 0 5%;
   }
 `;
-
 const LogoWrapper = styled.div`
   display: flex;
   justify-content: center;
@@ -31,27 +28,22 @@ const LogoWrapper = styled.div`
   margin-top: 5px;
   flex-shrink: 0;
   margin-right: auto;
-
   cursor: pointer;
 `;
-
 const LogoImage = styled(Image)`
   @media (max-width: 850px) {
     width: 150px;
     height: 23px;
   }
 `;
-
 const ProfileIcon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   flex-shrink: 0;
-
   cursor: pointer;
 `;
-
 const ProfileImage = styled(Image)`
   border-radius: 50%;
   @media (max-width: 850px) {
@@ -59,7 +51,6 @@ const ProfileImage = styled(Image)`
     height: 35px;
   }
 `;
-
 const ProfileUser = styled.div`
   position: absolute;
   display: flex;
@@ -67,14 +58,11 @@ const ProfileUser = styled.div`
   top: 60px;
   right: 0px;
   margin-top: 7px;
-
   z-index: 200;
-
   @media (max-width: 650px) {
     margin-right: 1%;
   }
 `;
-
 interface UserData {
   name: string;
   email: string;
@@ -84,7 +72,6 @@ interface UserData {
   profileImgUrl: string;
   bannerImgUrl: string;
 }
-
 const Header: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -93,17 +80,14 @@ const Header: React.FC = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [userProfile, setUserProfile] = useState<string | null>(null);
   const router = useRouter();
-
   const getValidToken = () => {
     const token = localStorage.getItem('token');
     const refreshToken = localStorage.getItem('refreshToken');
-
     if (token) return token;
     if (refreshToken) {
       console.log('기존 토큰 만료, 리프레시 토큰 사용');
       return refreshToken;
     }
-
     console.error('토큰 없음, 재로그인 필요');
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
@@ -113,7 +97,6 @@ const Header: React.FC = () => {
   const fetchUserData = async () => {
     const validToken = getValidToken();
     if (!validToken) return;
-
     try {
       // 로컬 스토리지에서 토큰 가져오기 (로그인 시에만 접근 가능)
       // const token = localStorage.getItem('token');
@@ -122,12 +105,10 @@ const Header: React.FC = () => {
       const storedSocialType = localStorage.getItem('socialType');
       setSocialType(storedSocialType);
       // console.log('소셜 타입:', storedSocialType)
-
       // if (!token) {
       // console.error('로그인이 필요한 서비스입니다.');
       // return;
       // }
-
       // Authorization 헤더 추가
       const response = await axios.get('https://onboarding.p-e.kr/user', {
         headers: {
@@ -135,7 +116,6 @@ const Header: React.FC = () => {
           // 'Refresh-Token': `Bearer ${refreshToken}`,
         },
       });
-
       console.log('Profile Response Data:', response.data);
       setUserData(response.data.result);
       setUserProfile(response.data.result.imageUrl);
@@ -159,16 +139,13 @@ const Header: React.FC = () => {
       }
     }
   };
-
   useEffect(() => {
     fetchUserData();
   }, []);
-
   // 사용자 아이콘 클릭 시 모달 토글
   const toggleModal = () => {
     setIsModalOpen((prev) => !prev);
   };
-
   // 모달 외부 클릭 시 닫기
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -181,22 +158,18 @@ const Header: React.FC = () => {
         setIsModalOpen(false);
       }
     };
-
     if (isModalOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     } else {
       document.removeEventListener('mousedown', handleClickOutside);
     }
-
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isModalOpen]);
-
   if (!userData) {
     return <p>정보 없음</p>;
   }
-
   return (
     <HeaderWrapper>
       <LogoWrapper>
@@ -233,5 +206,4 @@ const Header: React.FC = () => {
     </HeaderWrapper>
   );
 };
-
 export default Header;
