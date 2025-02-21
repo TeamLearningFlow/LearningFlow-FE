@@ -193,6 +193,7 @@ import SkeletonCollectionInfo from '../../components/skeleton/skeleton_collectio
 import Footer from '@/components/homeFooter';
 
 import { LoginContext } from '../../components/context/LoginContext';
+import { ProgressContext } from '@/components/context/ProgressContext';
 
 const PageWrapper = styled.div`
   background-color: #fafafc;
@@ -246,6 +247,7 @@ export default function CollectionPage() {
   const [error, setError] = useState<string | null>(null);
 
   const scrollPositionRef = useRef<number>(0); // 스크롤 위치 저장할 Ref
+  const { progressByEpisode } = useContext(ProgressContext);
 
   const context = useContext(LoginContext);
   if (!context) {
@@ -319,30 +321,45 @@ export default function CollectionPage() {
   
     // 각 resource 항목에 대해 updatedEpisodes 데이터와 로컬 스토리지의 값을 모두 고려하여 업데이트
     const updatedResource = collection.resource.map((ep) => {
-      // updatedEpisodes 배열에서 해당 에피소드에 대한 최신 업데이트 데이터를 찾습니다.
-      const matchingUpdate = updatedEpisodes.find(
-        (upd) => upd.episodeNumber === ep.episodeId, // episodeNumber와 episodeId를 매칭
-      );
+      // 로컬 스토리지에서 수강완료 플래그를 확인합니다.
+      const completedFlag =
+        typeof window !== 'undefined'
+          ? localStorage.getItem(`completed-${ep.episodeId}`)
+          : null;
   
-      // 로컬 스토리지에 저장된 진행 상태가 있다면 우선순위로 반영합니다.
-      const storedProgress = localStorage.getItem(`progress-${ep.episodeId}`);
-      const localProgress = storedProgress ? Number(storedProgress) : ep.progress;
-  
-      // updatedEpisodes에 해당 에피소드의 업데이트 정보가 있다면 그 값을 사용하고,
-      // 없으면 로컬 스토리지의 값을 사용하여 업데이트합니다.
-      if (matchingUpdate) {
+      if (completedFlag === 'true') {
+        // 수강완료 플래그가 있으면 해당 에피소드는 progress 100, completed true로 설정
         return {
           ...ep,
-          progress: matchingUpdate.progress,
-          completed: matchingUpdate.completed,
+          progress: 100,
+          completed: true,
         };
       } else {
-        return {
-          ...ep,
-          progress: localProgress,
-          // completed 상태는 로컬 진행률에 따른 기본 조건 (예: 80% 이상이면 true)
-          completed: localProgress >= 80,
-        };
+        // updatedEpisodes 배열에서 해당 에피소드의 업데이트 정보 찾기
+        const matchingUpdate = updatedEpisodes.find(
+          (upd) => upd.episodeNumber === ep.episodeId, // episodeNumber와 episodeId 매칭
+        );
+        if (matchingUpdate) {
+          return {
+            ...ep,
+            progress: matchingUpdate.progress,
+            completed: matchingUpdate.completed,
+          };
+        } else {
+          // 전역 상태 > 로컬 스토리지 > API 원본 순서로 진행률 결정
+          const storedProgress = localStorage.getItem(`progress-${ep.episodeId}`);
+          const progress =
+            progressByEpisode[ep.episodeId] !== undefined
+              ? progressByEpisode[ep.episodeId]
+              : storedProgress !== null
+              ? Number(storedProgress)
+              : ep.progress ?? 0;
+          return {
+            ...ep,
+            progress,
+            completed: progress >= 80,
+          };
+        }
       }
     });
   
