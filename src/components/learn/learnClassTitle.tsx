@@ -221,7 +221,7 @@ const ClassTitle: React.FC<ClassTitleProps> = ({ episodeId, episodeData }) => {
     if (completedFlag === 'true') {
       setLocalIsCompleted(true);
     } else {
-      // 없으면 기존 로직대로 진도율율에 따라 상태 설정
+      // 없으면 기존 로직대로 진도율에 따라 상태 설정
       const storedProgress = localStorage.getItem(`progress-${episodeId}`);
       const progress = storedProgress
         ? Number(storedProgress)

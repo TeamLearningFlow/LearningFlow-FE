@@ -21,6 +21,7 @@ interface YoutubeArticleProps {
 const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
   videoId,
   onProgressChange = () => {},
+  isCompleted,
 }) => {
   // const [progress, setProgress] = useState<number>(0);
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -166,6 +167,10 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
   const startTrackingProgress = () => {
     stopTrackingProgress();
     intervalRef.current = setInterval(() => {
+      // 수강완료 상태(버튼 누름)이면 업데이트를 중단
+      if (isCompleted) {
+        return;
+      }
       if (
         playerRef.current &&
         typeof playerRef.current.getCurrentTime === 'function' &&
@@ -175,7 +180,6 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
         const duration = playerRef.current.getDuration();
         if (duration > 0) {
           const progressValue = Math.round((currentTime / duration) * 100);
-          // setProgress(progressValue);
           if (previousProgressRef.current !== progressValue) {
             previousProgressRef.current = progressValue;
             onProgressChange(progressValue);
@@ -188,6 +192,7 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
       }
     }, 1000);
   };
+  
 
   // 진도율 추적 중지
   const stopTrackingProgress = () => {
