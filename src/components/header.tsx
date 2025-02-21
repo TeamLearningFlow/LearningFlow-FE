@@ -106,6 +106,10 @@ const ProfileIcon = styled.div`
   flex-shrink: 0;
 `;
 
+const ProfileImage = styled(Image)`
+  border-radius: 50%;
+`;
+
 const ProfileUser = styled.div`
   position: absolute;
   display: flex;
@@ -268,7 +272,7 @@ const Header: React.FC = () => {
       </SearchWrapper>
 
       <ProfileIcon>
-        <Image
+        <ProfileImage
           src={userData.profileImgUrl}
           alt="profile"
           width={40}
