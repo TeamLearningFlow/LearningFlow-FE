@@ -221,9 +221,28 @@ const CollectionWrapper = styled.div`
   justify-content: flex-start;
 `;
 
+const CollectionImageWrapper = styled.div`
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 282px;
+  height: 158px;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+`;
+
+const CollectionImg = styled(Image)`
+  position: absolute;
+  top: 120px;
+  left: 120px;
+  height: 100%;
+  width: 100%;
+`;
+
 interface EpisodeData {
   resourceId: number;
   collectionId: number;
+  imgUrl: "string";
   collectionTitle: string;
   resourceSource: string;
   episodeNumber: number;
@@ -251,14 +270,20 @@ const CollectionItem: React.FC<{ episode: EpisodeData }> = ({ episode }) => {
       <CollectionImage />
       <CollectionTitle>{episode.collectionTitle}</CollectionTitle>
       <ContentWrapper>
-        <Image
-          src={
-            episode.resourceSource ? imageMap[episode.resourceSource] : circle
-          }
-          alt={episode.resourceSource}
-          width={32}
-          height={32}
+        <CollectionImageWrapper>
+        <CollectionImg
+          src={episode.imgUrl || CollectionImage}
+          alt="collection image"
+          fill
+          style={{
+            left: '120px',
+            top: '569px',
+            borderTopLeftRadius: '16px',
+            borderTopRightRadius: '16px',
+            objectFit: 'cover',
+          }}
         />
+        </CollectionImageWrapper>
         <Content>
           <ContentNumber>{episode.episodeNumber} 회차</ContentNumber>
           <ContentTitle>{episode.episodeName}</ContentTitle>
