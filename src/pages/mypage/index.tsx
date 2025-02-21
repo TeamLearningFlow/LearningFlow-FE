@@ -85,6 +85,7 @@ const DEFAULT_BANNER = 'linear-gradient(90deg, #5e52ff 0%, #383199 100%)';
 interface EpisodeData {
   resourceId: number;
   collectionId: number;
+  imgUrl: string;
   collectionTitle: string;
   resourceSource: string;
   episodeNumber: number;

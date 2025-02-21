@@ -31,7 +31,7 @@ const Container = styled.div`
   cursor: pointer;
 `;
 
-const CollectionImage = styled.div`
+const CollectionImage = styled(Image)`
   height: 158px;
   width: 100%;
   border-radius: 16px 16px 0px 0px;
@@ -231,18 +231,10 @@ const CollectionImageWrapper = styled.div`
   border-top-right-radius: 16px;
 `;
 
-const CollectionImg = styled(Image)`
-  position: absolute;
-  top: 120px;
-  left: 120px;
-  height: 100%;
-  width: 100%;
-`;
-
 interface EpisodeData {
   resourceId: number;
   collectionId: number;
-  // imgUrl: string;
+  imgUrl: string;
   collectionTitle: string;
   resourceSource: string;
   episodeNumber: number;
@@ -267,23 +259,23 @@ const CollectionItem: React.FC<{ episode: EpisodeData }> = ({ episode }) => {
     <Container
       onClick={() => router.push(`/collection/${episode.collectionId}`)}
     >
-      <CollectionImage />
+      <CollectionImage
+        src={episode.imgUrl || CollectionImage}
+        alt="collection image"
+        width={282}
+        height={158}
+
+      />
       <CollectionTitle>{episode.collectionTitle}</CollectionTitle>
       <ContentWrapper>
-        <CollectionImageWrapper>
-        <CollectionImg
-          src={CollectionImage}
-          alt="collection image"
-          fill
-          style={{
-            left: '120px',
-            top: '569px',
-            borderTopLeftRadius: '16px',
-            borderTopRightRadius: '16px',
-            objectFit: 'cover',
-          }}
+        <Image
+          src={
+            episode.resourceSource ? imageMap[episode.resourceSource] : circle
+          }
+          alt={episode.resourceSource}
+          width={32}
+          height={32}
         />
-        </CollectionImageWrapper>
         <Content>
           <ContentNumber>{episode.episodeNumber} 회차</ContentNumber>
           <ContentTitle>{episode.episodeName}</ContentTitle>
