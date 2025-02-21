@@ -316,27 +316,42 @@ export default function CollectionPage() {
     }[],
   ) => {
     if (!collection) return;
-    // resource에서 episodeId가 mergedResource의 episodeNumber와 일치하면 업데이트
+  
+    // 각 resource 항목에 대해 updatedEpisodes 데이터와 로컬 스토리지의 값을 모두 고려하여 업데이트
     const updatedResource = collection.resource.map((ep) => {
-      const matching = updatedEpisodes.find(
-        (upd) => upd.episodeNumber === ep.episodeId, // episodeNumber와 episodeId 매칭
+      // updatedEpisodes 배열에서 해당 에피소드에 대한 최신 업데이트 데이터를 찾습니다.
+      const matchingUpdate = updatedEpisodes.find(
+        (upd) => upd.episodeNumber === ep.episodeId, // episodeNumber와 episodeId를 매칭
       );
-      if (matching) {
+  
+      // 로컬 스토리지에 저장된 진행 상태가 있다면 우선순위로 반영합니다.
+      const storedProgress = localStorage.getItem(`progress-${ep.episodeId}`);
+      const localProgress = storedProgress ? Number(storedProgress) : ep.progress;
+  
+      // updatedEpisodes에 해당 에피소드의 업데이트 정보가 있다면 그 값을 사용하고,
+      // 없으면 로컬 스토리지의 값을 사용하여 업데이트합니다.
+      if (matchingUpdate) {
         return {
           ...ep,
-          progress: matching.progress,
-          completed: matching.completed,
+          progress: matchingUpdate.progress,
+          completed: matchingUpdate.completed,
+        };
+      } else {
+        return {
+          ...ep,
+          progress: localProgress,
+          // completed 상태는 로컬 진행률에 따른 기본 조건 (예: 80% 이상이면 true)
+          completed: localProgress >= 80,
         };
       }
-      return ep;
     });
+  
     setCollection({ ...collection, resource: updatedResource });
-
-    // 진도율 업데이트 시 스크롤 위치 저장
-    const currentScrollPosition = window.scrollY;
-    scrollPositionRef.current = currentScrollPosition;
+  
+    // 진도율 업데이트 시 현재 스크롤 위치 저장
+    scrollPositionRef.current = window.scrollY;
   };
-
+  
   // ESLint 오류 방지용
   useEffect(() => {
     console.log('현재 에러 상태:', error);
