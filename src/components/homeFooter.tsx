@@ -144,32 +144,48 @@ const Footer: React.FC = () => {
   return (
     <FooterWrapper>
       <FooterLeft>
-      <FooterIconWrapper>
-        <Image src={Logo} alt="Footer Logo" fill style={{ objectFit: 'contain' }} />
-      </FooterIconWrapper>
-      <CopyWrapper>
-        @ 2025 All Rights Reserved
-      </CopyWrapper>
+        <FooterIconWrapper>
+          <Image
+            src={Logo}
+            alt="Footer Logo"
+            fill
+            style={{ objectFit: 'contain' }}
+          />
+        </FooterIconWrapper>
+        <CopyWrapper>@ 2025 All Rights Reserved</CopyWrapper>
       </FooterLeft>
 
       <TextWrapper>
         <SloganWrapper>당신의 곁에서 성장의 순간을 함께합니다</SloganWrapper>
         <CaptionWrapper>
-          나에게 딱 맞는 학습 경로를 설정하여<br />
+          나에게 딱 맞는 학습 경로를 설정하여
+          <br />
           학습 컬렉션으로 배움의 여정을 쉽고 빠르게 즐겨봐요
         </CaptionWrapper>
         <MenuWrapper>
-          <StyledLink href="/register/privacyContracts" target="_blank" rel="noopener noreferrer">
+          <StyledLink
+            href="https://www.instagram.com/onboarding__official?igsh=cDJqdHZwa3F0OXNv&utm_source=qr"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            인스타그램
+          </StyledLink>
+          <StyledLink
+            href="/register/privacyContracts"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             개인정보처리방침
           </StyledLink>
-          <StyledLink href="/register/contracts" target="_blank" rel="noopener noreferrer">
+          <StyledLink
+            href="/register/contracts"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             이용약관
           </StyledLink>
           <StyledLink href="/help" target="_blank" rel="noopener noreferrer">
             도움말
-          </StyledLink>
-          <StyledLink href="/register/contracts" target="_blank" rel="noopener noreferrer">
-            인스타그램
           </StyledLink>
         </MenuWrapper>
       </TextWrapper>
