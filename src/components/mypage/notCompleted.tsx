@@ -242,7 +242,7 @@ const CollectionImg = styled(Image)`
 interface EpisodeData {
   resourceId: number;
   collectionId: number;
-  // imgUrl: "string";
+  // imgUrl: string;
   collectionTitle: string;
   resourceSource: string;
   episodeNumber: number;
