@@ -55,20 +55,11 @@ const ArrowButton = styled.div`
     &.next {
       right: -6%;
     }
-  }
+  } */
 
   @media (max-width: 560px) {
-    width: 10px;
-    height: 10px;
-
-    &.prev {
-      left: -12%;
-    }
-
-    &.next {
-      right: -12%;
-    }
-  } */
+    display: none;
+  }
 `;
 
 const BannerImage = styled(Image)`
