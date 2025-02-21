@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import RecentBoardingPass from './recentBoardingPass';
@@ -12,6 +12,8 @@ import velogChecked from '/public/platformicon/velog_checked_ic.svg';
 import velog from '/public/platformicon/velog_ic.svg';
 import youtubeChecked from '/public/platformicon/youtube_checked_ic.svg';
 import youtube from '/public/platformicon/youtube_ic.svg';
+
+import Skeleton from '../../components/skeleton/skeleton_recentCollection';
 
 const Container = styled.div`
   display: flex;
@@ -374,6 +376,14 @@ const RecentCollection = ({
   collectionInfo: RecentLearning;
 }) => {
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
+
+  // 스켈레톤 적용
+  useEffect(() => {
+    if (collectionInfo) {
+      setLoading(false);
+    }
+  }, [collectionInfo]);
 
   return (
     <>
@@ -388,49 +398,54 @@ const RecentCollection = ({
             얼마 남지 않았어요
           </BlackLabel>
         </LabelWrapper>
-        <CollectionWrapper>
-          <RecentBoardingPass collectionInfo={collectionInfo} />
-          <ContentDescription>
-            <LearningRate>
-              <TitleLabel>
-                &lt;{collectionInfo?.title}&gt; 컬렉션 학습률
-              </TitleLabel>
-              <ProgressWrapper>
-                <ProgressBarFull>
-                  <ProgressBar
-                    percentage={collectionInfo?.progressRatePercentage}
-                  />
-                </ProgressBarFull>
-                <ProgressRate>{collectionInfo?.progressRatio}</ProgressRate>
-                <ProgressLabel>조금 더 힘을 내요!</ProgressLabel>
-              </ProgressWrapper>
-            </LearningRate>
-            <ContentList>
-              {collectionInfo?.resource.map((item, index) => {
-                const contentImage = getPlatformImage(
-                  item.resourceSource,
-                  item.completed,
-                );
 
-                const contentElement = (
-                  <Content key={index}>
-                    <Image src={contentImage} alt={item.resourceSource} />
-                    <ContentWrapper>
-                      <ContentNumber>{item.episodeNumber}회차</ContentNumber>
-                      <ContentTitle>{item.episodeName}</ContentTitle>
-                    </ContentWrapper>
-                  </Content>
-                );
+        {loading ? (
+          <Skeleton />
+        ) : (
+          <CollectionWrapper>
+            <RecentBoardingPass collectionInfo={collectionInfo} />
+            <ContentDescription>
+              <LearningRate>
+                <TitleLabel>
+                  &lt;{collectionInfo?.title}&gt; 컬렉션 학습률
+                </TitleLabel>
+                <ProgressWrapper>
+                  <ProgressBarFull>
+                    <ProgressBar
+                      percentage={collectionInfo?.progressRatePercentage}
+                    />
+                  </ProgressBarFull>
+                  <ProgressRate>{collectionInfo?.progressRatio}</ProgressRate>
+                  <ProgressLabel>조금 더 힘을 내요!</ProgressLabel>
+                </ProgressWrapper>
+              </LearningRate>
+              <ContentList>
+                {collectionInfo?.resource.map((item, index) => {
+                  const contentImage = getPlatformImage(
+                    item.resourceSource,
+                    item.completed,
+                  );
 
-                return item.today ? (
-                  <TodayContent key={index}>{contentElement}</TodayContent>
-                ) : (
-                  contentElement
-                );
-              })}
-            </ContentList>
-          </ContentDescription>
-        </CollectionWrapper>
+                  const contentElement = (
+                    <Content key={index}>
+                      <Image src={contentImage} alt={item.resourceSource} />
+                      <ContentWrapper>
+                        <ContentNumber>{item.episodeNumber}회차</ContentNumber>
+                        <ContentTitle>{item.episodeName}</ContentTitle>
+                      </ContentWrapper>
+                    </Content>
+                  );
+
+                  return item.today ? (
+                    <TodayContent key={index}>{contentElement}</TodayContent>
+                  ) : (
+                    contentElement
+                  );
+                })}
+              </ContentList>
+            </ContentDescription>
+          </CollectionWrapper>
+        )}
         <Button
           onClick={() =>
             router.push(`/collection/${collectionInfo.collectionId}`)
