@@ -4,50 +4,29 @@ import axios from 'axios';
 
 const RegisterCompletePage: React.FC = () => {
   const router = useRouter();
-  const { emailVerificationCode, oauth2RegistrationCode } = router.query; // URL에서 token 추출
+  const { emailVerificationCode } = router.query; // URL에서 token 추출
 
   useEffect(() => {
     const validateToken = async () => {
-      if (!emailVerificationCode && !oauth2RegistrationCode) return; // 토큰이 없는 경우 작업 중단
+      if (!emailVerificationCode) return; // 토큰이 없는 경우 작업 중단
 
       try {
-        let response;
-        let queryParam = '';
+        const response = await axios.get(
+          `http://onboarding.p-e.kr:8080/register/complete?emailVerificationCode=${emailVerificationCode}`,
+        );
 
-        if (emailVerificationCode) {
-          // 일반 회원가입
-          response = await axios.get(
-            `https://onboarding.p-e.kr/register/complete?emailVerificationCode=${emailVerificationCode}`,
-          );
-
-          if (response.data.isSuccess) {
-            localStorage.setItem(
-              'emailVerificationCode',
-              emailVerificationCode as string,
-            );
-            queryParam = `emailVerificationCode=${emailVerificationCode}`;
-          }
-        } else if (oauth2RegistrationCode) {
-          // 구글 회원가입
-          response = await axios.get(
-            `https://onboarding.p-e.kr/oauth2/additional-info?oauth2RegistrationCode=${oauth2RegistrationCode}`,
-          );
-
-          if (response.data.isSuccess) {
-            localStorage.setItem(
-              'oauth2RegistrationCode',
-              oauth2RegistrationCode as string,
-            );
-            queryParam = `oauth2RegistrationCode=${oauth2RegistrationCode}`;
-          }
-        }
-
-        if (response && response.data.isSuccess) {
+        // 유효성 확인 후 페이지 이동
+        if (response.data.isSuccess) {
           console.log('토큰 유효');
+
+          // 로컬 스토리지에 토큰 저장
+          localStorage.setItem(
+            'emailVerificationCode',
+            emailVerificationCode as string,
+          );
           console.log('토큰 저장 완료');
 
-          // 랜딩 페이지로 이동
-          router.push('/landing?${queryParam}');
+          router.push('/landing'); // 랜딩 페이지로 이동
         } else {
           console.log('토큰 무효');
           router.push('/register'); // 회원가입 페이지로 이동
@@ -59,7 +38,7 @@ const RegisterCompletePage: React.FC = () => {
     };
 
     validateToken();
-  }, [emailVerificationCode, oauth2RegistrationCode, router]);
+  }, [emailVerificationCode, router]);
 
   return null;
 };
