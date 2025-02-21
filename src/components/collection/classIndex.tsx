@@ -208,6 +208,7 @@ const EndIndex: React.FC<{ allProgressed: boolean }> = ({ allProgressed }) => {
           <Image
             src={allProgressed ? CompletedIndexIcon : EndIndexIcon}
             alt="End-icon"
+            fill
             style={{ objectFit: 'contain' }}
           />
         </IndexIcon>
