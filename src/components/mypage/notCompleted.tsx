@@ -242,7 +242,7 @@ const CollectionImg = styled(Image)`
 interface EpisodeData {
   resourceId: number;
   collectionId: number;
-  imgUrl: "string";
+  // imgUrl: "string";
   collectionTitle: string;
   resourceSource: string;
   episodeNumber: number;
@@ -272,7 +272,7 @@ const CollectionItem: React.FC<{ episode: EpisodeData }> = ({ episode }) => {
       <ContentWrapper>
         <CollectionImageWrapper>
         <CollectionImg
-          src={episode.imgUrl || CollectionImage}
+          src={CollectionImage}
           alt="collection image"
           fill
           style={{

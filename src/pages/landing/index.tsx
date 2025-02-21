@@ -49,24 +49,26 @@ const LandingPage: React.FC = () => {
 
   // URL 파라미터를 확인하여 회원가입 타입 결정
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const emailVerificationCode = params.get('emailVerificationCode');
-    const oauth2RegistrationCode = params.get('oauth2RegistrationCode');
+    const storedEmailVerificationCode = localStorage.getItem(
+      'emailVerificationCode',
+    );
+    const storedOauth2RegistrationCode = localStorage.getItem(
+      'oauth2RegistrationCode',
+    );
 
-    if (emailVerificationCode) {
-      setToken(emailVerificationCode);
+    if (storedEmailVerificationCode) {
+      setToken(storedEmailVerificationCode);
       setIsGoogleSignup(false);
       // localStorage.setItem('emailVerificationCode', emailVerificationCode);
-    } else if (oauth2RegistrationCode) {
-      setToken(oauth2RegistrationCode);
+    } else if (storedOauth2RegistrationCode) {
+      setToken(storedOauth2RegistrationCode);
       setIsGoogleSignup(true);
-      // localStorage.setItem('oauth2RegistrationCode', oauth2RegistrationCode);
     } else {
       console.log('회원가입 타입 결정 실패');
       console.error('토큰이 존재하지 않습니다.');
     }
   }, []);
-
+  
   // 일반 회원가입 함수
   const handleNormalSignup = async (finalPreferType: string) => {
     const storedEmail = localStorage.getItem('email');
