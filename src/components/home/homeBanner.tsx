@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import Slider from 'react-slick';
-import BannerImage1 from '/public/banner1.svg';
-import BannerImage2 from '/public/banner2.svg';
-import BannerImage3 from '/public/banner3.svg';
+import BannerImage1 from '/public/Banner1edit.svg';
+import BannerImage2 from '/public/Banner2edit.svg';
+import BannerImage3 from '/public/Banner3edit.svg';
 import PrevArrowImage from '/public/left_arrow_ic.svg';
 import NextArrowImage from '/public/right_arrow_ic.svg';
 import 'slick-carousel/slick/slick.css';
@@ -71,6 +71,11 @@ const ArrowButton = styled.div`
   } */
 `;
 
+const BannerImage = styled(Image)`
+  width: 100%;
+  height: auto;
+`
+
 const CustomPrevArrow: React.FC<{ onClick?: () => void }> = ({ onClick }) => (
   <ArrowButton className="prev" onClick={onClick}>
     <Image
@@ -122,11 +127,9 @@ const Banner: React.FC = () => {
           onClick={() => router.push(link)}
           style={{ cursor: 'pointer' }}
         >
-          <Image
+          <BannerImage
             src={image}
             alt={`Banner ${index + 1}`}
-            width={1440}
-            height={316}
           />
         </div>
       ))}
