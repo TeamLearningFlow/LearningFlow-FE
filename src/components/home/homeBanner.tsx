@@ -58,15 +58,15 @@ const ArrowButton = styled.div`
   }
 
   @media (max-width: 560px) {
-    width: 25px;
-    height: 25px;
+    width: 10px;
+    height: 10px;
 
     &.prev {
-      left: -8%;
+      left: -12%;
     }
 
     &.next {
-      right: -8%;
+      right: -12%;
     }
   } */
 `;
@@ -74,7 +74,11 @@ const ArrowButton = styled.div`
 const BannerImage = styled(Image)`
   width: 100%;
   height: auto;
-`
+
+  @media (max-width: 480px) {
+    // height: 100px;
+  }
+`;
 
 const CustomPrevArrow: React.FC<{ onClick?: () => void }> = ({ onClick }) => (
   <ArrowButton className="prev" onClick={onClick}>
@@ -127,10 +131,7 @@ const Banner: React.FC = () => {
           onClick={() => router.push(link)}
           style={{ cursor: 'pointer' }}
         >
-          <BannerImage
-            src={image}
-            alt={`Banner ${index + 1}`}
-          />
+          <BannerImage src={image} alt={`Banner ${index + 1}`} />
         </div>
       ))}
     </Slider>

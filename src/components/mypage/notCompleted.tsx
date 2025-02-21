@@ -335,14 +335,14 @@ const NotCompleted: React.FC<{ episodes: EpisodeData[] }> = ({ episodes }) => {
     startIndex + itemsShown,
   );
 
-  const validEpisodes = episodes.filter(
+  /*const validEpisodes = episodes.filter(
     (episode) =>
       episode.episodeNumber >= 1 &&
       episode.episodeNumber <= 20 &&
       [7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].includes(
         episode.collectionId,
       ),
-  );
+  ); */
 
   return (
     <NotCompletedWrapper>
@@ -376,8 +376,8 @@ const NotCompleted: React.FC<{ episodes: EpisodeData[] }> = ({ episodes }) => {
               gap: '24px',
             }}
           >
-            {validEpisodes.length > 0
-              ? validEpisodes.slice(0, itemsShown).map((episode) => (
+            {episodes.length > 0
+              ? episodes.slice(0, itemsShown).map((episode) => (
                   <motion.div key={episode.resourceId} layout>
                     <CollectionItem episode={episode} />
                   </motion.div>
@@ -387,7 +387,7 @@ const NotCompleted: React.FC<{ episodes: EpisodeData[] }> = ({ episodes }) => {
         </AnimatePresence>
       </CollectionWrapper>
 
-      {validEpisodes.length === 0 && (
+      {episodes.length === 0 && (
         <div
           style={{
             display: 'flex',
