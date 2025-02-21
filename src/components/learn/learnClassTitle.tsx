@@ -189,10 +189,8 @@ const ClassTitle: React.FC<ClassTitleProps> = ({ episodeId, episodeData }) => {
         setTimeout(() => {
           // 여기서는 전역 상태 업데이트 대신 localStorage 업데이트 후 로컬 상태를 갱신
           updateProgress(episodeId, targetProgress);
-          localStorage.setItem(
-            `progress-${episodeId}`,
-            targetProgress.toString(),
-          );
+          localStorage.setItem(`progress-${episodeId}`, targetProgress.toString());
+          localStorage.setItem(`completed-${episodeId}`, 'true'); // 수강완료 전적 저장
           setLocalIsCompleted(true);
           console.log('학습 상태 업데이트 성공:', response.data);
         }, 700);
@@ -212,24 +210,27 @@ const ClassTitle: React.FC<ClassTitleProps> = ({ episodeId, episodeData }) => {
     updateProgress(episodeId, 0);
     context.actions.setIsCompleted(false);
     localStorage.setItem(`progress-${episodeId}`, '0');
+    localStorage.removeItem(`completed-${episodeId}`); // 수강완료 전적 제거
     setLocalIsCompleted(false);
     setIsModalVisible(false);
   };
 
   useEffect(() => {
-    const storedProgress = localStorage.getItem(`progress-${episodeId}`);
-    const progress = storedProgress
-      ? Number(storedProgress)
-      : progressByEpisode[episodeId] || 0;
-
-    if (progressByEpisode[episodeId] !== progress) {
-      updateProgress(episodeId, progress);
-    }
-
-    if (progress >= 80) {
+    // 먼저 수강완료 전적 있는지 확인
+    const completedFlag = localStorage.getItem(`completed-${episodeId}`);
+    if (completedFlag === 'true') {
       setLocalIsCompleted(true);
     } else {
-      setLocalIsCompleted(false);
+      // 없으면 기존 로직대로 진도율율에 따라 상태 설정
+      const storedProgress = localStorage.getItem(`progress-${episodeId}`);
+      const progress = storedProgress
+        ? Number(storedProgress)
+        : progressByEpisode[episodeId] || 0;
+      if (progress >= 80) {
+        setLocalIsCompleted(true);
+      } else {
+        setLocalIsCompleted(false);
+      }
     }
   }, [episodeId, progressByEpisode]);
 
