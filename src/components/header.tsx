@@ -272,14 +272,25 @@ const Header: React.FC = () => {
       </SearchWrapper>
 
       <ProfileIcon>
-        <ProfileImage
-          src={userData.profileImgUrl}
-          alt="profile"
-          width={40}
-          height={40}
-          onClick={toggleModal}
-          ref={profileIconRef}
-        />
+        {userData.profileImgUrl ? (
+          <ProfileImage
+            src={userData.profileImgUrl}
+            alt="profile"
+            width={40}
+            height={40}
+            onClick={toggleModal}
+            ref={profileIconRef}
+          />
+        ) : (
+          <ProfileImage
+            src={Guest}
+            alt="profile"
+            width={40}
+            height={40}
+            onClick={toggleModal}
+            ref={profileIconRef}
+          />
+        )}
       </ProfileIcon>
       {isModalOpen && (
         <ProfileUser ref={modalRef}>
