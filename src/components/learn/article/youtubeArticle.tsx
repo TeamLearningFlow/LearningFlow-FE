@@ -169,6 +169,7 @@ const YoutubeArticle: React.FC<YoutubeArticleProps> = ({
     intervalRef.current = setInterval(() => {
       // 수강완료 상태(버튼 누름)이면 업데이트를 중단
       if (isCompleted) {
+        stopTrackingProgress();
         return;
       }
       if (

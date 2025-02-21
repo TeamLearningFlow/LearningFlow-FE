@@ -81,6 +81,11 @@ const CollectionList: React.FC<CollectionListProps> = ({
 
   // 각 에피소드에 대해 전역 progress와 localStorage를 반영한 mergedResource 생성
   const mergedResource: MergedEpisode[] = resource.map((episode: Episode) => {
+    const completedFlag =
+    typeof window !== 'undefined'
+      ? localStorage.getItem(`completed-${episode.episodeId}`)
+      : null;
+    
     // 전역 상태(ProgressContext)에서 진도율을 가져옴
     const globalProgress = progressByEpisode[episode.episodeId];
     // 클라이언트(브라우저)에서 localStorage에 저장된 진도율을 가져옴
@@ -89,18 +94,24 @@ const CollectionList: React.FC<CollectionListProps> = ({
         ? localStorage.getItem(`progress-${episode.episodeId}`)
         : null;
     // 우선 순위: 전역 상태 > localStorage > API 원본 (null이면 0으로 처리)
-    const progress =
+    let progress =
       globalProgress !== undefined
         ? globalProgress
         : localProgress !== null
           ? Number(localProgress)
           : (episode.progress ?? 0);
 
+          let completed = progress >= 80;
+          // 수강완료 플래그가 있으면 강제로 progress 100, completed true
+          if (completedFlag === 'true') {
+            progress = 100;
+            completed = true;
+          }
+
     return {
       ...episode,
       progress,
-      // 진도율이 80 이상이면 completed를 true로 설정
-      completed: progress >= 80,
+      completed,
     };
   });
 
