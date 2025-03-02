@@ -1,4 +1,4 @@
-# LearningFlow-FE: A front-end repository of team LearningFlow
+# Onboarding-FE: A front-end repository of team Onboarding
 
 ### 👩🏻‍💻 프론트엔드 협업 규칙
 
